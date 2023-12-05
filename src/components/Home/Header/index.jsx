@@ -7,12 +7,12 @@ const Header = ({ data }) => {
   return (
     <header id='home'>
       <nav id='nav-wrap'>
-        <a className='mobile-btn' href='#nav-wrap' title='Show navigation'>
+        <Link className='mobile-btn' href='#nav-wrap' title='Show navigation'>
           Show navigation
-        </a>
-        <a className='mobile-btn' href='#home' title='Hide navigation'>
+        </Link>
+        <Link className='mobile-btn' href='#home' title='Hide navigation'>
           Hide navigation
-        </a>
+        </Link>
 
         <ul id='nav' className='nav'>
           <li className='current'>
@@ -46,23 +46,23 @@ const Header = ({ data }) => {
           <hr />
           <Fade bottom duration={2000}>
             <ul className='index-btn'>
-              <a href='/family/login' className='button btn suiteFamily-btn'>
+              <Link href='/family/login' className='button btn suiteFamily-btn'>
                 {/* <img src={findMate} alt='findMate' /> */}
                 <h2>간병 신청하기</h2>
-              </a>
-              <a href='/mate/login' className='button btn suiteMate-btn'>
+              </Link>
+              <Link href='/mate/login' className='button btn suiteMate-btn'>
                 {/* <img src={findWork} alt='findWork' /> */}
                 <h2>간병 일감 찾기</h2>
-              </a>
+              </Link>
             </ul>
           </Fade>
         </div>
       </div>
 
       <p className='scrolldown'>
-        <a className='smoothscroll' href='#about'>
+        <Link className='smoothscroll' href='#about'>
           <i className='icon-down-circle'></i>
-        </a>
+        </Link>
       </p>
     </header>
   );
