@@ -32,7 +32,7 @@ const LoginForm = ({ type }) => {
   };
 
   return (
-    <div className={styles.LoginForm}>
+    <div className={`${styles.LoginForm} Form`}>
       <div className={styles.loginBox}>
         <h1> 로그인 </h1>
         <form onSubmit={onSubmitHandler}>
@@ -52,7 +52,7 @@ const LoginForm = ({ type }) => {
           <button className={styles.button_1} type='submit'>
             로그인
           </button>
-          <button className={styles.button_2} onClick={() => navigator(`/${type}/signup`)}>
+          <button className={styles.button_2} onClick={() => navigator.push(`/${type}/signup`)}>
             회원가입
           </button>
         </form>

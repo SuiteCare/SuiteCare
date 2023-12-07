@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './HeaderCore.module.css';
-import Logo from '../../assets/img/logo/logo-full-highres.png';
+import Logo from '@/assets/logo-white.png';
 import Dropdown from './Dropdown';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -21,7 +21,7 @@ const HeaderCore = ({ type }) => {
 
   return (
     <div className={styles.HeaderCore}>
-      <Link id='logo' href={`/${type}/main`}>
+      <Link className={styles.logo} href={`/${type}/main`}>
         <Image src={Logo} alt='Logo' />
       </Link>
       <div className='nav_wrapper'>
