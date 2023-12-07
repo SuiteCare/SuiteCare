@@ -1,0 +1,11 @@
+.SignUpForm {
+}
+
+.SignUpForm .input_wrapper .input_phone {
+  display: flex;
+  align-items: baseline;
+}
+
+.SignUpForm .input_wrapper .input_phone input {
+  width: 30%;
+}

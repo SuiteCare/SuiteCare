@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Fade, Slide } from 'react-reveal';
+import envelop from '@/assets/envelope-arrow-up-fill.svg';
+import Image from 'next/image';
 
 const Contact = ({ data }) => {
   if (!data) return null;
@@ -25,7 +27,7 @@ const Contact = ({ data }) => {
         <div className='row section-head'>
           <div className='two columns header-col'>
             <h1>
-              <span>Get In Touch.</span>
+              <span>메일 보내기</span>
             </h1>
           </div>
 

@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Fade } from 'react-reveal';
 
+import styles from './header.module.css';
+
 const Header = ({ data }) => {
   if (!data) return null;
 
@@ -77,7 +79,7 @@ const Header = ({ data }) => {
   }, [scrollPosition]);
 
   return (
-    <header id='home'>
+    <header id='home' className={styles.header}>
       <nav id='nav-wrap'>
         <button className='mobile-btn' onClick={toggleNav} title='Toggle navigation'>
           Toggle navigation

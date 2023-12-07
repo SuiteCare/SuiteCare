@@ -32,7 +32,7 @@ const LoginForm = ({ type }) => {
   };
 
   return (
-    <div className={styles.LoginForm}>
+    <div className={styles.LoginForm} id='test'>
       <div className={styles.loginBox}>
         <h1> 로그인 </h1>
         <form onSubmit={onSubmitHandler}>

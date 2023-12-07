@@ -1,0 +1,43 @@
+.HeaderCore {
+  background-color: var(--deep-brown);
+  display: grid;
+  height: 160px;
+  padding: 3rem 3rem 1rem 3rem;
+  box-shadow: 0px 0px 20px #aaaa;
+  grid-template-rows: 1fr 6.6rem;
+  margin-bottom: 8rem;
+}
+
+.HeaderCore ul.menu_wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  font-size: 3rem;
+}
+
+.HeaderCore .menu_wrapper li {
+  cursor: pointer;
+  position: relative;
+}
+
+.HeaderCore button {
+  width: inherit;
+  background: transparent;
+  padding: 7px 20px;
+  font-size: 3rem;
+  cursor: pointer;
+  color: var(--beige-01);
+  font-weight: 500;
+}
+
+.HeaderCore button.active {
+  color: white;
+}
+
+.HeaderCore a#logo img {
+  width: 120px;
+}
+
+.HeaderCore a#logo {
+  width: fit-content;
+}
