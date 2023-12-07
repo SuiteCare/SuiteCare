@@ -1,36 +1,102 @@
 import Link from 'next/link';
-import Fade from 'react-reveal';
+import { useState, useEffect } from 'react';
+import { Fade } from 'react-reveal';
 
 const Header = ({ data }) => {
   if (!data) return null;
 
+  const [navVisible, setNavVisibility] = useState(false);
+  const [selectedMenuItem, setSelectedMenuItem] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const toggleNav = () => {
+    setNavVisibility(!navVisible);
+  };
+
+  const menuList = [
+    {
+      name: 'home',
+      href: '#home',
+    },
+    {
+      name: 'about',
+      href: '#about',
+    },
+    {
+      name: 'contact',
+      href: '#contact',
+    },
+  ];
+
+  const handleMenuItemClick = (menuName) => {
+    setSelectedMenuItem(menuName);
+  };
+
+  const handleScroll = () => {
+    setScrollPosition(window.scrollY);
+  };
+
+  useEffect(() => {
+    // 이벤트 리스너 등록
+    window.addEventListener('scroll', handleScroll);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    // 각 섹션의 위치를 알아내는 로직
+    const sectionPositions = menuList.reduce((acc, menu) => {
+      const targetElement = document.querySelector(menu.href);
+      if (targetElement) {
+        acc[menu.name] = targetElement.offsetTop;
+      }
+      return acc;
+    }, []);
+
+    // 현재 스크롤 위치가 어떤 섹션에 도달했는지 확인하고 색상 변경
+    const handleSectionColorChange = () => {
+      const currentSection = Object.keys(sectionPositions).find(
+        (section) => scrollPosition >= sectionPositions[section] && scrollPosition < sectionPositions[section] + 100,
+      );
+
+      if (currentSection) {
+        setSelectedMenuItem(currentSection);
+      }
+    };
+
+    // 스크롤 이벤트 핸들러 등록
+    window.addEventListener('scroll', handleSectionColorChange);
+
+    // 컴포넌트가 언마운트될 때 이벤트 핸들러 제거
+    return () => {
+      window.removeEventListener('scroll', handleSectionColorChange);
+    };
+  }, [scrollPosition]);
+
   return (
     <header id='home'>
       <nav id='nav-wrap'>
-        <Link className='mobile-btn' href='#nav-wrap' title='Show navigation'>
-          Show navigation
-        </Link>
-        <Link className='mobile-btn' href='#home' title='Hide navigation'>
-          Hide navigation
-        </Link>
+        <button className='mobile-btn' onClick={toggleNav} title='Toggle navigation'>
+          Toggle navigation
+        </button>
 
         <ul id='nav' className='nav'>
-          <li className='current'>
-            <Link className='smoothscroll' href='#home'>
-              Home
-            </Link>
-          </li>
-
+          {menuList.map((menu) => (
+            <li
+              key={menu.name}
+              className={`${selectedMenuItem === menu.name ? 'selected' : ''}`}
+              onClick={() => handleMenuItemClick(menu.name)}
+            >
+              <Link className='smoothscroll' href={menu.href}>
+                {menu.name}
+              </Link>
+            </li>
+          ))}
           <li>
-            <Link className='smoothscroll' href='#about'>
-              About
-            </Link>
-          </li>
-
-          <li>
-            <Link className='smoothscroll' href='#contact'>
-              Contact
-            </Link>
+            <Link href='/login'>Login</Link>
           </li>
         </ul>
       </nav>

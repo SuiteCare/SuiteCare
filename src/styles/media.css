@@ -212,6 +212,10 @@
     border: none;
   }
 
+  .mobile-btn {
+    display: block;
+  }
+
   /* Header Styles
    -------------------------------------------------------------------- */
   header .banner {

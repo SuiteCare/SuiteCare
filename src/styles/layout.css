@@ -112,7 +112,7 @@ header .index-btn img {
 /* scrolldown link */
 header .scrolldown a {
   position: absolute;
-  bottom: 30px;
+  bottom: 50px;
   left: 50%;
   margin-left: -29px;
   color: #fff;
@@ -123,14 +123,16 @@ header .scrolldown a {
   line-height: 42px;
   color: #fff;
   border-radius: 100%;
+  background-color: #ffffff;
 
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -o-transition: all 0.3s ease-in-out;
   transition: all 0.3s ease-in-out;
 }
+
 header .scrolldown a:hover {
-  color: var(--deep-brown);
+  background-color: #095153;
 }
 
 /* primary navigation
@@ -165,7 +167,7 @@ header#home #nav-wrap {
 }
 
 /* hide toggle button */
-#nav-wrap > a.mobile-btn {
+.mobile-btn {
   display: none;
 }
 
@@ -206,6 +208,9 @@ ul#nav li a:active {
 }
 ul#nav li.current a {
   color: var(--deep-brown);
+}
+ul#nav li.selected a {
+  color: var(--brown-01);
 }
 
 /* ------------------------------------------------------------------ */
@@ -496,7 +501,7 @@ ul#nav li.current a {
   cursor: pointer;
   height: auto;
   display: inline-block;
-  border-radius: 0px;
+  border-radius: 7px;
   margin-left: 26%;
 }
 #contact button.submit:hover {

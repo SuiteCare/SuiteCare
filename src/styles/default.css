@@ -488,7 +488,7 @@ input[type='button'] {
   -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
   -khtml-border-radius: 0px;
-  border-radius: 0px;
+  border-radius: 7px;
 }
 
 .button:hover,
@@ -550,6 +550,7 @@ select {
   background: transparent;
   border-bottom: 1px solid var(--deep-brown);
   min-height: 50px;
+  border-radius: 7px;
 }
 
 /* select { padding: 0;
@@ -562,6 +563,7 @@ input[type='email']:focus,
 textarea:focus {
   outline: 3px solid var(--beige-01);
   background-color: white;
+  border-radius: 7px;
 }
 
 textarea {
