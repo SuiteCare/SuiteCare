@@ -1,4 +1,4 @@
-import Slide from 'react-reveal';
+import { Slide } from 'react-reveal';
 
 const About = ({ data }) => {
   if (!data) return null;
