@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Fade, Slide } from 'react-reveal';
-import envelop from '@/assets/envelope-arrow-up-fill.svg';
 import Image from 'next/image';
 
 const Contact = ({ data }) => {

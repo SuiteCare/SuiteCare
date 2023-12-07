@@ -1,9 +1,6 @@
-import Image from 'next/image';
-
-const MainCard = ({ title, onClick, background }) => {
+const MainCard = ({ title, onClick }) => {
   return (
     <div className='MainCard' onClick={onClick}>
-      <Image src={background} />
       {title}
     </div>
   );

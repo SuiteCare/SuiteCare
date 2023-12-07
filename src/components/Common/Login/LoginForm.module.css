@@ -11,53 +11,42 @@
   flex-direction: column;
 }
 
-.login_wrapper {
+.loginBox {
   position: relative;
   width: 400px;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.login_wrapper h1 {
+.loginBox h1 {
   text-align: center;
+  font-size: 24px;
+  padding: 10px 0;
 }
 
-.login_wrapper .login_input_wrapper {
+.loginBox .userBox {
   position: relative;
 }
 
-.login_wrapper .login_input_wrapper input {
+.loginBox .userBox input {
   width: 100%;
+  border-radius: 0;
 }
 
-.login_wrapper .button_1 {
+.loginBox .button_1 {
   background: #4f4242;
   padding: 7px 20px;
 }
 
-.login_wrapper .button_2 {
+.loginBox .button_2 {
   background: #a4907c;
   padding: 7px 20px;
 }
 
-.login_wrapper .button_1:hover,
-button:hover,
-input[type='button']:hover {
-  background: var(--deep-brown);
-}
-
-.login_wrapper .button_1:active,
-button:active,
-input[type='button']:active {
-  background: var(--deep-brown);
-}
-
-.login_wrapper .button_2:hover,
-button:hover,
-input[type='button']:hover {
-  background: var(--deep-brown);
-}
-
-.login_wrapper .button_2:active,
-button:active,
-input[type='button']:active {
+.loginBox .button_1:hover,
+.loginBox .button_2:hover {
   background: var(--deep-brown);
 }

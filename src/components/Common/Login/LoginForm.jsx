@@ -1,65 +1,58 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './LoginForm.module.css';
-import axios from 'axios';
-import { useRouter } from 'next/router';
 
 const LoginForm = ({ type }) => {
-  // react hook에서 state 사용
-  const [ID, setID] = useState('');
-  const [Password, setPassword] = useState('');
+  const navigator = useRouter();
 
-  const onIDHandler = (event) => {
-    setID(event.currentTarget.value);
-  };
+  const [loginForm, setLoginForm] = useState({
+    id: '',
+    password: '',
+  });
 
-  const onPasswordHandler = (event) => {
-    setPassword(event.currentTarget.value);
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setLoginForm({
+      ...loginForm,
+      [name]: value,
+    });
   };
 
   const onSubmitHandler = (event) => {
     // 버튼만 누르면 리로드 되는것을 막아줌
     event.preventDefault();
-    console.log('ID', ID);
-    console.log('Password', Password);
-
-    axios
-      .post('/api/v1/login', {
-        suite_family_id: 'Kim',
-        password: 'Kim',
-      })
-      .then((response) => {
-        if (response.status === 200) {
-          console.log('로그인 결과: ');
-          console.log('ID : ' + response.data.suite_family_id);
-          console.log('PW: ' + response.data.password);
-        }
-      })
-      .catch((error) => console.log(error));
-  };
-
-  const navigator = useRouter();
-
-  const goToSignUp = () => {
-    navigator.push(`/${type}/signup`);
+    console.log(loginForm);
+    /*
+    let body = {
+        ID: ID,
+        password: Password,
+    }
+        dispatch(loginUser(body));
+*/
   };
 
   return (
     <div className={styles.LoginForm}>
-      <div class='login_wrapper'>
+      <div className={styles.loginBox}>
         <h1> 로그인 </h1>
-        <br />
         <form onSubmit={onSubmitHandler}>
-          <div class='login_input_wrapper'>
-            <input type='text' placeholder=' 아이디' value={ID} onChange={onIDHandler} />
+          <div className={styles.userBox}>
+            <input type='text' placeholder=' 아이디' name='id' value={loginForm.id} onChange={onChangeHandler} />
           </div>
-          <div class='login_input_wrapper'>
-            <input type='password' placeholder=' 비밀번호' value={Password} onChange={onPasswordHandler} />
+          <div className={styles.userBox}>
+            <input
+              type='password'
+              placeholder=' 비밀번호'
+              name='password'
+              value={loginForm.password}
+              onChange={onChangeHandler}
+            />
           </div>
           <br />
-          <button className='button button_1' type='submit'>
+          <button className={styles.button_1} type='submit'>
             로그인
           </button>
-          <button className='button button_2' onClick={goToSignUp}>
+          <button className={styles.button_2} onClick={() => navigator(`/${type}/signup`)}>
             회원가입
           </button>
         </form>
