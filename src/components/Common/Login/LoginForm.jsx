@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './loginForm.module.css';
+import styles from './LoginForm.module.css';
 
 const LoginForm = ({ type }) => {
   const navigator = useRouter();
