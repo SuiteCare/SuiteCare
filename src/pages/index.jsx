@@ -21,6 +21,7 @@ const Home = () => {
     try {
       const response = await axios.get('./indexData.json');
       const data = response.data;
+
       setIndexData(data);
     } catch (error) {
       console.error(error.message);

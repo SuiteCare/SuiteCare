@@ -127,7 +127,7 @@
       12px 'Noto Sans KR',
       sans-serif;
     font-weight: 600;
-    background: transparent !important;
+    background: rgba(255, 255, 255, 0.3);
     letter-spacing: 1.5px;
     width: auto;
     position: fixed;
@@ -177,11 +177,15 @@
     display: none;
     clear: both;
     width: auto;
-    float: right;
 
     position: relative;
-    top: 12px;
+    top: 0;
     right: 0;
+  }
+
+  #nav-wrap ul#nav.visible {
+    display: block;
+    margin-top: 60px;
   }
 
   /* display menu panels */
@@ -194,7 +198,8 @@
   }
 
   ul#nav li {
-    display: block;
+    display: flex;
+    justify-content: center;
     height: auto;
     margin: 0 auto;
     padding: 0 4%;
@@ -253,6 +258,10 @@
   /* scrolldown link */
   header .scrolldown {
     display: none;
+  }
+
+  header .index-btn {
+    flex-direction: column;
   }
 
   /* About Section

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Fade } from 'react-reveal';
+import styles from './header.module.css';
 
 const Header = ({ data }) => {
   if (!data) return null;
@@ -28,8 +29,14 @@ const Header = ({ data }) => {
     },
   ];
 
-  const handleMenuItemClick = (menuName) => {
+  const handleMenuItemClick = (menuName, href) => {
     setSelectedMenuItem(menuName);
+    const targetElement = document.querySelector(href);
+    if (targetElement) {
+      targetElement.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
   };
 
   const handleScroll = () => {
@@ -37,29 +44,24 @@ const Header = ({ data }) => {
   };
 
   useEffect(() => {
-    // 이벤트 리스너 등록
     window.addEventListener('scroll', handleScroll);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
   useEffect(() => {
-    // 각 섹션의 위치를 알아내는 로직
     const sectionPositions = menuList.reduce((acc, menu) => {
       const targetElement = document.querySelector(menu.href);
       if (targetElement) {
         acc[menu.name] = targetElement.offsetTop;
       }
       return acc;
-    }, []);
+    }, {});
 
-    // 현재 스크롤 위치가 어떤 섹션에 도달했는지 확인하고 색상 변경
     const handleSectionColorChange = () => {
       const currentSection = Object.keys(sectionPositions).find(
-        (section) => scrollPosition >= sectionPositions[section] && scrollPosition < sectionPositions[section] + 100,
+        (section) => scrollPosition >= sectionPositions[section] && scrollPosition < sectionPositions[section] + 500,
       );
 
       if (currentSection) {
@@ -67,36 +69,37 @@ const Header = ({ data }) => {
       }
     };
 
-    // 스크롤 이벤트 핸들러 등록
     window.addEventListener('scroll', handleSectionColorChange);
 
-    // 컴포넌트가 언마운트될 때 이벤트 핸들러 제거
     return () => {
       window.removeEventListener('scroll', handleSectionColorChange);
     };
   }, [scrollPosition]);
 
   return (
-    <header id='home'>
+    <header id='home' className={styles.header}>
       <nav id='nav-wrap'>
         <button className='mobile-btn' onClick={toggleNav} title='Toggle navigation'>
-          Toggle navigation
+          <span />
+          <span />
+          <span />
         </button>
 
-        <ul id='nav' className='nav'>
+        <ul id='nav' className={`nav ${navVisible ? 'visible' : ''}`}>
           {menuList.map((menu) => (
-            <li
-              key={menu.name}
-              className={`${selectedMenuItem === menu.name ? 'selected' : ''}`}
-              onClick={() => handleMenuItemClick(menu.name)}
-            >
-              <Link className='smoothscroll' href={menu.href}>
+            <li key={menu.name}>
+              <span
+                className={`${selectedMenuItem === menu.name ? 'selected' : ''}`}
+                onClick={() => handleMenuItemClick(menu.name, menu.href)}
+              >
                 {menu.name}
-              </Link>
+              </span>
             </li>
           ))}
           <li>
-            <Link href='/login'>Login</Link>
+            <span>
+              <Link href='/login'>Login</Link>
+            </span>
           </li>
         </ul>
       </nav>
@@ -113,11 +116,9 @@ const Header = ({ data }) => {
           <Fade bottom duration={2000}>
             <ul className='index-btn'>
               <Link href='/family/login' className='button btn suiteFamily-btn'>
-                {/* <img src={findMate} alt='findMate' /> */}
                 <h2>간병 신청하기</h2>
               </Link>
               <Link href='/mate/login' className='button btn suiteMate-btn'>
-                {/* <img src={findWork} alt='findWork' /> */}
                 <h2>간병 일감 찾기</h2>
               </Link>
             </ul>
