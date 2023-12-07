@@ -1,8 +1,7 @@
 import React from 'react';
 import { Fade } from 'react-reveal';
-import { CSSTransition } from 'react-transition-group';
-import FamilyMenuList from '../Family/Header/MenuList';
-import MateMenuList from '../Mate/Header/MenuList';
+import FamilyMenuList from '@/components/Family/FamilyHeader/FamilyMenuList';
+import MateMenuList from '@/components/Mate/MateHeader/MateMenuList';
 import styles from './Dropdown.module.css';
 import Link from 'next/link';
 
@@ -18,11 +17,9 @@ const Dropdown = ({ type, isOpen }) => {
 
   return (
     <div className={styles.Dropdown}>
-      <CSSTransition in={isOpen} timeout={10} className='menu' unmountOnExit>
-        <Fade top cascade>
-          <ul className='dropdown_menu'>{menuItems(type)}</ul>
-        </Fade>
-      </CSSTransition>
+      <Fade top cascade>
+        <ul className='dropdown_menu'>{menuItems(type)}</ul>
+      </Fade>
     </div>
   );
 };

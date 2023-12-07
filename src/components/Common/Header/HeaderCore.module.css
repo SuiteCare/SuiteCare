@@ -34,10 +34,10 @@
   color: white;
 }
 
-.HeaderCore a#logo img {
+.HeaderCore .logo img {
   width: 120px;
 }
 
-.HeaderCore a#logo {
+.HeaderCore .logo {
   width: fit-content;
 }
