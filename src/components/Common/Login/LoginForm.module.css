@@ -1,0 +1,63 @@
+.LoginForm.Form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: calc(100vh - 360px);
+}
+
+.LoginForm form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login_wrapper {
+  position: relative;
+  width: 400px;
+}
+
+.login_wrapper h1 {
+  text-align: center;
+}
+
+.login_wrapper .login_input_wrapper {
+  position: relative;
+}
+
+.login_wrapper .login_input_wrapper input {
+  width: 100%;
+}
+
+.login_wrapper .button_1 {
+  background: #4f4242;
+  padding: 7px 20px;
+}
+
+.login_wrapper .button_2 {
+  background: #a4907c;
+  padding: 7px 20px;
+}
+
+.login_wrapper .button_1:hover,
+button:hover,
+input[type='button']:hover {
+  background: var(--deep-brown);
+}
+
+.login_wrapper .button_1:active,
+button:active,
+input[type='button']:active {
+  background: var(--deep-brown);
+}
+
+.login_wrapper .button_2:hover,
+button:hover,
+input[type='button']:hover {
+  background: var(--deep-brown);
+}
+
+.login_wrapper .button_2:active,
+button:active,
+input[type='button']:active {
+  background: var(--deep-brown);
+}
