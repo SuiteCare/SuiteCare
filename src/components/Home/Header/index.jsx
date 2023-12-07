@@ -3,8 +3,6 @@ import { useState, useEffect } from 'react';
 import { Fade } from 'react-reveal';
 import styles from './header.module.css';
 
-import styles from './header.module.css';
-
 const Header = ({ data }) => {
   if (!data) return null;
 
