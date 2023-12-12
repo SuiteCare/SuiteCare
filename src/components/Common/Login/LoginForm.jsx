@@ -27,7 +27,7 @@ const LoginForm = ({ type }) => {
         password: loginForm.password,
       };
 
-      const response = await axios.post("/api/login", body)
+      const response = await axios.post("/api/v1/login", body)
           .then((response) => {
             const msg = response.headers.get("msg");
             if(response.status === 200 && msg === "success") {
