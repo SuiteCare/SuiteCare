@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const LoginForm = ({ type }) => {
   const navigator = useRouter();
+  const [loginFail, setLoginFail] = useState(false);
 
   const [loginForm, setLoginForm] = useState({
     id: '',
@@ -22,23 +23,32 @@ const LoginForm = ({ type }) => {
   async function onSubmitHandler(event)  {
       // 버튼만 누르면 리로드 되는것을 막아줌
       event.preventDefault();
-      let body = {
-        suite_family_id: loginForm.id,
-        password: loginForm.password,
-      };
+      const role = type === "mate" ? "M" : "F";
 
-      const response = await axios.post("/api/v1/login", body)
-          .then((response) => {
-            const msg = response.headers.get("msg");
-            if(response.status === 200 && msg === "success") {
-              console.log("로그인 성공!");
-            } else if(msg === "fail") {
-              console.log("로그인 실패...");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+      if(loginForm.id && loginForm.password) {
+          let body = {
+            suite_family_id: loginForm.id,
+            password: loginForm.password,
+            role: role
+          };
+
+          const response = await axios.post("/api/v1/login", body)
+              .then((response) => {
+                const msg = response.headers.get("msg");
+                if(response.status === 200 && msg === "success") {
+                // session 로그인 상태 추가해야함!
+                  navigator.push(`/${type}/main`);
+                } else if(msg === "fail") {
+                  setLoginFail(true);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+      } else {
+        alert("아이디와 비밀번호를 입력해주세요!!!");
+      }
+
   };
 
   return (
@@ -58,6 +68,7 @@ const LoginForm = ({ type }) => {
               onChange={onChangeHandler}
             />
           </div>
+          {loginFail && <div className={styles.loginMsg}><p>아이디와 비밀번호가 일치하지 않습니다.</p></div>}
           <br />
           <button className={styles.button_1} type='submit'>
             로그인
