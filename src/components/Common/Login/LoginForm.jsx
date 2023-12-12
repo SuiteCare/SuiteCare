@@ -73,7 +73,7 @@ const LoginForm = ({ type }) => {
           <button className={styles.button_1} type='submit'>
             로그인
           </button>
-          <button className={styles.button_2} onClick={() => navigator.push(`/${type}/signup`)}>
+          <button className={styles.button_2} onClick={() => navigator.push(`/${type}/signup`)} type='button'>
             회원가입
           </button>
         </form>

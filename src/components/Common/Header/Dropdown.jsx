@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fade } from 'react-reveal';
-import FamilyMenuList from '@/components/Family/FamilyHeader/FamilyMenuList';
-import MateMenuList from '@/components/Mate/MateHeader/MateMenuList';
+import FamilyMenuList from '@/components/Family/FamilyHeader/FamilyMenuList.js';
+import MateMenuList from '@/components/Mate/MateHeader/MateMenuList.js';
 import styles from './Dropdown.module.css';
 import Link from 'next/link';
 
