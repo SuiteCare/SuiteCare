@@ -3,7 +3,6 @@ const MenuList = [
     title: '간병인 추천받기',
     url: 'suggestion',
   },
-
   {
     title: '원하는 간병인 찾기',
     url: 'search',
