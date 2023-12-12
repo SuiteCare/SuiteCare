@@ -9,7 +9,7 @@ import Contact from '@/components/Home/Contact';
 import About from '@/components/Home/About';
 
 const Home = () => {
-  const [indexData, setIndexData] = useState(Object);
+  const [indexData, setIndexData] = useState({});
 
   useEffect(() => {
     ReactGA.initialize('UA-110570651-1');
@@ -29,7 +29,7 @@ const Home = () => {
   };
   return (
     <div className={styles.Home}>
-      <StateContext.Provider vaule={indexData}>
+      <StateContext.Provider value={indexData && indexData.main ? indexData : {}}>
         <Header data={indexData.main} />
         <About data={indexData.about} />
         <Contact data={indexData.main} />
