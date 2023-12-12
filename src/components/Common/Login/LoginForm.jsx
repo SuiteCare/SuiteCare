@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './LoginForm.module.css';
+import axios from 'axios';
 
 const LoginForm = ({ type }) => {
   const navigator = useRouter();
