@@ -26,18 +26,14 @@ const HeaderCore = ({ type }) => {
       </Link>
       <div className='nav_wrapper'>
         <ul className='menu_wrapper'>
-          <li>
-            <button onClick={() => toggleMenu('family')} className={`${type === 'family' ? 'active' : ''}`}>
-              간병인 찾기
-            </button>
-            <Dropdown type='family' isOpen={familyMenuOpen} />
-          </li>
-          <li>
-            <button onClick={() => toggleMenu('mate')} className={`${type === 'mate' ? 'active' : ''}`}>
+            <button onClick={() => toggleMenu('mate')} className={`${type === 'mate' ? 'active' : ''} mate-button`}>
               간병 일감 찾기
             </button>
-            <Dropdown type='mate' isOpen={mateMenuOpen} />
-          </li>
+            {mateMenuOpen && <Dropdown type='mate' isOpen={true} />}
+            <button className='family-button' onClick={() => toggleMenu('family')} className={`${type === 'family' ? 'active' : ''} family-button`}>
+            <span className={styles.buttonText}>간병인 찾기</span>
+            </button>
+            {familyMenuOpen && <Dropdown type='family' isOpen={true} />}
         </ul>
       </div>
     </div>
