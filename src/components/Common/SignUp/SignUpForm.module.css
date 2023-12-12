@@ -5,11 +5,11 @@
   border-radius: 0;
 }
 
-.SignUpForm .input_wrapper .input_phone {
+.SignUpForm .input_phone {
   display: flex;
   align-items: baseline;
 }
 
-.SignUpForm .input_wrapper .input_phone input {
+.SignUpForm .input_phone input {
   width: 30%;
 }

@@ -195,7 +195,7 @@ const SignUpForm = ({ type }) => {
         <div className='input_wrapper'>
           <label>휴대전화</label>
           <div className='input_with_button'>
-            <div className='input_phone'>
+            <div className={styles.input_phone}>
               <input
                 type='text'
                 placeholder='010'
