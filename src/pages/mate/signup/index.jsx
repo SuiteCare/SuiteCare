@@ -1,11 +1,11 @@
-import Header from '@/components/Family/FamilyHeader/FamilyHeader';
+import Header from '@/components/Mate/MateHeader/MateHeader';
 import SignUpForm from '@/components/Common/SignUp/SignUpForm';
 
 const SignUp = () => {
   return (
     <div className='SignUp'>
       <Header />
-      <SignUpForm type='family' />
+      <SignUpForm type='mate' />
     </div>
   );
 };
