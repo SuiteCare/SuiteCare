@@ -35,6 +35,11 @@
   border-radius: 0;
 }
 
+.loginBox .loginMsg {
+    font-size: 2rem;
+    color: #BE3144;
+}
+
 .loginBox .button_1 {
   background: #4f4242;
   padding: 7px 20px;
