@@ -7,7 +7,7 @@ const LoginPage = () => {
   return (
     <div className={styles.login}>
       <FamilyHeader />
-      <LoginForm />
+      <LoginForm type='family' />
     </div>
   );
 };

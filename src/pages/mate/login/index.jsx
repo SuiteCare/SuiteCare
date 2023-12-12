@@ -7,7 +7,7 @@ const LoginPage = () => {
   return (
     <div className={styles.login}>
       <Header />
-      <LoginForm />
+      <LoginForm type='mate' />
     </div>
   );
 };
