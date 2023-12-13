@@ -8,30 +8,23 @@
   margin-bottom: 8rem;
 }
 
-.HeaderCore ul.menu_wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 5rem;
-  font-size: 3rem;
-}
-
-.HeaderCore .menu_wrapper li {
-  cursor: pointer;
-  position: relative;
-}
-
 .HeaderCore button {
+  float: right;
   width: inherit;
   background: transparent;
   padding: 7px 20px;
-  font-size: 3rem;
+  font-size: 2rem;
   cursor: pointer;
-  color: var(--beige-01);
+  color: white;
   font-weight: 500;
 }
 
-.HeaderCore button.active {
-  color: white;
+.buttonText {
+  margin: 0 34px;
+}
+
+.HeaderCore button:hover {
+  color: var(--beige-01);
 }
 
 .HeaderCore .logo img {
