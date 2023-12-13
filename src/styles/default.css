@@ -129,9 +129,10 @@ table {
   --beige-01: #dfd7bf;
   --brown-01: #a4907c;
   --deep-brown: #4f4242;
-  --gray: #aaa;
-  --light-gray: #ccc;
-  --very-light-gray: #eee;
+  --gray: #acabaa;
+  --normal-gray: #cccbca;
+  --light-gray: #efeeed;
+  --very-light-gray: #f9f8f7;
   --warning: #be3144;
 }
 
@@ -216,7 +217,7 @@ small {
 
 hr {
   border: none;
-  border-bottom: 1px solid #cccc;
+  border-bottom: 1px solid #dddd;
   line-height: 0;
   position: relative;
   margin: 0.8rem 0;
@@ -383,6 +384,7 @@ form .button_wrapper {
 input[type='text'],
 input[type='password'],
 input[type='email'],
+input[type='number'],
 textarea,
 select {
   padding: 1rem 1.2rem;
@@ -391,8 +393,6 @@ select {
   color: #333;
   background: transparent;
   border-bottom: 1px solid var(--deep-brown);
-  min-height: 50px;
-  border-radius: 7px;
   margin: 5px 0;
   font-size: 1rem;
 }
@@ -414,6 +414,7 @@ select {
 input[type='text']:focus,
 input[type='password']:focus,
 input[type='email']:focus,
+input[type='number']:focus,
 textarea:focus {
   outline: 3px solid var(--beige-01);
   background-color: white;

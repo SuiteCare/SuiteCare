@@ -1,16 +1,54 @@
 import { useState } from 'react';
 import styles from './SearchForm.module.css';
 import FormLocationList from './FormLocationList';
-import FormWageList from './FormWageList';
 import FormAgeList from './FormAgeList';
 
 const SearchForm = ({ onSearch }) => {
+  //시급 관련
+  const [wages, setWages] = useState([9860, 9860]);
+
+  const handleWageChange = (e, index) => {
+    const newWages = [...wages];
+    newWages[index] = +e.target.value;
+    setWages(newWages);
+  };
+
+  const updateWage = () => {
+    if (wages[0] < 9860) {
+      alert('최소 시급은 2024년 기준 최저임금 9,860원 이상이어야 합니다.');
+      setWages([9860, wages[1]]);
+    }
+
+    if (wages[0] > wages[1]) {
+      alert('최대 시급은 최소 시급보다 높아야 합니다.');
+      setWages([wages[0], wages[0]]);
+    }
+
+    setCheckedItems({
+      ...checkedItems,
+      wage: wages,
+    });
+  };
+
+  //상단 이름 검색창 관련
+  const [searchInput, setSearchInput] = useState('');
+
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+    setCheckedItems({
+      ...checkedItems,
+      search_input: e.target.value,
+    });
+  };
+
+  //체크박스 및 최종 데이터 관련
   const [checkedItems, setCheckedItems] = useState({
+    search_input: '',
     location: [],
     gender: [],
     service: [],
     age: [],
-    wage: [],
+    wage: [9860, 9860],
   });
 
   const handleCheckboxChange = (e) => {
@@ -31,17 +69,15 @@ const SearchForm = ({ onSearch }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isEmptyData = ($obj) => {
-      for (let i in $obj) {
-        if ($obj[i].length > 0) {
-          return false;
-        }
+    const isEmptyData = ($obj, key) => {
+      if ($obj[key].length > 0) {
+        return false;
       }
       return true;
     };
 
-    if (isEmptyData(checkedItems)) {
-      alert('검색 조건을 선택하세요.');
+    if (isEmptyData(checkedItems, 'location')) {
+      alert('활동 지역을 1곳 이상 선택하세요.');
     } else {
       console.log(checkedItems);
       onSearch(checkedItems);
@@ -56,6 +92,18 @@ const SearchForm = ({ onSearch }) => {
       </div>
 
       <form name='search_form' onSubmit={handleSubmit}>
+        <div className='input_wrapper'>
+          <label>이름으로 검색</label>
+          <input
+            type='text'
+            name='search_input'
+            placeholder='🔎 간병인 이름으로 검색하기'
+            value={searchInput}
+            onChange={handleSearchChange}
+            maxLength={10}
+          />
+        </div>
+        <hr />
         <div className='input_wrapper'>
           <label>활동 지역</label>
           <div className={styles.checkbox_list_wrapper}>
@@ -98,8 +146,28 @@ const SearchForm = ({ onSearch }) => {
         <hr />
         <div className='input_wrapper'>
           <label>시급</label>
-          <div className={styles.checkbox_list_wrapper}>
-            <FormWageList onChange={handleCheckboxChange} />
+          <div className={styles.input_wrapper}>
+            최소
+            <input
+              type='number'
+              value={wages[0]}
+              onChange={(e) => handleWageChange(e, 0)}
+              onBlur={updateWage}
+              min={9860}
+              step={1000}
+              max={1000000}
+            />
+            원 ~ 최대
+            <input
+              type='number'
+              value={wages[1]}
+              onChange={(e) => handleWageChange(e, 1)}
+              onBlur={updateWage}
+              min={9860}
+              step={1000}
+              max={1000000}
+            />
+            원
           </div>
         </div>
         <hr />
