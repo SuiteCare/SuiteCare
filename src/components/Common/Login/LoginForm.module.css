@@ -1,56 +1,46 @@
 .LoginForm {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
 }
 
 .LoginForm form {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
 }
 
 .loginBox {
   position: relative;
   width: 400px;
-  height: 100vh;
+  height: calc(100vh - 27rem);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.loginBox h1 {
-  text-align: center;
-  font-size: 24px;
-  padding: 10px 0;
-}
-
-.loginBox .userBox {
-  position: relative;
-}
-
-.loginBox .userBox input {
+.loginBox input {
   width: 100%;
   border-radius: 0;
+  font-size: 1rem;
 }
 
 .loginBox .loginMsg {
-    font-size: 2rem;
-    color: #BE3144;
+  font-size: 2rem;
+  color: var(--warning);
 }
 
-.loginBox .button_1 {
-  background: #4f4242;
-  padding: 7px 20px;
+.LoginForm .button {
+  padding: 1rem;
+  background: var(--brown-01);
+  margin-top: 1rem;
 }
 
-.loginBox .button_2 {
-  background: #a4907c;
-  padding: 7px 20px;
+.loginBox .button:first-of-type {
+  background: var(--deep-brown);
+  position: relative;
+  top: 1.5rem;
 }
 
-.loginBox .button_1:hover,
-.loginBox .button_2:hover {
+.loginBox .button:hover {
   background: var(--deep-brown);
 }
