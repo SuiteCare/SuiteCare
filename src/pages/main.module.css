@@ -4,23 +4,65 @@
   gap: 1rem;
   margin: 6rem auto;
 }
+
 .Main.Family {
   grid-template-columns: repeat(3, 1fr);
 }
+
 .Main.Mate {
   grid-template-columns: repeat(2, 1fr);
 }
 
 .Main .MainCard {
-  background-size: cover;
-  min-width: 100px;
-  border-radius: 10px;
-  padding: 2rem 1rem;
-  text-align: center;
   cursor: pointer;
-  border: 1px solid var(--deep-brown);
-  font-size: 2.4rem;
-  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  min-width: 100px;
+  height: 12rem;
+  padding: 2rem;
+  background-size: cover;
+  background: #dfd7bf50;
+  border: 1px solid #dfd7bf25;
+  border-top: 4px solid var(--brown-01);
+  box-shadow: 0px 0px 10px -6px #aaaa;
+}
+
+.MainCard .line {
+  border-bottom: 1px solid var(--beige-01);
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.MainCard span {
+  font-size: 1rem;
+  color: var(--brown-01);
+}
+
+.Main .MainCard:hover {
+  box-shadow: 0px 3px 12px -4px #aaaa;
+  background: #dfd7bf25;
+}
+
+.Main .MainCard p {
+  font-weight: 400;
+}
+
+.Main .MainCard:hover p {
+  font-weight: 500;
+}
+
+.MainCard .line,
+.MainCard span {
+  display: none;
+}
+
+.MainCard:hover .line,
+.MainCard:hover span {
+  display: block;
 }
 
 .Main .MainCard img {

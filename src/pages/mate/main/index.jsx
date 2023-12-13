@@ -12,13 +12,13 @@ const Main = () => {
   };
 
   const cards = MenuList.map((e, index) => (
-    <MainCard key={index} title={e.title} onClick={() => navigateTo(`mate/${e.url}`)} />
+    <MainCard key={index} title={e.title} description={e.description} onClick={() => navigateTo(`mate/${e.url}`)} />
   ));
 
   return (
     <>
       <Header />
-      <div className={`${styles.main} Mate`}>{cards}</div>
+      <div className={`${styles.Main} ${styles.Mate}`}>{cards}</div>
     </>
   );
 };
