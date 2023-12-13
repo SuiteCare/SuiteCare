@@ -77,15 +77,15 @@ const Header = ({ data }) => {
   }, [scrollPosition]);
 
   return (
-    <header id='home' className={styles.header}>
-      <nav id='nav-wrap'>
-        <button className='mobile-btn' onClick={toggleNav} title='Toggle navigation'>
+    <header className={styles.header}>
+      <nav className={styles.nav_wrap}>
+        <button className={styles.mobile_btn} onClick={toggleNav}>
           <span />
           <span />
           <span />
         </button>
 
-        <ul id='nav' className={`nav ${navVisible ? 'visible' : ''}`}>
+        <ul id='nav' className={`${styles.nav} ${navVisible ? styles.visible : ''}`}>
           {menuList.map((menu) => (
             <li key={menu.name}>
               <span
