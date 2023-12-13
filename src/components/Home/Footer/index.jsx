@@ -1,14 +1,15 @@
 import { Fade } from 'react-reveal';
+import Link from 'next/link';
+
+import styles from './Footer.module.css';
 
 const Footer = ({ data }) => {
-  if (!data) return null;
-
   return (
-    <footer>
-      <div className='row'>
+    <footer className={styles.footer}>
+      <div className={styles.row}>
         <Fade bottom>
-          <div className='twelve columns'>
-            <ul className='social-links'>
+          <div className={styles.twelve}>
+            <ul>
               {data?.social.map((network) => {
                 return (
                   <li key={network.name}>
@@ -20,8 +21,8 @@ const Footer = ({ data }) => {
               })}
             </ul>
 
-            <ul className='copyright'>
-              <li>&copy; Copyright 2021 Nordic Giant</li>
+            <ul className={styles.copyright}>
+              <li>&copy; Copyright 2023 Nordic Giant</li>
               <li>
                 Design by{' '}
                 <a title='Styleshout' href='http://www.styleshout.com/'>
@@ -32,10 +33,10 @@ const Footer = ({ data }) => {
           </div>
         </Fade>
 
-        <div id='go-top'>
-          <a className='smoothscroll' title='Back to Top' href='#home'>
+        <div className={styles.go_top}>
+          <Link className='smoothscroll' title='Back to Top' href='#home'>
             <i className='icon-up-open'></i>
-          </a>
+          </Link>
         </div>
       </div>
     </footer>

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { Fade } from 'react-reveal';
-import styles from './header.module.css';
+import styles from './Header.module.css';
 
 const Header = ({ data }) => {
   if (!data) return null;
@@ -77,7 +77,7 @@ const Header = ({ data }) => {
   }, [scrollPosition]);
 
   return (
-    <header className={styles.header}>
+    <header id='home' className={styles.header}>
       <nav className={styles.nav_wrap}>
         <button className={styles.mobile_btn} onClick={toggleNav}>
           <span />
@@ -89,23 +89,18 @@ const Header = ({ data }) => {
           {menuList.map((menu) => (
             <li key={menu.name}>
               <span
-                className={`${selectedMenuItem === menu.name ? 'selected' : ''}`}
+                className={`${selectedMenuItem === menu.name ? `${styles.selected}` : ''}`}
                 onClick={() => handleMenuItemClick(menu.name, menu.href)}
               >
                 {menu.name}
               </span>
             </li>
           ))}
-          <li>
-            <span>
-              <Link href='/login'>Login</Link>
-            </span>
-          </li>
         </ul>
       </nav>
 
-      <div className='row banner'>
-        <div className='banner-text'>
+      <div className={styles.banner}>
+        <div className={styles.banner_text}>
           <Fade bottom>
             <h1 className='responsive-headline'>{data?.title}</h1>
           </Fade>
@@ -114,20 +109,24 @@ const Header = ({ data }) => {
           </Fade>
           <hr />
           <Fade bottom duration={2000}>
-            <ul className='index-btn'>
-              <Link href='/family/login' className='button btn suiteFamily-btn'>
-                <h2>간병 신청하기</h2>
-              </Link>
-              <Link href='/mate/login' className='button btn suiteMate-btn'>
-                <h2>간병 일감 찾기</h2>
-              </Link>
+            <ul>
+              <li>
+                <Link href='/family/login' className='button btn suiteFamily-btn'>
+                  간병 신청 하기
+                </Link>
+              </li>
+              <li>
+                <Link href='/mate/login' className='button btn suiteMate-btn'>
+                  간병 일감 찾기
+                </Link>
+              </li>
             </ul>
           </Fade>
         </div>
       </div>
 
-      <p className='scrolldown'>
-        <Link className='smoothscroll' href='#about'>
+      <p className={styles.scrolldown}>
+        <Link href='#about'>
           <i className='icon-down-circle'></i>
         </Link>
       </p>
