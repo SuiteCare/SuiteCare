@@ -2,9 +2,9 @@
   background-color: var(--deep-brown);
   display: grid;
   height: 160px;
-  padding: 2rem 2rem 0rem 2rem;
+  padding: 2rem 2rem 1rem 2rem;
   box-shadow: 0px 0px 20px #aaaa;
-  grid-template-rows: 1fr 6.6rem;
+  grid-template-rows: 2rem 1fr;
   margin-bottom: 7.2rem;
   align-items: end;
 }

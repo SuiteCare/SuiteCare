@@ -9,28 +9,27 @@ const Dropdown = ({ type, isOpen }) => {
   const dropdownRef = useRef(null);
   const [positionStyle, setPositionStyle] = useState({});
 
-useEffect(() => {
-  const updatePositionStyle = () => {
-    const button = document.querySelector(`.${type}-button`);
-    console.log(`${type}-button`)
-    const dropdown = dropdownRef.current;
-    console.log(button, dropdown)
-    if (button && dropdown) {
-    console.log('if문 실행됨')
-      const rect = button.getBoundingClientRect();
-      const left = rect.left + window.pageXOffset;
-      const top = rect.top + button.offsetHeight + window.pageYOffset + 19; // 드롭다운 메뉴를 원하는 위치로 이동시키기 위해 값을 조정해주세요.
-      setPositionStyle({ top: `${top}px`, left: `${left}px` });
-    }
-  };
+  useEffect(() => {
+    const updatePositionStyle = () => {
+      const button = document.querySelector(`.${type}-button`);
+      console.log(`${type}-button`);
+      const dropdown = dropdownRef.current;
+      console.log(button, dropdown);
+      if (button && dropdown) {
+        const rect = button.getBoundingClientRect();
+        const left = rect.left + window.pageXOffset;
+        const top = rect.top + button.offsetHeight + window.pageYOffset + 15; // 드롭다운 메뉴를 원하는 위치로 이동시키기 위해 값을 조정해주세요.
+        setPositionStyle({ top: `${top}px`, left: `${left}px` });
+      }
+    };
 
-  updatePositionStyle();
+    updatePositionStyle();
 
-  window.addEventListener('resize', updatePositionStyle);
-  return () => {
-    window.removeEventListener('resize', updatePositionStyle);
-  };
-}, [type]);
+    window.addEventListener('resize', updatePositionStyle);
+    return () => {
+      window.removeEventListener('resize', updatePositionStyle);
+    };
+  }, [type]);
 
   const menuItems = ($type) => {
     const menuList = $type === 'family' ? FamilyMenuList : MateMenuList;

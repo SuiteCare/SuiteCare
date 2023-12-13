@@ -49,22 +49,24 @@ const SignUpForm = ({ type }) => {
   //아이디 중복확인
   const checkDuplicateID = async () => {
     alert('idState : ' + idState);
+    if (idState === '') {
+      alert('ID를 입력하세요.');
+    } else {
+      try {
+        const response = await axios.get('/api/v1/family', { params: { id: idState } });
+        const data = response.data;
 
-    try {
-      const response = await axios.get('/api/v1/family', { params: { id: idState } });
+        alert('data : ' + data);
 
-      const data = response.data;
-
-      alert('data : ' + data);
-
-      if (data === 1) {
-        alert('이미 사용 중인 아이디입니다.');
-      } else {
-        alert('사용 가능한 아이디입니다.');
-        document.getElementById('id').readOnly = true;
+        if (data === 1) {
+          alert('이미 사용 중인 아이디입니다.');
+        } else {
+          alert('사용 가능한 아이디입니다.');
+          document.getElementById('id').readOnly = true;
+        }
+      } catch (error) {
+        console.error('Error:', error);
       }
-    } catch (error) {
-      console.error('Error:', error);
     }
   };
 
@@ -161,8 +163,10 @@ const SignUpForm = ({ type }) => {
 
   //렌더링 부분
   return (
-    <div className={`${styles.SignUpForm} Form`}>
-      <h1>{valueSet(type).buttonText}</h1>
+    <div className={`${styles.SignUpForm} Form_narrow`}>
+      <div className='title_wrapper'>
+        <h1>{valueSet(type).buttonText}</h1>
+      </div>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>
