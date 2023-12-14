@@ -1,11 +1,18 @@
 import React from 'react';
 import styles from './SearchResult.module.css';
+import SearchResultCard from './SearchResultCard';
 
-const SearchResult = ({ data }) => {
+const SearchResult = ({ data, type }) => {
   return (
     <div className={styles.SearchResult}>
-      <h3>검색 결과</h3>
-      {'data를 json 파싱해서 배열로 만들고 map 돌려서 SearchResultCard를 만듦'}
+      <h3>
+        {type === 'search' ? `검색 결과 (${data.length ? data.length : 0}건)` : `스위트케어가 추천하는 간병 메이트`}
+      </h3>
+      {data && data.length > 0 ? (
+        data.map((e) => <SearchResultCard data={e} key={e.id} />)
+      ) : (
+        <div className={styles.no_result}>검색 결과가 없습니다.</div>
+      )}
     </div>
   );
 };
