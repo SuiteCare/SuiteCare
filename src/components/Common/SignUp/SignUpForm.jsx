@@ -16,7 +16,7 @@ const SignUpForm = ({ type }) => {
       };
     } else if ($type === 'mate') {
       return {
-        url: '/api/v1/mate',
+        url: '/api/v1/family',
         buttonText: '메이트 회원가입',
         radioRedirect: '/family/signup',
         otherType: '패밀리 (간병 서비스 이용자)',
@@ -43,14 +43,10 @@ const SignUpForm = ({ type }) => {
   //아이디 중복확인
   const checkDuplicateID = async () => {
     if (idState) {
-      alert('idState : ' + idState);
-
       try {
         const response = await axios.get('/api/v1/family', { params: { id: idState } });
 
         const data = response.data;
-
-        alert('data : ' + data);
 
         if (data === 1) {
           alert('이미 사용 중인 아이디입니다.');
@@ -100,13 +96,14 @@ const SignUpForm = ({ type }) => {
     const inputInfo = formInputInfos[typeName];
     return (
       <div className='input_wrapper'>
-        <label>{formInputInfos[typeName].label}</label>
+        <label>{inputInfo.label}</label>
         <input
-          type={formInputInfos[typeName].type}
-          placeholder={formInputInfos[typeName].label}
-          name={formInputInfos[typeName].name}
-          id={formInputInfos[typeName].id}
-          maxLength={formInputInfos[typeName].maxLength}
+          type={inputInfo.type}
+          placeholder={inputInfo.label}
+          name={inputInfo.name}
+          id={inputInfo.id}
+          maxLength={inputInfo.maxLength}
+          required
         />
       </div>
     );
@@ -115,34 +112,37 @@ const SignUpForm = ({ type }) => {
   //회원가입 버튼 클릭 시 이동시키는 함수
   const navigator = useRouter();
 
-  async function handleSignUpClick(event) {
+  async function handleSignUpClick() {
     // 버튼만 누르면 리로드 되는것을 막아줌
-    event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
     if (document.getElementById('id').readOnly) {
       if (pw.value && pw.value === pw_check.value) {
-        let body = {
-          id: id.value,
-          password: pw.value,
-          name: user_name.value,
-          tel: phoneNumber,
-          role: role,
-        };
+        if(user_name.value) {
+          let body = {
+            id: id.value,
+            password: pw.value,
+            name: user_name.value,
+            tel: phoneNumber,
+            role: role,
+          };
 
-        const response = await axios
-          .post('/api/v1/family', body)
-          .then((response) => {
-            if (response.data) {
-              alert('회원가입 완료!!!');
-              navigator.push(`/${type}/login`);
-            } else {
-              alert('실패..');
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          const response = await axios
+            .post('/api/v1/family', body)
+            .then((response) => {
+              if (response.data) {
+                alert('회원가입 완료!!!');
+                navigator.push(`/${type}/login`);
+              } else {
+                alert('실패..');
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          alert('성함을 입력해주세요.');
+        }
       } else {
         alert('비밀번호가 일치하지 않습니다.');
       }
@@ -175,7 +175,7 @@ const SignUpForm = ({ type }) => {
         <div className='input_wrapper'>
           <label>아이디</label>
           <div className='input_with_button'>
-            <input type='text' placeholder='아이디' name='id' id='id' maxLength='20' onChange={onIdChange} />
+            <input type='text' placeholder='아이디' name='id' id='id' maxLength='20' onChange={onIdChange} required/>
             <button onClick={checkDuplicateID} type='button'>
               중복확인
             </button>
@@ -218,14 +218,16 @@ const SignUpForm = ({ type }) => {
               />
               <input type='hidden' name='phone' value={phoneNumber} />
             </div>
-            <button onClick={authenticatePhone} type='button'>본인인증</button>
+            <button onClick={authenticatePhone} type='button'>
+              본인인증
+            </button>
           </div>
         </div>
 
         <hr />
 
         <div className='button_wrapper'>
-          <button onClick={handleSignUpClick}>{valueSet(type).buttonText}</button>
+          <button type='submit' onClick={handleSignUpClick}>{valueSet(type).buttonText}</button>
         </div>
       </form>
     </div>
