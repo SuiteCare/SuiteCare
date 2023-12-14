@@ -108,7 +108,8 @@ const SignUpForm = ({ type }) => {
     );
   };
 
-  async function handleSignUpClick() {
+  async function handleSignUpClick(event) {
+    event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
     if (document.getElementById('id').readOnly) {
