@@ -1,4 +1,4 @@
-import styles from './SearchForm.module.css';
+import styles from './FormList.module.css';
 
 const FormAgeList = ({ onChange }) => {
   return (
