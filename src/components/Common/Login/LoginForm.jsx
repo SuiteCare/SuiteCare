@@ -21,7 +21,6 @@ const LoginForm = ({ type }) => {
   };
 
   async function onSubmitHandler(event) {
-    // 버튼만 누르면 리로드 되는것을 막아줌
     event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
@@ -64,7 +63,7 @@ const LoginForm = ({ type }) => {
           <div className={styles.userBox}>
             <input
               type='password'
-              placeholder=' 비밀번호'
+              placeholder='비밀번호'
               name='password'
               value={loginForm.password}
               onChange={onChangeHandler}

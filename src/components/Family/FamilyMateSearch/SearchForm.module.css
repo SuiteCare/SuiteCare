@@ -18,7 +18,8 @@
 
 .checkbox_list_wrapper {
   display: flex;
-  gap: 2rem;
+  column-gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .checkbox_wrapper {

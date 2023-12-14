@@ -38,8 +38,6 @@ h4,
 h5,
 h6,
 p,
-blockquote,
-pre,
 em,
 img,
 small,
@@ -61,14 +59,10 @@ thead,
 tr,
 th,
 td,
-article,
 aside,
 canvas,
-details,
-figure,
 footer,
 header,
-hgroup,
 menu,
 nav {
   margin: 0;
@@ -81,7 +75,6 @@ nav {
   word-break: keep-all;
 }
 
-article,
 aside,
 footer,
 header,
@@ -93,14 +86,6 @@ section {
 
 [hidden] {
   display: none;
-}
-
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: '';
-  content: none;
 }
 
 table {
@@ -144,7 +129,7 @@ html {
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.8rem;
   color: #333;
 
