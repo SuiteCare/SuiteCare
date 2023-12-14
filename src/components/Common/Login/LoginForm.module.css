@@ -25,20 +25,18 @@
 }
 
 .loginBox .loginMsg {
-  font-size: 2rem;
   color: var(--warning);
 }
 
 .LoginForm .button {
-  padding: 1rem;
+  padding: 0.6rem;
   background: var(--brown-01);
-  margin-top: 1rem;
 }
 
 .loginBox .button:first-of-type {
   background: var(--deep-brown);
   position: relative;
-  top: 1.5rem;
+  top: 1rem;
 }
 
 .loginBox .button:hover {
