@@ -45,8 +45,8 @@ const FamilyMateSearch = () => {
             address: '서울시 중구',
             service: '외출동행, 목욕, 요리, 청소, 재활운동보조, 빨래, 운전',
             wage: 17800,
-            profilePic: '',
-            description:
+            profile_picture_filename: '',
+            introduction:
               '잘 부탁드립니다. 100자 제한 걸어둘 거니까 이것도 100자는 보여야 할 텐데 100자가 어느 정도지? 까지가 60자 정도니까 100자는 대충 두 줄 정도를 더 먹겠구나 여기까지',
           },
           {
@@ -56,8 +56,8 @@ const FamilyMateSearch = () => {
             address: '서울시 성북구',
             service: '빨래, 운전',
             wage: 32000,
-            profilePic: '',
-            description: '데이터 추가 테스트',
+            profile_picture_filename: '',
+            introduction: '데이터 추가 테스트',
           },
         ]}
         type={'search'}
@@ -72,8 +72,8 @@ const FamilyMateSearch = () => {
             address: '서울시 서초구',
             service: '',
             wage: 9900,
-            profilePic: '',
-            description: '잘 부탁드립니다.',
+            profile_picture_filename: '',
+            introduction: '잘 부탁드립니다.',
           },
           {
             userName: '추천간병인2',
@@ -82,8 +82,8 @@ const FamilyMateSearch = () => {
             address: '',
             service: '빨래, 운전',
             wage: 32000,
-            profilePic: '',
-            description: '데이터 추가 테스트',
+            profile_picture_filename: '',
+            introduction: '데이터 추가 테스트',
           },
         ]}
         type={'suggestion'}

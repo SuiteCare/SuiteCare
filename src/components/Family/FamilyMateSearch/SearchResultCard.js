@@ -1,18 +1,19 @@
 import styles from './SearchResultCard.module.css';
 import default_profile from '@/assets/default_profile.jpg';
+import Image from 'next/image';
 
 const SearchResultCard = ({ data }) => {
   const calAge = ($birth) => ~~((Date.now() - new Date($birth)) / (1000 * 3600 * 24 * 365));
 
   return (
     <div className={styles.card}>
-      <img src={data.profilePic ? data.profilePic : default_profile} />
+      {data.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
       <div className={styles.userName}>
-        <label>{data.userName}</label>&nbsp;&nbsp;메이트
+        <label>{data.userName}</label>메이트
         <p>
           {data.gender === 'F' ? '여성' : '남성'}, 만 {calAge(data.birth)}세
         </p>
-        <p>{data.description}</p>
+        <p>{data.introduction}</p>
       </div>
       <div className={styles.userInfo_wrapper}>
         <div className={styles.userInfo}>

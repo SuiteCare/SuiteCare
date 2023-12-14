@@ -1,7 +1,5 @@
 .SearchResult {
-  width: 100%;
-  padding: 0 8rem;
-  margin: 3rem 0;
+  margin: 3rem auto;
 }
 
 .no_result {

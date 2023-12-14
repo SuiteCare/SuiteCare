@@ -4,7 +4,7 @@ import SearchResultCard from './SearchResultCard';
 
 const SearchResult = ({ data, type }) => {
   return (
-    <div className={styles.SearchResult}>
+    <div className={`${styles.SearchResult} Form_wide`}>
       <h3>
         {type === 'search' ? `검색 결과 (${data.length ? data.length : 0}건)` : `스위트케어가 추천하는 간병 메이트`}
       </h3>

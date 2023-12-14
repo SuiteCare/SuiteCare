@@ -339,6 +339,8 @@ input::-moz-focus-inner {
 .Form_wide {
   width: 100%;
   padding: 0 8rem;
+  max-width: 2000px;
+  margin: 0 auto;
 }
 
 form .input_wrapper {

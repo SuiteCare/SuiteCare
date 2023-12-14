@@ -1,10 +1,10 @@
 .card {
   display: grid;
   width: 100%;
-  padding: 2rem 2.4rem;
-  grid-template-columns: 200px 440px 1fr 160px;
-  height: 200px;
-  column-gap: 1rem;
+  padding: 1.6rem;
+  grid-template-columns: 200px 40% 1fr 160px;
+  min-height: 200px;
+  grid-column-gap: 8px;
   border-bottom: 1px solid white;
   background-color: var(--very-light-gray);
   align-items: center;
@@ -21,6 +21,7 @@
 
 .userName label {
   font-size: 1.5rem;
+  margin-right: 6px;
 }
 
 .userName p:last-of-type {
