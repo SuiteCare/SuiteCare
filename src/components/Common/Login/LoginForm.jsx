@@ -53,9 +53,6 @@ const LoginForm = ({ type }) => {
   return (
     <div className={`${styles.LoginForm} Form`}>
       <div className={styles.loginBox}>
-        <div className='title_wrapper'>
-          <h1> 로그인 </h1>
-        </div>
         <form onSubmit={onSubmitHandler}>
           <div className={styles.userBox}>
             <input type='text' placeholder=' 아이디' name='id' value={loginForm.id} onChange={onChangeHandler} />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './SearchForm.module.css';
-import FormLocationList from './FormLocationList';
-import FormAgeList from './FormAgeList';
+import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
+import FormAgeList from '@/components/Common/SearchInfo/FormAgeList';
 
 const SearchForm = ({ onSearch }) => {
   //시급 관련
@@ -66,6 +66,31 @@ const SearchForm = ({ onSearch }) => {
     }
   };
 
+  const selectAllLocation = (e) => {
+    console.log(e);
+    const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
+    const isChecked = allLocationCheckboxes.filter((checkbox) => checkbox.checked === false).length === 0;
+
+    const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
+    console.log(selectedLocations);
+
+    allLocationCheckboxes.forEach((checkbox) => {
+      checkbox.checked = !isChecked;
+    });
+
+    e.target.checked = !isChecked;
+
+    setCheckedItems({
+      ...checkedItems,
+      location: selectedLocations,
+    });
+  };
+
+  const handleAllLocationChange = (e) => {
+    selectAllLocation(e);
+  };
+
+  //폼 제출
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -79,18 +104,12 @@ const SearchForm = ({ onSearch }) => {
     if (isEmptyData(checkedItems, 'location')) {
       alert('활동 지역을 1곳 이상 선택하세요.');
     } else {
-      console.log(checkedItems);
       onSearch(checkedItems);
     }
   };
 
   return (
     <div className={`${styles.SearchForm} Form_wide`}>
-      <div className='title_wrapper'>
-        <h1 className='title'>원하는 간병인 찾기</h1>
-        <span className='description'>나와 꼭 맞는 조건의 간병인을 검색할 수 있습니다.</span>
-      </div>
-
       <form name='search_form' onSubmit={handleSubmit}>
         <div className='input_wrapper'>
           <label>이름으로 검색</label>
@@ -105,7 +124,13 @@ const SearchForm = ({ onSearch }) => {
         </div>
         <hr />
         <div className='input_wrapper'>
-          <label>활동 지역</label>
+          <div>
+            <label>활동 지역</label>
+            <div className='checkbox_wrapper'>
+              <input type='checkbox' onChange={handleAllLocationChange} />
+              <span>전체 선택</span>
+            </div>
+          </div>
           <div className={styles.checkbox_list_wrapper}>
             <FormLocationList onChange={handleCheckboxChange} />
           </div>

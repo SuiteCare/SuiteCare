@@ -1,0 +1,12 @@
+.location_list:first-child > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.checkbox_wrapper {
+  min-width: 80px;
+}
+
+.location_wrapper {
+  display: grid;
+}
