@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Fade, Slide } from 'react-reveal';
-import Image from 'next/image';
+import styles from './Contact.module.css';
 
 const Contact = ({ data }) => {
   if (!data) return null;
@@ -21,30 +21,22 @@ const Contact = ({ data }) => {
   };
 
   return (
-    <section id='contact'>
+    <section id='contact' className={styles.contact}>
       <Fade bottom duration={1000}>
-        <div className='row section-head'>
-          <div className='two columns header-col'>
-            <h1>
-              <span>메일 보내기</span>
-            </h1>
-          </div>
-
-          <div className='ten columns'>
-            <p className='lead'>{data.contactmessage}</p>
+        <div className={`${styles.row} ${styles.section_head}`}>
+          <div className={styles.column}>
+            <p>{data.contactmessage}</p>
           </div>
         </div>
       </Fade>
 
-      <div className='row'>
+      <div className={styles.row}>
         <Slide left duration={1000}>
-          <div className='eight columns'>
+          <div className={styles.column}>
             <form action='' method='post' id='contactForm' name='contactForm'>
               <fieldset>
-                <div>
-                  <label htmlFor='contactName'>
-                    Name <span className='required'>*</span>
-                  </label>
+                <div className={styles.formGroup}>
+                  <label htmlFor='contactName'>Name</label>
                   <input
                     type='text'
                     size='35'
@@ -55,10 +47,8 @@ const Contact = ({ data }) => {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor='contactEmail'>
-                    Email <span className='required'>*</span>
-                  </label>
+                <div className={styles.formGroup}>
+                  <label htmlFor='contactEmail'>Email</label>
                   <input
                     type='text'
                     size='35'
@@ -69,7 +59,7 @@ const Contact = ({ data }) => {
                   />
                 </div>
 
-                <div>
+                <div className={styles.formGroup}>
                   <label htmlFor='contactSubject'>Subject</label>
                   <input
                     type='text'
@@ -81,10 +71,8 @@ const Contact = ({ data }) => {
                   />
                 </div>
 
-                <div>
-                  <label htmlFor='contactMessage'>
-                    Message <span className='required'>*</span>
-                  </label>
+                <div className={styles.formGroup}>
+                  <label htmlFor='contactMessage'>Message</label>
                   <textarea
                     cols='50'
                     rows='15'
@@ -95,20 +83,16 @@ const Contact = ({ data }) => {
                   ></textarea>
                 </div>
 
-                <div>
-                  <button className='submit'>Submit</button>
+                <div className={styles.formGroup}>
+                  <button type='submit' className={styles.submit}>
+                    Submit
+                  </button>
                   <span id='image-loader'>
                     <img alt='' src='images/loader.gif' />
                   </span>
                 </div>
               </fieldset>
             </form>
-
-            <div id='message-warning'> Error boy</div>
-            <div id='message-success'>
-              <i className='fa fa-check'></i>Your message was sent, thank you!
-              <br />
-            </div>
           </div>
         </Slide>
       </div>

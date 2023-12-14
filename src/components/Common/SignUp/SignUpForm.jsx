@@ -153,8 +153,10 @@ const SignUpForm = ({ type }) => {
 
   //렌더링 부분
   return (
-    <div className={`${styles.SignUpForm} Form`}>
-      <h1>{valueSet(type).buttonText}</h1>
+    <div className={`${styles.SignUpForm} Form_narrow`}>
+      <div className='title_wrapper'>
+        <h1>{valueSet(type).buttonText}</h1>
+      </div>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>
