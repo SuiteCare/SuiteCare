@@ -11,7 +11,6 @@
 .loginBox {
   position: relative;
   width: 400px;
-  height: calc(100vh - 27rem);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -31,6 +30,7 @@
 .LoginForm .button {
   padding: 0.6rem;
   background: var(--brown-01);
+  margin-top: 1rem;
 }
 
 .loginBox .button:first-of-type {
