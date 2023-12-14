@@ -115,7 +115,7 @@ const SignUpForm = ({ type }) => {
       if (pw.value && pw.value === pw_check.value) {
         if (user_name.value) {
           let body = {
-            id: id.value,
+            login_id: id.value,
             password: pw.value,
             name: user_name.value,
             tel: phoneNumber,
@@ -125,7 +125,7 @@ const SignUpForm = ({ type }) => {
           const response = await axios
             .post('/api/v1/family', body)
             .then((response) => {
-              if(response.data) {
+              if (response.data) {
                 alert('회원가입 완료!!!');
                 navigator.push(`/${type}/login`);
               } else {
@@ -149,9 +149,6 @@ const SignUpForm = ({ type }) => {
   //렌더링 부분
   return (
     <div className={`${styles.SignUpForm} Form_narrow`}>
-      <div className='title_wrapper'>
-        <h1>{valueSet(type).buttonText}</h1>
-      </div>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>

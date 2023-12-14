@@ -406,6 +406,20 @@ textarea:focus {
   border-radius: 7px;
 }
 
+input[type='text']:disabled,
+input[type='password']:disabled,
+input[type='email']:disabled,
+input[type='number']:disabled,
+textarea:disabled,
+input[type='text']:read-only,
+input[type='password']:read-only,
+input[type='email']:read-only,
+input[type='number']:read-only,
+textarea:read-only {
+  background-color: var(--very-light-gray);
+  color: var(--deep-brown);
+}
+
 textarea {
   min-height: 220px;
 }

@@ -26,7 +26,7 @@ const LoginForm = ({ type }) => {
 
     if (loginForm.id && loginForm.password) {
       let body = {
-        suite_family_id: loginForm.id,
+        login_id: loginForm.id,
         password: loginForm.password,
         role: role,
       };
