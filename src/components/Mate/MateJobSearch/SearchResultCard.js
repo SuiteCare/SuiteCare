@@ -1,43 +1,22 @@
 import styles from './SearchResultCard.module.css';
-import { calAge } from '@/assets/util.js';
+import { calAge, calTimeDiff, countWeekdays } from '@/assets/util.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
-  const calTimeDiff = ($start, $end) => {
-    const getMinutes = ($time) => {
-      const [hours, minutes] = $time.split(':').map(Number);
-      return hours * 60 + minutes;
-    };
-    return (getMinutes($end) - getMinutes($start)) / 60;
-  };
-
-  function countWeekdays(startDate, endDate, weekdaysArr) {
-    const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-
-    let count = 0;
-    let current = new Date(start);
-
-    while (current <= end) {
-      if (weekdaysArr.includes(weekdays[current.getDay()])) {
-        count++;
-      }
-      current.setDate(current.getDate() + 1);
-    }
-
-    return count;
-  }
-
   return (
     <div className={styles.card}>
-      <div className={styles.dday}>
-        <span>D-{Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24))}</span>
+      <div className={styles.top}>
+        <span className={data.location_type === '병원' ? styles.hospital : styles.home}>{data.location_type}</span>
+        <span className={styles.dday}>
+          지원 마감 <b>D-{Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24))}</b>
+        </span>
       </div>
+      {/* title */}
       <div className={styles.userInfo_wrapper}>
         <div className={styles.title}>
           <label>{data.address}</label>
         </div>
+        {/* title */}
+        {/* body */}
         <div className={styles.userInfo}>
           <label>진단명</label>
           <span>{data.diagnosis_name}</span>
@@ -85,10 +64,13 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
           </span>
         </div>
       </div>
+      {/* body */}
+      {/* bottom */}
       <div className={styles.search_button_wrapper}>
         <button onClick={() => showDetail(data.mate_id)}>상세정보 보기</button>
         <button onClick={() => handleApply(data.mate_id)}>간병 지원하기</button>
       </div>
+      {/* bottom */}
     </div>
   );
 };

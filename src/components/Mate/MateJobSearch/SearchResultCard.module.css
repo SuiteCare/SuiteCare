@@ -3,44 +3,75 @@
   width: 100%;
   padding: 1.6rem;
   grid-template-columns: 1fr;
+  grid-template-rows: 40px 1fr 8rem;
   min-height: 200px;
-  gap: 8px;
+  gap: 5px;
   border: 1px solid #dedddc;
   background-color: var(--transparent-brown);
-  align-items: center;
   border-radius: 12px;
   margin-bottom: 1rem;
   box-shadow: 0px 2px 12px -6px var(--normal-gray);
+  line-height: 1.5;
 }
 
-.card button {
-  height: fit-content;
-  padding: 5px;
+.title {
+  border-bottom: 1px solid var(--beige-01);
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  height: 40px;
   width: 100%;
+  position: relative;
+  width: calc(100% + 3.2rem + 2px);
+  left: calc(-1.6rem - 1px);
+  top: calc(-1.6rem - 1px);
 }
 
-.card button:nth-of-type(2) {
-  background-color: var(--deep-brown);
-}
-
-.dday {
-  text-align: right;
-}
-
-.dday span {
+.top span {
   padding: 0px 20px;
-  border-radius: 10px;
-  border: 3px solid var(--transparent-brown);
+  cursor: default;
+  align-items: center;
+}
 
-  background: var(--transparent-brown);
+.top span:not(:last-of-type) {
   font-weight: bold;
+  border-top-left-radius: 12px;
+  color: white;
+  padding: 5px 1.5rem;
+  border: 1px solid #0003;
+}
+
+.top span.hospital {
+  background-color: cornflowerblue;
+}
+
+.top span.home {
+  background-color: teal;
+}
+
+.top .dday {
+  display: flex;
+  justify-content: flex-end;
+  border-top-right-radius: 12px;
   color: var(--deep-brown);
+  border: 1px solid #dedddc;
+  background: var(--light-gray);
+  border-bottom: 1px solid var(--light-gray);
+  gap: 6px;
+}
+
+.top .dday b {
+  font-size: 1.1rem;
 }
 
 .title label {
   font-size: 1.5rem;
   width: 100%;
-  max-width: 530px;
+  max-width: 30vh;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -49,7 +80,7 @@
 
 .userInfo_wrapper {
   display: grid;
-  gap: 5px;
+  gap: 8px;
   padding: 0 1rem;
 }
 
@@ -66,6 +97,16 @@
   display: flex;
   gap: 10px;
   flex-direction: column;
-  justify-content: center;
-  margin-top: 1rem;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.card button {
+  height: fit-content;
+  padding: 5px;
+  width: 100%;
+}
+
+.card button:nth-of-type(2) {
+  background-color: var(--deep-brown);
 }
