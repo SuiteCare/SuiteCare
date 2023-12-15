@@ -1,0 +1,23 @@
+.SearchForm > form {
+  padding: 2rem 2.4rem;
+  background-color: var(--light-gray);
+  margin-bottom: 6rem;
+}
+
+.input_wrapper {
+  grid-template-columns: 100px 1fr;
+}
+
+.checkbox_list_wrapper {
+  display: flex;
+  column-gap: 5%;
+  flex-wrap: wrap;
+}
+
+.button_wrapper {
+  text-align: right;
+}
+
+.button_wrapper button {
+  padding: 8px 4rem;
+}
