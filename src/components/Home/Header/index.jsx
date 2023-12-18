@@ -1,14 +1,29 @@
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Fade } from 'react-reveal';
+import Image from 'next/image';
+
+import downArrow from '@/assets/down-arrow.png';
 import styles from './Header.module.css';
 
-const Header = ({ data }) => {
-  if (!data) return null;
+const throttle = (func, limit) => {
+  let inThrottle;
+  return () => {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => (inThrottle = false), limit);
+    }
+  };
+};
 
+const Header = ({ data }) => {
   const [navVisible, setNavVisibility] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const headerRef = useRef(null);
 
   const toggleNav = () => {
     setNavVisibility(!navVisible);
@@ -31,9 +46,12 @@ const Header = ({ data }) => {
 
   const handleMenuItemClick = (menuName, href) => {
     setSelectedMenuItem(menuName);
+
+    // 클릭한 Link가 가리키는 섹션의 위치로 스크롤
     const targetElement = document.querySelector(href);
     if (targetElement) {
-      targetElement.scrollIntoView({
+      window.scrollTo({
+        top: targetElement.offsetTop,
         behavior: 'smooth',
       });
     }
@@ -44,11 +62,14 @@ const Header = ({ data }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    const handleScrollThrottled = throttle(handleScroll, 200);
+
+    window.addEventListener('scroll', handleScrollThrottled);
+
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollThrottled);
     };
-  }, []);
+  }, [scrollPosition]);
 
   useEffect(() => {
     const sectionPositions = menuList.reduce((acc, menu) => {
@@ -77,23 +98,24 @@ const Header = ({ data }) => {
   }, [scrollPosition]);
 
   return (
-    <header id='home' className={styles.header}>
+    <header id='home' className={styles.header} ref={headerRef}>
       <nav className={styles.nav_wrap}>
-        <button className={styles.mobile_btn} onClick={toggleNav}>
+        <button onClick={toggleNav}>
           <span />
           <span />
           <span />
         </button>
 
-        <ul id='nav' className={`${styles.nav} ${navVisible ? styles.visible : ''}`}>
+        <ul className={`${styles.nav} ${navVisible ? styles.visible : ''}`}>
           {menuList.map((menu) => (
             <li key={menu.name}>
-              <span
-                className={`${selectedMenuItem === menu.name ? `${styles.selected}` : ''}`}
+              <Link
+                href={menu.href}
+                className={`${selectedMenuItem === menu.name ? styles.selected : ''}`}
                 onClick={() => handleMenuItemClick(menu.name, menu.href)}
               >
                 {menu.name}
-              </span>
+              </Link>
             </li>
           ))}
         </ul>
@@ -127,7 +149,7 @@ const Header = ({ data }) => {
 
       <p className={styles.scrolldown}>
         <Link href='#about'>
-          <i className='icon-down-circle'></i>
+          <Image src={downArrow} />
         </Link>
       </p>
     </header>

@@ -17,10 +17,19 @@
   color: #aaaaaa;
 }
 
-.twelve ul {
-  margin: 18px 0 30px 0;
+.social {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
+.social li {
+  width: 50px;
+}
+
 .copyright {
+  margin: 18px 0 30px 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,5 +53,9 @@
   color: #ffffff;
   line-height: 60px;
   border-radius: 50%;
-  font-size: 21px;
+  font-size: 14px;
+}
+
+.go_top a:hover {
+  background-color: #888888;
 }
