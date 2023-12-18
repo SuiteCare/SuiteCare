@@ -46,7 +46,6 @@ const SignUpForm = ({ type }) => {
     if (idState) {
       try {
         const response = await axios.get('/api/v1/family', { params: { id: idState } });
-
         const data = response.data;
 
         if (data === 1) {
@@ -85,18 +84,47 @@ const SignUpForm = ({ type }) => {
     }
   };
 
-  const { phone_1, phone_2, phone_3 } = phoneParts;
-  const phoneNumber = `${phone_1}${phone_2}${phone_3}`;
-
   //휴대폰 번호 인증
-  const authenticatePhone = () => {
-    alert(`인증 api 연동 필요\n${Array.from(phoneParts).join('')}`);
-  };
+  const { phone_1, phone_2, phone_3 } = phoneParts;
+  const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
+  async function handlePhoneCertification(event) {
+    event.preventDefault();
+
+    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(phoneNumber)) {
+      alert(`인증 api 연동 필요\n${phoneNumber}`);
+
+      const body = {
+        merchant_uid: '',
+        min_age: 14,
+        name: user_name.value,
+        phone: phoneNumber,
+        carrier: 'MVNO', //SKT, KTF, LGT, MVNO
+        company: 'http://localhost:3000',
+        m_redirect_url: 'http://localhost:3000/certification',
+        popup: true,
+      };
+
+      const response = await axios
+        .post('/certifications/{imp_uid}', body)
+        .then((response) => {
+          if (response.data) {
+            alert('인증 완료');
+          } else {
+            alert('인증 실패');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      alert('휴대폰 번호를 올바르게 입력하십시오.');
+    }
+  }
 
   const formInputs = ($typeName) => {
     return (
       <div className='input_wrapper'>
-        <label>{formInputInfos[typeName].label}</label>
+        <label>{formInputInfos[$typeName].label}</label>
         <input
           type={formInputInfos[$typeName].type}
           placeholder={formInputInfos[$typeName].label}
@@ -214,7 +242,7 @@ const SignUpForm = ({ type }) => {
               />
               <input type='hidden' name='phone' value={phoneNumber} />
             </div>
-            <button type='button' onClick={authenticatePhone}>
+            <button type='button' onClick={handlePhoneCertification}>
               본인인증
             </button>
           </div>

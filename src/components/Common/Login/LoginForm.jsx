@@ -25,28 +25,27 @@ const LoginForm = ({ type }) => {
     const role = type === 'mate' ? 'M' : 'F';
 
     if (loginForm.id && loginForm.password) {
-      let body = {
-        login_id: loginForm.id,
-        password: loginForm.password,
-        role: role,
-      };
+      try {
+        const body = {
+          login_id: loginForm.id,
+          password: loginForm.password,
+          role: role,
+        };
 
-      const response = await axios
-        .post('/api/v1/login', body)
-        .then((response) => {
-          const msg = response.headers.get('msg');
-          if (response.status === 200 && msg === 'success') {
-            // session 로그인 상태 추가해야함!
-            navigator.push(`/${type}/main`);
-          } else if (msg === 'fail') {
-            setLoginFail(true);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        const response = await axios.post('/api/v1/login', body);
+
+        const msg = response.headers.get('msg');
+        if (response.status === 200 && msg === 'success') {
+          sessionStorage.setItem('login_info', JSON.stringify({ login_id: body.login_id, role: body.role }));
+          navigator.push(`/${type}/main`);
+        } else if (msg === 'fail') {
+          setLoginFail(true);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     } else {
-      alert('아이디와 비밀번호를 입력해주세요!!!');
+      alert('아이디와 비밀번호를 입력해 주세요.');
     }
   }
 
