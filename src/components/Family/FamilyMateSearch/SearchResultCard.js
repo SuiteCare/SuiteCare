@@ -1,10 +1,9 @@
 import styles from './SearchResultCard.module.css';
 import default_profile from '@/assets/default_profile.jpg';
 import Image from 'next/image';
+import { calAge } from '@/assets/util.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
-  const calAge = ($birth) => ~~((Date.now() - new Date($birth)) / (1000 * 3600 * 24 * 365));
-
   return (
     <div className={styles.card}>
       {data.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
