@@ -48,6 +48,7 @@ const FamilyMateSearch = () => {
             profile_picture_filename: '',
             introduction:
               '잘 부탁드립니다. 100자 제한 걸어둘 거니까 이것도 100자는 보여야 할 텐데 100자가 어느 정도지? 까지가 60자 정도니까 100자는 대충 두 줄 정도를 더 먹겠구나 여기까지',
+            tel: '0505-1234-1234',
           },
           {
             mate_id: 'park',

@@ -19,10 +19,11 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           {modalData.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
           <div className={styles.profile_details}>
             <h2>{modalData.mate_name}</h2>메이트
-            <p>{modalData.mate_id}</p>
             <p>
               {modalData.gender === 'F' ? '여성' : '남성'}, 만 {calAge(modalData.birthday)}세
             </p>
+            <p>✉️{modalData.mate_email || '이메일 정보가 없습니다.'}</p>
+            <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
           </div>
         </div>
         <div className={styles.introduction}>{modalData.introduction || '소개글이 없습니다.'}</div>
