@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { Fade, Slide } from 'react-reveal';
+import Image from 'next/image';
+
+import mailImage from '@/assets/mail.png';
 import styles from './Contact.module.css';
 
 const Contact = ({ data }) => {
@@ -25,6 +28,7 @@ const Contact = ({ data }) => {
       <Fade bottom duration={1000}>
         <div className={`${styles.row} ${styles.section_head}`}>
           <div className={styles.column}>
+            <Image src={mailImage} />
             <p>{data.contactmessage}</p>
           </div>
         </div>

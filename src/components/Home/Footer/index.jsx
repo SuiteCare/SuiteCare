@@ -1,5 +1,6 @@
 import { Fade } from 'react-reveal';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import styles from './Footer.module.css';
 
@@ -9,13 +10,11 @@ const Footer = ({ data }) => {
       <div className={styles.row}>
         <Fade bottom>
           <div className={styles.twelve}>
-            <ul>
+            <ul className={styles.social}>
               {data?.social.map((network) => {
                 return (
                   <li key={network.name}>
-                    <a href={network.url}>
-                      <i className={network.className}></i>
-                    </a>
+                    <Link href={network.url}>{network.name}</Link>
                   </li>
                 );
               })}
@@ -25,9 +24,9 @@ const Footer = ({ data }) => {
               <li>&copy; Copyright 2023 Nordic Giant</li>
               <li>
                 Design by{' '}
-                <a title='Styleshout' href='http://www.styleshout.com/'>
+                <Link title='Styleshout' href='http://www.styleshout.com/'>
                   Styleshout
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -35,7 +34,7 @@ const Footer = ({ data }) => {
 
         <div className={styles.go_top}>
           <Link className='smoothscroll' title='Back to Top' href='#home'>
-            <i className='icon-up-open'></i>
+            TOP
           </Link>
         </div>
       </div>

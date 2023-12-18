@@ -11,7 +11,7 @@ const MenuList = [
   },
   {
     title: '환자 등록하기',
-    url: 'add_patient',
+    url: 'addPatient',
     description: '간병 신청을 위해 환자 정보를 등록하세요.',
   },
   {
@@ -21,7 +21,7 @@ const MenuList = [
   },
   {
     title: '예약내역 확인',
-    url: 'reservation_list',
+    url: 'reservationList',
     description: '내 간병 예약내역을 확인할 수 있습니다.',
   },
   {

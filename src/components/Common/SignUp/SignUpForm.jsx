@@ -46,6 +46,7 @@ const SignUpForm = ({ type }) => {
     if (idState) {
       try {
         const response = await axios.get('/api/v1/family', { params: { id: idState } });
+
         const data = response.data;
 
         if (data === 1) {
@@ -85,7 +86,7 @@ const SignUpForm = ({ type }) => {
   };
 
   const { phone_1, phone_2, phone_3 } = phoneParts;
-  const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
+  const phoneNumber = `${phone_1}${phone_2}${phone_3}`;
 
   //휴대폰 번호 인증
   const authenticatePhone = () => {
@@ -95,7 +96,7 @@ const SignUpForm = ({ type }) => {
   const formInputs = ($typeName) => {
     return (
       <div className='input_wrapper'>
-        <label>{formInputInfos[$typeName].label}</label>
+        <label>{formInputInfos[typeName].label}</label>
         <input
           type={formInputInfos[$typeName].type}
           placeholder={formInputInfos[$typeName].label}
