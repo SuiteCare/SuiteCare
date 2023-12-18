@@ -1,0 +1,88 @@
+.card {
+  display: grid;
+  width: 100%;
+  padding: 1.6rem;
+  grid-template-columns: 200px 38% 1fr 150px;
+  min-height: 200px;
+  grid-column-gap: 8px;
+  border: 1px solid #dedddc;
+  background-color: var(--transparent-brown);
+  align-items: center;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0px 2px 12px -6px var(--normal-gray);
+}
+
+.card img {
+  width: 95%;
+}
+
+.card button {
+  height: fit-content;
+  padding: 5px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.card button:nth-of-type(2) {
+  background-color: var(--deep-brown);
+}
+
+.userName label {
+  font-size: 1.5rem;
+  margin-right: 6px;
+}
+
+.userName p:last-of-type {
+  line-height: 1.25;
+  font-size: 0.9rem;
+  color: var(--brown-01);
+  margin-top: 6px;
+  width: 90%;
+}
+
+.userInfo_wrapper {
+  display: grid;
+  gap: 5px;
+}
+
+.userInfo {
+  display: grid;
+  grid-template-columns: 8rem 1fr;
+}
+
+.search_button_wrapper {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 1300px) {
+  .card {
+    grid-template-columns: 200px 1fr 32%;
+    grid-row-gap: 2rem;
+  }
+
+  .search_button_wrapper {
+    flex-direction: row;
+    grid-column-start: 1;
+    grid-column-end: 4;
+  }
+
+  .userInfo {
+    grid-template-columns: 6rem 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .card {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .userInfo_wrapper {
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+  }
+}

@@ -21,13 +21,12 @@ const LoginForm = ({ type }) => {
   };
 
   async function onSubmitHandler(event) {
-    // 버튼만 누르면 리로드 되는것을 막아줌
     event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
     if (loginForm.id && loginForm.password) {
       let body = {
-        suite_family_id: loginForm.id,
+        login_id: loginForm.id,
         password: loginForm.password,
         role: role,
       };
@@ -54,9 +53,6 @@ const LoginForm = ({ type }) => {
   return (
     <div className={`${styles.LoginForm} Form`}>
       <div className={styles.loginBox}>
-        <div className='title_wrapper'>
-          <h1> 로그인 </h1>
-        </div>
         <form onSubmit={onSubmitHandler}>
           <div className={styles.userBox}>
             <input type='text' placeholder=' 아이디' name='id' value={loginForm.id} onChange={onChangeHandler} />
@@ -64,7 +60,7 @@ const LoginForm = ({ type }) => {
           <div className={styles.userBox}>
             <input
               type='password'
-              placeholder=' 비밀번호'
+              placeholder='비밀번호'
               name='password'
               value={loginForm.password}
               onChange={onChangeHandler}

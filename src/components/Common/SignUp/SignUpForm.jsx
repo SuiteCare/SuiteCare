@@ -9,20 +9,21 @@ const SignUpForm = ({ type }) => {
   const valueSet = ($type) => {
     if ($type === 'family') {
       return {
-        url: '/api/v1/family',
         buttonText: '패밀리 회원가입',
         radioRedirect: '/mate/signup',
         otherType: '메이트 (간병인)',
       };
     } else if ($type === 'mate') {
       return {
-        url: '/api/v1/mate',
         buttonText: '메이트 회원가입',
         radioRedirect: '/family/signup',
         otherType: '패밀리 (간병 서비스 이용자)',
       };
     }
   };
+
+  //회원가입 버튼 클릭 시 이동시키는 함수
+  const navigator = useRouter();
 
   //회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수
   const handleRadioClick = () => {
@@ -43,14 +44,10 @@ const SignUpForm = ({ type }) => {
   //아이디 중복확인
   const checkDuplicateID = async () => {
     if (idState) {
-      alert('idState : ' + idState);
-
       try {
         const response = await axios.get('/api/v1/family', { params: { id: idState } });
 
         const data = response.data;
-
-        alert('data : ' + data);
 
         if (data === 1) {
           alert('이미 사용 중인 아이디입니다.');
@@ -62,7 +59,7 @@ const SignUpForm = ({ type }) => {
         console.error('Error:', error);
       }
     } else {
-      alert('아이디를 입력하세요.');
+      alert('ID를 입력하세요.');
     }
   };
 
@@ -96,53 +93,53 @@ const SignUpForm = ({ type }) => {
     alert(`인증 api 연동 필요\n${Array.from(phoneParts).join('')}`);
   };
 
-  const formInputs = (typeName) => {
-    const inputInfo = formInputInfos[typeName];
+  const formInputs = ($typeName) => {
     return (
       <div className='input_wrapper'>
         <label>{formInputInfos[typeName].label}</label>
         <input
-          type={formInputInfos[typeName].type}
-          placeholder={formInputInfos[typeName].label}
-          name={formInputInfos[typeName].name}
-          id={formInputInfos[typeName].id}
-          maxLength={formInputInfos[typeName].maxLength}
+          type={formInputInfos[$typeName].type}
+          placeholder={formInputInfos[$typeName].label}
+          name={formInputInfos[$typeName].name}
+          id={formInputInfos[$typeName].id}
+          maxLength={formInputInfos[$typeName].maxLength}
+          required
         />
       </div>
     );
   };
 
-  //회원가입 버튼 클릭 시 이동시키는 함수
-  const navigator = useRouter();
-
   async function handleSignUpClick(event) {
-    // 버튼만 누르면 리로드 되는것을 막아줌
     event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
     if (document.getElementById('id').readOnly) {
       if (pw.value && pw.value === pw_check.value) {
-        let body = {
-          id: id.value,
-          password: pw.value,
-          name: user_name.value,
-          tel: phoneNumber,
-          role: role,
-        };
+        if (user_name.value) {
+          let body = {
+            login_id: id.value,
+            password: pw.value,
+            name: user_name.value,
+            tel: phoneNumber,
+            role: role,
+          };
 
-        const response = await axios
-          .post('/api/v1/family', body)
-          .then((response) => {
-            if (response.data) {
-              alert('회원가입 완료!!!');
-              navigator.push(`/${type}/login`);
-            } else {
-              alert('실패..');
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          const response = await axios
+            .post('/api/v1/family', body)
+            .then((response) => {
+              if (response.data) {
+                alert('회원가입 완료!!!');
+                navigator.push(`/${type}/login`);
+              } else {
+                alert('실패..');
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          alert('성함을 입력해주세요.');
+        }
       } else {
         alert('비밀번호가 일치하지 않습니다.');
       }
@@ -153,8 +150,7 @@ const SignUpForm = ({ type }) => {
 
   //렌더링 부분
   return (
-    <div className={`${styles.SignUpForm} Form`}>
-      <h1>{valueSet(type).buttonText}</h1>
+    <div className={`${styles.SignUpForm} Form_narrow`}>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>
@@ -176,7 +172,7 @@ const SignUpForm = ({ type }) => {
           <label>아이디</label>
           <div className='input_with_button'>
             <input type='text' placeholder='아이디' name='id' id='id' maxLength='20' onChange={onIdChange} />
-            <button onClick={checkDuplicateID} type='button'>
+            <button type='button' onClick={checkDuplicateID}>
               중복확인
             </button>
           </div>
@@ -218,7 +214,7 @@ const SignUpForm = ({ type }) => {
               />
               <input type='hidden' name='phone' value={phoneNumber} />
             </div>
-            <button onClick={authenticatePhone} type='button'>
+            <button type='button' onClick={authenticatePhone}>
               본인인증
             </button>
           </div>

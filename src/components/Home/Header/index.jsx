@@ -127,7 +127,7 @@ const Header = ({ data }) => {
             <h1 className='responsive-headline'>{data?.title}</h1>
           </Fade>
           <Fade bottom duration={1200}>
-            <h3>{data?.description}.</h3>
+            <h2>{data?.description}.</h2>
           </Fade>
           <hr />
           <Fade bottom duration={2000}>

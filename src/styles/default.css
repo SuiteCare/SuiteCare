@@ -38,8 +38,6 @@ h4,
 h5,
 h6,
 p,
-blockquote,
-pre,
 em,
 img,
 small,
@@ -61,14 +59,10 @@ thead,
 tr,
 th,
 td,
-article,
 aside,
 canvas,
-details,
-figure,
 footer,
 header,
-hgroup,
 menu,
 nav {
   margin: 0;
@@ -81,7 +75,6 @@ nav {
   word-break: keep-all;
 }
 
-article,
 aside,
 footer,
 header,
@@ -93,14 +86,6 @@ section {
 
 [hidden] {
   display: none;
-}
-
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: '';
-  content: none;
 }
 
 table {
@@ -127,11 +112,14 @@ table {
 
 :root {
   --beige-01: #dfd7bf;
+  --transparent-beige: #dfd7bf25;
   --brown-01: #a4907c;
+  --transparent-brown: #a4907c15;
   --deep-brown: #4f4242;
-  --gray: #aaa;
-  --light-gray: #ccc;
-  --very-light-gray: #eee;
+  --gray: #acabaa;
+  --normal-gray: #cccbca;
+  --light-gray: #efeeed;
+  --very-light-gray: #f9f8f7;
   --warning: #be3144;
 }
 
@@ -143,7 +131,7 @@ html {
 
 body {
   font-family: 'Noto Sans KR', sans-serif;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 1.8rem;
   color: #333;
 
@@ -183,6 +171,8 @@ h2 {
 h3 {
   font-size: 22px;
   margin-bottom: 12px;
+  border-left: 4px solid var(--brown-01);
+  padding: 0rem 0rem 6px 16px;
 }
 h4 {
   font-size: 20px;
@@ -216,7 +206,7 @@ small {
 
 hr {
   border: none;
-  border-bottom: 1px solid #cccc;
+  border-bottom: 1px solid #dddd;
   line-height: 0;
   position: relative;
   margin: 0.8rem 0;
@@ -353,6 +343,8 @@ input::-moz-focus-inner {
 .Form_wide {
   width: 100%;
   padding: 0 8rem;
+  max-width: 2000px;
+  margin: 0 auto;
 }
 
 form .input_wrapper {
@@ -383,6 +375,7 @@ form .button_wrapper {
 input[type='text'],
 input[type='password'],
 input[type='email'],
+input[type='number'],
 textarea,
 select {
   padding: 1rem 1.2rem;
@@ -391,8 +384,6 @@ select {
   color: #333;
   background: transparent;
   border-bottom: 1px solid var(--deep-brown);
-  min-height: 50px;
-  border-radius: 7px;
   margin: 5px 0;
   font-size: 1rem;
 }
@@ -414,10 +405,25 @@ select {
 input[type='text']:focus,
 input[type='password']:focus,
 input[type='email']:focus,
+input[type='number']:focus,
 textarea:focus {
   outline: 3px solid var(--beige-01);
   background-color: white;
   border-radius: 7px;
+}
+
+input[type='text']:disabled,
+input[type='password']:disabled,
+input[type='email']:disabled,
+input[type='number']:disabled,
+textarea:disabled,
+input[type='text']:read-only,
+input[type='password']:read-only,
+input[type='email']:read-only,
+input[type='number']:read-only,
+textarea:read-only {
+  background-color: var(--very-light-gray);
+  color: var(--deep-brown);
 }
 
 textarea {
@@ -443,4 +449,18 @@ input[type='checkbox'] {
 .title_wrapper {
   margin-bottom: 1rem;
   text-align: center;
+}
+
+.close_button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close_button span::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x-lg' viewBox='0 0 16 16'%3E%3Cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/%3E%3C/svg%3E");
+  cursor: pointer;
+  padding: 5px;
+  position: relative;
+  left: 1.5rem;
+  top: -0.5rem;
 }
