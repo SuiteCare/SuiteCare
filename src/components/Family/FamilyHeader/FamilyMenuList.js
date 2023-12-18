@@ -21,7 +21,7 @@ const MenuList = [
   },
   {
     title: '예약내역 확인',
-    url: 'reservationList',
+    url: 'reservation_list',
     description: '내 간병 예약내역을 확인할 수 있습니다.',
   },
   {

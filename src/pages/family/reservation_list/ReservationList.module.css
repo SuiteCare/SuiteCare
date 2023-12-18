@@ -1,0 +1,5 @@
+.ReservationList {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  column-gap: 3rem;
+}
