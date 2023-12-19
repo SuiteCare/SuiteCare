@@ -5,7 +5,7 @@ import 'moment/locale/ko';
 
 const localizer = momentLocalizer(moment);
 
-const FamilyCalendar = () => {
+const MateCalendar = () => {
   const [eventList, setEventList] = useState([]);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const FamilyCalendar = () => {
       const rawData = {
         patient_name: '김환자',
         diagnosis_name: '중풍',
-        mate_name: '박간병',
+        family_name: '이보호',
         start_date: '2023-12-18',
         end_date: '2024-2-1',
         weekdays: ['월', '목', '토', '일'],
@@ -35,7 +35,7 @@ const FamilyCalendar = () => {
         if (weekdays.includes(dayOfWeek)) {
           const event = {
             title: `${rawData.patient_name}님 (${rawData.diagnosis_name})`,
-            mate: `간병인 ${rawData.mate_name}님`,
+            family: `보호자 ${rawData.family_name}님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
             color: '#db4',
@@ -93,7 +93,7 @@ const FamilyCalendar = () => {
 
   const EventComponent = ({ event }) => (
     <div>
-      <strong>{event.title}</strong> / <span>{event.mate}</span>
+      <strong>{event.title}</strong> / <span>{event.family}</span>
     </div>
   );
 
@@ -134,4 +134,4 @@ const FamilyCalendar = () => {
   );
 };
 
-export default FamilyCalendar;
+export default MateCalendar;

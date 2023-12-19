@@ -1,17 +1,17 @@
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyCalendar from '@/components/Family/FamilyReservationList/FamilyCalendar';
 import FamilyReservationSidebar from '@/components/Family/FamilyReservationList/FamilyReservationSidebar';
-import styles from './ReservationList.module.css';
 
 const ReservationList = () => {
   return (
     <>
       <FamilyHeader />
-      <div className={styles.ReservationList}>
+      <div className='page_with_sidebar'>
         <FamilyReservationSidebar />
-        <div>
+        <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>예약 내역 확인</h1>
+            <span>나의 간병 예약 내역을 확인할 수 있습니다.</span>
           </div>
           <FamilyCalendar />
         </div>
