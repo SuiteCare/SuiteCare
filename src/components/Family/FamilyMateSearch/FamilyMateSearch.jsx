@@ -33,7 +33,7 @@ const FamilyMateSearch = () => {
   }
 
   return (
-    <div className='FamilyMateSearch'>
+    <div className='FamilyMateSearch content_wrapper'>
       <SearchForm onSearch={handleSearch} />
       <SearchResult
         data={[

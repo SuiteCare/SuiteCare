@@ -342,7 +342,6 @@ input::-moz-focus-inner {
 
 .Form_wide {
   width: 100%;
-  padding: 0 8rem;
   max-width: 2000px;
   margin: 0 auto;
 }
@@ -439,6 +438,17 @@ input[type='checkbox'] {
 }
 
 /*  8. Page Design  --------------------------------------------------- */
+
+.content_wrapper {
+  padding-left: 8rem;
+  padding-right: 8rem;
+  margin-bottom: 2rem;
+}
+
+.page_with_sidebar {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16%) 1fr;
+}
 
 .title_wrapper span {
   color: var(--gray);
