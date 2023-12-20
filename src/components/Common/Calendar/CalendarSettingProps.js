@@ -1,4 +1,3 @@
-import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 
 const messages = {
@@ -40,35 +39,50 @@ export const customDayPropGetter = (date) => {
   else return {};
 };
 
-const EventComponent = ({ event, showEvent }) => (
-  <div onClick={() => showEvent(event)}>
+const EventComponent = ({ event, openModal, setModalData }) => (
+  <div
+    onClick={() => {
+      setModalData(event);
+      openModal();
+    }}
+  >
     <strong>{event.title}</strong>
     <br />
     <span>{event.mate}</span>
   </div>
 );
 
-const AgendaEventComponent = ({ event, showEvent }) => (
-  <div onClick={() => showEvent(event)}>
+const AgendaEventComponent = ({ event, openModal, setModalData }) => (
+  <div
+    onClick={() => {
+      setModalData(event);
+      openModal();
+    }}
+  >
     <span style={{ color: event.color }}>●</span> <strong>{event.title}</strong> / <span>{event.mate}</span>
   </div>
 );
 
-const MonthEventComponent = ({ event, showEvent }) => (
-  <div onClick={() => showEvent(event)}>
+const MonthEventComponent = ({ event, openModal, setModalData }) => (
+  <div
+    onClick={() => {
+      setModalData(event);
+      openModal();
+    }}
+  >
     <strong>{event.title}</strong>
   </div>
 );
 
-export const getSettingProps = () => ({
+export const getSettingProps = (openModal, setModalData) => ({
   style: { height: 800 },
   messages: { messages },
   min: moment().startOf('day').clone().hour(6).toDate(),
   max: moment().startOf('day').clone().hour(22).toDate(),
   components: {
-    event: EventComponent,
-    month: { event: MonthEventComponent },
-    agenda: { event: AgendaEventComponent },
+    event: (props) => <EventComponent {...props} openModal={openModal} setModalData={setModalData} />,
+    month: { event: (props) => <MonthEventComponent {...props} openModal={openModal} setModalData={setModalData} /> },
+    agenda: { event: (props) => <AgendaEventComponent {...props} openModal={openModal} setModalData={setModalData} /> },
   },
   formats: {
     monthHeaderFormat: formats.monthHeaderFormat,

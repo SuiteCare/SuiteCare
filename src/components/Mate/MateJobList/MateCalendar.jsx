@@ -39,8 +39,8 @@ const MateCalendar = () => {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name}님 (${rawData.diagnosis_name})`,
-            family: `보호자 ${rawData.family_name}님`,
+            title: `${rawData.patient_name} 님 (${rawData.diagnosis_name})`,
+            family: `보호자 ${rawData.family_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
             color: stringToColor(rawData.patient_name + rawData.diagnosis_name + rawData.family_name),

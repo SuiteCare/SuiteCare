@@ -551,3 +551,7 @@ input[type='checkbox'] {
 .rbc-agenda-table tr {
   background-color: transparent !important;
 }
+
+.rbc-agenda-event-cell div {
+  cursor: pointer;
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useModal from '@/components/Common/Modal/useModal';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
@@ -7,11 +8,11 @@ import { stringToColor } from '@/assets/util';
 import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
 
 const localizer = momentLocalizer(moment);
-const settingProps = getSettingProps();
 
 const FamilyCalendar = () => {
   const [eventList, setEventList] = useState([]);
-  const [showEventDetails, setShowEventDetails] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const { isModalVisible, openModal, closeModal } = useModal();
 
   useEffect(() => {
     const getEventList = () => {
@@ -39,8 +40,8 @@ const FamilyCalendar = () => {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name}님 (${rawData.diagnosis_name})`,
-            mate: `간병인 ${rawData.mate_name}님`,
+            title: `${rawData.patient_name} 님 (${rawData.diagnosis_name})`,
+            mate: `간병인 ${rawData.mate_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
             color: stringToColor(rawData.patient_name + rawData.diagnosis_name + rawData.mate_name),
@@ -57,15 +58,6 @@ const FamilyCalendar = () => {
     getEventList();
   }, []);
 
-  const showEvent = (event) => {
-    setSelectedEvent(event);
-    setShowEventDetails(true);
-  };
-
-  const closeModal = () => {
-    setShowEventDetails(false);
-  };
-
   return (
     <>
       <Calendar
@@ -78,9 +70,9 @@ const FamilyCalendar = () => {
         views={['month', 'week', 'agenda']}
         timeslots={2} // step={30}와 동일
         dayPropGetter={customDayPropGetter}
-        {...settingProps}
+        {...getSettingProps(openModal, setModalData)}
       />
-      {showEventDetails && <FamilyCalendarModal modalData={'test'} closeModal={closeModal} />}
+      {isModalVisible && <FamilyCalendarModal modalData={modalData} closeModal={closeModal} />}
     </>
   );
 };
