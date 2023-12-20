@@ -1,31 +1,12 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState } from 'react';
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import JobDetailModal from './JobDetailModal';
+import useModal from '@/components/Common/Modal/useModal';
 
 const SearchResult = ({ data }) => {
   const [modalData, setModalData] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  useEffect(() => {
-    const handleBodyOverflow = () => {
-      if (typeof document !== 'undefined') {
-        if (isModalVisible) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = 'auto';
-        }
-      }
-    };
-
-    handleBodyOverflow();
-
-    return () => {
-      if (typeof document !== 'undefined') {
-        document.body.style.overflow = 'auto';
-      }
-    };
-  }, [isModalVisible]);
+  const { isModalVisible, openModal, closeModal } = useModal();
 
   const handleShowModal = async (defaultData) => {
     // const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) }; API 완성되면 되돌려야 함
@@ -34,11 +15,7 @@ const SearchResult = ({ data }) => {
       ...{},
     };
     setModalData(combinedData);
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
+    openModal();
   };
 
   return (
