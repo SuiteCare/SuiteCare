@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import MateDetailModal from './MateDetailModal';
@@ -6,6 +6,26 @@ import MateDetailModal from './MateDetailModal';
 const SearchResult = ({ data, type }) => {
   const [modalData, setModalData] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    const handleBodyOverflow = () => {
+      if (typeof document !== 'undefined') {
+        if (isModalVisible) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = 'auto';
+        }
+      }
+    };
+
+    handleBodyOverflow();
+
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = 'auto';
+      }
+    };
+  }, [isModalVisible]);
 
   const handleShowModal = async (defaultData) => {
     // const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) };

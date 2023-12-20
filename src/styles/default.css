@@ -496,15 +496,6 @@ input[type='checkbox'] {
   background: var(--light-gray);
 }
 
-.rbc-today {
-  background-color: var(--transparent-brown);
-  border: 1px solid var(--deep-brown) !important;
-}
-
-.rbc-event {
-  background-color: var(--brown-01);
-}
-
 .rbc-toolbar button:active,
 .rbc-toolbar button.rbc-active {
   background-image: none;
@@ -540,4 +531,23 @@ input[type='checkbox'] {
 .rbc-button-link {
   padding: 0 5px;
   border-radius: 100%;
+}
+
+.rbc-current-time-indicator {
+  height: 2px;
+  background-color: #74ad31aa;
+}
+
+.rbc-event:focus,
+.rbc-day-slot .rbc-background-event:focus {
+  outline: 5px auto var(--deep-brown);
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  border: none;
+}
+
+.rbc-agenda-table tr {
+  background-color: transparent !important;
 }

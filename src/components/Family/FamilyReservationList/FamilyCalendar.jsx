@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
+import FamilyCalendarModal from './FamilyCalendarModal';
+import { stringToColor } from '@/assets/util';
+import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
 
 const localizer = momentLocalizer(moment);
+const settingProps = getSettingProps();
 
 const FamilyCalendar = () => {
   const [eventList, setEventList] = useState([]);
+  const [showEventDetails, setShowEventDetails] = useState(false);
 
   useEffect(() => {
     const getEventList = () => {
@@ -38,7 +43,7 @@ const FamilyCalendar = () => {
             mate: `간병인 ${rawData.mate_name}님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
-            color: '#db4',
+            color: stringToColor(rawData.patient_name + rawData.diagnosis_name + rawData.mate_name),
           };
           events.push(event);
         }
@@ -52,85 +57,31 @@ const FamilyCalendar = () => {
     getEventList();
   }, []);
 
-  const messages = {
-    today: '오늘',
-    previous: '이전',
-    next: '다음',
-    month: '월별 보기',
-    week: '주별 보기',
-    day: '일별 보기',
-    agenda: '목록 보기',
-    date: '날짜',
-    time: '시간',
-    event: '간병',
-    showMore: (total) => `+${total}개 더 보기`,
-    noEventsInRange: '해당 기간에는 간병 일정이 없습니다.',
+  const showEvent = (event) => {
+    setSelectedEvent(event);
+    setShowEventDetails(true);
   };
 
-  const formats = {
-    monthHeaderFormat: 'YYYY년 M월',
-    dayRangeHeaderFormat: ({ start }, culture, localizer) => {
-      let weekRange = new Date(start);
-      weekRange.setDate(weekRange.getDate() + 6);
-      return `${localizer.format(start, 'M월 DD일', culture)} ~ ${localizer.format(
-        new Date(weekRange),
-        'M월 DD일',
-        culture,
-      )}`;
-    },
-    agendaDateFormat: (date, culture, localizer) => localizer.format(date, 'M월 DD일 (ddd)', culture),
-    agendaHeaderFormat: ({ start, end }, culture, localizer) =>
-      `${localizer.format(start, 'M월 DD일', culture)} ~ ${localizer.format(end, 'M월 DD일', culture)}`,
+  const closeModal = () => {
+    setShowEventDetails(false);
   };
-
-  const customDayPropGetter = (date) => {
-    if (date.getDay() === 0 || date.getDay() === 6)
-      return {
-        className: 'rbc-weekend',
-      };
-    else return {};
-  };
-
-  const EventComponent = ({ event }) => (
-    <div>
-      <strong>{event.title}</strong> / <span>{event.mate}</span>
-    </div>
-  );
-
-  const MonthEventComponent = ({ event }) => (
-    <div>
-      <strong>{event.title}</strong>
-    </div>
-  );
 
   return (
-    <div>
+    <>
       <Calendar
         className='Calendar'
         localizer={localizer}
         events={eventList}
         culture={'ko-KR'}
-        components={{
-          event: EventComponent,
-          month: { event: MonthEventComponent },
-        }}
         startAccessor='start'
         endAccessor='end'
         views={['month', 'week', 'agenda']}
-        messages={messages}
         timeslots={2} // step={30}와 동일
-        min={moment().startOf('day').clone().hour(6).toDate()}
-        max={moment().startOf('day').clone().hour(22).toDate()}
-        formats={{
-          monthHeaderFormat: formats.monthHeaderFormat,
-          dayRangeHeaderFormat: formats.dayRangeHeaderFormat,
-          agendaDateFormat: formats.agendaDateFormat,
-          agendaHeaderFormat: formats.agendaHeaderFormat,
-        }}
         dayPropGetter={customDayPropGetter}
-        style={{ height: 800 }}
+        {...settingProps}
       />
-    </div>
+      {showEventDetails && <FamilyCalendarModal modalData={'test'} closeModal={closeModal} />}
+    </>
   );
 };
 
