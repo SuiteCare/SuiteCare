@@ -7,6 +7,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'eslint-config-prettier',
     'next/core-web-vitals',
+    'react-hooks',
   ],
   globals: {
     NodeJS: true,
