@@ -2,7 +2,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
 import default_profile from '@/assets/default_profile.jpg';
-import { calAge } from '@/assets/util.js';
+import { calAge } from '@/utils/calculators.js';
 import useModal from '@/components/Common/Modal/useModal';
 
 const MateDetailModal = ({ modalData, closeModal }) => {

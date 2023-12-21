@@ -10,8 +10,8 @@ const ReservationList = () => {
         <FamilyReservationSidebar />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
-            <h1>예약 내역 확인</h1>
-            <span>나의 간병 예약 내역을 확인할 수 있습니다.</span>
+            <h1>내 일정 정보</h1>
+            <span>나의 간병 예약 일정을 확인할 수 있습니다.</span>
           </div>
           <FamilyCalendar />
         </div>
