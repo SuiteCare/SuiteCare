@@ -38,6 +38,17 @@ const JobDetailModal = ({ modalData, closeModal }) => {
               </div>
             </div>
 
+            <div className={styles.info_section}>
+              <h5>보호자 정보</h5>
+              <div className={styles.info_wrapper}>
+                <label>보호자 연락처</label>
+                <div>
+                  <p>✉️{modalData.family_email || '이메일 정보가 없습니다.'}</p>
+                  <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
+                </div>
+              </div>
+            </div>
+
             {/* 간병 정보 시작 */}
             <div className={styles.info_section}>
               <h5>간병 정보</h5>
@@ -94,14 +105,6 @@ const JobDetailModal = ({ modalData, closeModal }) => {
               </div>
             </div>
 
-            <div className={styles.info_section}>
-              <h5>보호자 정보</h5>
-              <div className={styles.info_wrapper}>
-                <label>보호자 연락처</label>
-                <span>{modalData.family_id}</span>
-                <span>{modalData.family_tel}</span>
-              </div>
-            </div>
             {/* 간병 정보 끝 */}
           </>
         )}
@@ -197,7 +200,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         )}
         {/* 끝 */}
 
-        <div className={styles.search_button_wrapper}>
+        <div className={styles.button_wrapper}>
           <button onClick={() => handleApply(modalData.mate_id)}>간병 지원하기</button>
         </div>
       </div>
