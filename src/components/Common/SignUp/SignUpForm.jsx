@@ -138,6 +138,7 @@ const SignUpForm = ({ type }) => {
   };
 
   async function handleSignUpClick(event) {
+    console.log(user_name.value);
     event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 

@@ -115,3 +115,19 @@
 .button_wrapper button {
   background-color: var(--deep-brown);
 }
+
+.location {
+  color: white;
+  border-radius: 10px;
+  padding: 4px 10px 5px 10px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.location.house {
+  background-color: teal;
+}
+
+.location.hospital {
+  background-color: cornflowerblue;
+}

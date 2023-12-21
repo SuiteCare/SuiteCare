@@ -1,10 +1,13 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
-import React from 'react';
-import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
+import React, { useState } from 'react';
+
 import useModal from '@/components/Common/Modal/useModal';
+import styles from '@/components/Common/Modal/Modal.module.css';
+
+import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
 const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -14,66 +17,114 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         </div>
 
         {/* 시작 */}
+        <div className='tab_wrapper'>
+          <ul>
+            <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+              간병 정보
+            </li>
+            <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+              환자 상세정보
+            </li>
+          </ul>
+        </div>
 
-        <div className={styles.userInfo_wrapper}>
-          <h5>보호자 정보</h5>
-          <div className={styles.info_grid}>
-            <div className={styles.info_wrapper}>
-              <label>보호자 성함</label>
-              <span>
-                {modalData.family_name} ({modalData.family_id})
-              </span>
-            </div>
-
+        {activeTab === 0 && (
+          <div>
             <h5>간병 정보</h5>
 
-            <div className={styles.info_wrapper}>
-              <label>주소</label>
-              <span>{modalData.address}</span>
-            </div>
-            <div className={styles.info_wrapper}>
-              <label>위치</label>
-              <span>{modalData.location_type}</span>
-            </div>
+            {/* 간병 정보 시작 */}
+            <div>
+              <label>간병 정보</label>
+              <div className={styles.info_wrapper}>
+                <label>주소</label>
+                <div>
+                  <span
+                    className={`${styles.location} ${
+                      modalData.location_type === '자택' ? styles.house : styles.hospital
+                    }`}
+                  >
+                    {modalData.location_type}
+                  </span>
+                  <span>{modalData.address}</span>
+                </div>
+              </div>
+              <div className={styles.info_wrapper}>
+                <label>간병 기간</label>
+                <span>
+                  {modalData.start_date} ~ {modalData.end_date}{' '}
+                  <span>(총 {countWeekdays(modalData.start_date, modalData.end_date, modalData.week_days)}일)</span>
+                </span>
+              </div>
 
-            <div className={styles.info_wrapper}>
-              <label>간병 기간</label>
-              <span>
-                {modalData.start_date} ~ {modalData.end_date}{' '}
-                <span>(총 {countWeekdays(modalData.start_date, modalData.end_date, modalData.week_days)}일)</span>
-              </span>
-            </div>
+              <div className={styles.info_wrapper}>
+                <label>간병 요일</label>
+                <span>{modalData.week_days.join(', ')}</span>
+              </div>
 
-            <div className={styles.info_wrapper}>
-              <label>간병 요일</label>
-              <span>{modalData.week_days.join(', ')}</span>
-            </div>
+              <div className={styles.info_wrapper}>
+                <label>출퇴근시간</label>
+                <span>
+                  {modalData.start_time} ~ {modalData.end_time}{' '}
+                  <span>(총 {calTimeDiff(modalData.start_time, modalData.end_time)}시간)</span>
+                </span>
+              </div>
 
-            <div className={styles.info_wrapper}>
-              <label>출퇴근시간</label>
-              <span>
-                {modalData.start_time} ~ {modalData.end_time}{' '}
-                <span>(총 {calTimeDiff(modalData.start_time, modalData.end_time)}시간)</span>
-              </span>
-            </div>
+              <div className={styles.info_wrapper}>
+                <label>제시 시급</label>
+                <span>{modalData.wage.toLocaleString()}원</span>
+              </div>
 
-            <div className={styles.info_wrapper}>
-              <label>제시 시급</label>
-              <span>{modalData.wage.toLocaleString()}원</span>
+              <div className={styles.info_wrapper}>
+                <label>예상 총 급여</label>
+                <span>
+                  {(
+                    modalData.wage *
+                    calTimeDiff(modalData.start_time, modalData.end_time) *
+                    countWeekdays(modalData.start_date, modalData.end_date, modalData.week_days)
+                  ).toLocaleString()}
+                  원
+                </span>
+              </div>
             </div>
+            <div>
+              <label>환자 정보</label>
+              <div className={styles.info_wrapper}>
+                <label>환자</label>
+                <span>
+                  {modalData.patient_name} 님 (만 {calAge(modalData.patient_birthday)}세{' '}
+                  {modalData.gender === 'F' ? '여성' : '남성'})
+                </span>
+              </div>
 
-            <div className={styles.info_wrapper}>
-              <label> 예상 총 급여</label>
-              <span>
-                {(
-                  modalData.wage *
-                  calTimeDiff(modalData.start_time, modalData.end_time) *
-                  countWeekdays(modalData.start_date, modalData.end_date, modalData.week_days)
-                ).toLocaleString()}
-                원
-              </span>
+              <div className={styles.info_wrapper}>
+                <label>진단명</label>
+                <span>{modalData.diagnosis}</span>
+              </div>
             </div>
-            <h5>환자 기본정보</h5>
+            <div>
+              <label>보호자 정보</label>
+              <div className={styles.info_wrapper}>
+                <label>보호자 성함</label>
+                <span>
+                  {modalData.family_name} ({modalData.family_id})
+                </span>
+              </div>
+              <div className={styles.info_wrapper}>
+                <label>보호자 연락처</label>
+                <span>{modalData.family_id}</span>
+                <span>{modalData.family_tel}</span>
+              </div>
+            </div>
+            {/* 간병 정보 끝 */}
+          </div>
+        )}
+
+        {activeTab === 1 && (
+          <div>
+            <h5>환자 상세정보</h5>
+
+            {/* 상세정보 시작 */}
+            <label>환자 기본정보</label>
             <div className={styles.info_wrapper}>
               <label>키</label>
               <span>{modalData.patient_height}</span>
@@ -86,7 +137,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
             <div className={styles.info_wrapper}>
               <label>진단명</label>
-              <span>{modalData.diagnosis_name}</span>
+              <span>{modalData.diagnosis}</span>
             </div>
 
             <div className={styles.info_wrapper}>
@@ -96,7 +147,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
               </span>
             </div>
 
-            <h5>환자 상세정보</h5>
+            <label>환자 상세정보</label>
             <div className={styles.info_wrapper}>
               <label>의식 상태</label>
               <span>{modalData.consciousness_state}</span>
@@ -146,9 +197,9 @@ const JobDetailModal = ({ modalData, closeModal }) => {
               <label>비고</label>
               <span>{modalData.notice}</span>
             </div>
+            {/* 상세정보 끝 */}
           </div>
-        </div>
-
+        )}
         {/* 끝 */}
 
         <div className={styles.search_button_wrapper}>

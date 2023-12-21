@@ -1,10 +1,22 @@
 import { useState } from 'react';
+
 import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 import FormAgeList from '@/components/Common/SearchInfo/FormAgeList';
 
 const SearchForm = ({ onSearch }) => {
-  //시급 관련
+  // 체크박스 및 최종 데이터 관련
+  const [checkedItems, setCheckedItems] = useState({
+    search_name: '',
+    search_diagnosis: '',
+    location: [],
+    gender: [],
+    service: [],
+    age: [],
+    wage: [9860, 9860],
+  });
+
+  // 시급 관련
   const [wages, setWages] = useState([9860, 9860]);
 
   const handleWageChange = (e, index) => {
@@ -30,26 +42,25 @@ const SearchForm = ({ onSearch }) => {
     });
   };
 
-  //상단 이름 검색창 관련
-  const [searchInput, setSearchInput] = useState('');
+  // 상단 텍스트 검색창 관련
+  const [searchName, setSearchName] = useState('');
 
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value);
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
     setCheckedItems({
       ...checkedItems,
-      search_input: e.target.value,
+      search_name: e.target.value,
     });
   };
+  const [searchDiagnosis, setSearchDiagnosis] = useState('');
 
-  //체크박스 및 최종 데이터 관련
-  const [checkedItems, setCheckedItems] = useState({
-    search_input: '',
-    location: [],
-    gender: [],
-    service: [],
-    age: [],
-    wage: [9860, 9860],
-  });
+  const handleSearchDiagnosisNameChange = (e) => {
+    setSearchDiagnosis(e.target.value);
+    setCheckedItems({
+      ...checkedItems,
+      search_diagnosis: e.target.value,
+    });
+  };
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
@@ -90,7 +101,7 @@ const SearchForm = ({ onSearch }) => {
     selectAllLocation(e);
   };
 
-  //폼 제출
+  // 폼 제출
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -115,10 +126,21 @@ const SearchForm = ({ onSearch }) => {
           <label>이름으로 검색</label>
           <input
             type='text'
-            name='search_input'
+            name='search_name'
             placeholder='🔎 간병인 이름으로 검색하기'
-            value={searchInput}
-            onChange={handleSearchChange}
+            value={searchName}
+            onChange={handleSearchNameChange}
+            maxLength={10}
+          />
+        </div>
+        <div className='input_wrapper'>
+          <label>진단명으로 검색</label>
+          <input
+            type='text'
+            name='search_diagnosis'
+            placeholder='🔎 진단명으로 검색하기'
+            value={searchDiagnosis}
+            onChange={handleSearchDiagnosisNameChange}
             maxLength={10}
           />
         </div>

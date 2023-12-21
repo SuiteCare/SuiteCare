@@ -53,7 +53,7 @@ const MateJobSearch = () => {
             end_time: '17:00',
             week_days: ['화', '수'],
             introduction: '뼈가 약하십니다',
-            diagnosis_name: '중풍',
+            diagnosis: '중풍',
           },
           {
             family_name: '테스트2',
@@ -70,7 +70,7 @@ const MateJobSearch = () => {
             end_time: '17:00',
             week_days: ['금', '토', '일'],
             introduction: '',
-            diagnosis_name: '류마티스성 골절',
+            diagnosis: '류마티스성 골절',
           },
           {
             family_name: '테스트',
@@ -87,7 +87,7 @@ const MateJobSearch = () => {
             end_time: '17:00',
             week_days: ['수'],
             introduction: '뼈가 약하십니다',
-            diagnosis_name: '진단명을 매우 길게 적는 사람도 있지 않을까',
+            diagnosis: '진단명을 매우 길게 적는 사람도 있지 않을까',
           },
           {
             family_name: '테스트2',
@@ -104,7 +104,7 @@ const MateJobSearch = () => {
             end_time: '17:00',
             week_days: ['금', '토', '일'],
             introduction: '',
-            diagnosis_name: '류마티스성 골절',
+            diagnosis: '류마티스성 골절',
           },
         ]}
       />
