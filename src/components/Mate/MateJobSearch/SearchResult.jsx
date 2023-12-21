@@ -1,4 +1,5 @@
 import { React, useState } from 'react';
+
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import JobDetailModal from './JobDetailModal';

@@ -475,6 +475,34 @@ input[type='checkbox'] {
   top: -0.5rem;
 }
 
+.tab_wrapper {
+  border-bottom: 1px solid var(--normal-gray);
+  margin-bottom: 1rem;
+}
+
+.tab_wrapper ul {
+  display: flex;
+}
+
+.tab_wrapper li {
+  padding: 16px 2rem 14px 2rem;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+}
+
+.tab_wrapper li:hover {
+  background-color: var(--very-light-gray);
+}
+
+.tab_wrapper .active {
+  border: 1px solid var(--normal-gray);
+  border-bottom: none;
+  outline: 1px solid white;
+  font-weight: 500;
+}
+
 /*  9. Calendar  --------------------------------------------------- */
 @import '~react-big-calendar/lib/css/react-big-calendar.css';
 

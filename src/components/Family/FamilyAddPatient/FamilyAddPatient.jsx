@@ -20,7 +20,7 @@ const Form = () => {
     bedsore_yn: '',
     suction_yn: '',
     outpatient_yn: '',
-    bedsornight_care_yne_yn: '',
+    night_care_yn: '',
   });
 
   const handleInputChange = (e) => {

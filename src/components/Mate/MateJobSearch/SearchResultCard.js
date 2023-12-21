@@ -19,7 +19,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
         {/* body */}
         <div className={styles.userInfo}>
           <label>진단명</label>
-          <span>{data.diagnosis_name}</span>
+          <span>{data.diagnosis}</span>
         </div>
         <div className={styles.userInfo}>
           <label>나이/성별</label>

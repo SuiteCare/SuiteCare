@@ -18,7 +18,7 @@ const MateCalendar = () => {
       // 서버와 통신해서 다음 데이터를 받아온다고 가정한다.
       const rawData = {
         patient_name: '김환자',
-        diagnosis_name: '중풍',
+        diagnosis: '중풍',
         family_name: '이보호',
         start_date: '2023-12-18',
         end_date: '2024-2-1',
@@ -39,11 +39,11 @@ const MateCalendar = () => {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name} 님 (${rawData.diagnosis_name})`,
+            title: `${rawData.patient_name} 님 (${rawData.diagnosis})`,
             family: `보호자 ${rawData.family_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
-            color: stringToColor(rawData.patient_name + rawData.diagnosis_name + rawData.family_name),
+            color: stringToColor(rawData.patient_name + rawData.diagnosis + rawData.family_name),
           };
           events.push(event);
         }
