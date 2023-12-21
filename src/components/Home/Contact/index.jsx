@@ -28,7 +28,7 @@ const Contact = ({ data }) => {
       <Fade bottom duration={1000}>
         <div className={`${styles.row} ${styles.section_head}`}>
           <div className={styles.column}>
-            <Image src={mailImage} />
+            <Image src={mailImage} alt='mail_icon' />
             <p>{data.contactmessage}</p>
           </div>
         </div>
@@ -84,7 +84,7 @@ const Contact = ({ data }) => {
                     name='contactMessage'
                     value={formData.contactMessage}
                     onChange={handleChange}
-                  ></textarea>
+                  />
                 </div>
 
                 <div className={styles.formGroup}>
@@ -92,7 +92,7 @@ const Contact = ({ data }) => {
                     Submit
                   </button>
                   <span id='image-loader'>
-                    <img alt='' src='images/loader.gif' />
+                    <Image alt='' src='images/loader.gif' />
                   </span>
                 </div>
               </fieldset>
