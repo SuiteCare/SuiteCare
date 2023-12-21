@@ -8,13 +8,14 @@ import styles from './Header.module.css';
 
 const throttle = (func, limit) => {
   let inThrottle;
-  return () => {
-    const args = arguments;
+  return (...args) => {
     const context = this;
     if (!inThrottle) {
       func.apply(context, args);
       inThrottle = true;
-      setTimeout(() => (inThrottle = false), limit);
+      setTimeout(() => {
+        inThrottle = false;
+      }, limit);
     }
   };
 };

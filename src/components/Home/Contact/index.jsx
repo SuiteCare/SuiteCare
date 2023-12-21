@@ -6,8 +6,6 @@ import mailImage from '@/assets/mail.png';
 import styles from './Contact.module.css';
 
 const Contact = ({ data }) => {
-  if (!data) return null;
-
   const [formData, setFormData] = useState({
     contactName: '',
     contactEmail: '',
@@ -29,7 +27,7 @@ const Contact = ({ data }) => {
         <div className={`${styles.row} ${styles.section_head}`}>
           <div className={styles.column}>
             <Image src={mailImage} alt='mail_icon' />
-            <p>{data.contactmessage}</p>
+            <p>{data?.contactmessage}</p>
           </div>
         </div>
       </Fade>
@@ -91,9 +89,6 @@ const Contact = ({ data }) => {
                   <button type='submit' className={styles.submit}>
                     Submit
                   </button>
-                  <span id='image-loader'>
-                    <Image alt='' src='images/loader.gif' />
-                  </span>
                 </div>
               </fieldset>
             </form>

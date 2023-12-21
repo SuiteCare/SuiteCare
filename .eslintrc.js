@@ -1,13 +1,12 @@
 module.exports = {
   parser: '@babel/eslint-parser',
   extends: [
+    'plugin:react/recommended',
     'airbnb',
     'airbnb/hooks',
-    'plugin:react/recommended',
+    'prettier',
     'plugin:jsx-a11y/recommended',
-    'eslint-config-prettier',
     'next/core-web-vitals',
-    'react-hooks',
   ],
   globals: {
     NodeJS: true,
@@ -33,6 +32,8 @@ module.exports = {
     'arrow-body-style': 'off',
     'no-plusplus': 'off',
     'react/display-name': 'off',
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'react/function-component-definition': ['warn', { namedComponents: 'arrow-function' }],
     'react/jsx-one-expression-per-line': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
