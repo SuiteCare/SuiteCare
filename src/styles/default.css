@@ -477,7 +477,7 @@ input[type='checkbox'] {
 
 .tab_wrapper {
   border-bottom: 1px solid var(--normal-gray);
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .tab_wrapper ul {
@@ -500,6 +500,7 @@ input[type='checkbox'] {
   border: 1px solid var(--normal-gray);
   border-bottom: none;
   outline: 1px solid white;
+  font-weight: 500;
 }
 
 /*  9. Calendar  --------------------------------------------------- */

@@ -29,14 +29,21 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         </div>
 
         {activeTab === 0 && (
-          <div>
-            <h5>간병 정보</h5>
+          <>
+            <div className={styles.info_section}>
+              <h5>환자 정보</h5>
+              <div className={styles.info_wrapper}>
+                <label>진단명</label>
+                <span>{modalData.diagnosis}</span>
+              </div>
+            </div>
 
             {/* 간병 정보 시작 */}
-            <div>
-              <label>간병 정보</label>
+            <div className={styles.info_section}>
+              <h5>간병 정보</h5>
+
               <div className={styles.info_wrapper}>
-                <label>주소</label>
+                <label>간병지 주소</label>
                 <div>
                   <span
                     className={`${styles.location} ${
@@ -86,29 +93,9 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 </span>
               </div>
             </div>
-            <div>
-              <label>환자 정보</label>
-              <div className={styles.info_wrapper}>
-                <label>환자</label>
-                <span>
-                  {modalData.patient_name} 님 (만 {calAge(modalData.patient_birthday)}세{' '}
-                  {modalData.gender === 'F' ? '여성' : '남성'})
-                </span>
-              </div>
 
-              <div className={styles.info_wrapper}>
-                <label>진단명</label>
-                <span>{modalData.diagnosis}</span>
-              </div>
-            </div>
-            <div>
-              <label>보호자 정보</label>
-              <div className={styles.info_wrapper}>
-                <label>보호자 성함</label>
-                <span>
-                  {modalData.family_name} ({modalData.family_id})
-                </span>
-              </div>
+            <div className={styles.info_section}>
+              <h5>보호자 정보</h5>
               <div className={styles.info_wrapper}>
                 <label>보호자 연락처</label>
                 <span>{modalData.family_id}</span>
@@ -116,89 +103,97 @@ const JobDetailModal = ({ modalData, closeModal }) => {
               </div>
             </div>
             {/* 간병 정보 끝 */}
-          </div>
+          </>
         )}
 
         {activeTab === 1 && (
-          <div>
-            <h5>환자 상세정보</h5>
+          <>
+            <div className={styles.info_section}>
+              <h5>환자 기본정보</h5>
+              <div className={styles.info_wrapper}>
+                <label>진단명</label>
+                <span>{modalData.diagnosis}</span>
+              </div>
 
-            {/* 상세정보 시작 */}
-            <label>환자 기본정보</label>
-            <div className={styles.info_wrapper}>
-              <label>키</label>
-              <span>{modalData.patient_height}</span>
+              <div className={styles.info_grid}>
+                <div className={styles.info_wrapper}>
+                  <label>나이</label>
+                  <span>만 {calAge(modalData.patient_birthday)}세</span>
+                </div>
+
+                <div className={styles.info_wrapper}>
+                  <label>성별</label>
+                  <span>{modalData.gender === 'F' ? '여성' : '남성'}</span>
+                </div>
+
+                <div className={styles.info_wrapper}>
+                  <label>키</label>
+                  <span>{modalData.patient_height} cm</span>
+                </div>
+
+                <div className={styles.info_wrapper}>
+                  <label>몸무게</label>
+                  <span>{modalData.patient_weight} kg</span>
+                </div>
+              </div>
             </div>
 
-            <div className={styles.info_wrapper}>
-              <label>몸무게</label>
-              <span>{modalData.patient_weight}</span>
-            </div>
+            <div className={styles.info_section}>
+              {/* 상세정보 시작 */}
+              <h5>환자 상세정보</h5>
+              <div className={styles.info_grid}>
+                <div className={styles.info_wrapper}>
+                  <label>의식 상태</label>
+                  <span>{modalData.consciousness_state}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>진단명</label>
-              <span>{modalData.diagnosis}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>식사 보조</label>
+                  <span>{modalData.need_meal_care}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>나이/성별</label>
-              <span>
-                만 {calAge(modalData.patient_birthday)}세 {modalData.gender === 'F' ? '여성' : '남성'}
-              </span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>용변 보조</label>
+                  <span>{modalData.need_toilet_care}</span>
+                </div>
 
-            <label>환자 상세정보</label>
-            <div className={styles.info_wrapper}>
-              <label>의식 상태</label>
-              <span>{modalData.consciousness_state}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>마비 상태</label>
+                  <span>{modalData.paralysis_state}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>식사 보조</label>
-              <span>{modalData.need_meal_care}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>거동 상태</label>
+                  <span>{modalData.behavioral_state}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>용변 보조</label>
-              <span>{modalData.need_toilet_care}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>욕창</label>
+                  <span>{modalData.is_bedsore}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>마비 상태</label>
-              <span>{modalData.paralysis_state}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>석션</label>
+                  <span>{modalData.need_suction}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>거동 및 운동 상태</label>
-              <span>{modalData.behavioral_state}</span>
-            </div>
+                <div className={styles.info_wrapper}>
+                  <label>주기적 외래 진료</label>
+                  <span>{modalData.need_outpatient}</span>
+                </div>
 
-            <div className={styles.info_wrapper}>
-              <label>욕창</label>
-              <span>{modalData.is_bedsore}</span>
+                <div className={styles.info_wrapper}>
+                  <label>야간 케어</label>
+                  <span>{modalData.need_night_care}</span>
+                </div>
+              </div>
+              <div className={styles.info_wrapper}>
+                <label>비고</label>
+                <span>{modalData.notice}</span>
+              </div>
+              {/* 상세정보 끝 */}
             </div>
-
-            <div className={styles.info_wrapper}>
-              <label>석션</label>
-              <span>{modalData.need_suction}</span>
-            </div>
-
-            <div className={styles.info_wrapper}>
-              <label>주기적 외래 진료</label>
-              <span>{modalData.need_outpatient}</span>
-            </div>
-
-            <div className={styles.info_wrapper}>
-              <label>야간 케어</label>
-              <span>{modalData.need_night_care}</span>
-            </div>
-
-            <div className={styles.info_wrapper}>
-              <label>비고</label>
-              <span>{modalData.notice}</span>
-            </div>
-            {/* 상세정보 끝 */}
-          </div>
+          </>
         )}
         {/* 끝 */}
 
