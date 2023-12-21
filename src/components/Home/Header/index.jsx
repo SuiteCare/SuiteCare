@@ -100,7 +100,7 @@ const Header = ({ data }) => {
   return (
     <header id='home' className={styles.header} ref={headerRef}>
       <nav className={styles.nav_wrap}>
-        <button onClick={toggleNav}>
+        <button type='button' onClick={toggleNav}>
           <span />
           <span />
           <span />
@@ -149,7 +149,7 @@ const Header = ({ data }) => {
 
       <p className={styles.scrolldown}>
         <Link href='#about'>
-          <Image src={downArrow} />
+          <Image src={downArrow} alt='' />
         </Link>
       </p>
     </header>
