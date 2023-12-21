@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import styles from './MyPageForm.module.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -7,16 +7,36 @@ import ChangePwModal from './ChangePwModal';
 const MyPageForm = ({ type }) => {
   const navigator = useRouter();
 
-  //로그인 정보 받아오는 부분
-  const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-  const login_id = loginInfo.login_id;
+  const [login_id, setLogin_id] = useState();
 
-  //session값 확인
-  if (sessionStorage) {
-    console.log(loginInfo);
-  } else {
-    alert('로그인을 해주세요.');
-  }
+  useEffect(() => {
+    const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
+    setLogin_id(loginInfo.login_id);
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const login_id = '1';
+      console.log(login_id);
+
+      if (login_id) {
+        try {
+          const response = await axios.get('/api/v1/mypage', {
+            params: {
+              id: login_id,
+            },
+          });
+          console.log('번호:' + response.data.tel);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      } else {
+        alert('로그인이 필요합니다.');
+      }
+    };
+
+    fetchData();
+  }, [login_id]);
 
   //비밀번호 변경 모달
   const [ChangePwModalOn, setChangePwModalOn] = useState(false);
