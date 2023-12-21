@@ -18,7 +18,7 @@ const messages = {
 const formats = {
   monthHeaderFormat: 'YYYY년 M월',
   dayRangeHeaderFormat: ({ start }, culture, localizer) => {
-    let weekRange = new Date(start);
+    const weekRange = new Date(start);
     weekRange.setDate(weekRange.getDate() + 6);
     return `${localizer.format(start, 'M월 DD일', culture)} ~ ${localizer.format(
       new Date(weekRange),
@@ -36,7 +36,7 @@ export const customDayPropGetter = (date) => {
     return {
       className: 'rbc-weekend',
     };
-  else return {};
+  return {};
 };
 
 const EventComponent = ({ event, openModal, setModalData }) => (

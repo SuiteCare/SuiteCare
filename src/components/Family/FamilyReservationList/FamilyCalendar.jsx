@@ -4,7 +4,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
 import FamilyCalendarModal from './FamilyCalendarModal';
-import { stringToColor } from '@/assets/util';
+import { stringToColor } from '@/utils/calculators';
 import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
 
 const localizer = momentLocalizer(moment);
@@ -31,7 +31,7 @@ const FamilyCalendar = () => {
       let currentStartDate = moment(`${rawData.start_date} ${rawData.start_time}`);
       let currentEndDate = moment(`${rawData.start_date} ${rawData.end_time}`);
       const endDate = moment(`${rawData.end_date} ${rawData.end_time}`);
-      const weekdays = rawData.weekdays;
+      const { weekdays } = rawData;
 
       const events = [];
 
@@ -64,7 +64,7 @@ const FamilyCalendar = () => {
         className='Calendar'
         localizer={localizer}
         events={eventList}
-        culture={'ko-KR'}
+        culture='ko-KR'
         startAccessor='start'
         endAccessor='end'
         views={['month', 'week', 'agenda']}

@@ -1,5 +1,5 @@
 import styles from './SearchResultCard.module.css';
-import { calAge, calTimeDiff, countWeekdays } from '@/assets/util.js';
+import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (

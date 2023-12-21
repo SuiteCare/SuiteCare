@@ -555,3 +555,7 @@ input[type='checkbox'] {
 .rbc-agenda-event-cell div {
   cursor: pointer;
 }
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0;
+}

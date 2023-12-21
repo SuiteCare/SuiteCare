@@ -20,7 +20,7 @@ const MenuList = [
     description: '간병이 필요하신가요? 새로운 간병 예약을 신청하세요.',
   },
   {
-    title: '예약내역 확인',
+    title: '내 활동 관리',
     url: 'manage',
     description: '내 간병 예약내역을 확인할 수 있습니다.',
   },

@@ -1,7 +1,7 @@
 import styles from './SearchResultCard.module.css';
 import default_profile from '@/assets/default_profile.jpg';
 import Image from 'next/image';
-import { calAge } from '@/assets/util.js';
+import { calAge } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (

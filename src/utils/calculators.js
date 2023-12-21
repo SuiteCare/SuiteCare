@@ -1,4 +1,4 @@
-export const calAge = ($birth) => ~~((Date.now() - new Date($birth)) / (1000 * 3600 * 24 * 365));
+export const calAge = ($birth) => Math.floor((Date.now() - new Date($birth)) / (1000 * 3600 * 24 * 365));
 
 export const calTimeDiff = ($start, $end) => {
   const getMinutes = ($time) => {
@@ -15,7 +15,7 @@ export const countWeekdays = (startDate, endDate, weekdaysArr) => {
   const end = new Date(endDate);
 
   let count = 0;
-  let current = new Date(start);
+  const current = new Date(start);
 
   while (current <= end) {
     if (weekdaysArr.includes(weekdays[current.getDay()])) {

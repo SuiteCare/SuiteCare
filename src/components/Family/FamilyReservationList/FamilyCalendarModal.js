@@ -1,7 +1,7 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
-import { calAge, calTimeDiff, countWeekdays } from '@/assets/util.js';
-import useModal from '@/components/Common/Modal/useModal';
+import styles from '@/components/Common/Modal/Modal.module.css';
+import useModal from '@/components/Common/Modal/useModal.js';
+import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
 const FamilyCalendarModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -13,13 +13,13 @@ const FamilyCalendarModal = ({ modalData, closeModal }) => {
           <span onClick={closeModal}></span>
         </div>
         {/* 시작 */}
-        {`{
+        {/*`{
           title: '김환자 님 (중풍)',
           mate: '간병인 박간병 님',
           start: '2023-12-21T00:00:00.000Z',
           end: '2023-12-21T08:00:00.000Z',
           color: 'hsl(342, 55%, 50%)',
-        }`}
+        }`*/}
         {modalData.title}
         {modalData.mate}
         {(modalData.start + '').split(' ')}

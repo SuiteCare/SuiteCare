@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
 import MateCalendarModal from './MateCalendarModal';
-import { stringToColor } from '@/assets/util';
+import { stringToColor } from '@/utils/calculators';
 import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
 
 const localizer = momentLocalizer(moment);
