@@ -34,7 +34,7 @@ const MateJobSearch = () => {
   }
 
   return (
-    <div className='MateJobSearch'>
+    <div className='MateJobSearch content_wrapper'>
       <SearchForm onSearch={handleSearch} />
       <SearchResult
         data={[

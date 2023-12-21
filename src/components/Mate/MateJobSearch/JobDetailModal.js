@@ -1,11 +1,10 @@
-import styles from '@/components/Common/Modal.module.css';
+import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import { calAge, calTimeDiff, countWeekdays } from '@/assets/util.js';
+import useModal from '@/components/Common/Modal/useModal';
 
 const JobDetailModal = ({ modalData, closeModal }) => {
-  const handleContentClick = (e) => {
-    e.stopPropagation();
-  };
+  const { handleContentClick } = useModal();
 
   return (
     <div className={styles.Modal} onClick={closeModal}>

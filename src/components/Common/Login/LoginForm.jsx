@@ -26,7 +26,7 @@ const LoginForm = ({ type }) => {
 
     if (loginForm.id && loginForm.password) {
       try {
-        const body = {
+        let body = {
           login_id: loginForm.id,
           password: loginForm.password,
           role: role,
@@ -36,6 +36,7 @@ const LoginForm = ({ type }) => {
 
         const msg = response.headers.get('msg');
         if (response.status === 200 && msg === 'success') {
+          // login_id로 검색한 id를 대신 저장할 예정 (재선 작업 후 진행)
           sessionStorage.setItem('login_info', JSON.stringify({ login_id: body.login_id, role: body.role }));
           navigator.push(`/${type}/main`);
         } else if (msg === 'fail') {

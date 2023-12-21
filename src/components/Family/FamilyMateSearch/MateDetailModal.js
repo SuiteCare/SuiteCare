@@ -1,13 +1,12 @@
-import styles from '@/components/Common/Modal.module.css';
+import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
 import default_profile from '@/assets/default_profile.jpg';
 import { calAge } from '@/assets/util.js';
+import useModal from '@/components/Common/Modal/useModal';
 
 const MateDetailModal = ({ modalData, closeModal }) => {
-  const handleContentClick = (e) => {
-    e.stopPropagation();
-  };
+  const { handleContentClick } = useModal();
 
   return (
     <div className={styles.Modal} onClick={closeModal}>

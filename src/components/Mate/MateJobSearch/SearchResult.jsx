@@ -2,23 +2,20 @@ import { React, useState } from 'react';
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import JobDetailModal from './JobDetailModal';
+import useModal from '@/components/Common/Modal/useModal';
 
 const SearchResult = ({ data }) => {
   const [modalData, setModalData] = useState({});
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { isModalVisible, openModal, closeModal } = useModal();
 
   const handleShowModal = async (defaultData) => {
-    // const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) };
+    // const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) }; API 완성되면 되돌려야 함
     const combinedData = {
       ...defaultData,
       ...{},
     };
     setModalData(combinedData);
-    setIsModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setIsModalVisible(false);
+    openModal();
   };
 
   return (

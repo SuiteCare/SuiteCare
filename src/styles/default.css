@@ -342,7 +342,6 @@ input::-moz-focus-inner {
 
 .Form_wide {
   width: 100%;
-  padding: 0 8rem;
   max-width: 2000px;
   margin: 0 auto;
 }
@@ -440,6 +439,17 @@ input[type='checkbox'] {
 
 /*  8. Page Design  --------------------------------------------------- */
 
+.content_wrapper {
+  padding-left: 8rem;
+  padding-right: 8rem;
+  margin-bottom: 2rem;
+}
+
+.page_with_sidebar {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16%) 1fr;
+}
+
 .title_wrapper span {
   color: var(--gray);
   position: relative;
@@ -463,4 +473,85 @@ input[type='checkbox'] {
   position: relative;
   left: 1.5rem;
   top: -0.5rem;
+}
+
+/*  9. Calendar  --------------------------------------------------- */
+@import '~react-big-calendar/lib/css/react-big-calendar.css';
+
+.rbc-allday-cell {
+  display: none;
+}
+
+.rbc-toolbar-label {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--deep-brown);
+}
+
+.rbc-weekend {
+  background-color: var(--transparent-beige);
+}
+
+.rbc-off-range-bg {
+  background: var(--light-gray);
+}
+
+.rbc-toolbar button:active,
+.rbc-toolbar button.rbc-active {
+  background-image: none;
+  box-shadow: none;
+  background: var(--light-gray);
+  border-color: var(--gray);
+}
+
+.rbc-toolbar button:active:hover,
+.rbc-toolbar button:active:focus,
+.rbc-toolbar button.rbc-active:hover,
+.rbc-toolbar button.rbc-active:focus {
+  color: #333;
+  background-color: var(--beige-01);
+  border-color: var(--gray);
+}
+
+.rbc-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 1rem;
+}
+
+.rbc-toolbar > span:nth-child(2) {
+  position: relative;
+  top: -1rem;
+}
+
+.rbc-toolbar > span:nth-child(3) {
+  text-align: right;
+}
+
+.rbc-button-link {
+  padding: 0 5px;
+  border-radius: 100%;
+}
+
+.rbc-current-time-indicator {
+  height: 2px;
+  background-color: #74ad31aa;
+}
+
+.rbc-event:focus,
+.rbc-day-slot .rbc-background-event:focus {
+  outline: 5px auto var(--deep-brown);
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  border: none;
+}
+
+.rbc-agenda-table tr {
+  background-color: transparent !important;
+}
+
+.rbc-agenda-event-cell div {
+  cursor: pointer;
 }
