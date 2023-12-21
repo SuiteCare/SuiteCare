@@ -5,7 +5,12 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import FamilyCalendarModal from './FamilyCalendarModal';
 import { stringToColor } from '@/utils/calculators';
-import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
+import {
+  getComponents,
+  getSettingProps,
+  customDayPropGetter,
+  messages,
+} from '@/components/Common/Calendar/CalendarSettingProps';
 
 const localizer = momentLocalizer(moment);
 
@@ -69,8 +74,10 @@ const FamilyCalendar = () => {
         endAccessor='end'
         views={['month', 'week', 'agenda']}
         timeslots={2} // step={30}와 동일
+        messages={messages}
         dayPropGetter={customDayPropGetter}
-        {...getSettingProps(openModal, setModalData)}
+        {...getComponents(openModal, setModalData)}
+        {...getSettingProps()}
       />
       {isModalVisible && <FamilyCalendarModal modalData={modalData} closeModal={closeModal} />}
     </>

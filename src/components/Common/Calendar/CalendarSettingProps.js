@@ -1,9 +1,9 @@
 import moment from 'moment';
 
-const messages = {
+export const messages = {
   today: '오늘',
-  previous: '이전',
-  next: '다음',
+  previous: '이전 기간',
+  next: '다음 기간',
   month: '월별 보기',
   week: '주별 보기',
   day: '일별 보기',
@@ -74,16 +74,18 @@ const MonthEventComponent = ({ event, openModal, setModalData }) => (
   </div>
 );
 
-export const getSettingProps = (openModal, setModalData) => ({
-  style: { height: 800 },
-  messages: { messages },
-  min: moment().startOf('day').clone().hour(6).toDate(),
-  max: moment().startOf('day').clone().hour(22).toDate(),
+export const getComponents = (openModal, setModalData) => ({
   components: {
     event: (props) => <EventComponent {...props} openModal={openModal} setModalData={setModalData} />,
     month: { event: (props) => <MonthEventComponent {...props} openModal={openModal} setModalData={setModalData} /> },
     agenda: { event: (props) => <AgendaEventComponent {...props} openModal={openModal} setModalData={setModalData} /> },
   },
+});
+
+export const getSettingProps = () => ({
+  style: { height: 800 },
+  min: moment().startOf('day').clone().hour(6).toDate(),
+  max: moment().startOf('day').clone().hour(22).toDate(),
   formats: {
     monthHeaderFormat: formats.monthHeaderFormat,
     dayRangeHeaderFormat: formats.dayRangeHeaderFormat,
