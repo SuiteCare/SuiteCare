@@ -186,13 +186,13 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 </div>
 
                 <div className={styles.info_wrapper}>
-                  <label>야간 케어</label>
+                  <label>야간 간병</label>
                   <span>{modalData.need_night_care}</span>
                 </div>
               </div>
               <div className={styles.info_wrapper}>
                 <label>비고</label>
-                <span>{modalData.notice}</span>
+                <span className={styles.introduction}>{modalData.notice}</span>
               </div>
               {/* 상세정보 끝 */}
             </div>
@@ -201,7 +201,9 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         {/* 끝 */}
 
         <div className={styles.button_wrapper}>
-          <button onClick={() => handleApply(modalData.mate_id)}>간병 지원하기</button>
+          <button type='submit' onClick={() => handleApply(modalData.mate_id)}>
+            간병 지원하기
+          </button>
         </div>
       </div>
     </div>

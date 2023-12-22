@@ -55,13 +55,9 @@
   margin-bottom: 0.5rem;
 }
 
-.info_grid .info_wrapper {
-  grid-template-columns: 6rem 1fr;
-}
-
 .info_wrapper {
   display: grid;
-  grid-template-columns: 5rem 1fr;
+  grid-template-columns: 7rem 1fr;
   padding: 5px;
   column-gap: 1rem;
   line-height: 1.6;
@@ -74,7 +70,7 @@
   padding-right: 1rem;
 }
 
-.info_grid .info_wrapper label {
+label.with_line {
   border-right: 1px solid #ddd;
 }
 
@@ -83,7 +79,6 @@
 }
 
 .info_section .info_wrapper {
-  grid-template-columns: 8rem 1fr;
   margin-bottom: 8px;
 }
 
@@ -116,7 +111,7 @@
 }
 
 .Modal td {
-  border: 1px solid var(--beige-01);
+  border: 1px solid #ddd;
 }
 
 .Modal td:first-of-type {

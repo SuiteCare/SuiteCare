@@ -28,21 +28,21 @@ const MateDetailModal = ({ modalData, closeModal }) => {
         <div className={styles.introduction}>{modalData.introduction || '소개글이 없습니다.'}</div>
         <div className={styles.info_grid}>
           <div className={styles.info_wrapper}>
-            <label>활동 지역</label>
+            <label className={styles.with_line}>활동 지역</label>
             <p>{modalData.address}</p>
           </div>
           <div className={styles.info_wrapper}>
-            <label>대표 서비스</label>
+            <label className={styles.with_line}>대표 서비스</label>
             <p>{modalData.main_service}</p>
           </div>
           <div className={styles.info_wrapper}>
-            <label>연락 가능 시간</label>
+            <label className={styles.with_line}>연락 가능 시간</label>
             <p>
               {modalData.contact_time_start}~{modalData.contact_time_end}
             </p>
           </div>
           <div className={styles.info_wrapper}>
-            <label>희망 시급</label>
+            <label className={styles.with_line}>희망 시급</label>
             <p>{modalData.wage.toLocaleString()}원</p>
           </div>
         </div>
@@ -89,7 +89,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           </table>
         </div>
         <div className={styles.button_wrapper}>
-          <button>간병 신청하기</button>
+          <button type='submit'>간병 신청하기</button>
         </div>
       </div>
     </div>
