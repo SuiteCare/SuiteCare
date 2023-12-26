@@ -1,23 +1,24 @@
-import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
-import FamilyCalendar from '@/components/Family/FamilyReservationList/FamilyCalendar';
-import FamilyReservationSidebar from '@/components/Family/FamilyReservationList/FamilyReservationSidebar';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-const ReservationList = () => {
+import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
+import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
+
+const FamilyManagePage = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('./manage/calendar');
+  }, []);
+
   return (
     <>
       <FamilyHeader />
       <div className='page_with_sidebar'>
-        <FamilyReservationSidebar />
-        <div className='content_wrapper'>
-          <div className='title_wrapper'>
-            <h1>내 일정 정보</h1>
-            <span>나의 간병 예약 일정을 확인할 수 있습니다.</span>
-          </div>
-          <FamilyCalendar />
-        </div>
+        <FamilyManageSidebar />
       </div>
     </>
   );
 };
 
-export default ReservationList;
+export default FamilyManagePage;
