@@ -7,8 +7,12 @@
   height: auto;
 }
 
-.Sidebar h4 {
+.Sidebar h3 {
   text-align: center;
+  padding: 0 0 1.5rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--normal-gray);
+  border-left: none;
 }
 
 .Sidebar .menu a {
@@ -26,5 +30,4 @@
 
 .Sidebar .menu:hover {
   background-color: var(--beige-01);
-  border-bottom: 1px solid var(--brown-01);
 }

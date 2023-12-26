@@ -5,7 +5,7 @@ import styles from '@/components/Common/Sidebar.module.css';
 const FamilyReservationSidebar = () => {
   return (
     <div className={styles.Sidebar}>
-      <h4>내 활동 관리</h4>
+      <h3>내 활동 관리</h3>
       <div className={styles.menu}>
         <Link href='/family/manage'>내 일정 정보</Link>
       </div>
