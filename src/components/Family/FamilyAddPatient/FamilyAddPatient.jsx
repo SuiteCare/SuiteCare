@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import styles from './Form.module.css';
+import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
 const Form = () => {
@@ -34,7 +34,7 @@ const Form = () => {
   const renderInput = (typeName) => {
     const inputInfo = formInputInfos[typeName];
     return (
-      <div key={typeName}>
+      <div key={typeName} className='input_wrapper'>
         <label>{inputInfo.label}</label>
         {inputInfo.type === 'radio' ? (
           <div>
@@ -73,32 +73,45 @@ const Form = () => {
   };
 
   return (
-    <div className={styles.form}>
+    <div className={`${styles.addPatient} content_wrapper`}>
       <form name='addPatient' onSubmit={handleSubmit}>
-        <h2>기본 정보</h2>
-        <div>
-          {renderInput('name')}
-          {renderInput('gender')}
-          {renderInput('birth')}
-          {renderInput('height')}
-          {renderInput('weight')}
-          {renderInput('diagnosis')}
+        <h3>환자 기본 정보</h3>
+        <div className={styles.info_grid}>
+          <div>
+            {renderInput('name')}
+            {renderInput('gender')}
+            {renderInput('birth')}
+          </div>
+          <div>
+            {renderInput('height')}
+            {renderInput('weight')}
+            {renderInput('diagnosis')}
+          </div>
         </div>
-
-        <h2>상세 정보</h2>
-        {renderInput('consciousness_state')}
-        {renderInput('care_meal_yn')}
-        {renderInput('care_toilet_yn')}
-        {renderInput('bedsore_yn')}
-        {renderInput('suction_yn')}
-        {renderInput('outpatient_yn')}
-        {renderInput('bedsornight_care_yne_yn')}
-
-        {renderInput('paralysis_state')}
-        {renderInput('mobility_state')}
+        <hr />
+        <h3>환자 상세 정보</h3>
+        <div className={`${styles.info_grid} ${styles.detail}`}>
+          <div>
+            {renderInput('consciousness_state')}
+            {renderInput('care_meal_yn')}
+            {renderInput('care_toilet_yn')}
+          </div>
+          <div>
+            {renderInput('paralysis_state')}
+            {renderInput('mobility_state')}
+            {renderInput('bedsore_yn')}
+          </div>
+          <div>
+            {renderInput('suction_yn')}
+            {renderInput('night_care_yn')}
+            {renderInput('outpatient_yn')}
+          </div>
+        </div>
         {renderInput('notice')}
-        <input type='submit' value='환자 등록' />
-        <div></div>
+
+        <div className='button_wrapper'>
+          <input type='submit' value='환자 등록' />
+        </div>
       </form>
     </div>
   );

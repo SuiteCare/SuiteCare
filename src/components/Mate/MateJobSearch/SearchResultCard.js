@@ -1,13 +1,31 @@
 import styles from './SearchResultCard.module.css';
+
 import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
-const SearchResultCard = ({ data, showDetail, handleApply }) => {
+const SearchResultCard = ({ data, showDetail }) => {
+  const dueDate = Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24));
+
+  const handleApply = () => {
+    alert('지원 기능 개발 중');
+  };
+
+  const expiredAlert = () => {
+    alert('만료된 건입니다.');
+  };
+
   return (
-    <div className={styles.card}>
+    <div className={`${styles.card} ${dueDate <= 0 ? styles.expired : ''}`}>
       <div className={styles.top}>
         <span className={data.location_type === '병원' ? styles.hospital : styles.home}>{data.location_type}</span>
         <span className={styles.dday}>
-          지원 마감 <b>D-{Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24))}</b>
+          지원 마감
+          {dueDate > 0 ? (
+            <>
+              까지 <b>D-{dueDate}</b>
+            </>
+          ) : (
+            <>됨</>
+          )}
         </span>
       </div>
       {/* title */}
@@ -67,9 +85,10 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       {/* body */}
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
-        <button onClick={() => showDetail(data.mate_id)}>상세정보 보기</button>
-        <button onClick={() => handleApply(data.mate_id)}>간병 지원하기</button>
+        <button onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>상세정보 보기</button>
+        <button onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.mate_id)}>간병 지원하기</button>
       </div>
+
       {/* bottom */}
     </div>
   );
