@@ -33,13 +33,10 @@ const LoginForm = ({ type }) => {
         };
 
         const response = await axios.post('/api/v1/login', body);
-
-        const msg = response.headers.get('msg');
-        if (response.status === 200 && msg === 'success') {
-          // login_id로 검색한 id를 대신 저장할 예정 (재선 작업 후 진행)
-          sessionStorage.setItem('login_info', JSON.stringify({ login_id: body.login_id, role: body.role }));
+        if (response.data) {
+          sessionStorage.setItem('login_info', JSON.stringify({ login_id: response.data, role: body.role }));
           navigator.push(`/${type}/main`);
-        } else if (msg === 'fail') {
+        } else {
           setLoginFail(true);
         }
       } catch (error) {
