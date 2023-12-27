@@ -31,10 +31,10 @@ const formInputInfos = {
     id: 'weight',
     maxLength: 3,
   },
-  diagnosis: {
+  diagnosis_name: {
     label: '진단명',
     type: 'text',
-    id: 'diagnosis',
+    id: 'diagnosis_name',
     maxLength: 45,
   },
   consciousness_state: {
@@ -48,7 +48,7 @@ const formInputInfos = {
       { value: '0', label: '의식 없음' },
     ],
   },
-  care_meal_yn: {
+  need_meal_care: {
     label: '식사 보조',
     type: 'radio',
     options: [
@@ -58,7 +58,7 @@ const formInputInfos = {
       { value: '0', label: '스스로 식사 가능' },
     ],
   },
-  care_toilet_yn: {
+  need_toilet_care: {
     label: '용변 보조',
     type: 'radio',
     options: [
@@ -80,10 +80,10 @@ const formInputInfos = {
       { value: '0', label: '없음' },
     ],
   },
-  mobility_state: {
+  behavioral_state: {
     label: '거동 상태',
     type: 'radio',
-    id: 'mobility_state',
+    id: 'behavioral_state',
     maxLength: 45,
     options: [
       { value: '1', label: '움직일 수 없음' },
@@ -93,7 +93,7 @@ const formInputInfos = {
     ],
   },
 
-  bedsore_yn: {
+  is_bedsore: {
     label: '욕창 유무',
     type: 'radio',
     options: [
@@ -101,7 +101,7 @@ const formInputInfos = {
       { value: '0', label: '없음' },
     ],
   },
-  suction_yn: {
+  need_suction: {
     label: '석션 필요',
     type: 'radio',
     options: [
@@ -109,7 +109,7 @@ const formInputInfos = {
       { value: '0', label: '아니오' },
     ],
   },
-  outpatient_yn: {
+  need_outpatient: {
     label: '동행 외출 필요',
     type: 'radio',
     options: [
@@ -117,7 +117,7 @@ const formInputInfos = {
       { value: '0', label: '아니오' },
     ],
   },
-  night_care_yn: {
+  need_night_care: {
     label: '야간 간병 필요',
     type: 'radio',
     options: [
