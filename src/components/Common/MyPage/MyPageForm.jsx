@@ -1,32 +1,31 @@
 import { use, useEffect, useState } from 'react';
-import styles from './MyPageForm.module.css';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+
 import ChangePwModal from './ChangePwModal';
+import styles from './MyPageForm.module.css';
 
 const MyPageForm = ({ type }) => {
   const navigator = useRouter();
-
-  const [login_id, setLogin_id] = useState();
-
-  useEffect(() => {
-    const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-    setLogin_id(loginInfo.login_id);
-  }, []);
+  const [login_id, setLogin_id] = useState('');
+  const [myId, setMyId] = useState();
+  const [name, setName] = useState();
+  const [tel, setTel] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const login_id = '1';
-      console.log(login_id);
-
-      if (login_id) {
+      const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
+      if (loginInfo && loginInfo.login_id) {
+        setLogin_id(loginInfo.login_id);
         try {
           const response = await axios.get('/api/v1/mypage', {
             params: {
-              id: login_id,
+              id: loginInfo.login_id,
             },
           });
-          console.log('번호:' + response.data.tel);
+          setName(response.data.name);
+          setMyId(response.data.login_id);
+          setTel(response.data.tel);
         } catch (error) {
           console.error('Error:', error);
         }
@@ -36,7 +35,11 @@ const MyPageForm = ({ type }) => {
     };
 
     fetchData();
-  }, [login_id]);
+  }, []);
+
+  let part1 = tel.substring(0, 3); // 첫 세 자리
+  let part2 = tel.substring(4, 8); // 중간 네 자리
+  let part3 = tel.substring(9); // 마지막 네 자리
 
   //비밀번호 변경 모달
   const [ChangePwModalOn, setChangePwModalOn] = useState(false);
@@ -82,14 +85,11 @@ const MyPageForm = ({ type }) => {
 
     let body = {
       login_id: id.value,
-      password: pw.value,
-      name: user_name.value,
       tel: phoneNumber,
-      role: role,
     };
 
     const response = await axios
-      .post('/api/v1/family', body)
+      .post('/api/v1/member', body) //서버 연결 필요(수정예정)
       .then((response) => {
         if (response.data) {
           alert('정보 수정 완료!!!');
@@ -111,7 +111,7 @@ const MyPageForm = ({ type }) => {
       <form name='MyPageForm' method='post'>
         <div className='input_wrapper'>
           <label>아이디</label>
-          <input type='text' name='id' id='id' readOnly value={login_id} />
+          <input type='text' name='id' id='id' readOnly value={myId} />
         </div>
 
         <div className='input_wrapper'>
@@ -127,7 +127,7 @@ const MyPageForm = ({ type }) => {
 
         <div className='input_wrapper'>
           <label>성함</label>
-          <input type='text' name='name' id='name' readOnly value={login_id} />
+          <input type='text' name='name' id='name' readOnly value={name} />
         </div>
 
         <div className='input_wrapper'>
@@ -136,7 +136,7 @@ const MyPageForm = ({ type }) => {
             <div className={styles.input_phone}>
               <input
                 type='text'
-                placeholder='010'
+                placeholder={part1}
                 id='phone_1'
                 value={phone_1}
                 maxLength={3}
@@ -145,7 +145,7 @@ const MyPageForm = ({ type }) => {
               -
               <input
                 type='text'
-                placeholder='0000'
+                placeholder={part2}
                 id='phone_2'
                 value={phone_2}
                 maxLength={4}
@@ -154,7 +154,7 @@ const MyPageForm = ({ type }) => {
               -
               <input
                 type='text'
-                placeholder='0000'
+                placeholder={part3}
                 id='phone_3'
                 value={phone_3}
                 maxLength={4}
@@ -171,7 +171,9 @@ const MyPageForm = ({ type }) => {
         <hr />
 
         <div className='button_wrapper'>
-          <button onClick={handleModifyClick}>수정하기</button>
+          <button type='button' onClick={handleModifyClick}>
+            수정하기
+          </button>
         </div>
       </form>
     </div>
