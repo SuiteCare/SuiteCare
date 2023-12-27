@@ -157,7 +157,6 @@ const JobSearchForm = ({ onSearch }) => {
               onChange={(e) => handleWageChange(e, 0)}
               onBlur={updateWage}
               min={9860}
-              step={1000}
               max={1000000}
             />
             원 ~ 최대
@@ -167,7 +166,6 @@ const JobSearchForm = ({ onSearch }) => {
               onChange={(e) => handleWageChange(e, 1)}
               onBlur={updateWage}
               min={9860}
-              step={1000}
               max={1000000}
             />
             원

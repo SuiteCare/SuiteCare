@@ -31,6 +31,10 @@ const Form = () => {
     }));
   };
 
+  const handleRadioWrapperClick = (typeName, optionValue) => {
+    setFormData({ ...formData, [typeName]: optionValue });
+  };
+
   const renderInput = (typeName) => {
     const inputInfo = formInputInfos[typeName];
     return (
@@ -39,7 +43,11 @@ const Form = () => {
         {inputInfo.type === 'radio' ? (
           <div>
             {inputInfo.options.map((option) => (
-              <div key={option.value}>
+              <div
+                className={styles.radio_wrapper}
+                key={option.value}
+                onClick={() => handleRadioWrapperClick(typeName, option.value)}
+              >
                 <input
                   type='radio'
                   id={option.id}
@@ -47,6 +55,7 @@ const Form = () => {
                   value={option.value}
                   onChange={handleInputChange}
                   checked={formData[typeName] === option.value}
+                  required
                 />
                 <span>{option.label}</span>
               </div>
@@ -61,6 +70,7 @@ const Form = () => {
             maxLength={inputInfo.maxLength}
             value={formData[typeName]}
             onChange={handleInputChange}
+            required
           />
         )}
       </div>
@@ -69,6 +79,7 @@ const Form = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     console.log(formData);
   };
 
@@ -107,8 +118,18 @@ const Form = () => {
             {renderInput('outpatient_yn')}
           </div>
         </div>
-        {renderInput('notice')}
-
+        {/* {renderInput('notice')} */}
+        <div className='input_wrapper'>
+          <label>비고</label>
+          <textarea
+            type='text'
+            placeholder='비고'
+            name='notice'
+            id='notice'
+            maxLength='200'
+            onChange={handleInputChange}
+          />
+        </div>
         <div className='button_wrapper'>
           <input type='submit' value='환자 등록' />
         </div>
