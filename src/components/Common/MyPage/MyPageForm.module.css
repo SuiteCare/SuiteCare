@@ -1,0 +1,20 @@
+.MyPageForm {
+}
+
+.MyPageForm input {
+  border-radius: 0;
+}
+
+.MyPageForm .input_phone {
+  display: flex;
+  align-items: baseline;
+}
+
+.MyPageForm .input_phone input {
+  width: 30%;
+}
+
+.MyPageForm .change_button {
+  height: 120% !important;
+  width: 155%;
+}
