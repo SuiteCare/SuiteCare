@@ -1,0 +1,593 @@
+/*=====================================================================
+
+TOC:
+a. Webfonts and Icon fonts
+b. Reset
+c. Default Styles
+   1. Basic
+   2. Typography
+   3. Links
+   4. Images
+   5. Buttons
+   6. Forms
+
+=====================================================================  */
+
+/* ------------------------------------------------------------------ */
+/* a. Webfonts and Icon fonts
+ ------------------------------------------------------------------ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;200;300;400;500;600;700;800;900&family=Noto+Serif+KR:wght@200;300;400;500;600;700;900&display=swap');
+
+/* ------------------------------------------------------------------
+ /* b. Reset
+       Adapted from:
+       Normalize.css - https://github.com/necolas/normalize.css/
+       HTML5 Doctor Reset - html5doctor.com/html-5-reset-stylesheet/
+ /* ------------------------------------------------------------------ */
+
+html,
+body,
+div,
+span,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+em,
+img,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+ol,
+ul,
+li,
+form,
+label,
+table,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+aside,
+canvas,
+footer,
+header,
+menu,
+nav {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  word-break: keep-all;
+}
+
+aside,
+footer,
+header,
+menu,
+nav,
+section {
+  display: block;
+}
+
+[hidden] {
+  display: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* c. Default and Basic Styles
+       Adapted from:
+       Skeleton CSS Framework - http://www.getskeleton.com/
+       Typeplate Typographic Starter Kit - http://typeplate.com/
+ /* ------------------------------------------------------------------ */
+
+/*  1. Basic  ------------------------------------------------------- */
+
+*,
+*:before,
+*:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:root {
+  --beige-01: #dfd7bf;
+  --transparent-beige: #dfd7bf25;
+  --brown-01: #a4907c;
+  --transparent-brown: #a4907c15;
+  --deep-brown: #4f4242;
+  --gray: #acabaa;
+  --normal-gray: #cccbca;
+  --light-gray: #efeeed;
+  --very-light-gray: #f9f8f7;
+  --warning: #be3144;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  accent-color: var(--deep-brown);
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-weight: 400;
+  line-height: 1.8rem;
+  color: #333;
+
+  -webkit-font-smoothing: antialiased; /* Fix for webkit rendering */
+  -webkit-text-size-adjust: 100%;
+}
+
+/*  2. Typography
+        Vertical rhythm with leading derived from 6
+ --------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+  font-weight: inherit;
+}
+h1 {
+  font-size: 38px;
+  margin-bottom: 4rem;
+  letter-spacing: -1px;
+}
+h2 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+h3 {
+  font-size: 22px;
+  margin-bottom: 12px;
+  border-left: 4px solid var(--brown-01);
+  padding: 0rem 0rem 6px 16px;
+}
+h4 {
+  font-size: 20px;
+  margin-bottom: 6px;
+}
+h5 {
+  font-size: 18px;
+}
+h6 {
+  font-size: 14px;
+}
+
+/* for 'em' and 'strong' tags, font-size and line-height should be same with
+ the body tag due to rendering problems in some browsers */
+em {
+  font:
+    15px/30px 'Noto Sans KR',
+    sans-serif;
+}
+strong,
+b {
+  font:
+    15px/30px 'Noto Sans KR',
+    sans-serif;
+  font-weight: 600;
+}
+small {
+  font-size: 11px;
+  line-height: inherit;
+}
+
+hr {
+  border: none;
+  border-bottom: 1px solid #dddd;
+  line-height: 0;
+  position: relative;
+  margin: 0.8rem 0;
+}
+
+/*  3. Links  ------------------------------------------------------- */
+
+a,
+a:visited {
+  text-decoration: none;
+  outline: 0;
+  color: var(--beige-01);
+
+  -webkit-transition: color 0.3s ease-in-out;
+  -moz-transition: color 0.3s ease-in-out;
+  -o-transition: color 0.3s ease-in-out;
+  transition: color 0.3s ease-in-out;
+}
+a:hover,
+a:focus {
+  color: var(--deep-brown);
+}
+
+/*  4. List  --------------------------------------------------------- */
+
+ul {
+  list-style: none outside;
+}
+ol {
+  list-style: decimal;
+}
+ol,
+ul.square,
+ul.circle,
+ul.disc {
+  margin-left: 30px;
+}
+ul.square {
+  list-style: square outside;
+}
+ul.circle {
+  list-style: circle outside;
+}
+ul.disc {
+  list-style: disc outside;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+  margin: 6px 0 6px 30px;
+}
+ul ul li,
+ul ol li,
+ol ol li,
+ol ul li {
+  margin-bottom: 6px;
+}
+
+/*  5. Images  --------------------------------------------------------- */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/*  6. Buttons  --------------------------------------------------------- */
+
+.button,
+.button:visited,
+button,
+input[type='submit'],
+input[type='reset'],
+input[type='button'] {
+  font:
+    16px/30px 'Noto Sans KR',
+    sans-serif;
+  font-weight: 600;
+  background: var(--brown-01);
+  display: inline-block;
+  text-decoration: none;
+  letter-spacing: 0;
+  color: #fff;
+  padding: 1rem 2rem;
+  border: none;
+  cursor: pointer;
+  height: auto;
+
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -khtml-border-radius: 0px;
+  border-radius: 7px;
+}
+
+.button:hover,
+button:hover,
+input[type='submit']:hover,
+input[type='reset']:hover,
+input[type='button']:hover {
+  background: var(--deep-brown);
+  color: #fff;
+}
+
+.button:active,
+button:active,
+input[type='submit']:active,
+input[type='reset']:active,
+input[type='button']:active {
+  background: var(--deep-brown);
+  color: #fff;
+}
+
+/* Fix for odd Mozilla border & padding issues */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/*  7. Forms  --------------------------------------------------------- */
+
+.Form_narrow {
+  width: 60%;
+  margin: 0 auto;
+  max-width: 600px;
+}
+
+.Form_wide {
+  width: 100%;
+  max-width: 2000px;
+  margin: 0 auto;
+}
+
+form .input_wrapper {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+}
+
+form .input_wrapper .input_with_button {
+  display: grid;
+  grid-template-columns: 1fr 8rem;
+  gap: 1rem;
+  align-items: center;
+}
+
+form .input_wrapper .input_with_button button {
+  padding: 0;
+  height: 80%;
+  font-weight: 400;
+  background-color: var(--beige-01);
+  color: var(--deep-brown);
+}
+
+form .button_wrapper {
+  text-align: center;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='email'],
+input[type='number'],
+input[type='date'],
+textarea,
+select {
+  padding: 1rem 1.2rem;
+  border: 0;
+  outline: none;
+  color: #333;
+  background: transparent;
+  border-bottom: 1px solid var(--deep-brown);
+  margin: 5px 0;
+  font-size: 1rem;
+  font-family: 'Noto Sans KR';
+}
+
+.input_wrapper {
+  display: grid;
+  margin-bottom: 1rem;
+}
+
+.button_wrapper {
+  margin: 3rem 0;
+}
+
+select {
+  padding: 0;
+  width: 220px;
+}
+
+input[type='text']:focus,
+input[type='password']:focus,
+input[type='email']:focus,
+input[type='number']:focus,
+textarea:focus {
+  outline: 3px solid var(--beige-01);
+  background-color: white;
+  border-radius: 7px;
+}
+
+input[type='text']:disabled,
+input[type='password']:disabled,
+input[type='email']:disabled,
+input[type='number']:disabled,
+textarea:disabled,
+input[type='text']:read-only,
+input[type='password']:read-only,
+input[type='email']:read-only,
+input[type='number']:read-only,
+textarea:read-only {
+  background-color: var(--very-light-gray);
+  color: var(--deep-brown);
+}
+
+textarea {
+  min-height: 3.5rem;
+  max-height: 16rem;
+  resize: vertical;
+}
+
+label {
+  font-weight: 600;
+}
+
+input[type='checkbox'] {
+  display: inline;
+}
+
+/*  8. Page Design  --------------------------------------------------- */
+
+.content_wrapper {
+  padding-left: 8rem;
+  padding-right: 8rem;
+  margin-bottom: 2rem;
+}
+
+.page_with_sidebar {
+  display: grid;
+  grid-template-columns: minmax(12rem, 16%) 1fr;
+}
+
+.title_wrapper span {
+  color: var(--gray);
+  position: relative;
+  top: -2.4rem;
+}
+
+.title_wrapper {
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.close_button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close_button span::before {
+  content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-x-lg' viewBox='0 0 16 16'%3E%3Cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/%3E%3C/svg%3E");
+  cursor: pointer;
+  padding: 5px;
+  position: relative;
+  left: 1.5rem;
+  top: -0.5rem;
+}
+
+.tab_wrapper {
+  border-bottom: 1px solid var(--normal-gray);
+  margin-bottom: 1rem;
+}
+
+.tab_wrapper ul {
+  display: flex;
+}
+
+.tab_wrapper li {
+  padding: 16px 2rem 14px 2rem;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+}
+
+.tab_wrapper li:hover {
+  background-color: var(--very-light-gray);
+}
+
+.tab_wrapper .active {
+  border: 1px solid var(--normal-gray);
+  border-bottom: none;
+  outline: 1px solid white;
+  font-weight: 500;
+}
+
+/*  9. Calendar  --------------------------------------------------- */
+@import '~react-big-calendar/lib/css/react-big-calendar.css';
+
+.rbc-allday-cell {
+  display: none;
+}
+
+.rbc-toolbar-label {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--deep-brown);
+}
+
+.rbc-weekend {
+  background-color: var(--transparent-beige);
+}
+
+.rbc-off-range-bg {
+  background: var(--light-gray);
+}
+
+.rbc-toolbar button:active,
+.rbc-toolbar button.rbc-active {
+  background-image: none;
+  box-shadow: none;
+  background: var(--light-gray);
+  border-color: var(--gray);
+}
+
+.rbc-toolbar button:active:hover,
+.rbc-toolbar button:active:focus,
+.rbc-toolbar button.rbc-active:hover,
+.rbc-toolbar button.rbc-active:focus {
+  color: #333;
+  background-color: var(--beige-01);
+  border-color: var(--gray);
+}
+
+.rbc-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-top: 1rem;
+}
+
+.rbc-toolbar > span:nth-child(2) {
+  position: relative;
+  top: -1rem;
+}
+
+.rbc-toolbar > span:nth-child(3) {
+  text-align: right;
+}
+
+.rbc-button-link {
+  padding: 0 5px;
+  border-radius: 100%;
+}
+
+.rbc-current-time-indicator {
+  height: 2px;
+  background-color: #74ad31aa;
+}
+
+.rbc-event:focus,
+.rbc-day-slot .rbc-background-event:focus {
+  outline: 5px auto var(--deep-brown);
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  border: none;
+}
+
+.rbc-agenda-table tr {
+  background-color: transparent !important;
+}
+
+.rbc-agenda-event-cell div {
+  cursor: pointer;
+}
+
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0;
+}

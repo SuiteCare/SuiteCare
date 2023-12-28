@@ -1,0 +1,44 @@
+.HeaderCore {
+  background-color: var(--deep-brown);
+  display: grid;
+  height: 160px;
+  padding: 2rem 2rem 1rem 2rem;
+  box-shadow: 0px 0px 20px #aaaa;
+  grid-template-rows: 2rem 1fr;
+  margin-bottom: 7.2rem;
+  align-items: end;
+  position: relative;
+  z-index: 9998;
+}
+
+.HeaderCore button {
+  float: right;
+  width: inherit;
+  background: transparent;
+  padding: 7px 20px;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--beige-01);
+  font-weight: 400;
+}
+
+.HeaderCore .active {
+  color: white;
+  font-weight: 600;
+}
+
+.buttonText {
+  margin: 0 34px;
+}
+
+.HeaderCore button:hover {
+  color: var(--beige-01);
+}
+
+.HeaderCore .logo img {
+  width: 120px;
+}
+
+.HeaderCore .logo {
+  width: fit-content;
+}

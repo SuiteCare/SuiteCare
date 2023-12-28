@@ -1,0 +1,14 @@
+.PaymentCard .card {
+  display: grid;
+  width: 100%;
+  padding: 1.6rem;
+  grid-template-columns: 200px 38% 1fr 150px;
+  min-height: 200px;
+  grid-column-gap: 8px;
+  border: 1px solid #dedddc;
+  background-color: var(--transparent-brown);
+  align-items: center;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0px 2px 12px -6px var(--normal-gray);
+}

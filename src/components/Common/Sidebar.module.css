@@ -1,0 +1,35 @@
+.Sidebar {
+  z-index: 1;
+  background: var(--very-light-gray);
+  height: auto;
+  margin-top: -7.2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  box-shadow: 0px 3px 20px -3px #aaa6;
+  min-height: calc(100vh - 160px);
+}
+
+.Sidebar h3 {
+  text-align: center;
+  padding: 0 0 1.5rem 0;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--normal-gray);
+  border-left: none;
+}
+
+.Sidebar .menu a {
+  color: var(--deep-brown);
+  font-size: 1.5rem;
+  display: inline-block;
+}
+
+.Sidebar .menu {
+  text-align: center;
+  margin: 0 auto;
+  padding: 12px 2rem 9px 2rem;
+  margin-bottom: 1rem;
+}
+
+.Sidebar .menu:hover {
+  background-color: var(--beige-01);
+}
