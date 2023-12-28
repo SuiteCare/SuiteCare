@@ -1,8 +1,8 @@
-import styles from './HistoryTable.module.css';
+import styles from './FamilyManageTable.module.css';
 
 const HistoryTable = ({ data }) => {
   return (
-    <table className={styles.HistoryTable}>
+    <table className={styles.FamilyManageTable}>
       <thead>
         <tr>
           <th>예약 상태</th>

@@ -12,6 +12,9 @@ const FamilyManageSidebar = () => {
         <Link href={`${defaultUrl}/calendar`}>내 일정 정보</Link>
       </div>
       <div className={styles.menu}>
+        <Link href={`${defaultUrl}/patient_list`}>내 환자 목록</Link>
+      </div>
+      <div className={styles.menu}>
         <Link href={`${defaultUrl}/pending_payments`}>결제 대기 목록</Link>
       </div>
       <div className={styles.menu}>
