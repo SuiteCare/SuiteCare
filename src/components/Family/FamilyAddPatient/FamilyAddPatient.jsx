@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
 const Form = () => {
+  const navigator = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
-    birth: '',
+    birthday: '',
     gender: '',
     height: '',
     weight: '',
@@ -15,8 +18,8 @@ const Form = () => {
     consciousness_state: '',
     paralysis_state: '',
     behavioral_state: '',
-    need_meal_care: '',
-    need_toilet_care: '',
+    meal_care_state: '',
+    toilet_care_state: '',
     is_bedsore: '',
     need_suction: '',
     need_outpatient: '',
@@ -90,11 +93,12 @@ const Form = () => {
       .post('/api/v1/patient', submitData)
       .then((response) => {
         if (response.data === 2) {
-          alert('성공');
+          alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
+          navigator.push('/family/main');
         } else if (response.data === 1) {
-          alert('일부 실패');
+          alert('환자 정보 등록에 일부 실패하였습니다.');
         } else {
-          alert('실패');
+          alert('환자 정보 등록에 실패하였습니다.');
         }
       })
       .catch((error) => {
@@ -186,7 +190,7 @@ const Form = () => {
         2,
         '0',
       )}`;
-      randomData.birth = formattedRandomBirth;
+      randomData.birthday = formattedRandomBirth;
 
       for (const key in randomData) {
         if (formInputInfos[key].type === 'radio') {
@@ -215,7 +219,7 @@ const Form = () => {
           <div>
             {renderInput('name')}
             {renderInput('gender')}
-            {renderInput('birth')}
+            {renderInput('birthday')}
           </div>
           <div>
             {renderInput('height')}
@@ -228,8 +232,8 @@ const Form = () => {
         <div className={`${styles.info_grid} ${styles.detail}`}>
           <div>
             {renderInput('consciousness_state')}
-            {renderInput('need_meal_care')}
-            {renderInput('need_toilet_care')}
+            {renderInput('meal_care_state')}
+            {renderInput('toilet_care_state')}
           </div>
           <div>
             {renderInput('paralysis_state')}
