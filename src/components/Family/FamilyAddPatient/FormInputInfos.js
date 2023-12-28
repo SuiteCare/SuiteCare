@@ -5,10 +5,10 @@ const formInputInfos = {
     id: 'user_name',
     maxLength: 15,
   },
-  birth: {
+  birthday: {
     label: '생년월일',
     type: 'date',
-    id: 'birth',
+    id: 'birthday',
     maxLength: 20,
   },
   gender: {
@@ -31,10 +31,10 @@ const formInputInfos = {
     id: 'weight',
     maxLength: 3,
   },
-  diagnosis: {
+  diagnosis_name: {
     label: '진단명',
     type: 'text',
-    id: 'diagnosis',
+    id: 'diagnosis_name',
     maxLength: 45,
   },
   consciousness_state: {
@@ -43,30 +43,30 @@ const formInputInfos = {
     id: 'consciousness_state',
     maxLength: 45,
     options: [
-      { value: '1', label: '의식 있음' },
-      { value: '2', label: '의식은 있으나 의사소통 어려움' },
-      { value: '0', label: '의식 없음' },
+      { value: '의식 있음', label: '의식 있음' },
+      { value: '의식은 있으나 의사소통 어려움', label: '의식은 있으나 의사소통 어려움' },
+      { value: '의식 없음', label: '의식 없음' },
     ],
   },
-  care_meal_yn: {
+  meal_care_state: {
     label: '식사 보조',
     type: 'radio',
     options: [
-      { value: '1', label: '필요함' },
-      { value: '2', label: '경관영양 (피딩)' },
-      { value: '3', label: '주사를 통한 정맥영양' },
-      { value: '0', label: '스스로 식사 가능' },
+      { value: '필요함', label: '필요함' },
+      { value: '경관영양 (피딩)', label: '경관영양 (피딩)' },
+      { value: '주사를 통한 정맥영양', label: '주사를 통한 정맥영양' },
+      { value: '스스로 식사 가능', label: '스스로 식사 가능' },
     ],
   },
-  care_toilet_yn: {
+  toilet_care_state: {
     label: '용변 보조',
     type: 'radio',
     options: [
-      { value: '1', label: '화장실 동행 필요' },
-      { value: '2', label: '기저귀' },
-      { value: '3', label: '소변줄' },
-      { value: '4', label: '장루/요루' },
-      { value: '0', label: '스스로 화장실 이용' },
+      { value: '화장실 동행 필요', label: '화장실 동행 필요' },
+      { value: '기저귀', label: '기저귀' },
+      { value: '소변줄', label: '소변줄' },
+      { value: '장루/요루', label: '장루/요루' },
+      { value: '스스로 화장실 이용', label: '스스로 화장실 이용' },
     ],
   },
   paralysis_state: {
@@ -75,54 +75,53 @@ const formInputInfos = {
     id: 'paralysis_state',
     maxLength: 45,
     options: [
-      { value: '1', label: '전신마비' },
-      { value: '2', label: '편마비' },
-      { value: '0', label: '없음' },
+      { value: '전신마비', label: '전신마비' },
+      { value: '편마비', label: '편마비' },
+      { value: '없음', label: '없음' },
     ],
   },
-  mobility_state: {
+  behavioral_state: {
     label: '거동 상태',
     type: 'radio',
-    id: 'mobility_state',
+    id: 'behavioral_state',
     maxLength: 45,
     options: [
-      { value: '1', label: '움직일 수 없음' },
-      { value: '2', label: '지팡이 혹은 휠체어 보조 필요' },
-      { value: '3', label: '침대에서만 거동 가능' },
-      { value: '0', label: '스스로 걸을 수 있음' },
+      { value: '움직일 수 없음', label: '움직일 수 없음' },
+      { value: '지팡이 혹은 휠체어 보조 필요', label: '지팡이 혹은 휠체어 보조 필요' },
+      { value: '침대에서만 거동 가능', label: '침대에서만 거동 가능' },
+      { value: '스스로 걸을 수 있음', label: '스스로 걸을 수 있음' },
     ],
   },
-
-  bedsore_yn: {
+  is_bedsore: {
     label: '욕창 유무',
     type: 'radio',
     options: [
-      { value: '1', label: '있음' },
-      { value: '0', label: '없음' },
+      { value: 'Y', label: '있음' },
+      { value: 'N', label: '없음' },
     ],
   },
-  suction_yn: {
+  need_suction: {
     label: '석션 필요',
     type: 'radio',
     options: [
-      { value: '1', label: '예' },
-      { value: '0', label: '아니오' },
+      { value: 'Y', label: '예' },
+      { value: 'N', label: '아니오' },
     ],
   },
-  outpatient_yn: {
+  need_outpatient: {
     label: '동행 외출 필요',
     type: 'radio',
     options: [
-      { value: '1', label: '예' },
-      { value: '0', label: '아니오' },
+      { value: 'Y', label: '예' },
+      { value: 'N', label: '아니오' },
     ],
   },
-  night_care_yn: {
+  need_night_care: {
     label: '야간 간병 필요',
     type: 'radio',
     options: [
-      { value: '1', label: '예' },
-      { value: '0', label: '아니오' },
+      { value: 'Y', label: '예' },
+      { value: 'N', label: '아니오' },
     ],
   },
   notice: {

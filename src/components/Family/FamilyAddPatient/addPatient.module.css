@@ -13,7 +13,13 @@
   grid-template-columns: 1fr 1fr;
 }
 
+div.info_grid:first-of-type div:first-of-type > div:nth-of-type(2) > div {
+  display: flex;
+  gap: 2rem;
+}
+
 .info_grid.detail {
+  column-gap: 4rem;
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -24,4 +30,16 @@
 .info_grid.detail > div > div {
   border-bottom: 1px solid var(--light-gray);
   padding-bottom: 1rem;
+}
+
+.radio_wrapper {
+  cursor: pointer;
+  line-height: 1.4;
+  display: flex;
+  gap: 8px;
+}
+
+.detail > div > div > div {
+  display: grid;
+  row-gap: 12px;
 }
