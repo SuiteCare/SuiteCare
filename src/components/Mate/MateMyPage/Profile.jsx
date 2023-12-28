@@ -1,39 +1,9 @@
 import styles from './Profile.module.css';
 import Sidebar from '@/components/Mate/MateMyPage/Sidebar';
-import { useState } from 'react';
-import { calAge } from '@/utils/calculators';
 
 const Profile = ({ data }) => {
   console.log({ data });
   // console.log(data.mate.name);
-  // const [info, setInfo] = useState({
-  //   basic: {},
-  //   career: [{}],
-  //   certificate: [{}],
-  //   location: [{}],
-  //   mainService: [{}],
-  // });
-  //   setInfo({
-  //       basic: data.mate,
-  //       career: data.career,
-  //       certificate: data.certificate,
-  //       location: data.location,
-  //       mainService: data.mainService
-  //   });
-
-  const [introduction, setIntroduction] = useState('');
-
-  const [wordCnt, setWordCnt] = useState(0);
-  const handlerTextChange = (e) => {
-    setIntroduction(e.target.value);
-    setWordCnt(e.target.value.length);
-  };
-  // const age = calAge(data.mate.birthday);
-  const [loc, setLoc] = useState();
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-  };
 
 
   return (
