@@ -1,9 +1,11 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
-import default_profile from '@/assets/default_profile.jpg';
-import { calAge } from '@/utils/calculators.js';
+
+import defaultProfile from '@/assets/default_profile.jpg';
 import useModal from '@/components/Common/Modal/useModal';
+import styles from '@/components/Common/Modal/Modal.module.css';
+
+import { calAge } from '@/utils/calculators';
 
 const MateDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -15,7 +17,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           <span onClick={closeModal}></span>
         </div>
         <div className={styles.profile_section}>
-          {modalData.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
+          {modalData.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
             <h2>{modalData.mate_name}</h2>메이트
             <p>
@@ -56,8 +58,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.career.map((e, index) => (
-                <tr key={index}>
+              {modalData.career.map((e) => (
+                <tr key={e.mate_name}>
                   <td>{e.title}</td>
                   <td>
                     {e.date_start} ~ {e.date_end}
@@ -78,8 +80,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.certificate.map((e, index) => (
-                <tr key={index}>
+              {modalData.certificate.map((e) => (
+                <tr key={e.mate_name}>
                   <td>{e.certificate_name}</td>
                   <td>{e.qualification_date}</td>
                   <td>{e.expired_date}</td>
