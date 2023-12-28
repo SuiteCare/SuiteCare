@@ -8,10 +8,10 @@ const ChangePwModal = ({ modalData, closeModal }) => {
     e.stopPropagation();
   };
   const [dbPw, setDbPw] = useState();
+  const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
 
   useEffect(() => {
     const fetchData = async () => {
-      const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
       if (loginInfo && loginInfo.login_id) {
         try {
           const response = await axios.get('/api/v1/mypage', {
@@ -35,9 +35,12 @@ const ChangePwModal = ({ modalData, closeModal }) => {
       console.log(pw.value);
       if (newPw.value === newPwCheck.value) {
         console.log(newPw.value);
-        let password = { password: newPw.value };
+        let body = {
+          login_id: loginInfo.login_id,
+          password: newPw.value,
+        };
         const response = await axios
-          .post('/api/v1/member', password) //서버 연결 필요(수정예정)
+          .post('/api/v1/changepw', body)
           .then((response) => {
             if (response.data) {
               alert('비밀번호 변경이 완료되었습니다.');

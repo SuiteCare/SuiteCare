@@ -5,16 +5,17 @@ import { useRouter } from 'next/router';
 import ChangePwModal from './ChangePwModal';
 import styles from './MyPageForm.module.css';
 
-const MyPageForm = ({ type }) => {
+const MyPageForm = () => {
   const navigator = useRouter();
   const [login_id, setLogin_id] = useState('');
   const [myId, setMyId] = useState();
   const [name, setName] = useState();
   const [tel, setTel] = useState('');
+  const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
+  const [role, setRole] = useState(loginInfo.role);
 
   useEffect(() => {
     const fetchData = async () => {
-      const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
       if (loginInfo && loginInfo.login_id) {
         setLogin_id(loginInfo.login_id);
         try {
@@ -43,7 +44,6 @@ const MyPageForm = ({ type }) => {
 
   //비밀번호 변경 모달
   const [ChangePwModalOn, setChangePwModalOn] = useState(false);
-  const [modalData, setModalData] = useState({});
 
   const closeModal = () => {
     setChangePwModalOn(false);
@@ -71,33 +71,46 @@ const MyPageForm = ({ type }) => {
     }
   };
 
+  //휴대폰 번호 인증
   const { phone_1, phone_2, phone_3 } = phoneParts;
   const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
+  async function handlePhoneCertification(event) {
+    event.preventDefault();
 
-  //휴대폰 번호 인증
-  const authenticatePhone = () => {
-    alert(`인증 api 연동 필요\n${Array.from(phoneParts).join('')}`);
-  };
+    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(phoneNumber)) {
+      alert(`인증 api 연동 필요\n${phoneNumber}`);
+    } else {
+      alert('휴대폰 번호를 올바르게 입력하십시오.');
+    }
+  }
 
   //수정하기 클릭
   async function handleModifyClick(event) {
     event.preventDefault();
 
     let body = {
-      login_id: id.value,
+      login_id: loginInfo.login_id,
       tel: phoneNumber,
     };
 
     const response = await axios
-      .post('/api/v1/member', body) //서버 연결 필요(수정예정)
-      .then((response) => {
-        if (response.data) {
-          alert('정보 수정 완료!!!');
-          navigator.push(`/${type}/main`);
-        } else {
-          alert('실패..');
-        }
-      })
+      .post('/api/v1/modify', body)
+      .then(
+        (response) => {
+          if (response.data) {
+            alert('정보 수정 완료!!!');
+
+            if (role === 'F') {
+              navigator.push(`/family/main`);
+            } else {
+              navigator.push(`/mate/main`);
+            }
+          } else {
+            alert('실패..');
+          }
+        },
+        [role],
+      )
       .catch((error) => {
         console.log(error);
       });
@@ -162,7 +175,7 @@ const MyPageForm = ({ type }) => {
               />
               <input type='hidden' name='phone' value={phoneNumber} />
             </div>
-            <button type='button' onClick={authenticatePhone}>
+            <button type='button' onClick={handlePhoneCertification}>
               변경/인증
             </button>
           </div>
