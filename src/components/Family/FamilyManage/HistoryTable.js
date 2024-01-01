@@ -30,7 +30,7 @@ const HistoryTable = ({ data }) => {
             <td>{e.start_date}</td>
             <td>{e.end_date}</td>
             <td>
-              <button>상세정보 보기</button>
+              <button type='button'>상세정보 보기</button>
             </td>
           </tr>
         ))}
