@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import useModal from '@/components/Common/Modal/useModal';
 import styles from '@/components/Common/Modal/Modal.module.css';
 
-import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
+import { calAge, calTimeDiff, countWeekdays, genderToKo } from '@/utils/calculators.js';
 
 const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -32,15 +32,15 @@ const JobDetailModal = ({ modalData, closeModal }) => {
           <>
             <div className={styles.info_section}>
               <h5>환자 정보</h5>
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>진단명</label>
                 <span>{modalData.diagnosis}</span>
               </div>
             </div>
-
+            <hr />
             <div className={styles.info_section}>
               <h5>보호자 정보</h5>
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>보호자 연락처</label>
                 <div>
                   <p>✉️{modalData.family_email || '이메일 정보가 없습니다.'}</p>
@@ -48,12 +48,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 </div>
               </div>
             </div>
-
+            <hr />
             {/* 간병 정보 시작 */}
             <div className={styles.info_section}>
               <h5>간병 정보</h5>
 
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>간병지 주소</label>
                 <div>
                   <span
@@ -66,7 +66,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                   <span>{modalData.address}</span>
                 </div>
               </div>
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>간병 기간</label>
                 <span>
                   {modalData.start_date} ~ {modalData.end_date}{' '}
@@ -74,12 +74,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 </span>
               </div>
 
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>간병 요일</label>
                 <span>{modalData.week_days.join(', ')}</span>
               </div>
 
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>출퇴근시간</label>
                 <span>
                   {modalData.start_time} ~ {modalData.end_time}{' '}
@@ -87,12 +87,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 </span>
               </div>
 
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>제시 시급</label>
                 <span>{modalData.wage.toLocaleString()}원</span>
               </div>
 
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>예상 총 급여</label>
                 <span>
                   {(
@@ -113,84 +113,84 @@ const JobDetailModal = ({ modalData, closeModal }) => {
           <>
             <div className={styles.info_section}>
               <h5>환자 기본정보</h5>
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>진단명</label>
                 <span>{modalData.diagnosis}</span>
               </div>
 
               <div className={styles.info_grid}>
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>나이</label>
                   <span>만 {calAge(modalData.patient_birthday)}세</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>성별</label>
-                  <span>{modalData.gender === 'F' ? '여성' : '남성'}</span>
+                  <span>{genderToKo(modalData.gender)}성</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>키</label>
                   <span>{modalData.patient_height} cm</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>몸무게</label>
                   <span>{modalData.patient_weight} kg</span>
                 </div>
               </div>
             </div>
-
+            <hr />
             <div className={styles.info_section}>
               {/* 상세정보 시작 */}
               <h5>환자 상세정보</h5>
               <div className={styles.info_grid}>
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>의식 상태</label>
                   <span>{modalData.consciousness_state}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>식사 보조</label>
-                  <span>{modalData.need_meal_care}</span>
+                  <span>{modalData.meal_care_state}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>용변 보조</label>
-                  <span>{modalData.need_toilet_care}</span>
+                  <span>{modalData.toilet_care_state}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>마비 상태</label>
                   <span>{modalData.paralysis_state}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>거동 상태</label>
                   <span>{modalData.behavioral_state}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>욕창</label>
-                  <span>{modalData.is_bedsore}</span>
+                  <span>{modalData.is_bedsore === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>석션</label>
-                  <span>{modalData.need_suction}</span>
+                  <span>{modalData.need_suction === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>주기적 외래 진료</label>
-                  <span>{modalData.need_outpatient}</span>
+                  <span>{modalData.need_outpatient === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
-                <div className={styles.info_wrapper}>
-                  <label>야간 간병</label>
-                  <span>{modalData.need_night_care}</span>
+                <div className={`${styles.info_wrapper} ${styles.double}`}>
+                  <label>야간 간병 필요</label>
+                  <span>{modalData.need_night_care === 'Y' ? '있음' : '없음'}</span>
                 </div>
               </div>
-              <div className={styles.info_wrapper}>
+              <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>비고</label>
                 <span className={styles.introduction}>{modalData.notice}</span>
               </div>

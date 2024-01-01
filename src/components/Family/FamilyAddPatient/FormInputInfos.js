@@ -104,24 +104,24 @@ const formInputInfos = {
     label: '석션 필요',
     type: 'radio',
     options: [
-      { value: 'Y', label: '예' },
-      { value: 'N', label: '아니오' },
+      { value: 'Y', label: '있음' },
+      { value: 'N', label: '없음' },
     ],
   },
   need_outpatient: {
-    label: '동행 외출 필요',
+    label: '주기적 외래 진료',
     type: 'radio',
     options: [
-      { value: 'Y', label: '예' },
-      { value: 'N', label: '아니오' },
+      { value: 'Y', label: '있음' },
+      { value: 'N', label: '없음' },
     ],
   },
   need_night_care: {
     label: '야간 간병 필요',
     type: 'radio',
     options: [
-      { value: 'Y', label: '예' },
-      { value: 'N', label: '아니오' },
+      { value: 'Y', label: '있음' },
+      { value: 'N', label: '없음' },
     ],
   },
   notice: {
