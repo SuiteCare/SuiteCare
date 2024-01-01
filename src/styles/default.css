@@ -112,6 +112,7 @@ table {
 
 :root {
   --beige-01: #dfd7bf;
+  --transparent-beige-50: #dfd7bf50;
   --transparent-beige: #dfd7bf25;
   --brown-01: #a4907c;
   --transparent-brown: #a4907c15;
@@ -489,11 +490,11 @@ input[type='checkbox'] {
 }
 
 .tab_wrapper li {
-  padding: 16px 2rem 14px 2rem;
-  background-color: white;
+  cursor: pointer;
+  border: 1px solid transparent;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  cursor: pointer;
+  padding: 18px 2rem 12px 2rem;
 }
 
 .tab_wrapper li:hover {
@@ -501,10 +502,14 @@ input[type='checkbox'] {
 }
 
 .tab_wrapper .active {
+  font-weight: 500;
   border: 1px solid var(--normal-gray);
   border-bottom: none;
-  outline: 1px solid white;
-  font-weight: 500;
+  padding-top: 16px;
+  padding-bottom: 14px;
+  position: relative;
+  top: 1px;
+  background-color: white;
 }
 
 /*  9. Calendar  --------------------------------------------------- */

@@ -7,7 +7,7 @@ const FamilyCalendarPage = () => {
     <>
       <FamilyHeader />
       <div className='page_with_sidebar'>
-        <FamilyManageSidebar />
+        <FamilyManageSidebar activeMenu='calendar' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>내 일정 정보</h1>

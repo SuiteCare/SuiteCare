@@ -17,19 +17,25 @@
   border-left: none;
 }
 
-.Sidebar .menu a {
+.menu a {
   color: var(--deep-brown);
   font-size: 1.5rem;
   display: inline-block;
+  width: 100%;
+  padding: 12px 2rem;
 }
 
-.Sidebar .menu {
+.menu {
   text-align: center;
   margin: 0 auto;
-  padding: 12px 2rem 9px 2rem;
   margin-bottom: 1rem;
 }
 
-.Sidebar .menu:hover {
-  background-color: var(--beige-01);
+.menu:hover {
+  background-color: var(--transparent-beige-50);
+}
+
+.active {
+  font-weight: 500;
+  background-color: var(--transparent-beige-50);
 }

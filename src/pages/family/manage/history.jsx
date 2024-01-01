@@ -7,7 +7,7 @@ const FamilyHistoryPage = () => {
     <>
       <FamilyHeader />
       <div className='page_with_sidebar'>
-        <FamilyManageSidebar />
+        <FamilyManageSidebar activeMenu='history' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>간병 신청 내역</h1>
