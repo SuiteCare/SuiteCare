@@ -18,8 +18,8 @@ const PaymentCard = ({ data }) => {
             <p>{e.diagnosis}</p>
           </div>
           <div>
-            <button>예약 상세정보</button>
-            <button>결제하기</button>
+            <button type='button'>예약 상세정보</button>
+            <button type='button'>결제하기</button>
           </div>
         </div>
       ))}

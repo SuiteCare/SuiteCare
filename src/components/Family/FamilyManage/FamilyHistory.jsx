@@ -7,6 +7,11 @@ const FamilyHistory = () => {
 
   return (
     <div className='FamilyHistory'>
+      <div style={{ textAlign: 'right' }}>
+        <button type='button' onClick={() => navigator.push('/family/reservation')}>
+          간병 예약하기
+        </button>
+      </div>
       <div className='tab_wrapper'>
         <ul>
           <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
