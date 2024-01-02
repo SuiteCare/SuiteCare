@@ -1,9 +1,11 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
-import default_profile from '@/assets/default_profile.jpg';
-import { calAge } from '@/utils/calculators.js';
+
+import styles from '@/components/Common/Modal/Modal.module.css';
+import defaultProfile from '@/assets/default_profile.jpg';
 import useModal from '@/components/Common/Modal/useModal';
+
+import { calAge } from '@/utils/calculators.js';
 
 const MateDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -12,10 +14,10 @@ const MateDetailModal = ({ modalData, closeModal }) => {
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
-          <span onClick={closeModal}></span>
+          <span onClick={closeModal} />
         </div>
         <div className={styles.profile_section}>
-          {modalData.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
+          {modalData.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
             <h2>{modalData.mate_name}</h2>메이트
             <p>
@@ -56,8 +58,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.career.map((e, index) => (
-                <tr key={index}>
+              {modalData.career.map((e) => (
+                <tr key={e}>
                   <td>{e.title}</td>
                   <td>
                     {e.date_start} ~ {e.date_end}
@@ -78,8 +80,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.certificate.map((e, index) => (
-                <tr key={index}>
+              {modalData.certificate.map((e) => (
+                <tr key={e}>
                   <td>{e.certificate_name}</td>
                   <td>{e.qualification_date}</td>
                   <td>{e.expired_date}</td>

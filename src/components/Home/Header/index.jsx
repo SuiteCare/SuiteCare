@@ -4,7 +4,7 @@ import { Fade } from 'react-reveal';
 import Image from 'next/image';
 
 import downArrow from '@/assets/down-arrow.png';
-import styles from './Header.module.css';
+import styles from './header.module.css';
 
 const throttle = (func, limit) => {
   let inThrottle;

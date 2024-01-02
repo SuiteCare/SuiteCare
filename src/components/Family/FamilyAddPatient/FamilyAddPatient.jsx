@@ -36,7 +36,10 @@ const Form = () => {
   };
 
   const handleRadioWrapperClick = (typeName, optionValue) => {
-    setFormData({ ...formData, [typeName]: optionValue });
+    setFormData((prevData) => ({
+      ...prevData,
+      [typeName]: optionValue,
+    }));
   };
 
   const renderInput = (typeName) => {
@@ -85,25 +88,24 @@ const Form = () => {
     e.preventDefault();
     console.log(formData);
 
-    const submitData = {
-      ...formData,
-      family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
-    };
-    const response = await axios
-      .post('/api/v1/patient', submitData)
-      .then((response) => {
-        if (response.data === 2) {
-          alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
-          navigator.push('/family/main');
-        } else if (response.data === 1) {
-          alert('환자 정보 등록에 일부 실패하였습니다.');
-        } else {
-          alert('환자 정보 등록에 실패하였습니다.');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      const submitData = {
+        ...formData,
+        family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
+      };
+
+      const response = await axios.post('/api/v1/patient', submitData);
+      if (response.data === 2) {
+        alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
+        navigator.push('/family/main');
+      } else if (response.data === 1) {
+        alert('환자 정보 등록에 일부 실패하였습니다.');
+      } else {
+        alert('환자 정보 등록에 실패하였습니다.');
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -171,7 +173,7 @@ const Form = () => {
         '가',
       ];
       const randomName = names[Math.floor(Math.random() * names.length)];
-      randomData.name = randomName + '환자';
+      randomData.name = `${randomName}환자`;
 
       const randomHeight = Math.floor(Math.random() * 101) + 100;
       randomData.height = randomHeight.toString();
@@ -192,13 +194,15 @@ const Form = () => {
       )}`;
       randomData.birthday = formattedRandomBirth;
 
-      for (const key in randomData) {
-        if (formInputInfos[key].type === 'radio') {
-          const radioOptions = formInputInfos[key].options;
-          const randomOption = radioOptions[Math.floor(Math.random() * radioOptions.length)].value;
-          randomData[key] = randomOption;
+      Object.keys(randomData).forEach((key) => {
+        if (formInputInfos[key]?.type === 'radio') {
+          const radioOptions = formInputInfos[key]?.options;
+          if (radioOptions && radioOptions.length > 0) {
+            const randomOption = radioOptions[Math.floor(Math.random() * radioOptions.length)].value;
+            randomData[key] = randomOption;
+          }
         }
-      }
+      });
 
       setFormData(randomData);
     }
@@ -254,6 +258,7 @@ const Form = () => {
             name='notice'
             id='notice'
             maxLength='200'
+            value={formData.notice}
             onChange={handleInputChange}
           />
         </div>

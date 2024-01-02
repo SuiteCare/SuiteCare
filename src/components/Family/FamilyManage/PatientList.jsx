@@ -22,7 +22,7 @@ const PatientList = ({ data }) => {
         </thead>
         <tbody>
           {data.map((e, index) => (
-            <tr key={index}>
+            <tr key={e}>
               <td>{index + 1}</td>
               <td>{e.name}</td>
               <td>{e.gender === 'F' ? '여자' : '남자'}</td>

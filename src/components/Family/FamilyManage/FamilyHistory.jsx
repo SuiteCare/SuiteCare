@@ -9,11 +9,11 @@ const FamilyHistory = () => {
     <div className='FamilyHistory'>
       <div className='tab_wrapper'>
         <ul>
-          <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-            예약 내역
+          <li className={activeTab === 0 ? 'active' : ''}>
+            <div onClick={() => setActiveTab(0)}>예약 내역</div>
           </li>
-          <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-            완료 내역
+          <li className={activeTab === 1 ? 'active' : ''}>
+            <div onClick={() => setActiveTab(1)}>완료 내역</div>
           </li>
         </ul>
       </div>
