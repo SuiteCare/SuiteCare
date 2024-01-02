@@ -5,7 +5,7 @@ import axios from 'axios';
 import formInputInfos from './FormInputInfos';
 
 const SignUpForm = ({ type }) => {
-  //type에 따라 변경될 값을 모아 둔 함수
+  // type에 따라 변경될 값을 모아 둔 함수
   const valueSet = ($type) => {
     if ($type === 'family') {
       return {
@@ -13,7 +13,8 @@ const SignUpForm = ({ type }) => {
         radioRedirect: '/mate/signup',
         otherType: '메이트 (간병인)',
       };
-    } else if ($type === 'mate') {
+    }
+    if ($type === 'mate') {
       return {
         buttonText: '메이트 회원가입',
         radioRedirect: '/family/signup',
@@ -22,29 +23,31 @@ const SignUpForm = ({ type }) => {
     }
   };
 
-  //회원가입 버튼 클릭 시 이동시키는 함수
+  // 회원가입 버튼 클릭 시 이동시키는 함수
   const navigator = useRouter();
 
-  //회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수
+  /* eslint-disable camelcase */
+  const { id, pw, pw_check, user_name } = formInputInfos;
+
+  // 회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수
   const handleRadioClick = () => {
     const url = valueSet(type).radioRedirect;
-    const otherType = valueSet(type).otherType;
-    if (window.confirm(otherType + ' 회원가입 페이지로 이동하시겠습니까?\n단, 기존 작성내역은 초기화됩니다.')) {
+    const { otherType } = valueSet(type);
+    if (window.confirm(`${otherType} 회원가입 페이지로 이동하시겠습니까?\n단, 기존 작성내역은 초기화됩니다.`)) {
       navigator.push(url);
     }
   };
 
-  //아이디를 state에 저장
+  // 아이디를 state에 저장
   const [idState, setIdState] = useState('');
   const [isAvailableID, setIsAvailableID] = useState(false);
 
   const onIdChange = ($event) => {
-    const id = $event.target.value;
-    setIdState(id);
+    setIdState($event.target.value);
     setIsAvailableID(false);
   };
 
-  //아이디 중복확인
+  // 아이디 중복확인
   const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
   const checkDuplicateID = async () => {
     if (!userIDRegex.test(id.value))
@@ -53,7 +56,7 @@ const SignUpForm = ({ type }) => {
     if (idState) {
       try {
         const response = await axios.get('/api/v1/member', { params: { login_id: idState } });
-        const data = response.data;
+        const { data } = response;
 
         if (data === 1) {
           alert('이미 사용 중인 아이디입니다.');
@@ -77,12 +80,14 @@ const SignUpForm = ({ type }) => {
     setPhoneState($event.target.value);
   };
 
-  //휴대폰 번호 인증
+  // 휴대폰 번호 인증
   const [isPhoneCertificated, setIsPhoneCertificated] = useState(false);
   async function handlePhoneCertification(event) {
     event.preventDefault();
 
-    if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(phone.value)) return alert('휴대폰 번호를 올바르게 입력하십시오.');
+    if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(phone.value)) {
+      return alert('휴대폰 번호를 올바르게 입력하십시오.');
+    }
 
     alert(`인증 api 연동 필요\n${phone.value}`);
 
@@ -91,7 +96,7 @@ const SignUpForm = ({ type }) => {
       min_age: 14,
       name: user_name.value,
       phone: phone.value,
-      carrier: 'MVNO', //SKT, KTF, LGT, MVNO
+      carrier: 'MVNO', // SKT, KTF, LGT, MVNO
       company: 'http://localhost:3000',
       m_redirect_url: 'http://localhost:3000/certification',
       popup: true,
@@ -99,11 +104,13 @@ const SignUpForm = ({ type }) => {
 
     const response = await axios
       .post('/certifications/{imp_uid}', body)
-      .then((response) => {
+      .then((res) => {
         if (response.data) {
-          alert('인증 완료');
+          // alert('인증 완료');
+          console.log('200', res);
         } else {
-          alert('인증 실패');
+          // alert('인증 실패');
+          console.log('401', res);
         }
       })
       .catch((error) => {
@@ -137,18 +144,18 @@ const SignUpForm = ({ type }) => {
     if (!user_name.value) return alert('성함을 입력하세요.');
     if (!isPhoneCertificated) return alert('휴대폰 본인인증이 필요합니다.');
 
-    let body = {
+    const body = {
       login_id: id.value,
       password: pw.value,
       name: user_name.value,
       tel: phone.value.replaceAll('-', ''),
-      role: role,
+      role,
     };
 
     const response = await axios
       .post('/api/v1/member', body)
-      .then((response) => {
-        if (response.data) {
+      .then((res) => {
+        if (res.data) {
           alert('회원가입이 완료되었습니다.');
           navigator.push(`/${type}/login`);
         } else {
@@ -159,10 +166,8 @@ const SignUpForm = ({ type }) => {
         console.error(error);
       });
   }
-
-  //렌더링 부분
   return (
-    <div className={`Form_narrow`}>
+    <div className='Form_narrow'>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>

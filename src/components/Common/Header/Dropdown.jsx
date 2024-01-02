@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Fade } from 'react-reveal';
+import Link from 'next/link';
+
 import FamilyMenuList from '@/components/Family/FamilyHeader/FamilyMenuList.js';
 import MateMenuList from '@/components/Mate/MateHeader/MateMenuList.js';
 import styles from './Dropdown.module.css';
-import Link from 'next/link';
 
 const Dropdown = ({ type, isOpen }) => {
   const dropdownRef = useRef(null);

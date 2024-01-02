@@ -71,7 +71,7 @@ const PatientList = ({ data }) => {
             </tr>
           ) : (
             data.map((e, index) => (
-              <tr key={index}>
+              <tr key={e}>
                 <td>{index + 1}</td>
                 <td>{e.name}</td>
                 <td>{genderToKo(e.gender)}성</td>

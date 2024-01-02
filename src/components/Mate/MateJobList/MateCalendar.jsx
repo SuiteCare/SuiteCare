@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+
 import MateCalendarModal from './MateCalendarModal';
-import { stringToColor } from '@/utils/calculators';
 import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
+
+import { stringToColor } from '@/utils/calculators';
 
 const localizer = momentLocalizer(moment);
 const settingProps = getSettingProps();
@@ -30,7 +32,7 @@ const MateCalendar = () => {
       let currentStartDate = moment(`${rawData.start_date} ${rawData.start_time}`);
       let currentEndDate = moment(`${rawData.start_date} ${rawData.end_time}`);
       const endDate = moment(`${rawData.end_date} ${rawData.end_time}`);
-      const weekdays = rawData.weekdays;
+      const weekdays = rawData?.weekdays;
 
       const events = [];
 
@@ -58,7 +60,7 @@ const MateCalendar = () => {
   }, []);
 
   const showEvent = (event) => {
-    setSelectedEvent(event);
+    // setSelectedEvent(event);
     setShowEventDetails(true);
   };
 
@@ -72,7 +74,7 @@ const MateCalendar = () => {
         className='Calendar'
         localizer={localizer}
         events={eventList}
-        culture={'ko-KR'}
+        culture='ko-KR'
         startAccessor='start'
         endAccessor='end'
         views={['month', 'week', 'agenda']}
@@ -80,7 +82,7 @@ const MateCalendar = () => {
         dayPropGetter={customDayPropGetter}
         {...settingProps}
       />
-      {showEventDetails && <MateCalendarModal modalData={'test'} closeModal={closeModal} />}
+      {showEventDetails && <MateCalendarModal modalData='test' closeModal={closeModal} />}
     </>
   );
 };
