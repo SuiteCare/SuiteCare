@@ -1,9 +1,11 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
-import default_profile from '@/assets/default_profile.jpg';
-import { calAge } from '@/utils/calculators.js';
+
 import useModal from '@/components/Common/Modal/useModal';
+import styles from '@/components/Common/Modal/Modal.module.css';
+import default_profile from '@/assets/default_profile.jpg';
+
+import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const MateDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -19,7 +21,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           <div className={styles.profile_details}>
             <h2>{modalData.mate_name}</h2>메이트
             <p>
-              {modalData.gender === 'F' ? '여성' : '남성'}, 만 {calAge(modalData.birthday)}세
+              {genderToKo(modalData.gender)}성, 만 {calAge(modalData.birthday)}세
             </p>
             <p>✉️{modalData.mate_email || '이메일 정보가 없습니다.'}</p>
             <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
@@ -27,26 +29,26 @@ const MateDetailModal = ({ modalData, closeModal }) => {
         </div>
         <div className={styles.introduction}>{modalData.introduction || '소개글이 없습니다.'}</div>
         <div className={styles.info_grid}>
-          <div className={styles.info_wrapper}>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>활동 지역</label>
-            <p>{modalData.address}</p>
+            <span>{modalData.address}</span>
           </div>
-          <div className={styles.info_wrapper}>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>대표 서비스</label>
-            <p>{modalData.main_service}</p>
+            <span>{modalData.main_service}</span>
           </div>
-          <div className={styles.info_wrapper}>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>연락 가능 시간</label>
-            <p>
+            <span>
               {modalData.contact_time_start}~{modalData.contact_time_end}
-            </p>
+            </span>
           </div>
-          <div className={styles.info_wrapper}>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>희망 시급</label>
-            <p>{modalData.wage.toLocaleString()}원</p>
+            <span>{modalData.wage.toLocaleString()}원</span>
           </div>
         </div>
-        <div className={styles.info_wrapper}>
+        <div className={`${styles.info_wrapper} ${styles.double}`}>
           <label>경력사항</label>
           <table>
             <thead>
@@ -67,7 +69,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
             </tbody>
           </table>
         </div>
-        <div className={styles.info_wrapper}>
+        <div className={`${styles.info_wrapper} ${styles.double}`}>
           <label>자격증</label>
           <table>
             <thead>

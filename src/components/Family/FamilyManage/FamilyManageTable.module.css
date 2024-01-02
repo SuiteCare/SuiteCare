@@ -43,11 +43,6 @@
   color: var(--deep-brown);
 }
 
-.FamilyManageTable td > button.modify_button {
-  outline: 1px solid var(--light-gray);
-  background-color: white;
-}
-
 .FamilyManageTable td > button:hover {
   filter: brightness(0.95);
 }

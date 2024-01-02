@@ -167,20 +167,21 @@ h1 {
 }
 h2 {
   font-size: 28px;
-  margin-bottom: 6px;
+  margin-bottom: 1rem;
 }
 h3 {
   font-size: 22px;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
   border-left: 4px solid var(--brown-01);
   padding: 0rem 0rem 6px 16px;
 }
 h4 {
   font-size: 20px;
-  margin-bottom: 6px;
+  margin-bottom: 1rem;
 }
 h5 {
   font-size: 18px;
+  margin-bottom: 1rem;
 }
 h6 {
   font-size: 14px;

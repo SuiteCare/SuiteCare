@@ -1,6 +1,6 @@
 import styles from './SearchResultCard.module.css';
 
-import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
+import { calAge, calTimeDiff, countWeekdays, genderToKo } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail }) => {
   const dueDate = Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24));
@@ -42,7 +42,7 @@ const SearchResultCard = ({ data, showDetail }) => {
         <div className={styles.userInfo}>
           <label>나이/성별</label>
           <span>
-            만 {calAge(data.patient_birthday)}세 {data.gender === 'F' ? '여성' : '남성'}
+            만 {calAge(data.patient_birthday)}세 {genderToKo(data.gender)}성
           </span>
         </div>
         <div className={styles.userInfo}>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
-const Form = () => {
+const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
 
   const [formData, setFormData] = useState({
@@ -26,6 +26,22 @@ const Form = () => {
     need_night_care: '',
     notice: '',
   });
+
+  const getPatientData = async () => {
+    try {
+      const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } });
+      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${idQuery}`, { params: { id: idQuery } });
+
+      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
+
+      setFormData({
+        ...patientResponse.data,
+        ...patientDetailResponse.data,
+      });
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,26 +99,59 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
     const submitData = {
-      ...formData,
       family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
+      ...formData,
     };
-    const response = await axios
-      .post('/api/v1/patient', submitData)
+    console.log(submitData);
+
+    const response = idQuery
+      ? await axios
+          .patch(`/api/v1/patient/${idQuery}`, submitData)
+          .then((response) => {
+            if (response.data === 1) {
+              alert(`${formData.name} 님의 환자 정보가 수정되었습니다.`);
+              navigator.push('/family/manage/patient_list');
+            } else {
+              alert('환자 정보 수정에 실패하였습니다.');
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          })
+      : await axios
+          .post('/api/v1/patient', submitData)
+          .then((response) => {
+            if (response.data === 2) {
+              alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
+              navigator.push('/family/main');
+            } else if (response.data === 1) {
+              alert('환자 정보 등록에 일부 실패하였습니다.');
+            } else {
+              alert('환자 정보 등록에 실패하였습니다.');
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+  };
+
+  const handleClickDelete = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .delete(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } })
       .then((response) => {
-        if (response.data === 2) {
-          alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
-          navigator.push('/family/main');
-        } else if (response.data === 1) {
-          alert('환자 정보 등록에 일부 실패하였습니다.');
+        if (response.data === 1) {
+          alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
+          navigator.push('/family/manage/patient_list');
         } else {
-          alert('환자 정보 등록에 실패하였습니다.');
+          alert('환자 정보 삭제에 실패하였습니다.');
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   };
 
@@ -205,11 +254,13 @@ const Form = () => {
   };
 
   useEffect(() => {
+    if (idQuery) getPatientData();
+    console.log(formData);
     document.addEventListener('keydown', handleKeyPress);
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, []);
+  }, [idQuery]);
 
   return (
     <div className={`${styles.addPatient} content_wrapper`}>
@@ -255,14 +306,24 @@ const Form = () => {
             id='notice'
             maxLength='200'
             onChange={handleInputChange}
+            defaultValue={formData.notice}
           />
         </div>
         <div className='button_wrapper'>
-          <input type='submit' value='환자 등록' />
+          {idQuery ? (
+            <>
+              <button type='button' onClick={handleClickDelete}>
+                삭제
+              </button>
+              <button type='submit'>정보 수정</button>
+            </>
+          ) : (
+            <button type='submit'>환자 등록</button>
+          )}
         </div>
       </form>
     </div>
   );
 };
 
-export default Form;
+export default FamilyAddPatient;

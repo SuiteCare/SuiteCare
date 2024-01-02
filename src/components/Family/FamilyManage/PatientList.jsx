@@ -6,7 +6,7 @@ import styles from './FamilyManageTable.module.css';
 import PatientDetailModal from './PatientDetailModal';
 import useModal from '@/components/Common/Modal/useModal';
 
-import { calAge } from '@/utils/calculators';
+import { calAge, genderToKo } from '@/utils/calculators';
 
 const PatientList = ({ data }) => {
   const navigator = useRouter();
@@ -14,19 +14,32 @@ const PatientList = ({ data }) => {
   const [modalData, setModalData] = useState({});
   const { isModalVisible, openModal, closeModal } = useModal();
 
-  const getPatientDetail = async ($id) => {
-    const response = await axios.get(`/api/v1/patient/${$id}`);
-    setModalData(response.data);
+  const getPatientDetail = async ($event) => {
+    setModalData($event);
+    try {
+      const patientPromise = axios.get(`/api/v1/patient/${$event.id}`);
+      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${$event.id}`);
+
+      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
+
+      setModalData({
+        ...patientResponse.data,
+        ...patientDetailResponse.data,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const handleDetailClick = (e) => {
-    getPatientDetail();
+
+  const handleDetailClick = ($event) => {
+    getPatientDetail($event);
     openModal();
   };
 
   return (
     <div className={styles.FamilyManageTable}>
       <div style={{ textAlign: 'right' }}>
-        <button type='button' onClick={() => navigator.push('/family/addPatient')}>
+        <button type='button' onClick={() => navigator.push('/family/addpatient')}>
           환자 등록하기
         </button>
       </div>
@@ -41,7 +54,7 @@ const PatientList = ({ data }) => {
             <th>키</th>
             <th>몸무게</th>
             <th>진단명</th>
-            <th colSpan={2}>환자 정보 관리</th>
+            <th>환자 상세정보</th>
           </tr>
         </thead>
         <tbody>
@@ -58,10 +71,10 @@ const PatientList = ({ data }) => {
             </tr>
           ) : (
             data.map((e, index) => (
-              <tr key={index} target={e.id}>
+              <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{e.name}</td>
-                <td>{e.gender === 'F' ? '여자' : '남자'}</td>
+                <td>{genderToKo(e.gender)}성</td>
                 <td>
                   {e.birthday} (만 {calAge(e.birthday)}세)
                 </td>
@@ -69,13 +82,8 @@ const PatientList = ({ data }) => {
                 <td>{e.weight} kg</td>
                 <td>{e.diagnosis_name}</td>
                 <td>
-                  <button type='button' onClick={handleDetailClick}>
+                  <button type='button' onClick={() => handleDetailClick(e)}>
                     상세정보 보기
-                  </button>
-                </td>
-                <td>
-                  <button type='button' className={styles.modify_button}>
-                    정보 수정
                   </button>
                 </td>
               </tr>
