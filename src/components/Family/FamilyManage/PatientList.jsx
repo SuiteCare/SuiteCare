@@ -15,18 +15,17 @@ const PatientList = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
 
   const getPatientDetail = async ($event) => {
+    setModalData($event);
     try {
-      const response = await axios.get(`/api/v1/patient/${$event.id}`);
-      const { data } = response;
+      const patientPromise = axios.get(`/api/v1/patient/${$event.id}`);
+      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${$event.id}`);
 
-      const combinedData = { ...$event };
-      for (const key in data) {
-        if (data[key] !== null) {
-          combinedData[key] = data[key];
-        }
-      }
+      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
-      setModalData(combinedData);
+      setModalData({
+        ...patientResponse.data,
+        ...patientDetailResponse.data,
+      });
     } catch (error) {
       console.error(error);
     }

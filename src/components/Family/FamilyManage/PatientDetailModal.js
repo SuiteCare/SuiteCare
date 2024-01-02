@@ -1,13 +1,14 @@
+import { useRouter } from 'next/router';
+
 import styles from '@/components/Common/Modal/Modal.module.css';
 import useModal from '@/components/Common/Modal/useModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
-import { useRouter } from 'next/router';
 
 const PatientDetailModal = ({ modalData, closeModal }) => {
-  const { handleContentClick } = useModal();
-
   const navigator = useRouter();
+
+  const { handleContentClick } = useModal();
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -15,7 +16,7 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {modalData.diagnosis_name ? (
+        {modalData.consciousness_state ? (
           <>
             <h2>{modalData.name}님의 환자 정보</h2>
             <div className={styles.info_section}>
