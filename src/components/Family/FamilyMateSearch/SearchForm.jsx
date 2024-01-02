@@ -162,11 +162,11 @@ const SearchForm = ({ onSearch }) => {
           <label>간병인 성별</label>
           <div className={styles.checkbox_list_wrapper}>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'F'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='F' onChange={handleCheckboxChange} />
               <span>여자</span>
             </div>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'M'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='M' onChange={handleCheckboxChange} />
               <span>남자</span>
             </div>
           </div>
@@ -175,8 +175,8 @@ const SearchForm = ({ onSearch }) => {
         <div className='input_wrapper'>
           <label>대표서비스</label>
           <div className={styles.checkbox_list_wrapper}>
-            {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e, i) => (
-              <div className={styles.checkbox_wrapper} key={i}>
+            {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e) => (
+              <div className={styles.checkbox_wrapper} key={e}>
                 <input type='checkbox' name='service' value={e} onChange={handleCheckboxChange} />
                 <span>{`${e}`}</span>
               </div>

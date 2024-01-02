@@ -1,14 +1,14 @@
 import Image from 'next/image';
 
 import styles from './SearchResultCard.module.css';
-import default_profile from '@/assets/default_profile.jpg';
+import defaultProfile from '@/assets/default_profile.jpg';
 
 import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (
     <div className={styles.card}>
-      {data.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
+      {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
       <div className={styles.userName}>
         <label>{data.mate_name}</label>메이트
         <p>

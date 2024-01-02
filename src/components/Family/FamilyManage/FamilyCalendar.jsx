@@ -11,6 +11,7 @@ import {
   customDayPropGetter,
   messages,
 } from '@/components/Common/Calendar/CalendarSettingProps';
+
 import { stringToColor } from '@/utils/calculators';
 
 const localizer = momentLocalizer(moment);

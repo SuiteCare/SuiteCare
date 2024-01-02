@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import MateDetailModal from './MateDetailModal';
@@ -45,15 +47,16 @@ const SearchResult = ({ data, type }) => {
     openModal();
   };
 
-  async function getModalData($mate_id) {
+  async function getModalData($mateId) {
     try {
-      const response = await axios.get('/api/v1/familymatesearch', { params: $mate_id });
+      const response = await axios.get('/api/v1/familymatesearch', { params: $mateId });
       const msg = response.headers.get('msg');
       if (response.status === 200 && msg === 'success') {
         alert(response.data);
         console.log(response.data);
         return response.data;
-      } else if (msg === 'fail') {
+      }
+      if (msg === 'fail') {
         alert('데이터 불러오기 실패');
         return {};
       }

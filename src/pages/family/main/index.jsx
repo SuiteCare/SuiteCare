@@ -1,8 +1,10 @@
+import { useRouter } from 'next/router';
+
 import Header from '@/components/Family/FamilyHeader/FamilyHeader';
 import MenuList from '@/components/Family/FamilyHeader/FamilyMenuList.js';
 import MainCard from '@/components/Common/Main/MainCard';
+
 import styles from '@/pages/main.module.css';
-import { useRouter } from 'next/router';
 
 const Main = () => {
   const navigator = useRouter();
@@ -11,8 +13,8 @@ const Main = () => {
     navigator.push(`/${url}`);
   };
 
-  const cards = MenuList.map((e, index) => (
-    <MainCard key={index} title={e.title} description={e.description} onClick={() => navigateTo(`family/${e.url}`)} />
+  const cards = MenuList.map((e) => (
+    <MainCard key={e} title={e.title} description={e.description} onClick={() => navigateTo(`family/${e.url}`)} />
   ));
 
   return (

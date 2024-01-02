@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './LoginForm.module.css';
 import axios from 'axios';
+
+import styles from './LoginForm.module.css';
 
 const LoginForm = ({ type }) => {
   const navigator = useRouter();
@@ -26,10 +27,10 @@ const LoginForm = ({ type }) => {
 
     if (loginForm.id && loginForm.password) {
       try {
-        let body = {
+        const body = {
           login_id: loginForm.id,
           password: loginForm.password,
-          role: role,
+          role,
         };
 
         const response = await axios.post('/api/v1/login', body);
