@@ -43,3 +43,10 @@ div.info_grid:first-of-type div:first-of-type > div:nth-of-type(2) > div {
   display: grid;
   row-gap: 12px;
 }
+
+@media (max-width: 1200px) {
+  .info_grid,
+  .info_grid.detail {
+    grid-template-columns: 1fr;
+  }
+}
