@@ -4,12 +4,14 @@ const formInputInfos = {
     type: 'text',
     id: 'user_name',
     maxLength: 15,
+    basic: true,
   },
   birthday: {
     label: '생년월일',
     type: 'date',
     id: 'birthday',
     maxLength: 20,
+    basic: true,
   },
   gender: {
     label: '성별',
@@ -18,24 +20,28 @@ const formInputInfos = {
       { value: 'M', label: '남자' },
       { value: 'F', label: '여자' },
     ],
+    basic: true,
   },
   height: {
     label: '키 (cm)',
     type: 'number',
     id: 'height',
     maxLength: 3,
+    basic: true,
   },
   weight: {
     label: '몸무게 (kg)',
     type: 'number',
     id: 'weight',
     maxLength: 3,
+    basic: true,
   },
   diagnosis_name: {
     label: '진단명',
     type: 'text',
     id: 'diagnosis_name',
     maxLength: 45,
+    basic: true,
   },
   consciousness_state: {
     label: '의식 상태',
