@@ -50,7 +50,7 @@ const ChangePwModal = ({ modalData, closeModal }) => {
             }
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
       } else {
         alert('입력하신 새 비밀번호가 다릅니다.');

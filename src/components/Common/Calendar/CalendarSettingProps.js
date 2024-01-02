@@ -20,15 +20,15 @@ const formats = {
   dayRangeHeaderFormat: ({ start }, culture, localizer) => {
     const weekRange = new Date(start);
     weekRange.setDate(weekRange.getDate() + 6);
-    return `${localizer.format(start, 'M월 DD일', culture)} ~ ${localizer.format(
+    return `${localizer.format(start, 'M월 D일', culture)} ~ ${localizer.format(
       new Date(weekRange),
-      'M월 DD일',
+      'M월 D일',
       culture,
     )}`;
   },
-  agendaDateFormat: (date, culture, localizer) => localizer.format(date, 'M월 DD일 (ddd)', culture),
+  agendaDateFormat: (date, culture, localizer) => localizer.format(date, 'M월 D일 (ddd)', culture),
   agendaHeaderFormat: ({ start, end }, culture, localizer) =>
-    `${localizer.format(start, 'M월 DD일', culture)} ~ ${localizer.format(end, 'M월 DD일', culture)}`,
+    `${localizer.format(start, 'M월 D일', culture)} ~ ${localizer.format(end, 'M월 D일', culture)}`,
 };
 
 export const customDayPropGetter = (date) => {

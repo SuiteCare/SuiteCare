@@ -55,7 +55,7 @@ const SignUpForm = ({ type }) => {
 
     if (idState) {
       try {
-        const response = await axios.get('/api/v1/member', { params: { id: idState } });
+        const response = await axios.get('/api/v1/member', { params: { login_id: idState } });
         const { data } = response;
 
         if (data === 1) {
@@ -114,7 +114,7 @@ const SignUpForm = ({ type }) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
 
@@ -163,7 +163,7 @@ const SignUpForm = ({ type }) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   }
   return (

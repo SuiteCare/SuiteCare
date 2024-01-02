@@ -35,6 +35,14 @@
   padding: 5px 10px;
 }
 
-.FamilyManageTable td:first-of-type {
-  width: 10%;
+.FamilyManageTable td > button {
+  padding: 0.6rem 0;
+  width: 100%;
+  font-weight: 400;
+  background-color: var(--light-gray);
+  color: var(--deep-brown);
+}
+
+.FamilyManageTable td > button:hover {
+  filter: brightness(0.95);
 }

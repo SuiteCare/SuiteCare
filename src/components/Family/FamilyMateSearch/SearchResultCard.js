@@ -3,7 +3,7 @@ import Image from 'next/image';
 import styles from './SearchResultCard.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 
-import { calAge } from '@/utils/calculators.js';
+import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (
@@ -12,7 +12,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       <div className={styles.userName}>
         <label>{data.mate_name}</label>메이트
         <p>
-          {data.gender === 'F' ? '여성' : '남성'}, 만 {calAge(data.birthday)}세
+          {genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세
         </p>
         <p>{data.introduction}</p>
       </div>

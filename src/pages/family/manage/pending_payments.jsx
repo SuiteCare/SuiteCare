@@ -7,7 +7,7 @@ const FamilyCalendarPage = () => {
     <>
       <FamilyHeader />
       <div className='page_with_sidebar'>
-        <FamilyManageSidebar />
+        <FamilyManageSidebar activeMenu='pending_payments' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>결제 대기 목록</h1>
