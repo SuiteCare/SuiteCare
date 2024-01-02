@@ -28,7 +28,7 @@ const PatientList = ({ data }) => {
 
       setModalData(combinedData);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
