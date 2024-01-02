@@ -5,26 +5,32 @@ import axios from 'axios';
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
+import random from '@/utils/FamilyAddPatient';
+
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
 
   const [formData, setFormData] = useState({
-    name: '',
-    birthday: '',
-    gender: '',
-    height: '',
-    weight: '',
-    diagnosis_name: '',
-    consciousness_state: '',
-    paralysis_state: '',
-    behavioral_state: '',
-    meal_care_state: '',
-    toilet_care_state: '',
-    is_bedsore: '',
-    need_suction: '',
-    need_outpatient: '',
-    need_night_care: '',
-    notice: '',
+    basic: {
+      name: '',
+      birthday: '',
+      gender: '',
+      height: '',
+      weight: '',
+      diagnosis_name: '',
+    },
+    detail: {
+      consciousness_state: '',
+      paralysis_state: '',
+      behavioral_state: '',
+      meal_care_state: '',
+      toilet_care_state: '',
+      is_bedsore: '',
+      need_suction: '',
+      need_outpatient: '',
+      need_night_care: '',
+      notice: '',
+    },
   });
 
   const getPatientData = async () => {
@@ -35,8 +41,8 @@ const FamilyAddPatient = ({ idQuery }) => {
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
       setFormData({
-        ...patientResponse.data,
-        ...patientDetailResponse.data,
+        basic: { ...patientResponse.data },
+        detail: { ...patientDetailResponse.data },
       });
     } catch (error) {
       console.error('Error:', error);
@@ -45,18 +51,27 @@ const FamilyAddPatient = ({ idQuery }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    const isBasic = formInputInfos[name]?.basic;
+
     setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
+      basic: { ...prevData.basic, ...(isBasic ? { [name]: value } : {}) },
+      detail: { ...prevData.detail, ...(isBasic ? {} : { [name]: value }) },
     }));
   };
 
   const handleRadioWrapperClick = (typeName, optionValue) => {
-    setFormData({ ...formData, [typeName]: optionValue });
+    const isBasic = formInputInfos[typeName]?.basic;
+
+    setFormData(({ basic, detail }) => ({
+      basic: { ...basic, ...(isBasic ? { [typeName]: optionValue } : {}) },
+      detail: { ...detail, ...(isBasic ? {} : { [typeName]: optionValue }) },
+    }));
   };
 
   const renderInput = (typeName) => {
     const inputInfo = formInputInfos[typeName];
+    const formDataSection = inputInfo.basic ? formData.basic : formData.detail;
+
     return (
       <div key={typeName} className='input_wrapper'>
         <label>{inputInfo.label}</label>
@@ -73,8 +88,8 @@ const FamilyAddPatient = ({ idQuery }) => {
                   id={option.id}
                   name={typeName}
                   value={option.value}
-                  onChange={handleInputChange}
-                  checked={formData[typeName] === option.value}
+                  onChange={() => handleRadioWrapperClick(typeName, option.value)}
+                  checked={formDataSection[typeName] === option.value}
                   required
                 />
                 <span>{option.label}</span>
@@ -88,7 +103,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             name={typeName}
             id={inputInfo.id}
             maxLength={inputInfo.maxLength}
-            value={formData[typeName]}
+            value={formDataSection[typeName]}
             onChange={handleInputChange}
             required
           />
@@ -100,15 +115,20 @@ const FamilyAddPatient = ({ idQuery }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const submitData = {
+    const basicRequestData = {
       family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
-      ...formData,
+      ...formData.basic,
     };
-    console.log(submitData);
+
+    const detailRequestData = {
+      ...formData.detail,
+    };
+
+    console.log(basicRequestData, detailRequestData);
 
     const response = idQuery
       ? await axios
-          .patch(`/api/v1/patient/${idQuery}`, submitData)
+          .patch(`/api/v1/patient/${idQuery}`, { patientDTO: basicRequestData, patientDetailDTO: detailRequestData })
           .then((response) => {
             if (response.data === 1) {
               alert(`${formData.name} 님의 환자 정보가 수정되었습니다.`);
@@ -121,13 +141,11 @@ const FamilyAddPatient = ({ idQuery }) => {
             console.error(error);
           })
       : await axios
-          .post('/api/v1/patient', submitData)
+          .post('/api/v1/patient', { patientDTO: basicRequestData, patientDetailDTO: detailRequestData })
           .then((response) => {
-            if (response.data === 2) {
-              alert(`${formData.name} 님의 환자 정보가 등록되었습니다.`);
+            if (response.data === 1) {
+              alert(`${formData.basic.name} 님의 환자 정보가 등록되었습니다.`);
               navigator.push('/family/main');
-            } else if (response.data === 1) {
-              alert('환자 정보 등록에 일부 실패하였습니다.');
             } else {
               alert('환자 정보 등록에 실패하였습니다.');
             }
@@ -144,7 +162,7 @@ const FamilyAddPatient = ({ idQuery }) => {
       .delete(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } })
       .then((response) => {
         if (response.data === 1) {
-          alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
+          alert(`${formData.basic.name} 님의 환자 정보가 삭제되었습니다.`);
           navigator.push('/family/manage/patient_list');
         } else {
           alert('환자 정보 삭제에 실패하였습니다.');
@@ -155,108 +173,13 @@ const FamilyAddPatient = ({ idQuery }) => {
       });
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === '`') {
-      const randomData = { ...formData };
-
-      const names = [
-        '김',
-        '이',
-        '박',
-        '최',
-        '정',
-        '강',
-        '조',
-        '윤',
-        '장',
-        '임',
-        '한',
-        '오',
-        '서',
-        '신',
-        '권',
-        '황',
-        '안',
-        '송',
-        '전',
-        '홍',
-        '문',
-        '손',
-        '양',
-        '배',
-        '백',
-        '허',
-        '남',
-        '심',
-        '노',
-        '하',
-        '곽',
-        '성',
-        '차',
-        '주',
-        '우',
-        '구',
-        '나',
-        '민',
-        '유',
-        '류',
-        '진',
-        '엄',
-        '채',
-        '원',
-        '천',
-        '방',
-        '공',
-        '현',
-        '함',
-        '변',
-        '염',
-        '여',
-        '추',
-        '도',
-        '소',
-        '석',
-        '마',
-        '가',
-      ];
-      const randomName = names[Math.floor(Math.random() * names.length)];
-      randomData.name = randomName + '환자';
-
-      const randomHeight = Math.floor(Math.random() * 101) + 100;
-      randomData.height = randomHeight.toString();
-
-      const randomWeight = Math.floor(Math.random() * 91) + 30;
-      randomData.weight = randomWeight.toString();
-
-      const diagnoses = ['진단명1', '진단명2', '진단명3'];
-      const randomDiagnosis = diagnoses[Math.floor(Math.random() * diagnoses.length)];
-      randomData.diagnosis_name = randomDiagnosis;
-
-      const randomYear = Math.floor(Math.random() * 80) + 1924;
-      const randomMonth = Math.floor(Math.random() * 12) + 1;
-      const randomDay = Math.floor(Math.random() * 31) + 1;
-      const formattedRandomBirth = `${randomYear}-${String(randomMonth).padStart(2, '0')}-${String(randomDay).padStart(
-        2,
-        '0',
-      )}`;
-      randomData.birthday = formattedRandomBirth;
-
-      for (const key in randomData) {
-        if (formInputInfos[key].type === 'radio') {
-          const radioOptions = formInputInfos[key].options;
-          const randomOption = radioOptions[Math.floor(Math.random() * radioOptions.length)].value;
-          randomData[key] = randomOption;
-        }
-      }
-
-      setFormData(randomData);
-    }
-  };
+  const handleKeyPress = (e) => random(e, formData, setFormData); // 테스트용 코드
 
   useEffect(() => {
     if (idQuery) getPatientData();
-    console.log(formData);
+
     document.addEventListener('keydown', handleKeyPress);
+
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
@@ -306,7 +229,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             id='notice'
             maxLength='200'
             onChange={handleInputChange}
-            defaultValue={formData.notice}
+            defaultValue={formData.detail.notice}
           />
         </div>
         <div className='button_wrapper'>
