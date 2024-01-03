@@ -378,6 +378,7 @@ input[type='password'],
 input[type='email'],
 input[type='number'],
 input[type='date'],
+input[type='time'],
 textarea,
 select {
   padding: 1rem 1.2rem;
@@ -401,8 +402,9 @@ select {
 }
 
 select {
-  padding: 0;
-  width: 220px;
+  min-width: 220px;
+  position: relative;
+  top: -1px;
 }
 
 input[type='text']:focus,
@@ -441,6 +443,10 @@ label {
 
 input[type='checkbox'] {
   display: inline;
+}
+
+.time_picker select {
+  min-width: auto;
 }
 
 /*  8. Page Design  --------------------------------------------------- */

@@ -2,13 +2,11 @@ import { useState } from 'react';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
-export const PatientInfo = ({ patientInfo, styles }) => {
+export const PatientInfo = ({ patientInfo, styles, navigator }) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
     <>
-      <h2>{patientInfo.name}님의 환자 정보</h2>
-
       <div className='tab_wrapper'>
         <ul>
           <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
@@ -22,10 +20,16 @@ export const PatientInfo = ({ patientInfo, styles }) => {
 
       {activeTab === 0 && (
         <div className={styles.info_section}>
-          <h5>환자 기본정보</h5>
+          <h3>환자 기본정보</h3>
+
+          <div className='input_wrapper'>
+            <label>성명</label>
+            <span>{patientInfo.name}</span>
+          </div>
+
           <div className='input_wrapper'>
             <label>진단명</label>
-            <span>{patientInfo.diagnosis}</span>
+            <span>{patientInfo.diagnosis_name}</span>
           </div>
 
           <div className={styles.info_grid}>
@@ -55,7 +59,7 @@ export const PatientInfo = ({ patientInfo, styles }) => {
       {activeTab === 1 && (
         <div className={styles.info_section}>
           {/* 상세정보 시작 */}
-          <h5>환자 상세정보</h5>
+          <h3>환자 상세정보</h3>
           <div className={styles.info_grid}>
             <div className='input_wrapper'>
               <label>의식 상태</label>
@@ -110,10 +114,15 @@ export const PatientInfo = ({ patientInfo, styles }) => {
         </div>
       )}
 
-      <hr />
-
-      <div className={styles.button_wrapper}>
-        <button type='button' onClick={() => navigator.push(`/family/addpatient/${patientInfo.id}`)}>
+      <div className='button_wrapper'>
+        <button
+          type='button'
+          onClick={() =>
+            window.confirm('입력된 내용이 초기화됩니다. 환자 정보 수정 페이지로 이동하시겠습니까?')
+              ? navigator.push(`/family/addpatient/${patientInfo.id}`)
+              : ''
+          }
+        >
           정보 수정하기
         </button>
       </div>
