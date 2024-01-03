@@ -48,7 +48,7 @@ const PatientList = ({ data }) => {
         <thead>
           <tr>
             <th>#</th>
-            <th>성함</th>
+            <th>성명</th>
             <th>성별</th>
             <th>생년월일</th>
             <th>키</th>

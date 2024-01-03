@@ -166,10 +166,10 @@ const FamilyAddPatient = ({ idQuery }) => {
   useEffect(() => {
     if (idQuery) getPatientData();
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener('keydown', handleKeyPress); // 테스트용 코드
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('keydown', handleKeyPress); // 테스트용 코드
     };
   }, [idQuery]);
 

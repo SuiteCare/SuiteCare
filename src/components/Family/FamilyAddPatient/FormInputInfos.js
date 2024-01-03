@@ -1,6 +1,6 @@
 const formInputInfos = {
   name: {
-    label: '성함',
+    label: '성명',
     type: 'text',
     id: 'user_name',
     maxLength: 15,

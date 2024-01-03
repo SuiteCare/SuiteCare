@@ -139,7 +139,7 @@ const MyPageForm = () => {
         </div>
 
         <div className='input_wrapper'>
-          <label>성함</label>
+          <label>성명</label>
           <input type='text' name='name' id='name' readOnly value={name} />
         </div>
 
