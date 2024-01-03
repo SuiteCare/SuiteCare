@@ -559,7 +559,7 @@ input[type='checkbox'] {
 
 .rbc-toolbar > span:nth-child(2) {
   position: relative;
-  top: -1rem;
+  top: -0.33333333rem;
 }
 
 .rbc-toolbar > span:nth-child(3) {
