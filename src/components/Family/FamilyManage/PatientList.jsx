@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import styles from './FamilyManageTable.module.css';
 import PatientDetailModal from './PatientDetailModal';
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 

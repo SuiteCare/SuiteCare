@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
 
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 import FamilyCalendarModal from './FamilyCalendarModal';
 import {
   getComponents,

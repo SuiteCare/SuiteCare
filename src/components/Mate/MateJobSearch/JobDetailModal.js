@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo } from '@/utils/calculators.js';
