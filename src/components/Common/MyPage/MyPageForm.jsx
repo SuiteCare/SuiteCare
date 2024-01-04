@@ -1,4 +1,5 @@
-import { use, useEffect, useState } from 'react';
+/* eslint-disable camelcase */
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
@@ -7,7 +8,7 @@ import styles from './MyPageForm.module.css';
 
 const MyPageForm = () => {
   const navigator = useRouter();
-  const [login_id, setLogin_id] = useState('');
+  const [loginId, setLoginId] = useState('');
   const [myId, setMyId] = useState();
   const [name, setName] = useState();
   const [tel, setTel] = useState('');
@@ -17,7 +18,7 @@ const MyPageForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (loginInfo && loginInfo.login_id) {
-        setLogin_id(loginInfo.login_id);
+        setLoginId(loginInfo.login_id);
         try {
           const response = await axios.get('/api/v1/mypage', {
             params: {
@@ -36,20 +37,18 @@ const MyPageForm = () => {
     };
 
     fetchData();
-  }, []);
+  }, [loginInfo.login_id]);
 
-  let part1 = tel.substring(0, 3); // 첫 세 자리
-  let part2 = tel.substring(4, 8); // 중간 네 자리
-  let part3 = tel.substring(9); // 마지막 네 자리
+  const part1 = tel.substring(0, 3);
+  const part2 = tel.substring(4, 8);
+  const part3 = tel.substring(9);
 
-  //비밀번호 변경 모달
-  const [ChangePwModalOn, setChangePwModalOn] = useState(false);
+  const [changePwModalOn, setChangePwModalOn] = useState(false);
 
   const closeModal = () => {
     setChangePwModalOn(false);
   };
 
-  //휴대폰 번호를 작성하고 hidden input에 모으는 파트
   const [phoneParts, setPhoneParts] = useState({
     phone_1: '',
     phone_2: '',
@@ -71,10 +70,10 @@ const MyPageForm = () => {
     }
   };
 
-  //휴대폰 번호 인증
   const { phone_1, phone_2, phone_3 } = phoneParts;
   const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
-  async function handlePhoneCertification(event) {
+
+  const handlePhoneCertification = (event) => {
     event.preventDefault();
 
     if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(phoneNumber)) {
@@ -82,45 +81,37 @@ const MyPageForm = () => {
     } else {
       alert('휴대폰 번호를 올바르게 입력하십시오.');
     }
-  }
+  };
 
-  //수정하기 클릭
-  async function handleModifyClick(event) {
+  const handleModifyClick = async (event) => {
     event.preventDefault();
 
-    let body = {
+    const body = {
       login_id: loginInfo.login_id,
       tel: phoneNumber,
     };
 
-    const response = await axios
-      .post('/api/v1/modify', body)
-      .then(
-        (response) => {
-          if (response.data) {
-            alert('정보 수정 완료!!!');
+    try {
+      const response = await axios.post('/api/v1/modify', body);
+      if (response.data) {
+        alert('정보 수정 완료!!!');
 
-            if (role === 'F') {
-              navigator.push(`/family/main`);
-            } else {
-              navigator.push(`/mate/main`);
-            }
-          } else {
-            alert('실패..');
-          }
-        },
-        [role],
-      )
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+        if (role === 'F') {
+          navigator.push(`/family/main`);
+        } else {
+          navigator.push(`/mate/main`);
+        }
+      } else {
+        alert('실패..');
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-  //렌더링 부분
   return (
     <div className={`${styles.MyPageForm} Form_narrow`}>
       <hr />
-
       <form name='MyPageForm' method='post'>
         <div className='input_wrapper'>
           <label>아이디</label>
@@ -129,13 +120,12 @@ const MyPageForm = () => {
 
         <div className='input_wrapper'>
           <label>비밀번호</label>
-
           <div className='input_with_button'>
             <button type='button' className={styles.change_button} onClick={() => setChangePwModalOn(true)}>
               비밀번호 변경
             </button>
           </div>
-          {ChangePwModalOn && <ChangePwModal modalData={ChangePwModalOn} closeModal={closeModal} />}
+          {changePwModalOn && <ChangePwModal modalData={changePwModalOn} closeModal={closeModal} />}
         </div>
 
         <div className='input_wrapper'>

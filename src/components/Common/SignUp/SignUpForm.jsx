@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -26,7 +27,6 @@ const SignUpForm = ({ type }) => {
   // 회원가입 버튼 클릭 시 이동시키는 함수
   const navigator = useRouter();
 
-  /* eslint-disable camelcase */
   const { id, pw, pw_check, user_name } = formInputInfos;
 
   // 회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수

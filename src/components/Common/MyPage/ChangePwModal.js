@@ -35,7 +35,7 @@ const ChangePwModal = ({ modalData, closeModal }) => {
       console.log(pw.value);
       if (newPw.value === newPwCheck.value) {
         console.log(newPw.value);
-        let body = {
+        const body = {
           login_id: loginInfo.login_id,
           password: newPw.value,
         };
@@ -64,7 +64,7 @@ const ChangePwModal = ({ modalData, closeModal }) => {
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
-          <span onClick={closeModal}></span>
+          <span onClick={closeModal} />
         </div>
 
         <div className={styles.info_wrapper}>
