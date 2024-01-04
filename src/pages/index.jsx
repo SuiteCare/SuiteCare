@@ -11,25 +11,26 @@ import About from '@/components/Home/About';
 const Home = () => {
   const [indexData, setIndexData] = useState({});
 
-  useEffect(() => {
-    ReactGA.initialize('UA-110570651-1');
-    ReactGA.pageview(window.location.pathname);
-    getIndexData();
-  }, []);
-
   const getIndexData = async () => {
     try {
       const response = await axios.get('./indexData.json');
-      const data = response.data;
+      const { data } = response;
 
       setIndexData(data);
     } catch (error) {
       console.error(error.message);
     }
   };
+
+  useEffect(() => {
+    ReactGA.initialize('UA-110570651-1');
+    ReactGA.pageview(window.location.pathname);
+    getIndexData();
+  }, []);
+
   return (
     <div className={styles.Home}>
-      <StateContext.Provider value={indexData && indexData.main ? indexData : {}}>
+      <StateContext.Provider value={indexData && indexData.main ? indexData : null}>
         <Header data={indexData.main} />
         <About data={indexData.about} />
         <Contact data={indexData.main} />

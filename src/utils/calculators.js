@@ -36,3 +36,7 @@ export const stringToColor = (str, saturation = 55, lightness = 50) => {
   const hue = hash % 360;
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+
+export const genderToKo = (gender) => {
+  return gender === 'M' ? '남' : '여';
+};

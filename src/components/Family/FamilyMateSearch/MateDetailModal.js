@@ -1,9 +1,11 @@
-import styles from '@/components/Common/Modal/Modal.module.css';
 import React from 'react';
 import Image from 'next/image';
-import default_profile from '@/assets/default_profile.jpg';
-import { calAge } from '@/utils/calculators.js';
-import useModal from '@/components/Common/Modal/useModal';
+
+import useModal from '@/hooks/useModal';
+import styles from '@/components/Common/Modal/Modal.module.css';
+import defaultProfile from '@/assets/default_profile.jpg';
+
+import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const MateDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
@@ -12,14 +14,14 @@ const MateDetailModal = ({ modalData, closeModal }) => {
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
-          <span onClick={closeModal}></span>
+          <span onClick={closeModal} />
         </div>
         <div className={styles.profile_section}>
-          {modalData.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
+          {modalData.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
             <h2>{modalData.mate_name}</h2>메이트
             <p>
-              {modalData.gender === 'F' ? '여성' : '남성'}, 만 {calAge(modalData.birthday)}세
+              {genderToKo(modalData.gender)}성, 만 {calAge(modalData.birthday)}세
             </p>
             <p>✉️{modalData.mate_email || '이메일 정보가 없습니다.'}</p>
             <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
@@ -27,26 +29,26 @@ const MateDetailModal = ({ modalData, closeModal }) => {
         </div>
         <div className={styles.introduction}>{modalData.introduction || '소개글이 없습니다.'}</div>
         <div className={styles.info_grid}>
-          <div className={styles.info_wrapper}>
-            <label>활동 지역</label>
-            <p>{modalData.address}</p>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label className={styles.with_line}>활동 지역</label>
+            <span>{modalData.address}</span>
           </div>
-          <div className={styles.info_wrapper}>
-            <label>대표 서비스</label>
-            <p>{modalData.main_service}</p>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label className={styles.with_line}>대표 서비스</label>
+            <span>{modalData.main_service}</span>
           </div>
-          <div className={styles.info_wrapper}>
-            <label>연락 가능 시간</label>
-            <p>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label className={styles.with_line}>연락 가능 시간</label>
+            <span>
               {modalData.contact_time_start}~{modalData.contact_time_end}
-            </p>
+            </span>
           </div>
-          <div className={styles.info_wrapper}>
-            <label>희망 시급</label>
-            <p>{modalData.wage.toLocaleString()}원</p>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label className={styles.with_line}>희망 시급</label>
+            <span>{modalData.wage.toLocaleString()}원</span>
           </div>
         </div>
-        <div className={styles.info_wrapper}>
+        <div className={`${styles.info_wrapper} ${styles.double}`}>
           <label>경력사항</label>
           <table>
             <thead>
@@ -56,8 +58,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.career.map((e, index) => (
-                <tr key={index}>
+              {modalData.career.map((e) => (
+                <tr key={e}>
                   <td>{e.title}</td>
                   <td>
                     {e.date_start} ~ {e.date_end}
@@ -67,7 +69,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
             </tbody>
           </table>
         </div>
-        <div className={styles.info_wrapper}>
+        <div className={`${styles.info_wrapper} ${styles.double}`}>
           <label>자격증</label>
           <table>
             <thead>
@@ -78,8 +80,8 @@ const MateDetailModal = ({ modalData, closeModal }) => {
               </tr>
             </thead>
             <tbody>
-              {modalData.certificate.map((e, index) => (
-                <tr key={index}>
+              {modalData.certificate.map((e) => (
+                <tr key={e}>
                   <td>{e.certificate_name}</td>
                   <td>{e.qualification_date}</td>
                   <td>{e.expired_date}</td>
@@ -89,7 +91,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           </table>
         </div>
         <div className={styles.button_wrapper}>
-          <button>간병 신청하기</button>
+          <button type='submit'>간병 신청하기</button>
         </div>
       </div>
     </div>

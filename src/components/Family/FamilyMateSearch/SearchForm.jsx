@@ -1,10 +1,22 @@
 import { useState } from 'react';
+
 import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 import FormAgeList from '@/components/Common/SearchInfo/FormAgeList';
 
 const SearchForm = ({ onSearch }) => {
-  //시급 관련
+  // 체크박스 및 최종 데이터 관련
+  const [checkedItems, setCheckedItems] = useState({
+    search_name: '',
+    search_diagnosis: '',
+    location: [],
+    gender: [],
+    service: [],
+    age: [],
+    wage: [9860, 9860],
+  });
+
+  // 시급 관련
   const [wages, setWages] = useState([9860, 9860]);
 
   const handleWageChange = (e, index) => {
@@ -30,26 +42,25 @@ const SearchForm = ({ onSearch }) => {
     });
   };
 
-  //상단 이름 검색창 관련
-  const [searchInput, setSearchInput] = useState('');
+  // 상단 텍스트 검색창 관련
+  const [searchName, setSearchName] = useState('');
 
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value);
+  const handleSearchNameChange = (e) => {
+    setSearchName(e.target.value);
     setCheckedItems({
       ...checkedItems,
-      search_input: e.target.value,
+      search_name: e.target.value,
     });
   };
+  const [searchDiagnosis, setSearchDiagnosis] = useState('');
 
-  //체크박스 및 최종 데이터 관련
-  const [checkedItems, setCheckedItems] = useState({
-    search_input: '',
-    location: [],
-    gender: [],
-    service: [],
-    age: [],
-    wage: [9860, 9860],
-  });
+  const handleSearchDiagnosisNameChange = (e) => {
+    setSearchDiagnosis(e.target.value);
+    setCheckedItems({
+      ...checkedItems,
+      search_diagnosis: e.target.value,
+    });
+  };
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
@@ -90,7 +101,7 @@ const SearchForm = ({ onSearch }) => {
     selectAllLocation(e);
   };
 
-  //폼 제출
+  // 폼 제출
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -112,13 +123,24 @@ const SearchForm = ({ onSearch }) => {
     <div className={`${styles.SearchForm} Form_wide`}>
       <form name='search_form' onSubmit={handleSubmit}>
         <div className='input_wrapper'>
-          <label>이름으로 검색</label>
+          <label>성명으로 검색</label>
           <input
             type='text'
-            name='search_input'
-            placeholder='🔎 간병인 이름으로 검색하기'
-            value={searchInput}
-            onChange={handleSearchChange}
+            name='search_name'
+            placeholder='🔎 간병인 성명으로 검색하기'
+            value={searchName}
+            onChange={handleSearchNameChange}
+            maxLength={10}
+          />
+        </div>
+        <div className='input_wrapper'>
+          <label>진단명으로 검색</label>
+          <input
+            type='text'
+            name='search_diagnosis'
+            placeholder='🔎 진단명으로 검색하기'
+            value={searchDiagnosis}
+            onChange={handleSearchDiagnosisNameChange}
             maxLength={10}
           />
         </div>
@@ -140,11 +162,11 @@ const SearchForm = ({ onSearch }) => {
           <label>간병인 성별</label>
           <div className={styles.checkbox_list_wrapper}>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'F'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='F' onChange={handleCheckboxChange} />
               <span>여자</span>
             </div>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'M'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='M' onChange={handleCheckboxChange} />
               <span>남자</span>
             </div>
           </div>
@@ -153,8 +175,8 @@ const SearchForm = ({ onSearch }) => {
         <div className='input_wrapper'>
           <label>대표서비스</label>
           <div className={styles.checkbox_list_wrapper}>
-            {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e, i) => (
-              <div className={styles.checkbox_wrapper} key={i}>
+            {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e) => (
+              <div className={styles.checkbox_wrapper} key={e}>
                 <input type='checkbox' name='service' value={e} onChange={handleCheckboxChange} />
                 <span>{`${e}`}</span>
               </div>
@@ -179,7 +201,6 @@ const SearchForm = ({ onSearch }) => {
               onChange={(e) => handleWageChange(e, 0)}
               onBlur={updateWage}
               min={9860}
-              step={1000}
               max={1000000}
             />
             원 ~ 최대
@@ -189,7 +210,6 @@ const SearchForm = ({ onSearch }) => {
               onChange={(e) => handleWageChange(e, 1)}
               onBlur={updateWage}
               min={9860}
-              step={1000}
               max={1000000}
             />
             원

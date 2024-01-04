@@ -112,6 +112,7 @@ table {
 
 :root {
   --beige-01: #dfd7bf;
+  --transparent-beige-50: #dfd7bf50;
   --transparent-beige: #dfd7bf25;
   --brown-01: #a4907c;
   --transparent-brown: #a4907c15;
@@ -166,20 +167,21 @@ h1 {
 }
 h2 {
   font-size: 28px;
-  margin-bottom: 6px;
+  margin-bottom: 1rem;
 }
 h3 {
   font-size: 22px;
-  margin-bottom: 12px;
+  margin-bottom: 1rem;
   border-left: 4px solid var(--brown-01);
   padding: 0rem 0rem 6px 16px;
 }
 h4 {
   font-size: 20px;
-  margin-bottom: 6px;
+  margin-bottom: 1rem;
 }
 h5 {
   font-size: 18px;
+  margin-bottom: 1rem;
 }
 h6 {
   font-size: 14px;
@@ -375,6 +377,8 @@ input[type='text'],
 input[type='password'],
 input[type='email'],
 input[type='number'],
+input[type='date'],
+input[type='time'],
 textarea,
 select {
   padding: 1rem 1.2rem;
@@ -385,6 +389,7 @@ select {
   border-bottom: 1px solid var(--deep-brown);
   margin: 5px 0;
   font-size: 1rem;
+  font-family: 'Noto Sans KR';
 }
 
 .input_wrapper {
@@ -397,8 +402,9 @@ select {
 }
 
 select {
-  padding: 0;
-  width: 220px;
+  min-width: 220px;
+  position: relative;
+  top: -1px;
 }
 
 input[type='text']:focus,
@@ -426,7 +432,9 @@ textarea:read-only {
 }
 
 textarea {
-  min-height: 220px;
+  min-height: 3.5rem;
+  max-height: 16rem;
+  resize: vertical;
 }
 
 label {
@@ -435,6 +443,10 @@ label {
 
 input[type='checkbox'] {
   display: inline;
+}
+
+.time_picker select {
+  min-width: auto;
 }
 
 /*  8. Page Design  --------------------------------------------------- */
@@ -473,6 +485,38 @@ input[type='checkbox'] {
   position: relative;
   left: 1.5rem;
   top: -0.5rem;
+}
+
+.tab_wrapper {
+  border-bottom: 1px solid var(--normal-gray);
+  margin-bottom: 1rem;
+}
+
+.tab_wrapper ul {
+  display: flex;
+}
+
+.tab_wrapper li {
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 18px 2rem 12px 2rem;
+}
+
+.tab_wrapper li:hover {
+  background-color: var(--very-light-gray);
+}
+
+.tab_wrapper .active {
+  font-weight: 500;
+  border: 1px solid var(--normal-gray);
+  border-bottom: none;
+  padding-top: 16px;
+  padding-bottom: 14px;
+  position: relative;
+  top: 1px;
+  background-color: white;
 }
 
 /*  9. Calendar  --------------------------------------------------- */
@@ -521,7 +565,7 @@ input[type='checkbox'] {
 
 .rbc-toolbar > span:nth-child(2) {
   position: relative;
-  top: -1rem;
+  top: -0.33333333rem;
 }
 
 .rbc-toolbar > span:nth-child(3) {

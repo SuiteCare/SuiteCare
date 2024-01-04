@@ -4,7 +4,7 @@ import { Fade } from 'react-reveal';
 import Image from 'next/image';
 
 import downArrow from '@/assets/down-arrow.png';
-import styles from './Header.module.css';
+import styles from './header.module.css';
 
 const throttle = (func, limit) => {
   let inThrottle;
@@ -135,12 +135,12 @@ const Header = ({ data }) => {
             <ul>
               <li>
                 <Link href='/family/login' className='button btn suiteFamily-btn'>
-                  간병 신청 하기
+                  간병 신청하기
                 </Link>
               </li>
               <li>
                 <Link href='/mate/login' className='button btn suiteMate-btn'>
-                  간병 일감 찾기
+                  간병일감 찾기
                 </Link>
               </li>
             </ul>

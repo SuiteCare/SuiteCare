@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import styles from './SignUpForm.module.css';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+
 import formInputInfos from './FormInputInfos';
 
 const SignUpForm = ({ type }) => {
-  //type에 따라 변경될 값을 모아 둔 함수
+  // type에 따라 변경될 값을 모아 둔 함수
   const valueSet = ($type) => {
     if ($type === 'family') {
       return {
@@ -13,7 +13,8 @@ const SignUpForm = ({ type }) => {
         radioRedirect: '/mate/signup',
         otherType: '메이트 (간병인)',
       };
-    } else if ($type === 'mate') {
+    }
+    if ($type === 'mate') {
       return {
         buttonText: '메이트 회원가입',
         radioRedirect: '/family/signup',
@@ -22,103 +23,99 @@ const SignUpForm = ({ type }) => {
     }
   };
 
-  //회원가입 버튼 클릭 시 이동시키는 함수
+  // 회원가입 버튼 클릭 시 이동시키는 함수
   const navigator = useRouter();
 
-  //회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수
+  /* eslint-disable camelcase */
+  const { id, pw, pw_check, user_name } = formInputInfos;
+
+  // 회원구분 부분의 라디오 버튼 클릭 시 페이지를 이동시키는 함수
   const handleRadioClick = () => {
     const url = valueSet(type).radioRedirect;
-    const otherType = valueSet(type).otherType;
-    if (window.confirm(otherType + ' 회원가입 페이지로 이동하시겠습니까?\n단, 기존 작성내역은 초기화됩니다.')) {
+    const { otherType } = valueSet(type);
+    if (window.confirm(`${otherType} 회원가입 페이지로 이동하시겠습니까?\n단, 기존 작성내역은 초기화됩니다.`)) {
       navigator.push(url);
     }
   };
 
-  //아이디를 state에 저장
+  // 아이디를 state에 저장
   const [idState, setIdState] = useState('');
+  const [isAvailableID, setIsAvailableID] = useState(false);
+
   const onIdChange = ($event) => {
-    const id = $event.target.value;
-    setIdState(id);
+    setIdState($event.target.value);
+    setIsAvailableID(false);
   };
 
-  //아이디 중복확인
+  // 아이디 중복확인
+  const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
   const checkDuplicateID = async () => {
+    if (!userIDRegex.test(id.value))
+      return alert('아이디는 4글자 이상의 영문 소문자, 숫자, 혹은 밑줄로 구성되어야 합니다.');
+
     if (idState) {
       try {
         const response = await axios.get('/api/v1/member', { params: { login_id: idState } });
-        const data = response.data;
+        const { data } = response;
 
         if (data === 1) {
           alert('이미 사용 중인 아이디입니다.');
+          setIsAvailableID(false);
         } else {
           alert('사용 가능한 아이디입니다.');
-          document.getElementById('id').readOnly = true;
+          setIsAvailableID(true);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     } else {
-      alert('ID를 입력하세요.');
+      alert('아이디를 입력하세요.');
+      setIsAvailableID(false);
     }
   };
 
-  //휴대폰 번호를 작성하고 hidden input에 모으는 파트
-  const [phoneParts, setPhoneParts] = useState({
-    phone_1: '',
-    phone_2: '',
-    phone_3: '',
-  });
+  const [phoneState, setPhoneState] = useState();
 
   const handlePhoneChange = ($event) => {
-    const { id, value } = $event.target;
-
-    const isValidInput = /^\d{0,4}$/.test(value);
-
-    if (isValidInput) {
-      setPhoneParts((prevPhoneParts) => ({
-        ...prevPhoneParts,
-        [id]: value,
-      }));
-    } else {
-      alert('숫자만 입력할 수 있습니다.');
-    }
+    setPhoneState($event.target.value);
   };
 
-  //휴대폰 번호 인증
-  const { phone_1, phone_2, phone_3 } = phoneParts;
-  const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
+  // 휴대폰 번호 인증
+  const [isPhoneCertificated, setIsPhoneCertificated] = useState(false);
   async function handlePhoneCertification(event) {
     event.preventDefault();
 
-    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(phoneNumber)) {
-      alert(`인증 api 연동 필요\n${phoneNumber}`);
-
-      const body = {
-        merchant_uid: '',
-        min_age: 14,
-        name: user_name.value,
-        phone: phoneNumber,
-        carrier: 'MVNO', //SKT, KTF, LGT, MVNO
-        company: 'http://localhost:3000',
-        m_redirect_url: 'http://localhost:3000/certification',
-        popup: true,
-      };
-
-      const response = await axios
-        .post('/certifications/{imp_uid}', body)
-        .then((response) => {
-          if (response.data) {
-            alert('인증 완료');
-          } else {
-            alert('인증 실패');
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      alert('휴대폰 번호를 올바르게 입력하십시오.');
+    if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(phone.value)) {
+      return alert('휴대폰 번호를 올바르게 입력하십시오.');
     }
+
+    alert(`인증 api 연동 필요\n${phone.value}`);
+
+    const body = {
+      merchant_uid: '',
+      min_age: 14,
+      name: user_name.value,
+      phone: phone.value,
+      carrier: 'MVNO', // SKT, KTF, LGT, MVNO
+      company: 'http://localhost:3000',
+      m_redirect_url: 'http://localhost:3000/certification',
+      popup: true,
+    };
+
+    const response = await axios
+      .post('/certifications/{imp_uid}', body)
+      .then((res) => {
+        if (response.data) {
+          // alert('인증 완료');
+          console.log('200', res);
+        } else {
+          // alert('인증 실패');
+          console.log('401', res);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   const formInputs = ($typeName) => {
@@ -141,44 +138,36 @@ const SignUpForm = ({ type }) => {
     event.preventDefault();
     const role = type === 'mate' ? 'M' : 'F';
 
-    if (document.getElementById('id').readOnly) {
-      if (pw.value && pw.value === pw_check.value) {
-        if (user_name.value) {
-          let body = {
-            login_id: id.value,
-            password: pw.value,
-            name: user_name.value,
-            tel: phoneNumber,
-            role: role,
-          };
+    if (!isAvailableID) return alert('아이디 중복확인이 필요합니다.');
+    if (!pw.value) return alert('비밀번호를 입력하세요.');
+    if (pw.value !== pw_check.value) return alert('비밀번호가 일치하지 않습니다.');
+    if (!user_name.value) return alert('성명을 입력하세요.');
+    if (!isPhoneCertificated) return alert('휴대폰 본인인증이 필요합니다.');
 
-          const response = await axios
-            .post('/api/v1/family', body)
-            .then((response) => {
-              if (response.data) {
-                alert('회원가입 완료!!!');
-                navigator.push(`/${type}/login`);
-              } else {
-                alert('실패..');
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+    const body = {
+      login_id: id.value,
+      password: pw.value,
+      name: user_name.value,
+      tel: phone.value.replaceAll('-', ''),
+      role,
+    };
+
+    const response = await axios
+      .post('/api/v1/member', body)
+      .then((res) => {
+        if (res.data) {
+          alert('회원가입이 완료되었습니다.');
+          navigator.push(`/${type}/login`);
         } else {
-          alert('성함을 입력해주세요.');
+          alert('회원가입에 실패하였습니다.');
         }
-      } else {
-        alert('비밀번호가 일치하지 않습니다.');
-      }
-    } else {
-      alert('아이디 중복확인을 해주세요');
-    }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
-
-  //렌더링 부분
   return (
-    <div className={`${styles.SignUpForm} Form_narrow`}>
+    <div className='Form_narrow'>
       <div className='input_wrapper'>
         <label>회원 구분</label>
         <div className='input_radio'>
@@ -199,7 +188,7 @@ const SignUpForm = ({ type }) => {
         <div className='input_wrapper'>
           <label>아이디</label>
           <div className='input_with_button'>
-            <input type='text' placeholder='아이디' name='id' id='id' maxLength='20' onChange={onIdChange} />
+            <input type='text' placeholder='아이디' name='id' id='id' maxLength='20' onChange={onIdChange} required />
             <button type='button' onClick={checkDuplicateID}>
               중복확인
             </button>
@@ -213,34 +202,16 @@ const SignUpForm = ({ type }) => {
         <div className='input_wrapper'>
           <label>휴대전화</label>
           <div className='input_with_button'>
-            <div className={styles.input_phone}>
+            <div>
               <input
                 type='text'
-                placeholder='010'
-                id='phone_1'
-                value={phone_1}
-                maxLength={3}
+                placeholder='010-0000-0000'
+                name='phone'
+                id='phone'
+                maxLength={13}
                 onChange={handlePhoneChange}
+                required
               />
-              -
-              <input
-                type='text'
-                placeholder='0000'
-                id='phone_2'
-                value={phone_2}
-                maxLength={4}
-                onChange={handlePhoneChange}
-              />
-              -
-              <input
-                type='text'
-                placeholder='0000'
-                id='phone_3'
-                value={phone_3}
-                maxLength={4}
-                onChange={handlePhoneChange}
-              />
-              <input type='hidden' name='phone' value={phoneNumber} />
             </div>
             <button type='button' onClick={handlePhoneCertification}>
               본인인증

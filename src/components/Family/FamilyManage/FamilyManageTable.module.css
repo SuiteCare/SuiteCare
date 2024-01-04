@@ -1,0 +1,48 @@
+.FamilyManageTable,
+.FamilyManageTable table {
+  width: 100%;
+}
+
+.FamilyManageTable th {
+  font-weight: 500;
+  border-bottom: 2px solid var(--deep-brown);
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+.FamilyManageTable tr {
+  border-bottom: 1px solid var(--normal-gray);
+}
+
+.FamilyManageTable tbody > tr:hover {
+  background-color: var(--very-light-gray);
+}
+
+.FamilyManageTable tbody > tr:hover > td:not(:first-of-type) {
+  border-left: 1px solid white;
+}
+
+.FamilyManageTable td,
+.FamilyManageTable th {
+  text-align: center;
+}
+
+.FamilyManageTable td:not(:first-of-type) {
+  border-left: 1px solid var(--very-light-gray);
+}
+
+.FamilyManageTable td {
+  padding: 5px 10px;
+}
+
+.FamilyManageTable td > button {
+  padding: 0.6rem 0;
+  width: 100%;
+  font-weight: 400;
+  background-color: var(--light-gray);
+  color: var(--deep-brown);
+}
+
+.FamilyManageTable td > button:hover {
+  filter: brightness(0.95);
+}

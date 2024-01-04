@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+
 import MateCalendarModal from './MateCalendarModal';
-import { stringToColor } from '@/utils/calculators';
 import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
+
+import { stringToColor } from '@/utils/calculators';
 
 const localizer = momentLocalizer(moment);
 const settingProps = getSettingProps();
@@ -18,7 +20,7 @@ const MateCalendar = () => {
       // 서버와 통신해서 다음 데이터를 받아온다고 가정한다.
       const rawData = {
         patient_name: '김환자',
-        diagnosis_name: '중풍',
+        diagnosis: '중풍',
         family_name: '이보호',
         start_date: '2023-12-18',
         end_date: '2024-2-1',
@@ -30,7 +32,7 @@ const MateCalendar = () => {
       let currentStartDate = moment(`${rawData.start_date} ${rawData.start_time}`);
       let currentEndDate = moment(`${rawData.start_date} ${rawData.end_time}`);
       const endDate = moment(`${rawData.end_date} ${rawData.end_time}`);
-      const weekdays = rawData.weekdays;
+      const weekdays = rawData?.weekdays;
 
       const events = [];
 
@@ -39,11 +41,11 @@ const MateCalendar = () => {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name} 님 (${rawData.diagnosis_name})`,
+            title: `${rawData.patient_name} 님 (${rawData.diagnosis})`,
             family: `보호자 ${rawData.family_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
-            color: stringToColor(rawData.patient_name + rawData.diagnosis_name + rawData.family_name),
+            color: stringToColor(rawData.patient_name + rawData.diagnosis + rawData.family_name),
           };
           events.push(event);
         }
@@ -58,7 +60,7 @@ const MateCalendar = () => {
   }, []);
 
   const showEvent = (event) => {
-    setSelectedEvent(event);
+    // setSelectedEvent(event);
     setShowEventDetails(true);
   };
 
@@ -72,7 +74,7 @@ const MateCalendar = () => {
         className='Calendar'
         localizer={localizer}
         events={eventList}
-        culture={'ko-KR'}
+        culture='ko-KR'
         startAccessor='start'
         endAccessor='end'
         views={['month', 'week', 'agenda']}
@@ -80,7 +82,7 @@ const MateCalendar = () => {
         dayPropGetter={customDayPropGetter}
         {...settingProps}
       />
-      {showEventDetails && <MateCalendarModal modalData={'test'} closeModal={closeModal} />}
+      {showEventDetails && <MateCalendarModal modalData='test' closeModal={closeModal} />}
     </>
   );
 };

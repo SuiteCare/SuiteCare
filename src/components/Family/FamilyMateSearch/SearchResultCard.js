@@ -1,16 +1,18 @@
-import styles from './SearchResultCard.module.css';
-import default_profile from '@/assets/default_profile.jpg';
 import Image from 'next/image';
-import { calAge } from '@/utils/calculators.js';
+
+import styles from './SearchResultCard.module.css';
+import defaultProfile from '@/assets/default_profile.jpg';
+
+import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (
     <div className={styles.card}>
-      {data.profile_picture_filename || <Image src={default_profile} alt='profile_picture' />}
+      {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
       <div className={styles.userName}>
         <label>{data.mate_name}</label>메이트
         <p>
-          {data.gender === 'F' ? '여성' : '남성'}, 만 {calAge(data.birthday)}세
+          {genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세
         </p>
         <p>{data.introduction}</p>
       </div>

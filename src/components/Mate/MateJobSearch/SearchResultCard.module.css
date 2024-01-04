@@ -15,9 +15,9 @@
 }
 
 .title {
-  border-bottom: 1px solid var(--beige-01);
-  padding-bottom: 5px;
-  margin-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
 }
 
 .top {
@@ -109,4 +109,23 @@
 
 .card button:nth-of-type(2) {
   background-color: var(--deep-brown);
+}
+
+.expired {
+  color: var(--normal-gray);
+  filter: grayscale(0.3);
+}
+
+.expired .top span:not(:last-of-type) {
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+
+.expired button {
+  background-color: var(--normal-gray) !important;
+  pointer-events: none;
+}
+
+.expired .dday {
+  color: red;
 }

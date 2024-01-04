@@ -11,17 +11,16 @@ const useModal = () => {
     setIsModalVisible(false);
   };
 
-  const handleBodyOverflow = () => {
-    if (typeof document !== 'undefined') {
-      document.body.style.overflow = isModalVisible ? 'hidden' : 'auto';
-    }
-  };
-
   const handleContentClick = (e) => {
     e.stopPropagation();
   };
 
   useEffect(() => {
+    const handleBodyOverflow = () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = isModalVisible ? 'hidden' : 'auto';
+      }
+    };
     handleBodyOverflow();
 
     return () => {

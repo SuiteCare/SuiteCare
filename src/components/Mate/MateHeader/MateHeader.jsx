@@ -1,9 +1,9 @@
 import HeaderCore from '@/components/Common/Header/HeaderCore';
 
-const Header = () => {
+const Header = ({ isCheckLogin }) => {
   return (
     <div className='Header'>
-      <HeaderCore type={'mate'} />
+      <HeaderCore type='mate' isCheckLogin={isCheckLogin} />
     </div>
   );
 };

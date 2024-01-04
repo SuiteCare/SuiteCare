@@ -11,7 +11,7 @@ const MenuList = [
   },
   {
     title: '환자 등록하기',
-    url: 'addPatient',
+    url: 'addpatient',
     description: '간병 신청을 위해 환자 정보를 등록하세요.',
   },
   {
