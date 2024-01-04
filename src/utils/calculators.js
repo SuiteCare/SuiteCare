@@ -8,9 +8,9 @@ export const calTimeDiff = ($start, $end) => {
   return (getMinutes($end) - getMinutes($start)) / 60;
 };
 
-export const countWeekdays = (startDate, endDate, weekdaysArr) => {
-  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+export const weekdayDic = ['일', '월', '화', '수', '목', '금', '토'];
 
+export const countWeekdays = (startDate, endDate, weekdaysArr) => {
   const start = new Date(startDate);
   const end = new Date(endDate);
 
@@ -18,7 +18,7 @@ export const countWeekdays = (startDate, endDate, weekdaysArr) => {
   const current = new Date(start);
 
   while (current <= end) {
-    if (weekdaysArr.includes(weekdays[current.getDay()])) {
+    if (weekdaysArr.includes(current.getDay())) {
       count++;
     }
     current.setDate(current.getDate() + 1);
