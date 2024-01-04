@@ -5,6 +5,7 @@ import usePatientList from '@/hooks/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
+import DaumPostcode from '@/components/Common/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
@@ -25,14 +26,16 @@ const ReservationForm = () => {
     family_id: '', // 숫자
     patient_id: '', // 숫자
     location: '병원', // 병원 or 집
-    address: '',
-    address_detail: '',
     start_date: today, // 날짜 형식 YYYY-MM-DD
     end_date: today, // 날짜 형식 YYYY-MM-DD
     weekday: [], // 숫자 배열
     start_time: '', // 시간 형식 HH:MM
     end_time: '', // 시간 형식 HH:MM
     wage: '15000',
+    postcode: '',
+    road_address: '',
+    jibun_address: '',
+    detail_address: '',
   });
 
   const [startTime, setStartTime] = useState('06:00');
@@ -85,6 +88,14 @@ const ReservationForm = () => {
     }
   };
 
+  // 주소 관련
+  const [address, setAddress] = useState({
+    postcode: '',
+    roadAddress: '',
+    jibunAddress: '',
+    detailAddress: '',
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormData((prevData) => ({
@@ -97,6 +108,10 @@ const ReservationForm = () => {
         if (v) acc.push(i);
         return acc;
       }, []),
+      postcode: address.postcode,
+      road_address: address.roadAddress,
+      jibun_address: address.jibunAddress,
+      detail_address: address.detailAddress,
     }));
     console.log(formData);
   };
@@ -135,11 +150,13 @@ const ReservationForm = () => {
                       <option value='hospital'>병원</option>
                       <option value='home'>자택</option>
                     </select>
-                    <span>기본 주소</span>
-                    <input type='text' name='address' onChange={handleInputChange} />
-                    <span>상세 주소</span>
-                    <input type='text' name='address_detail' onChange={handleInputChange} />
-                    <button type='button'>주소 검색</button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.3rem' }}>
+                      <span>우편번호</span>
+                      <span>도로명주소</span>
+                      <span>지번주소</span>
+                      <span>상세주소</span>
+                    </div>
+                    <DaumPostcode address={address} setAddress={setAddress} />
                   </div>
                 </div>
 

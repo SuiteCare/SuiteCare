@@ -45,7 +45,7 @@ div.grid_wrapper > div:first-child {
 
 .input_with_button {
   display: grid;
-  grid-template-columns: 20% 1fr 8rem;
+  grid-template-columns: 8rem 1fr;
   align-items: center;
   column-gap: 1rem;
 }
@@ -56,14 +56,10 @@ div.grid_wrapper > div:first-child {
 }
 
 .input_with_button select:first-of-type {
-  grid-column-end: span 2;
   width: fit-content;
 }
 
 .input_with_button button {
-  grid-row-start: 2;
-  grid-column-start: 3;
-  grid-row-end: span 3;
   background: var(--beige-01);
   font-weight: 400;
   color: var(--deep-brown);
@@ -76,5 +72,6 @@ div.grid_wrapper > div:first-child {
   div.grid_wrapper > div:first-child {
     border-right: none;
     padding-right: 0;
+    border-bottom: 1px solid var(--light-gray);
   }
 }

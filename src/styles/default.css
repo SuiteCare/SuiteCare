@@ -603,3 +603,18 @@ input[type='checkbox'] {
 .rbc-day-slot .rbc-events-container {
   margin-right: 0;
 }
+
+/* 10. Address  --------------------------------------------------- */
+
+.DaumPostcode > input:first-of-type {
+  width: calc(100% - 11rem);
+  margin-right: 1rem;
+}
+
+.DaumPostcode button {
+  width: 10rem;
+}
+
+.DaumPostcode > input:not(:first-of-type) {
+  width: 100%;
+}
