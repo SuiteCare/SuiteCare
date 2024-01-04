@@ -354,14 +354,19 @@ form .input_wrapper {
   align-items: center;
 }
 
-form .input_wrapper .input_with_button {
+form .input_with_button {
   display: grid;
   grid-template-columns: 1fr 8rem;
   gap: 1rem;
   align-items: center;
+  margin-bottom: 1rem;
 }
 
-form .input_wrapper .input_with_button button {
+form .input_with_button > .input_wrapper {
+  margin-bottom: 0;
+}
+
+form .input_with_button button {
   padding: 0;
   height: 80%;
   font-weight: 400;
