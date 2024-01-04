@@ -1,0 +1,75 @@
+.wrapper {
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.form_wrapper {
+    width: 80%;
+}
+
+.wrapper label {
+    width: 10rem;
+}
+
+.introduce {
+    display: flex;
+}
+
+.img_wrapper {
+    display: flex;
+    flex-direction: column
+}
+
+.introduce img {
+    margin-top: 1rem;
+    margin-left: 2rem;
+    width: 10rem;
+    height: 13rem;
+}
+
+.introduce .basicInfo {
+    margin-top: 1rem;
+    margin-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+
+/*.location {*/
+/*    display: flex;*/
+/*    column-gap: 1rem;*/
+/*    flex-wrap: wrap;*/
+/*}*/
+
+.checkbox_list_wrapper {
+    display: flex;
+}
+
+.contact {
+    display: flex;
+    column-gap: 1rem;
+}
+
+.introduction {
+    display: flex;
+    column-gap: 1rem;
+}
+
+.introduction textarea {
+    border: 1px solid black;
+    width: 70%;
+    min-height: max-content;
+    resize: none;
+}
+
+.introduction .wordCnt {
+    display: flex;
+    align-items: flex-end;
+}
+
+.introduction span {
+    color: #6e7881;
+}
