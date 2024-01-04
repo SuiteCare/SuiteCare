@@ -9,8 +9,8 @@ const HistoryTable = ({ data }) => {
           <th>예약 신청일</th>
           <th>예약 체결일</th>
           <th>결제 완료일</th>
-          <th>간병인 성함</th>
-          <th>환자 성함</th>
+          <th>간병인 성명</th>
+          <th>환자 성명</th>
           <th>진단명</th>
           <th>간병 시작일</th>
           <th>간병 종료일</th>

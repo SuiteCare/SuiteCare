@@ -1,24 +1,19 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+
+import usePatientList from '@/hooks/usePatientList';
 
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
 import PatientList from '@/components/Family/FamilyManage/PatientList';
 
 const FamilyPatientListPage = () => {
-  const [patientList, setPatientList] = useState([]);
-
-  const getPatientList = async ($id) => {
-    try {
-      const response = await axios.get('/api/v1/patient', { params: { id: $id } });
-      setPatientList(response.data);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+  const [loginId, setLoginId] = useState(null);
+  const patientList = usePatientList(loginId);
 
   useEffect(() => {
-    getPatientList(JSON.parse(sessionStorage.getItem('login_info')).login_id);
+    if (typeof window !== 'undefined') {
+      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
+    }
   }, []);
 
   return (

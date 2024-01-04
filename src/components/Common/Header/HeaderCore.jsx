@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import styles from './HeaderCore.module.css';
 import Logo from '@/assets/logo-white.png';
 import Dropdown from './Dropdown';
 
-const HeaderCore = ({ type }) => {
+const HeaderCore = ({ type, isCheckLogin = true }) => {
   const [familyMenuOpen, setFamilyMenuOpen] = useState(false);
   const [mateMenuOpen, setMateMenuOpen] = useState(false);
 
@@ -19,6 +20,24 @@ const HeaderCore = ({ type }) => {
       setFamilyMenuOpen(false);
     }
   };
+
+  const navigator = useRouter();
+
+  useEffect(() => {
+    const checkLogin = () => {
+      if (typeof window !== 'undefined') {
+        const loginInfo = sessionStorage.getItem('login_info');
+        if (loginInfo && JSON.parse(loginInfo).login_id) {
+          console.log('ok');
+        } else {
+          alert('로그인이 필요합니다.');
+          navigator.push('/');
+        }
+      }
+    };
+
+    if (isCheckLogin) checkLogin();
+  }, []);
 
   return (
     <div className={styles.HeaderCore}>

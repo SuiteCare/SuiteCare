@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 import styles from '@/components/Common/Modal/Modal.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 

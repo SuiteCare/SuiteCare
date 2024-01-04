@@ -135,12 +135,12 @@ const Header = ({ data }) => {
             <ul>
               <li>
                 <Link href='/family/login' className='button btn suiteFamily-btn'>
-                  간병 신청 하기
+                  간병 신청하기
                 </Link>
               </li>
               <li>
                 <Link href='/mate/login' className='button btn suiteMate-btn'>
-                  간병 일감 찾기
+                  간병일감 찾기
                 </Link>
               </li>
             </ul>

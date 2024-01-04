@@ -141,7 +141,7 @@ const SignUpForm = ({ type }) => {
     if (!isAvailableID) return alert('아이디 중복확인이 필요합니다.');
     if (!pw.value) return alert('비밀번호를 입력하세요.');
     if (pw.value !== pw_check.value) return alert('비밀번호가 일치하지 않습니다.');
-    if (!user_name.value) return alert('성함을 입력하세요.');
+    if (!user_name.value) return alert('성명을 입력하세요.');
     if (!isPhoneCertificated) return alert('휴대폰 본인인증이 필요합니다.');
 
     const body = {
