@@ -56,7 +56,7 @@ const SignUpForm = ({ type }) => {
         const response = await axios.get('/api/v1/member', { params: { login_id: formData.login_id } });
         const { data } = response;
 
-        if (data === 1) {
+        if (data !== 1) {
           alert('이미 사용 중인 아이디입니다.');
           setIsAvailableID(false);
         } else {
