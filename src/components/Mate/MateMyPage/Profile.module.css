@@ -38,11 +38,11 @@
 }
 
 
-.location {
-    display: flex;
-    column-gap: 1rem;
-    flex-wrap: wrap;
-}
+/*.location {*/
+/*    display: flex;*/
+/*    column-gap: 1rem;*/
+/*    flex-wrap: wrap;*/
+/*}*/
 
 .checkbox_list_wrapper {
     display: flex;

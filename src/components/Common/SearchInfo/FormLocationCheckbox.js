@@ -10,7 +10,7 @@ const LocationList = ({ arr, num = 1, onChange }) => {
     >
       {arr.map((e) => (
         <div key={e} className={styles.checkbox_wrapper}>
-          <input type='checkbox' name='location' value={e} onChange={onChange} />
+          <input type='checkbox' name='location' id={e} value={e} onChange={onChange} />
           <span>{e}</span>
         </div>
       ))}

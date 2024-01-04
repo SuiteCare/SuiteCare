@@ -45,7 +45,7 @@ const SignUpForm = ({ type }) => {
   const checkDuplicateID = async () => {
     if (idState) {
       try {
-        const response = await axios.get('/api/v1/family', { params: { id: idState } });
+        const response = await axios.get('/api/v1/member', { params: { login_id: idState } });
         const data = response.data;
 
         if (data === 1) {

@@ -6,6 +6,11 @@ import axios from 'axios';
 const ProfilePage = () => {
     const [data, setData] = useState([]);
 
+    useEffect(() => {
+        const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
+        getData(loginId);
+    }, []);
+
     const getData = async ($id) => {
         try {
             const res = await axios.get(`/api/v1/mate/profile`, {
@@ -19,17 +24,16 @@ const ProfilePage = () => {
         }
     };
 
-    useEffect(() => {
-        const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
-        getData(loginId);
-    }, []);
+
 
     return (
-        <>
+        <div>
             <Header />
-            <Profile data={data} />
-        </>
+            <Profile profile={data}/>
+        </div>
     );
+
 };
+
 
 export default ProfilePage;
