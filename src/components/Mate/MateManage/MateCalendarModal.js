@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '@/components/Common/Modal/Modal.module.css';
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
 const MateCalendarModal = ({ modalData, closeModal }) => {

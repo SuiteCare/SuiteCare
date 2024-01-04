@@ -11,28 +11,25 @@ const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
 
   const [formData, setFormData] = useState({
-    basic: {
-      name: '',
-      birthday: '',
-      gender: '',
-      height: '',
-      weight: '',
-      diagnosis_name: '',
-    },
-    detail: {
-      consciousness_state: '',
-      paralysis_state: '',
-      behavioral_state: '',
-      meal_care_state: '',
-      toilet_care_state: '',
-      is_bedsore: '',
-      need_suction: '',
-      need_outpatient: '',
-      need_night_care: '',
-      notice: '',
-    },
+    name: '',
+    birthday: '',
+    gender: '',
+    height: '',
+    weight: '',
+    diagnosis_name: '',
+    consciousness_state: '',
+    paralysis_state: '',
+    behavioral_state: '',
+    meal_care_state: '',
+    toilet_care_state: '',
+    is_bedsore: '',
+    need_suction: '',
+    need_outpatient: '',
+    need_night_care: '',
+    notice: '',
   });
 
+  //정보 받아옴
   const getPatientData = async () => {
     try {
       const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } });
@@ -41,8 +38,8 @@ const FamilyAddPatient = ({ idQuery }) => {
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
       setFormData({
-        basic: { ...patientResponse.data },
-        detail: { ...patientDetailResponse.data },
+        ...patientResponse.data,
+        ...patientDetailResponse.data,
       });
     } catch (error) {
       console.error('Error:', error);
@@ -51,27 +48,21 @@ const FamilyAddPatient = ({ idQuery }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const isBasic = formInputInfos[name]?.basic;
-
     setFormData((prevData) => ({
-      basic: { ...prevData.basic, ...(isBasic ? { [name]: value } : {}) },
-      detail: { ...prevData.detail, ...(isBasic ? {} : { [name]: value }) },
+      ...prevData,
+      [name]: value,
     }));
   };
 
   const handleRadioWrapperClick = (typeName, optionValue) => {
-    const isBasic = formInputInfos[typeName]?.basic;
-
-    setFormData(({ basic, detail }) => ({
-      basic: { ...basic, ...(isBasic ? { [typeName]: optionValue } : {}) },
-      detail: { ...detail, ...(isBasic ? {} : { [typeName]: optionValue }) },
+    setFormData((prevData) => ({
+      ...prevData,
+      [typeName]: optionValue,
     }));
   };
 
   const renderInput = (typeName) => {
     const inputInfo = formInputInfos[typeName];
-    const formDataSection = inputInfo.basic ? formData.basic : formData.detail;
-
     return (
       <div key={typeName} className='input_wrapper'>
         <label>{inputInfo.label}</label>
@@ -89,7 +80,7 @@ const FamilyAddPatient = ({ idQuery }) => {
                   name={typeName}
                   value={option.value}
                   onChange={() => handleRadioWrapperClick(typeName, option.value)}
-                  checked={formDataSection[typeName] === option.value}
+                  checked={formData[typeName] === option.value}
                   required
                 />
                 <span>{option.label}</span>
@@ -103,7 +94,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             name={typeName}
             id={inputInfo.id}
             maxLength={inputInfo.maxLength}
-            value={formDataSection[typeName]}
+            value={formData[typeName]}
             onChange={handleInputChange}
             required
           />
@@ -112,26 +103,22 @@ const FamilyAddPatient = ({ idQuery }) => {
     );
   };
 
+  // 정보 백엔드로 전달
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const basicRequestData = {
+    const submitData = {
       family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
-      ...formData.basic,
+      ...formData,
     };
-
-    const detailRequestData = {
-      ...formData.detail,
-    };
-
-    console.log(basicRequestData, detailRequestData);
+    console.log(submitData);
 
     const response = idQuery
       ? await axios
-          .patch(`/api/v1/patient/${idQuery}`, { patientDTO: basicRequestData, patientDetailDTO: detailRequestData })
+          .patch(`/api/v1/patient/${idQuery}`, submitData)
           .then((response) => {
             if (response.data === 1) {
-              alert(`${formData.name} 님의 환자 정보가 수정되었습니다.`);
+              alert(`${submitData.name} 님의 환자 정보가 수정되었습니다.`);
               navigator.push('/family/manage/patient_list');
             } else {
               alert('환자 정보 수정에 실패하였습니다.');
@@ -141,10 +128,10 @@ const FamilyAddPatient = ({ idQuery }) => {
             console.error(error);
           })
       : await axios
-          .post('/api/v1/patient', { patientDTO: basicRequestData, patientDetailDTO: detailRequestData })
+          .post('/api/v1/patient', submitData)
           .then((response) => {
             if (response.data === 1) {
-              alert(`${formData.basic.name} 님의 환자 정보가 등록되었습니다.`);
+              alert(`${submitData.name} 님의 환자 정보가 등록되었습니다.`);
               navigator.push('/family/main');
             } else {
               alert('환자 정보 등록에 실패하였습니다.');
@@ -155,6 +142,7 @@ const FamilyAddPatient = ({ idQuery }) => {
           });
   };
 
+  //정보 삭제
   const handleClickDelete = async (e) => {
     e.preventDefault();
 
@@ -178,10 +166,10 @@ const FamilyAddPatient = ({ idQuery }) => {
   useEffect(() => {
     if (idQuery) getPatientData();
 
-    document.addEventListener('keydown', handleKeyPress);
+    document.addEventListener('keydown', handleKeyPress); // 테스트용 코드
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('keydown', handleKeyPress); // 테스트용 코드
     };
   }, [idQuery]);
 
@@ -229,7 +217,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             id='notice'
             maxLength='200'
             onChange={handleInputChange}
-            defaultValue={formData.detail.notice}
+            defaultValue={formData.notice}
           />
         </div>
         <div className='button_wrapper'>

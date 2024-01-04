@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-import useModal from '@/components/Common/Modal/useModal.js';
+import useModal from '@/hooks/useModal.js';
 
 import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 

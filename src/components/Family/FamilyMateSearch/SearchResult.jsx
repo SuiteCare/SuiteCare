@@ -4,7 +4,7 @@ import axios from 'axios';
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import MateDetailModal from './MateDetailModal';
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 
 const SearchResult = ({ data, type }) => {
   const [modalData, setModalData] = useState({});

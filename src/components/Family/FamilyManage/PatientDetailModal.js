@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-import useModal from '@/components/Common/Modal/useModal';
+import useModal from '@/hooks/useModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 

@@ -66,33 +66,28 @@ const random = (e, formData, setFormData) => {
     ];
 
     const randomName = names[Math.floor(Math.random() * names.length)];
-    randomData.basic.name = `${randomName}환자`;
+    randomData.name = randomName + '환자';
 
     const randomHeight = Math.floor(Math.random() * 101) + 100;
-    randomData.basic.height = randomHeight.toString();
+    randomData.height = randomHeight.toString();
 
     const randomWeight = Math.floor(Math.random() * 91) + 30;
-    randomData.basic.weight = randomWeight.toString();
+    randomData.weight = randomWeight.toString();
 
     const diagnoses = ['진단명1', '진단명2', '진단명3'];
     const randomDiagnosis = diagnoses[Math.floor(Math.random() * diagnoses.length)];
-    randomData.basic.diagnosis_name = randomDiagnosis;
+    randomData.diagnosis_name = randomDiagnosis;
 
     const randomYear = Math.floor(Math.random() * 80) + 1924;
     const randomMonth = Math.floor(Math.random() * 12) + 1;
     const randomDay = Math.floor(Math.random() * 31) + 1;
-    randomData.basic.birthday = `${randomYear}-${String(randomMonth).padStart(2, '0')}-${String(randomDay).padStart(
-      2,
-      '0',
-    )}`;
+    randomData.birthday = `${randomYear}-${String(randomMonth).padStart(2, '0')}-${String(randomDay).padStart(2, '0')}`;
 
-    for (const key in formInputInfos) {
-      const inputInfo = formInputInfos[key];
-      if (inputInfo.type === 'radio') {
-        const typeName = inputInfo.basic ? 'basic' : 'detail';
-        const radioOptions = inputInfo.options;
+    for (const key in randomData) {
+      if (formInputInfos[key].type === 'radio') {
+        const radioOptions = formInputInfos[key].options;
         const randomOption = radioOptions[Math.floor(Math.random() * radioOptions.length)].value;
-        randomData[typeName][key] = randomOption;
+        randomData[key] = randomOption;
       }
     }
 
