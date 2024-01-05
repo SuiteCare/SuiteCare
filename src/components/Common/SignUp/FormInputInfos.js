@@ -1,45 +1,38 @@
 const formInputInfos = {
-  id: {
+  login_id: {
     label: '아이디',
     type: 'text',
-    name: 'id',
-    id: 'id',
+    name: 'login_id',
+    id: 'login_id',
     maxLength: 20,
   },
-  pw: {
+  password: {
     label: '비밀번호',
     type: 'password',
-    name: 'pw',
-    id: 'pw',
+    name: 'password',
+    id: 'password',
     maxLength: 20,
   },
   pw_check: {
     label: '비밀번호 확인',
     type: 'password',
-    name: null,
     id: 'pw_check',
     maxLength: 20,
   },
-  user_name: {
+  name: {
     label: '성명',
     type: 'text',
-    name: 'user_name',
-    id: 'user_name',
+    name: 'name',
+    id: 'name',
     maxLength: 15,
   },
-  phone_authentication: {
-    label: null,
-    type: 'hidden',
-    name: null,
-    id: 'phone_authentication',
-    maxLength: 5,
-  },
-  birth: {
-    label: null,
-    type: 'hidden',
-    name: null,
-    id: 'birth',
-    maxLength: null,
+  tel: {
+    label: '휴대전화',
+    type: 'text',
+    name: 'tel',
+    id: 'tel',
+    maxLength: 13,
+    placeholder: '010-0000-0000',
   },
 };
 
