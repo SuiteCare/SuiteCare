@@ -10,7 +10,6 @@ const TimePicker = ({ time, setTime, start, end }) => {
   }, [time]);
 
   useEffect(() => {
-    // setTimeObj도 기본값에 따라 설정
     const [defaultHour, defaultMinute] = defaultTime.split(':');
     setTimeObj({ hour: defaultHour, minute: defaultMinute });
   }, [defaultTime]);

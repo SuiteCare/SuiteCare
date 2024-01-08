@@ -72,6 +72,17 @@ const ReservationForm = () => {
     }));
   };
 
+  const handleCheckboxChange = (e, day) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      weekday: {
+        ...prevData.weekday,
+        [day]: checked,
+      },
+    }));
+  };
+
   const handleCheckboxWrapperClick = (e) => {
     const optionValue = e.currentTarget.children[0].value;
     setFormData((prevData) => ({
@@ -193,7 +204,13 @@ const ReservationForm = () => {
                     {['일', '월', '화', '수', '목', '금', '토'].map((v) => {
                       return (
                         <div key={v} className={styles.checkbox_wrapper} onClick={handleCheckboxWrapperClick}>
-                          <input type='checkbox' name='weekday' value={v} checked={formData.weekday[v]} />
+                          <input
+                            type='checkbox'
+                            name='weekday'
+                            value={v}
+                            checked={formData.weekday[v]}
+                            onChange={(e) => handleCheckboxChange(e, v)}
+                          />
                           <span>{v}</span>
                         </div>
                       );
