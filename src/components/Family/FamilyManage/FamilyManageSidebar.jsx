@@ -8,6 +8,9 @@ const FamilyManageSidebar = ({ activeMenu }) => {
   return (
     <div className={styles.Sidebar}>
       <h3>내 활동 관리</h3>
+      <div className={`${styles.menu} ${activeMenu === 'reservation' ? styles.active : ''}`}>
+        <Link href={`${defaultUrl}/reservation`}>간병예약 확정</Link>
+      </div>
       <div className={`${styles.menu} ${activeMenu === 'calendar' ? styles.active : ''}`}>
         <Link href={`${defaultUrl}/calendar`}>내 일정 정보</Link>
       </div>

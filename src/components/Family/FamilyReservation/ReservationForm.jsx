@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
+import DaumPostcode from '@/components/Common/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
-import { calTimeDiff } from '@/utils/calculators';
+import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
 
 const ReservationForm = () => {
   const navigator = useRouter();
@@ -22,25 +24,19 @@ const ReservationForm = () => {
     .padStart(2, '0')}`;
 
   const [formData, setFormData] = useState({
-    family_id: '',
-    patient_id: '',
-    location: 'hospital',
-    address: '',
-    address_detail: '',
-    start_date: today,
-    end_date: today,
-    weekday: {
-      일: false,
-      월: false,
-      화: false,
-      수: false,
-      목: false,
-      금: false,
-      토: false,
-    },
-    start_time: '',
-    end_time: '',
+    family_id: '', // 숫자
+    patient_id: '', // 숫자
+    location: '병원', // 병원 or 집
+    start_date: today, // 날짜 형식 YYYY-MM-DD
+    end_date: today, // 날짜 형식 YYYY-MM-DD
+    weekday: [], // 숫자 배열
+    start_time: '', // 시간 형식 HH:MM
+    end_time: '', // 시간 형식 HH:MM
     wage: '15000',
+    postcode: '',
+    road_address: '',
+    jibun_address: '',
+    detail_address: '',
   });
 
   const [startTime, setStartTime] = useState('06:00');
@@ -92,41 +88,36 @@ const ReservationForm = () => {
         [optionValue]: !prevData.weekday[optionValue],
       },
     }));
+  // 요일 선택 관련
+  const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
+
+  const handleWeekdayCheckboxWrapperClick = (index) => {
+    setWeekdayBoolean((prev) => {
+      const newArr = [...prev];
+      newArr[index] = !newArr[index];
+      return newArr;
+    });
   };
 
   const selectAllWeekday = (e) => {
-    if (Object.values(formData?.weekday).every((v) => v === true)) {
+    if (weekdayBoolean.every((v) => v === true)) {
       e.currentTarget.children[0].checked = false;
-      setFormData((prevData) => ({
-        ...prevData,
-        weekday: {
-          일: false,
-          월: false,
-          화: false,
-          수: false,
-          목: false,
-          금: false,
-          토: false,
-        },
-      }));
+      setWeekdayBoolean([false, false, false, false, false, false, false]);
     } else {
       e.currentTarget.children[0].checked = true;
-      setFormData((prevData) => ({
-        ...prevData,
-        weekday: {
-          일: true,
-          월: true,
-          화: true,
-          수: true,
-          목: true,
-          금: true,
-          토: true,
-        },
-      }));
+      setWeekdayBoolean([true, true, true, true, true, true, true]);
     }
   };
 
-  const handleSubmit = (e) => {
+  // 주소 관련
+  const [address, setAddress] = useState({
+    postcode: '',
+    roadAddress: '',
+    jibunAddress: '',
+    detailAddress: '',
+  });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormData((prevData) => ({
       ...prevData,
@@ -134,8 +125,27 @@ const ReservationForm = () => {
       patient_id: patientInfo.id,
       start_time: startTime,
       end_time: endTime,
+      weekday: weekdayBoolean.reduce((acc, v, i) => {
+        if (v) acc.push(i);
+        return acc;
+      }, []),
+      postcode: address.postcode,
+      road_address: address.roadAddress,
+      jibun_address: address.jibunAddress,
+      detail_address: address.detailAddress,
     }));
-    console.log(formData);
+    try {
+      const body = formData;
+      console.log(body);
+      const response = await axios.post('/api/v1/reservation', body);
+      if (response.data) {
+        alert(response.data, 'ok');
+      } else {
+        alert(response.data, '?!');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -172,11 +182,13 @@ const ReservationForm = () => {
                       <option value='hospital'>병원</option>
                       <option value='home'>자택</option>
                     </select>
-                    <span>기본 주소</span>
-                    <input type='text' name='address' onChange={handleInputChange} />
-                    <span>상세 주소</span>
-                    <input type='text' name='address_detail' onChange={handleInputChange} />
-                    <button type='button'>주소 검색</button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.3rem' }}>
+                      <span>우편번호</span>
+                      <span>도로명주소</span>
+                      <span>지번주소</span>
+                      <span>상세주소</span>
+                    </div>
+                    <DaumPostcode address={address} setAddress={setAddress} />
                   </div>
                 </div>
 
@@ -186,7 +198,16 @@ const ReservationForm = () => {
                     <input type='date' name='start_date' onChange={handleInputChange} defaultValue={today} /> ~
                     <input type='date' name='end_date' onChange={handleInputChange} defaultValue={today} />
                     <p>
-                      (총 {(new Date(formData.end_date) - new Date(formData.start_date)) / (1000 * 3600 * 24) + 1}일)
+                      (총{' '}
+                      {countWeekdays(
+                        formData.start_date,
+                        formData.end_date,
+                        weekdayBoolean.reduce((acc, v, i) => {
+                          if (v) acc.push(i);
+                          return acc;
+                        }, []),
+                      )}
+                      일)
                     </p>
                   </div>
                 </div>
@@ -195,23 +216,21 @@ const ReservationForm = () => {
                   <div>
                     <label>출퇴근요일</label>
                     <div className={styles.checkbox_wrapper} onClick={selectAllWeekday}>
-                      <input type='checkbox' />
+                      <input type='checkbox' defaultChecked />
                       <span>전체 선택</span>
                     </div>
                   </div>
 
                   <div className={styles.weekdays}>
-                    {['일', '월', '화', '수', '목', '금', '토'].map((v) => {
+                    {weekdayBoolean.map((v, i) => {
                       return (
-                        <div key={v} className={styles.checkbox_wrapper} onClick={handleCheckboxWrapperClick}>
-                          <input
-                            type='checkbox'
-                            name='weekday'
-                            value={v}
-                            checked={formData.weekday[v]}
-                            onChange={(e) => handleCheckboxChange(e, v)}
-                          />
-                          <span>{v}</span>
+                        <div
+                          key={i}
+                          className={styles.checkbox_wrapper}
+                          onClick={() => handleWeekdayCheckboxWrapperClick(i)}
+                        >
+                          <input type='checkbox' name='weekday' value={i} checked={v} onChange={(e) => handleCheckboxChange(e, v) />
+                          <span>{weekdayDic[i]}</span>
                         </div>
                       );
                     })}

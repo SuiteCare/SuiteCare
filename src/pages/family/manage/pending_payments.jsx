@@ -1,6 +1,6 @@
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
-import FamilyPaymentList from '@/components/Family/FamilyManage/FamilyPaymentList';
+import PendingPaymentList from '@/components/Family/FamilyManage/PendingPaymentList';
 
 const FamilyCalendarPage = () => {
   return (
@@ -13,7 +13,7 @@ const FamilyCalendarPage = () => {
             <h1>결제 대기 목록</h1>
             <span>결제 대금 수납을 기다리는 간병 완료 목록입니다.</span>
           </div>
-          <FamilyPaymentList />
+          <PendingPaymentList />
         </div>
       </div>
     </>

@@ -1,9 +1,9 @@
-import PaymentCard from './PaymentCard';
+import PendingPaymentCard from './PendingPaymentCard';
 
 const FamilyPaymentList = () => {
   return (
     <div className='FamilyPaymentList'>
-      <PaymentCard
+      <PendingPaymentCard
         data={[
           {
             create_at: '2023-12-26',
