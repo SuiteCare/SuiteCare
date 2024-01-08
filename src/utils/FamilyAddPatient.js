@@ -66,7 +66,7 @@ const random = (e, formData, setFormData) => {
     ];
 
     const randomName = names[Math.floor(Math.random() * names.length)];
-    randomData.name = randomName + '환자';
+    randomData.name = `${randomName}환자`;
 
     const randomHeight = Math.floor(Math.random() * 101) + 100;
     randomData.height = randomHeight.toString();

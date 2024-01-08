@@ -16,7 +16,7 @@ const LocationList = ({ onChange }) => {
         <FormLocationCheckbox arr={['노원구']} onChange={onChange} />
       </div>
       <div className='location_list'>
-        <label>ㅁ</label>
+        <label>ㄷ</label>
         <FormLocationCheckbox arr={['도봉구', '동대문구', '동작구']} onChange={onChange} />
       </div>
       <div className='location_list'>

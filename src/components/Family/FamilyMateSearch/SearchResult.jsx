@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import useModal from '@/hooks/useModal';
+
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import MateDetailModal from './MateDetailModal';
-import useModal from '@/hooks/useModal';
 
 const SearchResult = ({ data, type }) => {
   const [modalData, setModalData] = useState({});

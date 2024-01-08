@@ -1,9 +1,10 @@
 import { React, useState } from 'react';
 
+import useModal from '@/hooks/useModal';
+
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import JobDetailModal from './JobDetailModal';
-import useModal from '@/hooks/useModal';
 
 const SearchResult = ({ data }) => {
   const [modalData, setModalData] = useState({});
