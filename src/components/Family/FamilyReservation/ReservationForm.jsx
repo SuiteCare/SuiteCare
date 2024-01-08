@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
 
@@ -96,7 +97,7 @@ const ReservationForm = () => {
     detailAddress: '',
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormData((prevData) => ({
       ...prevData,
@@ -113,7 +114,18 @@ const ReservationForm = () => {
       jibun_address: address.jibunAddress,
       detail_address: address.detailAddress,
     }));
-    console.log(formData);
+    try {
+      const body = formData;
+      console.log(body);
+      const response = await axios.post('/api/v1/reservation', body);
+      if (response.data) {
+        alert(response.data, 'ok');
+      } else {
+        alert(response.data, '?!');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
