@@ -1,15 +1,17 @@
 const formInputInfos = {
   name: {
-    label: '성함',
+    label: '성명',
     type: 'text',
     id: 'user_name',
     maxLength: 15,
+    basic: true,
   },
   birthday: {
     label: '생년월일',
     type: 'date',
     id: 'birthday',
     maxLength: 20,
+    basic: true,
   },
   gender: {
     label: '성별',

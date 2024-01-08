@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
+import useModal from '@/hooks/useModal';
+
 import styles from './FamilyManageTable.module.css';
 import PatientDetailModal from './PatientDetailModal';
-import useModal from '@/components/Common/Modal/useModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
@@ -48,7 +49,7 @@ const PatientList = ({ data }) => {
         <thead>
           <tr>
             <th>#</th>
-            <th>성함</th>
+            <th>성명</th>
             <th>성별</th>
             <th>생년월일</th>
             <th>키</th>

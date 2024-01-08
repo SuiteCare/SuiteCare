@@ -47,7 +47,7 @@ const FamilyMateSearch = () => {
     setSearchData([
       {
         mate_id: 'kim',
-        mate_name: '테스트이름',
+        mate_name: '테스트성명',
         gender: 'F',
         birthday: '1994-01-12',
         address: '서울시 중구',
@@ -60,7 +60,7 @@ const FamilyMateSearch = () => {
       },
       {
         mate_id: 'park',
-        mate_name: '테스트이름2',
+        mate_name: '테스트성명2',
         gender: 'M',
         birthday: '1991-07-04',
         address: '서울시 성북구',

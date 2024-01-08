@@ -123,11 +123,11 @@ const SearchForm = ({ onSearch }) => {
     <div className={`${styles.SearchForm} Form_wide`}>
       <form name='search_form' onSubmit={handleSubmit}>
         <div className='input_wrapper'>
-          <label>이름으로 검색</label>
+          <label>성명으로 검색</label>
           <input
             type='text'
             name='search_name'
-            placeholder='🔎 간병인 이름으로 검색하기'
+            placeholder='🔎 간병인 성명으로 검색하기'
             value={searchName}
             onChange={handleSearchNameChange}
             maxLength={10}
