@@ -205,7 +205,7 @@ const ReservationForm = () => {
                     {weekdayBoolean.map((v, i) => {
                       return (
                         <div
-                          key={i}
+                          key={weekdayDic[i]}
                           className={styles.checkbox_wrapper}
                           onClick={() => handleWeekdayCheckboxWrapperClick(i)}
                         >

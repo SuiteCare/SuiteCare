@@ -245,7 +245,10 @@ const Profile = ({ profile }) => {
 
   const handleUpdateProfile = async () => {
     try {
-      console.log('업데이트 완료:', formData);
+      const body = {
+        ...formData,
+      };
+      console.log('업데이트 완료:', body);
     } catch (error) {
       console.error('업데이트 실패:', error);
     }
