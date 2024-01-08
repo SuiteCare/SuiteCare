@@ -68,6 +68,26 @@ const ReservationForm = () => {
     }));
   };
 
+  const handleCheckboxChange = (e, day) => {
+    const { checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      weekday: {
+        ...prevData.weekday,
+        [day]: checked,
+      },
+    }));
+  };
+
+  const handleCheckboxWrapperClick = (e) => {
+    const optionValue = e.currentTarget.children[0].value;
+    setFormData((prevData) => ({
+      ...prevData,
+      weekday: {
+        ...prevData.weekday,
+        [optionValue]: !prevData.weekday[optionValue],
+      },
+    }));
   // 요일 선택 관련
   const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
 
@@ -209,7 +229,7 @@ const ReservationForm = () => {
                           className={styles.checkbox_wrapper}
                           onClick={() => handleWeekdayCheckboxWrapperClick(i)}
                         >
-                          <input type='checkbox' name='weekday' value={i} checked={v} />
+                          <input type='checkbox' name='weekday' value={i} checked={v} onChange={(e) => handleCheckboxChange(e, v) />
                           <span>{weekdayDic[i]}</span>
                         </div>
                       );

@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
+import useModal from '@/hooks/useModal';
+
 import styles from './FamilyManageTable.module.css';
 import PatientDetailModal from './PatientDetailModal';
-import useModal from '@/hooks/useModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 

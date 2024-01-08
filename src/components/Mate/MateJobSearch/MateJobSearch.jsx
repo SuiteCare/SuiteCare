@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import SearchForm from './JobSearchForm';
 import SearchResult from './SearchResult';
 
@@ -92,7 +93,8 @@ const MateJobSearch = () => {
         alert(response.data);
         console.log(response.data);
         return response.data;
-      } else if (msg === 'fail') {
+      }
+      if (msg === 'fail') {
         alert('검색 실패');
         return {};
       }

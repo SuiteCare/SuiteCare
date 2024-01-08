@@ -29,7 +29,7 @@ const FamilyAddPatient = ({ idQuery }) => {
     notice: '',
   });
 
-  //정보 받아옴
+  // 정보 받아옴
   const getPatientData = async () => {
     try {
       const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } });
@@ -142,7 +142,7 @@ const FamilyAddPatient = ({ idQuery }) => {
           });
   };
 
-  //정보 삭제
+  // 정보 삭제
   const handleClickDelete = async (e) => {
     e.preventDefault();
 

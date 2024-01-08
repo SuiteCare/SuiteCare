@@ -1,10 +1,19 @@
 import { useState } from 'react';
+
 import styles from './JobSearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 const JobSearchForm = ({ onSearch }) => {
-  //시급 관련
+  // 시급 관련
   const [wages, setWages] = useState([9860, 9860]);
+
+  // 체크박스 및 최종 데이터 관련
+  const [checkedItems, setCheckedItems] = useState({
+    search_input: '',
+    location: [],
+    gender: [],
+    wage: [9860, 9860],
+  });
 
   const handleWageChange = (e, index) => {
     const newWages = [...wages];
@@ -29,7 +38,7 @@ const JobSearchForm = ({ onSearch }) => {
     });
   };
 
-  //상단 텍스트 검색창 관련
+  // 상단 텍스트 검색창 관련
   const [searchInput, setSearchInput] = useState('');
 
   const handleSearchChange = (e) => {
@@ -39,14 +48,6 @@ const JobSearchForm = ({ onSearch }) => {
       search_input: e.target.value,
     });
   };
-
-  //체크박스 및 최종 데이터 관련
-  const [checkedItems, setCheckedItems] = useState({
-    search_input: '',
-    location: [],
-    gender: [],
-    wage: [9860, 9860],
-  });
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
@@ -87,7 +88,7 @@ const JobSearchForm = ({ onSearch }) => {
     selectAllLocation(e);
   };
 
-  //폼 제출
+  // 폼 제출
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -137,11 +138,11 @@ const JobSearchForm = ({ onSearch }) => {
           <label>환자 성별</label>
           <div className={styles.checkbox_list_wrapper}>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'F'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='F' onChange={handleCheckboxChange} />
               <span>여자</span>
             </div>
             <div className={styles.checkbox_wrapper}>
-              <input type='checkbox' name='gender' value={'M'} onChange={handleCheckboxChange} />
+              <input type='checkbox' name='gender' value='M' onChange={handleCheckboxChange} />
               <span>남자</span>
             </div>
           </div>
