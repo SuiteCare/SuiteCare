@@ -9,7 +9,7 @@ const MateJobSearch = () => {
 
   const getSearchData = async ($condition) => {
     try {
-      const response = await axios.get('/api/v1/search-reservation', { params: $condition });
+      const response = await axios.get('/api/v1/mate/search', { params: $condition });
 
       if (response.data) {
         setSearchData(response.data);
