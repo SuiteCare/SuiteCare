@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 
 const DaumPostcode = ({ address, setAddress }) => {
@@ -56,7 +57,7 @@ const DaumPostcode = ({ address, setAddress }) => {
           WebkitOverflowScrolling: 'touch',
         }}
       >
-        <img
+        <Image
           src='//t1.daumcdn.net/postcode/resource/images/close.png'
           id='btnClosePopup'
           style={{

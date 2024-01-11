@@ -6,7 +6,7 @@ import usePatientList from '@/hooks/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
-import DaumPostcode from '@/components/Common/DaumPostcode';
+import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
@@ -52,7 +52,7 @@ const ReservationForm = () => {
         navigator.push('/family/addpatient');
       }
     } else {
-      const selectedPatient = patientList[e.target.value - 1];
+      const selectedPatient = patientList.filter((v) => v.id === e.target.value);
       setPatientInfo(selectedPatient);
       setFormData((prevData) => ({
         ...prevData,
