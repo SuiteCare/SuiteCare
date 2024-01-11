@@ -4,7 +4,7 @@ import KakaoMapSearch from './kakaoMapSearch';
 import styles from '@/components/Common/Modal/Modal.module.css';
 import mapstyles from './kakaomap.module.css';
 
-const KaKaoMapModal = ({ keyword, closeModal }) => {
+const KaKaoMapModal = ({ closeModal }) => {
   const { handleContentClick } = useModal();
 
   return (

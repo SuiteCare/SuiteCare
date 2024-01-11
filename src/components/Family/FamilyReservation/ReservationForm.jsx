@@ -52,7 +52,7 @@ const ReservationForm = () => {
         navigator.push('/family/addpatient');
       }
     } else {
-      const selectedPatient = patientList[e.target.value - 1];
+      const selectedPatient = patientList.filter((v) => v.id === e.target.value);
       setPatientInfo(selectedPatient);
       setFormData((prevData) => ({
         ...prevData,

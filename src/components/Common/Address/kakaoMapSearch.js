@@ -8,6 +8,7 @@ const KakaoMapSearch = () => {
   const [markers, setMarkers] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [keyword, setKeyword] = useState('');
+  const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -49,6 +50,7 @@ const KakaoMapSearch = () => {
   const placesSearchCB = (data, status, pagination) => {
     if (status === window.kakao.maps.services.Status.OK) {
       setMarkers([]);
+      setPlaces(data);
       displayPlaces(data);
       setPagination(pagination);
       displayPagination(pagination);
@@ -59,13 +61,33 @@ const KakaoMapSearch = () => {
     }
   };
 
+  const addMarker = (position, idx, title) => {
+    const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png';
+    const imageSize = new window.kakao.maps.Size(36, 37);
+
+    const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+
+    const marker = new window.kakao.maps.Marker({
+      position,
+      image: markerImage,
+    });
+
+    marker.setMap(map);
+    markers.push(marker);
+
+    // 마커 클릭 시 인포윈도우 표시
+    window.kakao.maps.event.addListener(marker, 'click', () => {
+      displayInfowindow(marker, title);
+    });
+
+    return marker;
+  };
+
   const displayPlaces = (places) => {
     const bounds = new window.kakao.maps.LatLngBounds();
     const newMarkers = places.map((place, index) => {
       const placePosition = new window.kakao.maps.LatLng(place.y, place.x);
-      const marker = new window.kakao.maps.Marker({
-        position: placePosition,
-      });
+      const marker = addMarker(placePosition, index, place);
 
       window.kakao.maps.event.addListener(marker, 'click', () => {
         displayInfowindow(marker, place.place_name);
@@ -114,6 +136,11 @@ const KakaoMapSearch = () => {
     infowindow.open(map, marker);
   };
 
+  // 검색 결과 항목 클릭 시 지도 이동하는 함수
+  const handlePlaceClick = (place) => {
+    alert(`'${place.place_name}' 클릭됨. 주소는 '${place.road_address_name}'`);
+  };
+
   return (
     <div className={mapstyles.map_wrap}>
       <div id='map' style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }} />
@@ -128,19 +155,25 @@ const KakaoMapSearch = () => {
               }}
             >
               <h4>병원 찾기</h4>
-              <input
-                type='text'
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                id='keyword'
-                size='15'
-              />{' '}
+              <input type='text' value={keyword} onChange={(e) => setKeyword(e.target.value)} id='keyword' />
               <button type='submit'>검색</button>
             </form>
           </div>
         </div>
         <hr />
-        <ul id='placesList' className={mapstyles.placesList} />
+        {/* 검색 결과를 표시하는 부분 */}
+        <ul>
+          {places.map((place, index) => (
+            <li key={index} onClick={() => handlePlaceClick(place)}>
+              <span className={`${mapstyles.markerbg} ${mapstyles[`marker_${index + 1}`]}`} />
+              <div className={mapstyles.info}>
+                <h6>{place.place_name}</h6>
+                {place.road_address_name ? <span>{place.road_address_name}</span> : <span>{place.address_name}</span>}
+                <p className={mapstyles.tel}>📞{place.phone || '정보 없음'}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
         <div id='pagination' className={mapstyles.pagination} />
       </div>
     </div>
