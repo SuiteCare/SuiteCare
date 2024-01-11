@@ -15,6 +15,8 @@
 }
 
 .MyPageForm .change_button {
-  height: 120% !important;
-  width: 155%;
+  font-weight: 400;
+  background-color: var(--beige-01);
+  color: var(--deep-brown);
+  padding: 0.8rem;
 }

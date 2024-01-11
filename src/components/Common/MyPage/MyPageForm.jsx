@@ -8,36 +8,38 @@ import styles from './MyPageForm.module.css';
 
 const MyPageForm = () => {
   const navigator = useRouter();
-  const [loginId, setLoginId] = useState('');
-  const [myId, setMyId] = useState();
-  const [name, setName] = useState();
+
+  const [loginId, setLoginId] = useState();
+  const [name, setName] = useState('');
   const [tel, setTel] = useState('');
-  const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-  const [role, setRole] = useState(loginInfo.role);
+  const [loginInfo, setLoginInfo] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (loginInfo && loginInfo.login_id) {
-        setLoginId(loginInfo.login_id);
+    if (typeof window !== 'undefined') {
+      const sessionLoginInfo = JSON.parse(sessionStorage.getItem('login_info'));
+      const accessToken = sessionLoginInfo.token;
+      setLoginInfo(sessionLoginInfo);
+
+      const fetchData = async () => {
         try {
           const response = await axios.get('/api/v1/mypage', {
             params: {
-              id: loginInfo.login_id,
+              id: loginInfo.id,
+            },
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
             },
           });
           setName(response.data.name);
-          setMyId(response.data.login_id);
+          setLoginId(response.data.login_id);
           setTel(response.data.tel);
         } catch (error) {
           console.error('Error:', error);
         }
-      } else {
-        alert('로그인이 필요합니다.');
-      }
-    };
-
-    fetchData();
-  }, [loginInfo.login_id]);
+      };
+      fetchData();
+    }
+  }, []);
 
   const part1 = tel.substring(0, 3);
   const part2 = tel.substring(4, 8);
@@ -96,7 +98,7 @@ const MyPageForm = () => {
       if (response.data) {
         alert('정보 수정 완료!!!');
 
-        if (role === 'F') {
+        if (loginInfo?.role === 'F') {
           navigator.push(`/family/main`);
         } else {
           navigator.push(`/mate/main`);
@@ -115,16 +117,14 @@ const MyPageForm = () => {
       <form name='MyPageForm' method='post'>
         <div className='input_wrapper'>
           <label>아이디</label>
-          <input type='text' name='id' id='id' readOnly value={myId} />
+          <input type='text' name='id' id='id' readOnly value={loginId} />
         </div>
 
         <div className='input_wrapper'>
           <label>비밀번호</label>
-          <div className='input_with_button'>
-            <button type='button' className={styles.change_button} onClick={() => setChangePwModalOn(true)}>
-              비밀번호 변경
-            </button>
-          </div>
+          <button type='button' className={styles.change_button} onClick={() => setChangePwModalOn(true)}>
+            비밀번호 변경
+          </button>
           {changePwModalOn && <ChangePwModal modalData={changePwModalOn} closeModal={closeModal} />}
         </div>
 
@@ -166,7 +166,7 @@ const MyPageForm = () => {
               <input type='hidden' name='phone' value={phoneNumber} />
             </div>
             <button type='button' onClick={handlePhoneCertification}>
-              변경/인증
+              재인증
             </button>
           </div>
         </div>
