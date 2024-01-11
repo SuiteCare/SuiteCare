@@ -1,4 +1,4 @@
-import KaKaoHospitalSearch from '@/components/Common/Address/KakaoMapModal';
+import KaKaoHospitalSearch from '@/components/Common/Address/KakaoMap';
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 
 const TestPage = () => {
