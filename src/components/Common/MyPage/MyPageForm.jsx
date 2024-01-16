@@ -3,36 +3,39 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
+import useLoginInfo from '@/hooks/useLoginInfo';
+
 import ChangePwModal from './ChangePwModal';
 import styles from './MyPageForm.module.css';
 
 const MyPageForm = () => {
   const navigator = useRouter();
 
-  const [loginId, setLoginId] = useState();
-  const [name, setName] = useState('');
-  const [tel, setTel] = useState('');
-  const [loginInfo, setLoginInfo] = useState({});
+  const { token, id, login_id } = useLoginInfo();
+
+  const [myData, setMyData] = useState({
+    name: '',
+    tel: '',
+    role: '',
+  });
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const sessionLoginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-      const accessToken = sessionLoginInfo.token;
-      setLoginInfo(sessionLoginInfo);
-
       const fetchData = async () => {
         try {
           const response = await axios.get('/api/v1/mypage', {
             params: {
-              id: loginInfo.id,
+              id,
             },
             headers: {
-              Authorization: `Bearer ${accessToken}`,
+              Authorization: `Bearer ${token}`,
             },
           });
-          setName(response.data.name);
-          setLoginId(response.data.login_id);
-          setTel(response.data.tel);
+          if (id == response.data.id) {
+            setMyData(...response.data);
+          } else {
+            alert('오류가 발생했습니다.');
+          }
         } catch (error) {
           console.error('Error:', error);
         }
@@ -41,45 +44,17 @@ const MyPageForm = () => {
     }
   }, []);
 
-  const part1 = tel.substring(0, 3);
-  const part2 = tel.substring(4, 8);
-  const part3 = tel.substring(9);
-
   const [changePwModalOn, setChangePwModalOn] = useState(false);
 
   const closeModal = () => {
     setChangePwModalOn(false);
   };
 
-  const [phoneParts, setPhoneParts] = useState({
-    phone_1: '',
-    phone_2: '',
-    phone_3: '',
-  });
-
-  const handlePhoneChange = ($event) => {
-    const { id, value } = $event.target;
-
-    const isValidInput = /^\d{0,4}$/.test(value);
-
-    if (isValidInput) {
-      setPhoneParts((prevPhoneParts) => ({
-        ...prevPhoneParts,
-        [id]: value,
-      }));
-    } else {
-      alert('숫자만 입력할 수 있습니다.');
-    }
-  };
-
-  const { phone_1, phone_2, phone_3 } = phoneParts;
-  const phoneNumber = `${phone_1}-${phone_2}-${phone_3}`;
-
   const handlePhoneCertification = (event) => {
     event.preventDefault();
 
-    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(phoneNumber)) {
-      alert(`인증 api 연동 필요\n${phoneNumber}`);
+    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(myData.tel)) {
+      alert(`인증 api 연동 필요\n${myData.tel}`);
     } else {
       alert('휴대폰 번호를 올바르게 입력하십시오.');
     }
@@ -89,8 +64,8 @@ const MyPageForm = () => {
     event.preventDefault();
 
     const body = {
-      login_id: loginInfo.login_id,
-      tel: phoneNumber,
+      login_id,
+      tel: myData.tel.replaceAll('-', ''),
     };
 
     try {
@@ -98,7 +73,7 @@ const MyPageForm = () => {
       if (response.data) {
         alert('정보 수정 완료!!!');
 
-        if (loginInfo?.role === 'F') {
+        if (myData?.role === 'F') {
           navigator.push(`/family/main`);
         } else {
           navigator.push(`/mate/main`);
@@ -117,7 +92,7 @@ const MyPageForm = () => {
       <form name='MyPageForm' method='post'>
         <div className='input_wrapper'>
           <label>아이디</label>
-          <input type='text' name='id' id='id' readOnly value={loginId} />
+          <input type='text' name='id' id='id' readOnly value={login_id} />
         </div>
 
         <div className='input_wrapper'>
@@ -130,7 +105,7 @@ const MyPageForm = () => {
 
         <div className='input_wrapper'>
           <label>성명</label>
-          <input type='text' name='name' id='name' readOnly value={name} />
+          <input type='text' name='name' id='name' readOnly value={myData.name} />
         </div>
 
         <div className='input_wrapper'>
@@ -139,31 +114,17 @@ const MyPageForm = () => {
             <div className={styles.input_phone}>
               <input
                 type='text'
-                placeholder={part1}
-                id='phone_1'
-                value={phone_1}
-                maxLength={3}
-                onChange={handlePhoneChange}
+                placeholder='010-0000-0000'
+                id='tel'
+                value={myData.tel}
+                maxLength={13}
+                onChange={(e) =>
+                  setMyData((prevData) => ({
+                    ...prevData,
+                    tel: e.target.value,
+                  }))
+                }
               />
-              -
-              <input
-                type='text'
-                placeholder={part2}
-                id='phone_2'
-                value={phone_2}
-                maxLength={4}
-                onChange={handlePhoneChange}
-              />
-              -
-              <input
-                type='text'
-                placeholder={part3}
-                id='phone_3'
-                value={phone_3}
-                maxLength={4}
-                onChange={handlePhoneChange}
-              />
-              <input type='hidden' name='phone' value={phoneNumber} />
             </div>
             <button type='button' onClick={handlePhoneCertification}>
               재인증
