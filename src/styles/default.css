@@ -513,7 +513,7 @@ input[type='checkbox'] {
 .tab_wrapper .active {
   font-weight: 500;
   border: 1px solid var(--normal-gray);
-  border-bottom: none;
+  border-bottom: 1px solid white;
   padding-top: 16px;
   padding-bottom: 14px;
   position: relative;

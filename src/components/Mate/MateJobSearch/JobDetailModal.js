@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
 
@@ -10,8 +11,29 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
+  const handleApply = () => {
+    console.log('dev');
+  };
   const weekDays = modalData.day.split(',').map((e) => weekdayDic[e]);
   const [startTime, endTime] = [modalData.start_time.slice(0, 5), modalData.end_time.slice(0, 5)];
+
+  const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
+  const handleApply = async (reservation_id) => {
+    const body = {
+      mate_id: loginId,
+      reservation_id,
+    };
+    try {
+      const response = await axios.post('/api/v1/apply', body);
+      if (response.data === 1) {
+        alert('간병 지원이 완료되었습니다.');
+      } else {
+        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -200,7 +222,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         {/* 끝 */}
 
         <div className={styles.button_wrapper}>
-          <button type='submit' onClick={() => handleApply(modalData.mate_id)}>
+          <button type='submit' onClick={() => handleApply(modalData.id)}>
             간병 지원하기
           </button>
         </div>
