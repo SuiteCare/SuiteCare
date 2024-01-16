@@ -5,14 +5,14 @@ import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 const JobSearchForm = ({ onSearch }) => {
   // 시급 관련
-  const [wages, setWages] = useState([9860, 9860]);
+  const [wages, setWages] = useState([15000, 100000]);
 
   // 체크박스 및 최종 데이터 관련
   const [checkedItems, setCheckedItems] = useState({
     search_input: '',
     location: [],
     gender: [],
-    wage: [9860, 9860],
+    wage: [15000, 100000],
   });
 
   const handleWageChange = (e, index) => {
