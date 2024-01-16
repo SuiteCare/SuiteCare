@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import useModal from '@/hooks/useModal';
+
 import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo } from '@/utils/calculators.js';
@@ -9,21 +10,29 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
+  const handleApply = () => {
+    console.log('dev')
+  }
+
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
-          <span onClick={closeModal}></span>
+          <span onClick={closeModal} />
         </div>
 
         {/* 시작 */}
         <div className='tab_wrapper'>
           <ul>
-            <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-              간병 정보
+            <li>
+              <div className={activeTab === 0 ? 'active' : ''} onClick={() => setActiveTab(0)}>
+                간병 정보
+              </div>
             </li>
-            <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-              환자 상세정보
+            <li>
+              <div className={activeTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>
+                환자 상세정보
+              </div>
             </li>
           </ul>
         </div>

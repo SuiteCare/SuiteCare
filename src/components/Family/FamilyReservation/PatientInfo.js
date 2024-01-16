@@ -9,11 +9,15 @@ export const PatientInfo = ({ patientInfo, styles, navigator }) => {
     <>
       <div className='tab_wrapper'>
         <ul>
-          <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-            환자 기본정보
+          <li>
+            <div className={activeTab === 0 ? 'active' : ''} onClick={() => setActiveTab(0)}>
+              환자 기본정보
+            </div>
           </li>
-          <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-            환자 상세정보
+          <li>
+            <div className={activeTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>
+              환자 상세정보
+            </div>
           </li>
         </ul>
       </div>

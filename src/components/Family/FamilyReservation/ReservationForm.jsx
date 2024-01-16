@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-import usePatientList from '@/hooks/usePatientList';
+import usePatientList from '@/services/apis/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
@@ -15,7 +15,7 @@ const ReservationForm = () => {
   const navigator = useRouter();
 
   const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList(loginId);
+  const { patientList } = usePatientList();
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
@@ -44,7 +44,6 @@ const ReservationForm = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
       setFormData({ ...formData, family_id: loginId });
     }
   }, []);
@@ -135,7 +134,7 @@ const ReservationForm = () => {
           <label>간병받을 환자</label>
           <select onChange={handlePatientSelectChange}>
             <option>환자 선택</option>
-            {patientList.map((e) => (
+            {patientList?.map((e) => (
               <option key={e.id} value={e.id}>
                 {e.name} ({e.diagnosis_name})
               </option>
