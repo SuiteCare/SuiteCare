@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-
 import axios from 'axios';
+
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
@@ -18,19 +18,19 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const handleApply = async (reservation_id) => {
     const body = {
       mate_id: loginId,
-      reservation_id: reservation_id
-    }
+      reservation_id,
+    };
     try {
       const response = await axios.post('/api/v1/apply', body);
-      if(response.data === 1) {
+      if (response.data === 1) {
         alert('간병 지원이 완료되었습니다.');
       } else {
-        alert('오류로 간병 지원에 실패했습니다.');
+        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
