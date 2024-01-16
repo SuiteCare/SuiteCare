@@ -111,7 +111,7 @@ const ReservationForm = () => {
       postcode: address.postcode,
       road_address: address.roadAddress,
       jibun_address: address.jibunAddress,
-      detail_address: address.detailAddress,
+      address_detail: address.detailAddress,
     };
 
     try {
