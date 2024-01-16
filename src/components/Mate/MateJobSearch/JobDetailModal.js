@@ -11,6 +11,9 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
+  const handleApply = () => {
+    console.log('dev');
+  };
   const weekDays = modalData.day.split(',').map((e) => weekdayDic[e]);
   const [startTime, endTime] = [modalData.start_time.slice(0, 5), modalData.end_time.slice(0, 5)];
 
@@ -42,11 +45,15 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         {/* 시작 */}
         <div className='tab_wrapper'>
           <ul>
-            <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-              간병 정보
+            <li>
+              <div className={activeTab === 0 ? 'active' : ''} onClick={() => setActiveTab(0)}>
+                간병 정보
+              </div>
             </li>
-            <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-              환자 상세정보
+            <li>
+              <div className={activeTab === 1 ? 'active' : ''} onClick={() => setActiveTab(1)}>
+                환자 상세정보
+              </div>
             </li>
           </ul>
         </div>
