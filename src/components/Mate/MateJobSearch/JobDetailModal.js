@@ -132,12 +132,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>키</label>
-                  <span>{modalData.patient_height} cm</span>
+                  <span>{modalData.height} cm</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>몸무게</label>
-                  <span>{modalData.patient_weight} kg</span>
+                  <span>{modalData.weight} kg</span>
                 </div>
               </div>
             </div>

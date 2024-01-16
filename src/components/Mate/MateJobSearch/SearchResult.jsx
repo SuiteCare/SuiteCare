@@ -1,4 +1,5 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
 
@@ -7,19 +8,38 @@ import SearchResultCard from './SearchResultCard';
 import JobDetailModal from './JobDetailModal';
 
 const SearchResult = ({ data }) => {
-  const [modalData, setModalData] = useState({});
   const { isModalVisible, openModal, closeModal } = useModal();
   const [sortOption, setSortOption] = useState('');
+  const [modalData, setModalData] = useState({});
 
   const handleShowModal = async (defaultData) => {
-    // const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) }; API 완성되면 되돌려야 함
-    const combinedData = {
-      ...defaultData,
-      ...{},
+    const getPatientDetail = async () => {
+      if (typeof window !== 'undefined') {
+        try {
+          const [response1, response2] = await Promise.all([
+            axios.get(`/api/v1/patient/${defaultData.patient_id}`),
+            axios.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
+          ]);
+
+          setModalData({
+            ...defaultData,
+            ...response1.data,
+            ...response2.data,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
     };
-    setModalData(combinedData);
-    openModal();
+
+    getPatientDetail();
   };
+
+  useEffect(() => {
+    if (Object.keys(modalData).length > 0) {
+      openModal();
+    }
+  }, [modalData]);
 
   const sortOptions = {
     wage_asc: (a, b) => a.wage - b.wage,
