@@ -98,7 +98,7 @@ const ReservationForm = () => {
     e.preventDefault();
     if (!validateAddress()) return false;
 
-    const dataForRequest = {
+    const body = {
       family_id: loginId,
       patient_id: patientInfo?.id,
       ...formData,
@@ -115,8 +115,8 @@ const ReservationForm = () => {
     };
 
     try {
-      console.log('wjsekf', dataForRequest);
-      const response = await axios.post('/api/v1/reservation', dataForRequest);
+      console.log('wjsekf', body);
+      const response = await axios.post('/api/v1/reservation', body);
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {
@@ -149,7 +149,12 @@ const ReservationForm = () => {
           <>
             <div className={styles.grid_wrapper}>
               <div className={styles.patient_info_wrapper}>
-                <PatientInfo patientInfo={patientInfo} styles={styles} navigator={navigator} />
+                <PatientInfo
+                  patientBasic={patientInfo}
+                  styles={styles}
+                  navigator={navigator}
+                  id={formData.patient_id}
+                />
               </div>
 
               <div className={styles.reservation_info_wrapper}>
