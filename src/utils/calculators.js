@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const calAge = ($birth) => Math.floor((Date.now() - new Date($birth)) / (1000 * 3600 * 24 * 365));
 
 export const calTimeDiff = ($start, $end) => {
@@ -42,3 +44,19 @@ export const stringToColor = (str, saturation = 55, lightness = 50) => {
 export const genderToKo = (gender) => {
   return gender === 'M' ? '남' : '여';
 };
+
+export const getMinWage = async () => {
+  try {
+    const response = await axios.get(
+      `https://api.odcloud.kr/api/15068774/v1/uddi:ea28d355-6222-40db-8237-ceda86c5675d?serviceKey=${process.env.NEXT_PUBLIC_PUBLIC_DATA_PORTAL_MINWAGE_KEY}`,
+    );
+    if (response.data?.data?.length) {
+      return response.data.data[0];
+    }
+    console.error('Invalid response data structure:', response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+export const minWage = 9860;
