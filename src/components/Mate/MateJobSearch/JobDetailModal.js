@@ -22,14 +22,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
         {/* 시작 */}
         <div className='tab_wrapper'>
-          <ul>
-            <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-              간병 정보
-            </li>
-            <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-              환자 상세정보
-            </li>
-          </ul>
+          <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+            간병 정보
+          </div>
+          <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+            환자 상세정보
+          </div>
         </div>
 
         {activeTab === 0 && (

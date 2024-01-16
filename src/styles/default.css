@@ -495,13 +495,10 @@ input[type='checkbox'] {
 .tab_wrapper {
   border-bottom: 1px solid var(--normal-gray);
   margin-bottom: 1rem;
-}
-
-.tab_wrapper ul {
   display: flex;
 }
 
-.tab_wrapper li {
+.tab_wrapper div {
   cursor: pointer;
   border: 1px solid transparent;
   border-top-left-radius: 10px;
@@ -509,7 +506,7 @@ input[type='checkbox'] {
   padding: 18px 2rem 12px 2rem;
 }
 
-.tab_wrapper li:hover {
+.tab_wrapper div:hover {
   background-color: var(--very-light-gray);
 }
 
