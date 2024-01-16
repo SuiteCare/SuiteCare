@@ -11,9 +11,6 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
-  const handleApply = () => {
-    console.log('dev');
-  };
   const weekDays = modalData.day.split(',').map((e) => weekdayDic[e]);
   const [startTime, endTime] = [modalData.start_time.slice(0, 5), modalData.end_time.slice(0, 5)];
 
