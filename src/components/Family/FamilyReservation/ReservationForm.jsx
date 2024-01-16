@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-import usePatientList from '@/services/apis/usePatientList';
+import usePatientList from '@/hooks/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
-import DaumPostcode from '@/components/Common/DaumPostcode';
+import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
@@ -15,7 +15,7 @@ const ReservationForm = () => {
   const navigator = useRouter();
 
   const [loginId, setLoginId] = useState(null);
-  const { patientList } = usePatientList();
+  const patientList = usePatientList();
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
@@ -24,27 +24,26 @@ const ReservationForm = () => {
     .padStart(2, '0')}`;
 
   const [formData, setFormData] = useState({
-    family_id: '', // 숫자
-    patient_id: '', // 숫자
     location: '병원', // 병원 or 집
     start_date: today, // 날짜 형식 YYYY-MM-DD
     end_date: today, // 날짜 형식 YYYY-MM-DD
-    weekday: [], // 숫자 배열
-    start_time: '', // 시간 형식 HH:MM
-    end_time: '', // 시간 형식 HH:MM
     wage: '15000',
-    postcode: '',
-    road_address: '',
-    jibun_address: '',
-    detail_address: '',
   });
 
+  const [address, setAddress] = useState({
+    postcode: '',
+    roadAddress: '',
+    jibunAddress: '',
+    detailAddress: '',
+  });
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
+  const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setFormData({ ...formData, family_id: loginId });
+      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
     }
   }, []);
 
@@ -54,8 +53,12 @@ const ReservationForm = () => {
         navigator.push('/family/addpatient');
       }
     } else {
-      setPatientInfo(patientList[e.target.value - 1]);
-      setFormData({ ...formData, patient_id: patientInfo?.id });
+      const selectedPatient = patientList.filter((v) => v.id === +e.target.value)[0];
+      setPatientInfo(selectedPatient);
+      setFormData((prevData) => ({
+        ...prevData,
+        patient_id: selectedPatient.id,
+      }));
     }
   };
 
@@ -67,15 +70,11 @@ const ReservationForm = () => {
     }));
   };
 
-  // 요일 선택 관련
-  const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
-
   const handleWeekdayCheckboxWrapperClick = (index) => {
-    setWeekdayBoolean((prev) => {
-      const newArr = [...prev];
-      newArr[index] = !newArr[index];
-      return newArr;
-    });
+    const newArr = [...weekdayBoolean];
+    newArr[index] = !newArr[index];
+
+    setWeekdayBoolean(newArr);
   };
 
   const selectAllWeekday = (e) => {
@@ -88,20 +87,22 @@ const ReservationForm = () => {
     }
   };
 
-  // 주소 관련
-  const [address, setAddress] = useState({
-    postcode: '',
-    roadAddress: '',
-    jibunAddress: '',
-    detailAddress: '',
-  });
+  const validateAddress = () => {
+    if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress) {
+      alert('주소를 입력하세요.');
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData((prevData) => ({
-      ...prevData,
+    if (!validateAddress()) return false;
+
+    const dataForRequest = {
       family_id: loginId,
-      patient_id: patientInfo.id,
+      patient_id: patientInfo?.id,
+      ...formData,
       start_time: startTime,
       end_time: endTime,
       weekday: weekdayBoolean.reduce((acc, v, i) => {
@@ -112,15 +113,15 @@ const ReservationForm = () => {
       road_address: address.roadAddress,
       jibun_address: address.jibunAddress,
       detail_address: address.detailAddress,
-    }));
+    };
+
     try {
-      const body = formData;
-      console.log(body);
-      const response = await axios.post('/api/v1/reservation', body);
+      console.log('wjsekf', dataForRequest);
+      const response = await axios.post('/api/v1/reservation', dataForRequest);
       if (response.data) {
-        alert(response.data, 'ok');
+        alert('예약 신청이 완료되었습니다.');
       } else {
-        alert(response.data, '?!');
+        alert('예약 신청에 실패하였습니다.');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -158,8 +159,8 @@ const ReservationForm = () => {
                   <div className={styles.input_with_button}>
                     <span>장소 종류</span>
                     <select name='location' onChange={handleInputChange}>
-                      <option value='hospital'>병원</option>
-                      <option value='home'>자택</option>
+                      <option value='병원'>병원</option>
+                      <option value='자택'>자택</option>
                     </select>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2.3rem' }}>
                       <span>우편번호</span>
