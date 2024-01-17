@@ -7,8 +7,9 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 
 import { calAge, genderToKo } from '@/utils/calculators.js';
+import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal }) => {
+const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) => {
   const { handleContentClick } = useModal();
 
   return (
@@ -20,9 +21,10 @@ const MateDetailModal = ({ modalData, closeModal }) => {
         <div className={styles.profile_section}>
           {modalData.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
-            <h2>{modalData.mate_name}</h2>메이트
+            <h2>{modalData.mate_name}</h2> ({genderToKo(modalData.gender)}성, 만 {calAge(modalData.birthday)}세)
             <p>
-              {genderToKo(modalData.gender)}성, 만 {calAge(modalData.birthday)}세
+              수행한 간병 <b>{modalData.care_times}</b>건<span>|</span>
+              <StarRating rate={modalData.rate} /> {modalData.rate.toFixed(1)}
             </p>
             <p>✉️{modalData.mate_email || '이메일 정보가 없습니다.'}</p>
             <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
@@ -92,7 +94,11 @@ const MateDetailModal = ({ modalData, closeModal }) => {
           </table>
         </div>
         <div className={styles.button_wrapper}>
-          <button type='submit'>간병 신청하기</button>
+          {handleConfirm ? (
+            <button onClick={() => handleConfirm(modalData.mate_id)}>간병인 선택하기</button>
+          ) : (
+            <button onClick={() => handleApply(modalData.mate_id)}>간병 신청하기</button>
+          )}
         </div>
       </div>
     </div>
