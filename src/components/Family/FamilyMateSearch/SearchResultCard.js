@@ -4,15 +4,17 @@ import styles from './SearchResultCard.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 
 import { calAge, genderToKo } from '@/utils/calculators.js';
+import StarRating from '@/utils/StarRating';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
   return (
     <div className={styles.card}>
       {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
       <div className={styles.userName}>
-        <label>{data.mate_name}</label>메이트
+        <label>{data.mate_name}</label>({genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세)
         <p>
-          {genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세
+          수행한 간병 <b>4</b>건<span>|</span>
+          <StarRating rate={4.2} /> 4.2 {/* 백엔드에서 추가적으로 정보 불러와서 수정해야 함 */}
         </p>
         <p>{data.introduction}</p>
       </div>
