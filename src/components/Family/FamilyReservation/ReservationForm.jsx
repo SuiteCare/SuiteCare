@@ -9,7 +9,7 @@ import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
-import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
+import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
 
 const ReservationForm = () => {
   const navigator = useRouter();
@@ -24,7 +24,7 @@ const ReservationForm = () => {
     .padStart(2, '0')}`;
 
   const [formData, setFormData] = useState({
-    location: '병원', // 병원 or 집
+    location: '병원', // 병원 or 자택
     start_date: today, // 날짜 형식 YYYY-MM-DD
     end_date: today, // 날짜 형식 YYYY-MM-DD
     wage: '15000',
@@ -238,7 +238,7 @@ const ReservationForm = () => {
                   <div>
                     <input
                       type='number'
-                      min='9860'
+                      min={minWage}
                       max='1000000'
                       name='wage'
                       placeholder='15000'

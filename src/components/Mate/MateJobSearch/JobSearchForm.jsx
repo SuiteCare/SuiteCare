@@ -3,6 +3,8 @@ import { useState } from 'react';
 import styles from './JobSearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
+import { minWage } from '@/utils/calculators';
+
 const JobSearchForm = ({ onSearch }) => {
   // 시급 관련
   const [wages, setWages] = useState([15000, 100000]);
@@ -24,9 +26,9 @@ const JobSearchForm = ({ onSearch }) => {
   const updateWage = () => {
     const newWages = [...wages];
 
-    if (newWages[0] < 9860) {
-      alert('최소 시급은 2024년 기준 최저임금 9,860원 이상이어야 합니다.');
-      newWages[0] = 9860;
+    if (newWages[0] < minWage) {
+      alert(`최소 시급은 2024년 기준 최저임금 ${minWage.toLocaleString()}원 이상이어야 합니다.`);
+      newWages[0] = minWage;
     }
 
     if (newWages[0] > newWages[1]) {
@@ -160,7 +162,7 @@ const JobSearchForm = ({ onSearch }) => {
               value={wages[0]}
               onChange={(e) => handleWageChange(e, 0)}
               onBlur={updateWage}
-              min={9860}
+              min={minWage}
               max={1000000}
             />
             원 ~ 최대
@@ -169,7 +171,7 @@ const JobSearchForm = ({ onSearch }) => {
               value={wages[1]}
               onChange={(e) => handleWageChange(e, 1)}
               onBlur={updateWage}
-              min={9860}
+              min={minWage}
               max={1000000}
             />
             원
