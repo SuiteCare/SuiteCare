@@ -1,6 +1,6 @@
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
-import PendingPaymentList from '@/components/Family/FamilyManage/PendingPaymentList';
+import PendingPaymentList from '@/components/Family/FamilyManage/PendingPayment/PendingPaymentList';
 
 const FamilyCalendarPage = () => {
   return (

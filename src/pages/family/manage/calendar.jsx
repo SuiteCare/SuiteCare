@@ -1,5 +1,5 @@
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
-import FamilyCalendar from '@/components/Family/FamilyManage/FamilyCalendar';
+import FamilyCalendar from '@/components/Family/FamilyManage/Calendar/FamilyCalendar';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
 
 const FamilyCalendarPage = () => {
