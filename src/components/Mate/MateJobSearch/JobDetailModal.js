@@ -78,7 +78,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 <label>간병지 주소</label>
                 <div>
                   <span
-                    className={`${styles.location} ${modalData.location === '자택' ? styles.house : styles.hospital}`}
+                    className={`${styles.location} ${modalData.location === '자택' ? styles.home : styles.hospital}`}
                   >
                     {modalData.location}
                   </span>
@@ -138,7 +138,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
-                  <label>나이</label>
+                  <label>나이/성별</label>
                   <span>만 {calAge(modalData.birthday)}세</span>
                 </div>
 

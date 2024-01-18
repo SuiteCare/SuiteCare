@@ -26,6 +26,8 @@ const FamilyMateSearch = () => {
         wage: 9900,
         profile_picture_filename: '',
         introduction: '안녕하세요',
+        rate: 4.9,
+        care_times: 40,
       },
       {
         mate_id: 'lee',
@@ -37,6 +39,8 @@ const FamilyMateSearch = () => {
         wage: 189000,
         profile_picture_filename: '',
         introduction: '두 줄 짜리 소개글을 작성해 봅시다. 3줄 0줄 1줄이 있으니 2줄짜리도 있어야 체크가 되겠지요.',
+        rate: 3.0,
+        care_times: 331,
       },
     ]);
   }, []);
@@ -57,6 +61,8 @@ const FamilyMateSearch = () => {
         introduction:
           '잘 부탁드립니다. 100자 제한 걸어둘 거니까 이것도 100자는 보여야 할 텐데 100자가 어느 정도지? 까지가 60자 정도니까 100자는 대충 두 줄 정도를 더 먹겠구나 여기까지',
         tel: '0505-1234-1234',
+        rate: 4.5,
+        care_times: 4,
       },
       {
         mate_id: 'park',
@@ -68,6 +74,8 @@ const FamilyMateSearch = () => {
         wage: 32000,
         profile_picture_filename: '',
         introduction: '',
+        rate: 3.9,
+        care_times: 21,
       },
     ]);
     // setSearchData(await getSearchData(searchCondition));

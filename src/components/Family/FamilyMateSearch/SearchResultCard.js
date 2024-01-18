@@ -6,15 +6,15 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const SearchResultCard = ({ data, showDetail, handleApply }) => {
+const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
   return (
     <div className={styles.card}>
       {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
       <div className={styles.userName}>
         <label>{data.mate_name}</label>({genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세)
         <p>
-          수행한 간병 <b>4</b>건<span>|</span>
-          <StarRating rate={4.2} /> 4.2 {/* 백엔드에서 추가적으로 정보 불러와서 수정해야 함 */}
+          수행한 간병 <b>{data.care_times}</b>건<span>|</span>
+          <StarRating rate={data.rate} /> {data.rate.toFixed(1)}
         </p>
         <p>{data.introduction}</p>
       </div>
@@ -34,7 +34,11 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       </div>
       <div className={styles.search_button_wrapper}>
         <button onClick={() => showDetail(data.mate_id)}>상세정보 보기</button>
-        <button onClick={() => handleApply(data.mate_id)}>간병 신청하기</button>
+        {handleConfirm ? (
+          <button onClick={() => handleConfirm(data.mate_id)}>간병인 선택하기</button>
+        ) : (
+          <button onClick={() => handleApply(data.mate_id)}>간병 신청하기</button>
+        )}
       </div>
     </div>
   );
