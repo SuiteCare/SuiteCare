@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
@@ -14,8 +15,9 @@ import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
 const ReservationForm = () => {
   const navigator = useRouter();
 
-  const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList(loginId);
+  const { token, id } = useLoginInfo();
+
+  const patientList = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
@@ -39,12 +41,6 @@ const ReservationForm = () => {
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
   const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
-    }
-  }, []);
 
   const handlePatientSelectChange = (e) => {
     if (e.target.value === 'add') {
@@ -98,8 +94,8 @@ const ReservationForm = () => {
     e.preventDefault();
     if (!validateAddress()) return false;
 
-    const dataForRequest = {
-      family_id: loginId,
+    const body = {
+      family_id: id,
       patient_id: patientInfo?.id,
       ...formData,
       start_time: startTime,
@@ -111,12 +107,17 @@ const ReservationForm = () => {
       postcode: address.postcode,
       road_address: address.roadAddress,
       jibun_address: address.jibunAddress,
-      detail_address: address.detailAddress,
+      address_detail: address.detailAddress,
     };
 
     try {
-      console.log('wjsekf', dataForRequest);
-      const response = await axios.post('/api/v1/reservation', dataForRequest);
+      console.log('확인용', body);
+      const response = await axios.post('/api/v1/reservation', {
+        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {

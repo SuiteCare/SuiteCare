@@ -54,7 +54,9 @@ const SignUpForm = ({ type }) => {
 
     if (formData.login_id) {
       try {
-        const response = await axios.get('/api/v1/check/id', { params: { login_id: formData.login_id } });
+        const response = await axios.get(`/api/v1/patient/${formData.login_id}`, {
+          params: { login_id: formData.login_id },
+        });
         const { data } = response;
 
         if (data !== 0) {

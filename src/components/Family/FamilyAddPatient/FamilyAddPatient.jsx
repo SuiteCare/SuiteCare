@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+import useLoginInfo from '@/hooks/useLoginInfo';
+
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
@@ -9,6 +11,8 @@ import random from '@/utils/FamilyAddPatient';
 
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
+
+  const { token, id } = useLoginInfo();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,8 +36,18 @@ const FamilyAddPatient = ({ idQuery }) => {
   // 정보 받아옴
   const getPatientData = async () => {
     try {
-      const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } });
-      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${idQuery}`, { params: { id: idQuery } });
+      const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, {
+        params: { id: idQuery },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${idQuery}`, {
+        params: { id: idQuery },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
@@ -107,18 +121,23 @@ const FamilyAddPatient = ({ idQuery }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const submitData = {
-      family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
+    const body = {
+      family_id: id,
       ...formData,
     };
-    console.log(submitData);
+    console.log(body);
 
     const response = idQuery
       ? await axios
-          .patch(`/api/v1/patient/${idQuery}`, submitData)
+          .patch(`/api/v1/patient/${idQuery}`, {
+            body,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
             if (response.data === 1) {
-              alert(`${submitData.name} 님의 환자 정보가 수정되었습니다.`);
+              alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
               navigator.push('/family/manage/patient_list');
             } else {
               alert('환자 정보 수정에 실패하였습니다.');
@@ -128,10 +147,15 @@ const FamilyAddPatient = ({ idQuery }) => {
             console.error(error);
           })
       : await axios
-          .post('/api/v1/patient', submitData)
+          .post('/api/v1/patient', {
+            body,
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
           .then((response) => {
             if (response.data === 1) {
-              alert(`${submitData.name} 님의 환자 정보가 등록되었습니다.`);
+              alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
               navigator.push('/family/main');
             } else {
               alert('환자 정보 등록에 실패하였습니다.');
@@ -147,7 +171,12 @@ const FamilyAddPatient = ({ idQuery }) => {
     e.preventDefault();
 
     await axios
-      .delete(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } })
+      .delete(`/api/v1/patient/${idQuery}`, {
+        params: { id: idQuery },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         if (response.data === 1) {
           alert(`${formData.basic.name} 님의 환자 정보가 삭제되었습니다.`);

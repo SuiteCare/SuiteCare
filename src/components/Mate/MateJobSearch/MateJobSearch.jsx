@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+import useLoginInfo from '@/hooks/useLoginInfo';
+
 import SearchForm from './JobSearchForm';
 import SearchResult from './SearchResult';
 
 const MateJobSearch = () => {
   const [searchData, setSearchData] = useState([]);
 
+  const { token } = useLoginInfo();
+
   const getSearchData = async ($condition) => {
     try {
-      const response = await axios.get('/api/v1/mate/search', { params: $condition });
+      const response = await axios.get('/api/v1/mate/search', {
+        params: $condition,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data) {
         setSearchData(response.data);
