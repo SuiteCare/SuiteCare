@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
+import axios from 'axios';
 
 import axiosInstance from '@/services/axiosInstance';
+import usePatientList from '@/hooks/usePatientList';
 
 import styles from './PendingReservation.module.css';
 import PendingReservationCard from './PendingReservationCard';
@@ -11,31 +13,31 @@ const PendingReservation = () => {
   const navigator = useRouter();
 
   const [loginId, setLoginId] = useState(null);
+  const patientList = usePatientList(loginId);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
-    } else {
-      return null;
     }
   }, []);
 
-  const {
-    data: reservationList,
-    isError,
-    isLoading,
-  } = useQuery(
-    ['reservationList', loginId],
-    async () => {
-      const response = await axiosInstance.get('/api/v1/patient', { params: { id: loginId } });
-      {
-        /** 명세에 맞춰 url 변경 필요, id로 해당멤버의 예약정보 중 간병인 null이고 start_date가 오늘 이후인 거 가져옴 * */
+  const selectPatient = ($id) => patientList.filter((e) => e.id === $id);
+
+  const [reservationList, setReservationList] = useState();
+  useEffect(() => {
+    const getReservationList = async () => {
+      try {
+        const response = await axios.get('/api/v1/patient', { params: { id: loginId } }); // , status: 'P'
+        setReservationList(response.data);
+      } catch (error) {
+        console.error('Error:', error);
       }
-      return response.data;
-    },
-    {
-      enabled: Boolean(loginId),
-    },
-  );
+    };
+
+    if (loginId) {
+      getReservationList();
+    }
+  }, [loginId]);
 
   const [reservationInfo, setReservationInfo] = useState({});
 
@@ -46,10 +48,14 @@ const PendingReservation = () => {
       }
     } else {
       const selectedReservation = reservationList.filter((v) => v.id === +e.target.value)[0];
+      const selectedPatient = selectPatient(selectedReservation.patient_id);
+      console.log('집어넣은 id는 숫자인가?', selectedReservation.patient_id);
+
       setReservationInfo(selectedReservation);
       setReservationInfo((prevData) => ({
         ...prevData,
         reservation_id: selectedReservation.id,
+        ...selectedPatient,
       }));
     }
   };
@@ -62,7 +68,7 @@ const PendingReservation = () => {
           <option>간병예약 선택</option>
           {reservationList?.map((e) => (
             <option key={e.id} value={e.id}>
-              {e.name} ({e.diagnosis_name}) | 간병기간 입력
+              {e.name} ({e.diagnosis_name}) | {e.start_date} ~ {e.end_date}
             </option>
           ))}
           <option value='add'>새로운 간병 예약하기</option>
@@ -71,8 +77,8 @@ const PendingReservation = () => {
 
       <hr />
 
-      {reservationInfo ? (
-        <PendingReservationCard id={reservationInfo.id} />
+      {reservationInfo && reservationInfo.length > 0 ? (
+        <PendingReservationCard data={reservationInfo} mateList={mateList} id={reservationInfo.id} />
       ) : (
         <div style={{ textAlign: 'center' }}>정보를 확인할 간병 예약을 선택하세요.</div>
       )}
