@@ -20,7 +20,7 @@ const MyPageForm = () => {
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && token) {
       const fetchData = async () => {
         try {
           const response = await axios.get('/api/v1/mypage', {
@@ -42,7 +42,7 @@ const MyPageForm = () => {
       };
       fetchData();
     }
-  }, []);
+  }, [token]);
 
   const [changePwModalOn, setChangePwModalOn] = useState(false);
 
