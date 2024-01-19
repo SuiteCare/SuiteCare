@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useQuery } from 'react-query';
 
+import axiosInstance from '@/services/axiosInstance';
 import useModal from '@/hooks/useModal';
 
 import styles from './PendingReservationCard.module.css';
@@ -8,7 +10,7 @@ import ReservationPatientInfo from './ReservationPatientInfo';
 import SearchResultCard from '../../FamilyMateSearch/SearchResultCard';
 import MateDetailModal from '../../FamilyMateSearch/MateDetailModal';
 
-const PendingReservationCard = ({ data, mateList, id }) => {
+const PendingReservationCard = ({ data, mateList }) => {
   const [modalData, setModalData] = useState({});
   const { isModalVisible, openModal, closeModal } = useModal();
 
@@ -44,19 +46,69 @@ const PendingReservationCard = ({ data, mateList, id }) => {
     alert($id);
   };
 
+  const {
+    data: resData,
+    isErrorForResData,
+    isLoadingForResData,
+  } = useQuery(
+    ['resData', data.reservation_id],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/reservationInfo', {
+        params: { reservation_id: data.reservation_id },
+      });
+      return response.data;
+    },
+    {
+      enabled: Boolean(data.reservation_id),
+    },
+  );
+
   return (
     <div className={styles.PendingReservationCard}>
-      <ReservationPatientInfo styles={styles} resData={data.reservation} id={id} />
-      <hr />
-      {mateList && mateList.length > 0 ? (
-        mateList.map((e) => (
-          <SearchResultCard data={e} key={e.id} showDetail={() => handleShowModal(e)} handleConfirm={handleConfirm} />
-        ))
+      {resData?.weekday.length > 0 ? (
+        <>
+          <ReservationPatientInfo
+            styles={styles}
+            fullData={{
+              patient: {
+                family_id: data.family_id,
+                patient_id: data.patient_id,
+                name: data.name,
+                diagnosis_name: data.diagnosis_name,
+                birthday: data.birthday,
+                gender: data.gender,
+                weight: data.weight,
+                height: data.height,
+              },
+              reservation: {
+                ...resData,
+                start_date: data.start_date,
+                end_date: data.end_date,
+                start_time: resData.start_time.slice(0, 5),
+                end_time: resData.end_time.slice(0, 5),
+                weekday: resData.weekday.split(',').map((e) => +e),
+              },
+            }}
+          />
+          <hr />
+          {mateList?.length > 0 ? (
+            mateList.map((e) => (
+              <SearchResultCard
+                data={e}
+                key={e.id}
+                showDetail={() => handleShowModal(e)}
+                handleConfirm={handleConfirm}
+              />
+            ))
+          ) : (
+            <div className='no_result'>신청자가 없습니다.</div>
+          )}
+          {isModalVisible && (
+            <MateDetailModal modalData={modalData} closeModal={closeModal} handleConfirm={handleConfirm} />
+          )}
+        </>
       ) : (
-        <div className={styles.no_result}>신청자가 없습니다.</div>
-      )}
-      {isModalVisible && (
-        <MateDetailModal modalData={modalData} closeModal={closeModal} handleConfirm={handleConfirm} />
+        <div className='no_result'>예약 데이터를 불러오는 중 오류가 발생했습니다.</div>
       )}
     </div>
   );

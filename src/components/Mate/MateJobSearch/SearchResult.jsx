@@ -73,7 +73,7 @@ const SearchResult = ({ data }) => {
             <SearchResultCard data={item} key={item.id} showDetail={() => handleShowModal(item)} />
           ))
         ) : (
-          <div className={styles.no_result}>검색 결과가 없습니다.</div>
+          <div className='no_result'>검색 결과가 없습니다.</div>
         )}
       </div>
       {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} />}

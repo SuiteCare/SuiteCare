@@ -620,3 +620,10 @@ input[type='checkbox'] {
 .DaumPostcode > input:not(:first-of-type) {
   width: 100%;
 }
+
+/* 11. Etc  --------------------------------------------------- */
+
+.no_result {
+  text-align: center;
+  margin: 4rem;
+}
