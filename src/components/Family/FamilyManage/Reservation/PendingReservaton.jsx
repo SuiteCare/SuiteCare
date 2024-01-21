@@ -7,6 +7,7 @@ import usePatientList from '@/services/apis/usePatientList';
 
 import styles from './PendingReservation.module.css';
 import PendingReservationCard from './PendingReservationCard';
+import Loading from '@/components/Common/Modal/Loading';
 
 const PendingReservation = () => {
   const navigator = useRouter();
@@ -85,6 +86,7 @@ const PendingReservation = () => {
 
   return (
     <div className={styles.PendingReservation}>
+      {isLoading || isResListLoading || isMateListLoading ? <Loading /> : ''}
       <div className={`${styles.select_reservation} input_wrapper`}>
         <label>간병예약 목록</label>
         <select onChange={handleSelectChange}>
@@ -98,9 +100,7 @@ const PendingReservation = () => {
           <option value='add'>새로운 간병 예약하기</option>
         </select>
       </div>
-
       <hr />
-
       {reservationInfo?.reservation_id ? (
         <PendingReservationCard data={reservationInfo} mateList={mateList} />
       ) : (
