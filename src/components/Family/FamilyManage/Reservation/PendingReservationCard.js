@@ -101,7 +101,7 @@ const PendingReservationCard = ({ data, mateList }) => {
               />
             ))
           ) : (
-            <div className='no_result'>신청자가 없습니다.</div>
+            <div className='no_result'>아직 지원자가 없습니다.</div>
           )}
           {isModalVisible && (
             <MateDetailModal modalData={modalData} closeModal={closeModal} handleConfirm={handleConfirm} />

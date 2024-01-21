@@ -624,6 +624,12 @@ input[type='checkbox'] {
 /* 11. Etc  --------------------------------------------------- */
 
 .no_result {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  background-color: var(--very-light-gray);
   text-align: center;
-  margin: 4rem;
+  padding: 5rem;
+  border-radius: 10px;
+  width: 100%;
+  margin: 0 auto;
 }
