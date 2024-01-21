@@ -11,35 +11,32 @@ import SearchResultCard from '../../FamilyMateSearch/SearchResultCard';
 import MateDetailModal from '../../FamilyMateSearch/MateDetailModal';
 
 const PendingReservationCard = ({ data, mateList }) => {
-  const [modalData, setModalData] = useState({});
   const { isModalVisible, openModal, closeModal } = useModal();
 
-  async function getModalData($mateId) {
-    try {
-      const response = await axios.get('/api/v1/familymatesearch', { params: $mateId });
-      {
-        /* * 변경 필요 * */
-      }
-      const msg = response.headers.get('msg');
-      if (response.status === 200 && msg === 'success') {
-        alert(response.data);
-        console.log(response.data);
-        return response.data;
-      }
-      if (msg === 'fail') {
-        alert('데이터 불러오기 실패');
-        return {};
-      }
-    } catch (error) {
-      console.error('Error occurred while fetching modal data:', error);
-      return {};
-    }
-  }
+  const {
+    data: modalData,
+    isError: isModalError,
+    refetch: refetchModal,
+  } = useQuery(
+    ['mateSearchModal', {}],
+    async ({ queryKey }) => {
+      const [_key, params] = queryKey;
+      const { data } = await axiosInstance.get('/familymatesearch', { params });
+      return data;
+    },
+    {
+      enabled: false,
+    },
+  );
 
   const handleShowModal = async (defaultData) => {
-    const combinedData = { ...defaultData, ...(await getModalData(defaultData.mate_id)) };
-    setModalData(combinedData);
-    openModal();
+    await refetchModal({ params: defaultData.mate_id });
+    if (isModalError) {
+      alert('데이터 불러오기 실패');
+      return;
+    }
+    const combinedData = { ...defaultData, ...modalData };
+    openModal(combinedData);
   };
 
   const handleConfirm = ($id) => {
@@ -48,8 +45,8 @@ const PendingReservationCard = ({ data, mateList }) => {
 
   const {
     data: resData,
-    isErrorForResData,
-    isLoadingForResData,
+    isError: isResDataError,
+    isLoading: isResDataLoading,
   } = useQuery(
     ['resData', data.reservation_id],
     async () => {

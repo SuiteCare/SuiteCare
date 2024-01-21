@@ -14,7 +14,7 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
         <label>{data.mate_name}</label>({genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세)
         <p>
           수행한 간병 <b>{data.care_times}</b>건<span>|</span>
-          <StarRating rate={data.rate} /> {data.rate.toFixed(1)}
+          <StarRating rate={data.rate} /> {data.rate?.toFixed(1)}
         </p>
         <p>{data.introduction}</p>
       </div>
@@ -29,7 +29,7 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
         </div>
         <div className={styles.userInfo}>
           <label>희망시급</label>
-          <span>{data.wage.toLocaleString()}원 이상</span>
+          <span>{data.desired_wage.toLocaleString()}원 이상</span>
         </div>
       </div>
       <div className={styles.search_button_wrapper}>

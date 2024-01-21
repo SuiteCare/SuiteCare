@@ -24,13 +24,13 @@ const PendingReservation = () => {
 
   const {
     data: reservationList,
-    isErrorForResList,
-    isLoadingForResList,
+    isError: isResListError,
+    isLoading: isResListLoading,
   } = useQuery(
     ['reservationList', loginId],
     async () => {
-      const response = await axiosInstance.get('/api/v1/pendingReservation', { params: { id: loginId } });
-      return response.data.reverse();
+      const { data } = await axiosInstance.get('/api/v1/pendingReservation', { params: { id: loginId } });
+      return data.reverse();
     },
     {
       enabled: Boolean(loginId),
@@ -44,13 +44,14 @@ const PendingReservation = () => {
 
   const {
     data: mateList,
-    isErrorForMateList,
-    isLoadingForMateList,
+    isError: isMateListError,
+    isLoading: isMateListLoading,
   } = useQuery(
     ['mateList', selectedResId],
     async () => {
-      const response = await axiosInstance.get('/api/v1/applicant-list', { params: { reservation_id: selectedResId } });
-      return response.data;
+      const { data } = await axiosInstance.get('/api/v1/applicant-list', { params: { reservation_id: selectedResId } });
+      console.log('mateList', selectedResId, data);
+      return data;
     },
     {
       enabled: Boolean(selectedResId),
