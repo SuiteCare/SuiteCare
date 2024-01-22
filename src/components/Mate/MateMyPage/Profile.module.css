@@ -1,101 +1,37 @@
-.wrapper {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem;
+.Profile section {
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--light-gray);
 }
 
-.form_wrapper {
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.form_wrapper section {
-  margin-bottom: 20px;
-}
-
-.form_wrapper h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-}
-
-.form_wrapper h3 {
-  font-size: 1.2rem;
-  margin-bottom: 5px;
-}
-
-.form_wrapper p {
-  font-size: 1rem;
-  margin-bottom: 10px;
-}
-
-.introduce {
-  display: flex;
-  align-items: center;
-}
-
-.img_wrapper {
-  margin-right: 20px;
-}
-
-.basicInfo {
-  flex: 1;
-}
-
-.contact label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.time_picker {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.form_wrapper select {
-  margin-right: 5px;
-}
-
-.introduction label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form_wrapper textarea {
-  width: 100%;
-  padding: 5px;
-  margin-bottom: 5px;
-}
-
-.wordCnt span {
-  font-size: 0.8rem;
-}
-
-.location h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+.Profile h3 > button {
+  padding: 0;
+  margin-left: 1rem;
+  width: 3rem;
 }
 
 .checkbox_list_wrapper {
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2rem;
+}
+
+.career_item,
+.certificate_item {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
-.career h2,
-.certificate h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
+.career_item button,
+.certificate_item button {
+  padding: 0 1rem;
+  height: fit-content;
+  background: var(--normal-gray);
+  font-weight: 400;
 }
 
-.form_wrapper button {
-  background-color: #008cba;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-bottom: 10px;
+.mainService > div {
+  display: flex;
+  gap: 2rem;
 }

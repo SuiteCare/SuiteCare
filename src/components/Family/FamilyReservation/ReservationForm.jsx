@@ -226,7 +226,7 @@ const ReservationForm = () => {
                 <div className='input_wrapper'>
                   <label>출퇴근시간</label>
                   <div>
-                    <div className={styles.timepicker_wrapper}>
+                    <div className='timepicker_wrapper'>
                       <TimePicker time={startTime} setTime={setStartTime} start={6} end={22} />~
                       <TimePicker time={endTime} setTime={setEndTime} start={6} end={22} />
                     </div>
