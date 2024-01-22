@@ -27,6 +27,10 @@ const usePatientList = () => {
     },
     {
       enabled: Boolean(loginId),
+      onError: (error) => {
+        // 여기서 추가적인 에러 처리 로직을 수행할 수 있음
+        console.error('Error during data fetch:', error);
+      },
     },
   );
 

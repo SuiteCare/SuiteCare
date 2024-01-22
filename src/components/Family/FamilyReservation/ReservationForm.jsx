@@ -15,7 +15,7 @@ const ReservationForm = () => {
   const navigator = useRouter();
 
   const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList();
+  const patientList = usePatientList(loginId);
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()

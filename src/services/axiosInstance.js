@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const localServer = 'http://localhost:8080'; // 로컬 서버
-const productServer = ''; // 실제 백엔드 서버
+const localServer = process.env.NEXT_PUBLIC_API_BASE_URL; // 로컬 서버
+const productServer = process.env.API_BASE_URL; // 실제 프로덕션 서버
 
 const axiosInstance = axios.create({
   baseURL: localServer,
