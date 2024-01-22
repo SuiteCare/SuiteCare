@@ -4,7 +4,7 @@ import usePatientList from '@/hooks/usePatientList';
 
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
-import PatientList from '@/components/Family/FamilyManage/PatientList';
+import PatientList from '@/components/Family/FamilyManage/PatientList/PatientList';
 
 const FamilyPatientListPage = () => {
   const [loginId, setLoginId] = useState(null);

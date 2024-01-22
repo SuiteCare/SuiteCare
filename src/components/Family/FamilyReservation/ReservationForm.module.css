@@ -65,6 +65,14 @@ div.grid_wrapper > div:first-child {
   color: var(--deep-brown);
 }
 
+.patient_info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: calc(100% - 2rem);
+  padding: 1rem 0;
+}
+
 @media (max-width: 1200px) {
   .grid_wrapper {
     grid-template-columns: 1fr;

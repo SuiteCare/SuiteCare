@@ -13,14 +13,12 @@ const FamilyHistory = () => {
         </button>
       </div>
       <div className='tab_wrapper'>
-        <ul>
-          <li className={activeTab === 0 ? 'active' : ''}>
-            <div onClick={() => setActiveTab(0)}>예약 내역</div>
-          </li>
-          <li className={activeTab === 1 ? 'active' : ''}>
-            <div onClick={() => setActiveTab(1)}>완료 내역</div>
-          </li>
-        </ul>
+        <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+          예약 내역
+        </div>
+        <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+          완료 내역
+        </div>
       </div>
       {activeTab === 0 && (
         <HistoryTable

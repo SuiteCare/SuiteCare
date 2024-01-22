@@ -3,13 +3,14 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
+// import usePatientList from '@/services/apis/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 
 import TimePicker from '@/utils/TimePicker';
-import { calTimeDiff, weekdayDic, countWeekdays } from '@/utils/calculators';
+import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
 
 const ReservationForm = () => {
   const navigator = useRouter();
@@ -24,7 +25,7 @@ const ReservationForm = () => {
     .padStart(2, '0')}`;
 
   const [formData, setFormData] = useState({
-    location: '병원', // 병원 or 집
+    location: '병원', // 병원 or 자택
     start_date: today, // 날짜 형식 YYYY-MM-DD
     end_date: today, // 날짜 형식 YYYY-MM-DD
     wage: '15000',
@@ -99,7 +100,7 @@ const ReservationForm = () => {
     e.preventDefault();
     if (!validateAddress()) return false;
 
-    const dataForRequest = {
+    const body = {
       family_id: loginId,
       patient_id: patientInfo?.id,
       ...formData,
@@ -112,12 +113,12 @@ const ReservationForm = () => {
       postcode: address.postcode,
       road_address: address.roadAddress,
       jibun_address: address.jibunAddress,
-      detail_address: address.detailAddress,
+      address_detail: address.detailAddress,
     };
 
     try {
-      console.log('wjsekf', dataForRequest);
-      const response = await axios.post('/api/v1/reservation', dataForRequest);
+      console.log('wjsekf', body);
+      const response = await axios.post('/api/v1/reservation', body);
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {
@@ -150,7 +151,12 @@ const ReservationForm = () => {
           <>
             <div className={styles.grid_wrapper}>
               <div className={styles.patient_info_wrapper}>
-                <PatientInfo patientInfo={patientInfo} styles={styles} navigator={navigator} />
+                <PatientInfo
+                  patientBasic={patientInfo}
+                  styles={styles}
+                  navigator={navigator}
+                  id={formData.patient_id}
+                />
               </div>
 
               <div className={styles.reservation_info_wrapper}>
@@ -233,7 +239,7 @@ const ReservationForm = () => {
                   <div>
                     <input
                       type='number'
-                      min='9860'
+                      min={minWage}
                       max='1000000'
                       name='wage'
                       placeholder='15000'
@@ -248,6 +254,7 @@ const ReservationForm = () => {
             <hr />
             <div className='button_wrapper'>
               <button type='submit'>간병 신청하기</button>
+              {/** handle뭐시기 나온다음에 2면 '이미 지원한 간병예약입니다' 띄우기 */}
             </div>
           </>
         ) : (

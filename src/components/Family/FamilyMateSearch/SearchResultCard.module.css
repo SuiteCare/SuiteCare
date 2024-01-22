@@ -33,6 +33,17 @@
   margin-right: 6px;
 }
 
+.userName p > svg {
+  height: 20px;
+  position: relative;
+  top: 4px;
+}
+
+.userName p > span {
+  margin: 0 8px;
+  color: var(--normal-gray);
+}
+
 .userName p:last-of-type {
   line-height: 1.25;
   font-size: 0.9rem;

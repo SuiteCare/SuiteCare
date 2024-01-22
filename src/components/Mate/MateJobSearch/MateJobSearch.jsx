@@ -1,36 +1,45 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+
+import axiosInstance from '@/services/axiosInstance';
 
 import SearchForm from './JobSearchForm';
 import SearchResult from './SearchResult';
+import Loading from '@/components/Common/Modal/Loading';
 
 const MateJobSearch = () => {
-  const [searchData, setSearchData] = useState([]);
+  const [condition, setCondition] = useState({});
 
-  const getSearchData = async ($condition) => {
-    try {
-      const response = await axios.get('/api/v1/mate/search', { params: $condition });
-
-      if (response.data) {
-        setSearchData(response.data);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Error occurred while fetching search data:', error);
-    }
-  };
+  const {
+    data: searchData,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['searchData', condition],
+    async () => {
+      console.log('request params', condition);
+      const response = await axiosInstance.get('/api/v1/search', { params: condition });
+      return response.data;
+    },
+    {
+      enabled: Object.keys(condition).length > 0,
+    },
+  );
 
   const handleSearch = async ($condition) => {
-    if (!getSearchData($condition)) {
-      alert('검색 실패');
-    }
+    console.log($condition);
+    setCondition($condition);
   };
+
+  if (isError) {
+    alert('검색 실패');
+  }
 
   return (
     <div className='MateJobSearch content_wrapper'>
+      {isLoading ? <Loading /> : ''}
       <SearchForm onSearch={handleSearch} />
-      <SearchResult data={searchData} />
+      {searchData ? <SearchResult data={searchData} /> : <div className='no_result'>검색 조건을 입력하세요.</div>}
     </div>
   );
 };
