@@ -1,6 +1,6 @@
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
-import FamilyHistory from '@/components/Family/FamilyManage/FamilyHistory';
+import FamilyHistory from '@/components/Family/FamilyManage/History/FamilyHistory';
 
 const FamilyHistoryPage = () => {
   return (

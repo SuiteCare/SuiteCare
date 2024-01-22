@@ -86,6 +86,8 @@
 
 label.with_line {
   border-right: 1px solid #ddd;
+  margin-right: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .info_section {
@@ -148,10 +150,21 @@ label.with_line {
   margin-right: 5px;
 }
 
-.location.house {
+.location.home {
   background-color: teal;
 }
 
 .location.hospital {
   background-color: cornflowerblue;
+}
+
+.profile_details p > svg {
+  height: 20px;
+  position: relative;
+  top: 4px;
+}
+
+.profile_details p > span {
+  margin: 0 8px;
+  color: var(--normal-gray);
 }

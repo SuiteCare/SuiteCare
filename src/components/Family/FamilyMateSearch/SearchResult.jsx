@@ -71,13 +71,15 @@ const SearchResult = ({ data, type }) => {
     <div className={`${styles.SearchResult} Form_wide`}>
       <h3>
         {type === 'search'
-          ? `${data.length ? data.length : 0}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`
-          : `스위트케어가 추천하는 메이트`}
+          ? data.length
+            ? `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`
+            : '나에게 꼭 맞는 메이트님을 찾아보세요!'
+          : '스위트케어가 추천하는 메이트'}
       </h3>
       {data && data.length > 0 ? (
         data.map((e) => <SearchResultCard data={e} key={e.id} showDetail={() => handleShowModal(e)} />)
       ) : (
-        <div className={styles.no_result}>검색 결과가 없습니다.</div>
+        <div className='no_result'>검색 결과가 없습니다.</div>
       )}
       {isModalVisible && <MateDetailModal modalData={modalData} closeModal={closeModal} />}
     </div>

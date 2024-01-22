@@ -3,9 +3,11 @@ import axios from 'axios';
 const localServer = process.env.NEXT_PUBLIC_API_BASE_URL; // 로컬 서버
 const productServer = process.env.API_BASE_URL; // 실제 프로덕션 서버
 
+const baseURL = process.env.NODE_ENV === 'development' ? localServer : productServer;
+
 const axiosInstance = axios.create({
-  baseURL: localServer,
-  timeout: 5000,
+  baseURL,
+  timeout: 3000,
   headers: {
     'Content-Type': 'application/json',
   },

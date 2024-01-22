@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+import axiosInstance from '@/services/axiosInstance';
+
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
@@ -138,7 +140,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             }
           })
           .catch((error) => {
-            console.error(error);
+            console.log(error, '데이터 전송 에러');
           });
   };
 
