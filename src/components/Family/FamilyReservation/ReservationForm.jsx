@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
+// import usePatientList from '@/services/apis/usePatientList';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
@@ -15,7 +16,7 @@ const ReservationForm = () => {
   const navigator = useRouter();
 
   const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList();
+  const patientList = usePatientList(loginId);
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
@@ -253,6 +254,7 @@ const ReservationForm = () => {
             <hr />
             <div className='button_wrapper'>
               <button type='submit'>간병 신청하기</button>
+              {/** handle뭐시기 나온다음에 2면 '이미 지원한 간병예약입니다' 띄우기 */}
             </div>
           </>
         ) : (

@@ -8,3 +8,7 @@
 .PendingReservation hr {
   margin: 2rem auto;
 }
+
+.PendingReservation select {
+  min-width: 25rem;
+}
