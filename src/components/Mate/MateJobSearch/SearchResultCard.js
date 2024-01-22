@@ -1,5 +1,6 @@
-import styles from './SearchResultCard.module.css';
 import axios from 'axios';
+
+import styles from './SearchResultCard.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
@@ -13,11 +14,11 @@ const SearchResultCard = ({ data, showDetail }) => {
   const handleApply = async (reservation_id) => {
     const body = {
       mate_id: loginId,
-      reservation_id: reservation_id
-    }
+      reservation_id,
+    };
     try {
       const response = await axios.post('/api/v1/apply', body);
-      if(response.data === 1) {
+      if (response.data === 1) {
         alert('간병 지원이 완료되었습니다.');
       } else {
         alert('오류로 간병 지원에 실패했습니다.');
@@ -25,10 +26,10 @@ const SearchResultCard = ({ data, showDetail }) => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const expiredAlert = () => {
-    alert('만료된 건입니다.');
+    alert('만료된 간병입니다.');
   };
 
   return (

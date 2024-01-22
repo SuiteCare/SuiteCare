@@ -161,7 +161,7 @@ const Profile = ({ profile }) => {
   };
 
   const renderCareerItem = (careerItem, index) => (
-    <div key={`career-${index}`}>
+    <div key={`career-${index}`} className={styles.career_item}>
       <select name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
         {renderOptions([
           '경력명',
@@ -178,7 +178,7 @@ const Profile = ({ profile }) => {
         type='text'
         id='name'
         name='career_detail'
-        placeholder='상세 경력'
+        placeholder='경력 세부내용'
         value={careerItem.name}
         onChange={(e) => handleItemChange(e, index, 'career')}
       />
@@ -206,7 +206,7 @@ const Profile = ({ profile }) => {
   );
 
   const renderCertificateItem = (certificateItem, index) => (
-    <div key={`certificate-${index}`}>
+    <div key={`certificate-${index}`} className={styles.certificate_item}>
       <input
         name='certificate_name'
         type='text'
@@ -222,20 +222,24 @@ const Profile = ({ profile }) => {
         onChange={(e) => handleItemChange(e, index, 'certificate')}
       />
       <div>
-        <label htmlFor='qualification_date'>취득일</label>
-        <input
-          type='date'
-          name='qualification_date'
-          value={certificateItem.qualification_date}
-          onChange={(e) => handleItemChange(e, index, 'certificate')}
-        />
-        <label htmlFor='expired_date'>만료일</label>
-        <input
-          type='date'
-          name='expired_date'
-          value={certificateItem.expired_date}
-          onChange={(e) => handleItemChange(e, index, 'certificate')}
-        />
+        <div>
+          <label htmlFor='qualification_date'>취득일</label>
+          <input
+            type='date'
+            name='qualification_date'
+            value={certificateItem.qualification_date}
+            onChange={(e) => handleItemChange(e, index, 'certificate')}
+          />
+        </div>
+        <div>
+          <label htmlFor='expired_date'>만료일</label>
+          <input
+            type='date'
+            name='expired_date'
+            value={certificateItem.expired_date}
+            onChange={(e) => handleItemChange(e, index, 'certificate')}
+          />
+        </div>
       </div>
       <button type='button' onClick={() => deleteCertificate(certificateItem.id)}>
         X
@@ -255,11 +259,11 @@ const Profile = ({ profile }) => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.Profile}>
       <div className={styles.form_wrapper}>
         <form name='profile'>
           <section>
-            <h2>기본정보</h2>
+            <h3>기본정보</h3>
             <div className={styles.introduce}>
               <div className={styles.img_wrapper}>
                 {/* <img /> */}
@@ -267,7 +271,7 @@ const Profile = ({ profile }) => {
               </div>
               <div className={styles.basicInfo}>
                 <div>
-                  <h3>{profile?.mate?.name}</h3>
+                  <h2>{profile?.mate?.name}</h2>
                 </div>
                 <div>
                   <p>
@@ -276,64 +280,66 @@ const Profile = ({ profile }) => {
                 </div>
                 <div>
                   <div className={styles.contact}>
-                    <label htmlFor='contact'>연락 가능 시간</label>
-                    <div className={styles.time_picker}>
-                      <TimePicker
-                        time={formData?.contactTimeStart}
-                        setTime={(value) => handleContactTimeChange('start', value)}
-                        start={0}
-                        end={24}
-                      />
-                      ~
-                      <TimePicker
-                        time={formData?.contactTimeEnd}
-                        setTime={(value) => handleContactTimeChange('end', value)}
-                        start={0}
-                        end={24}
-                      />
+                    <div className='input_wrapper'>
+                      <label htmlFor='contact'>연락 가능 시간</label>
+                      <div className='timepicker_wrapper'>
+                        <TimePicker
+                          time={formData?.contactTimeStart}
+                          setTime={(value) => handleContactTimeChange('start', value)}
+                          start={0}
+                          end={24}
+                        />
+                        ~
+                        <TimePicker
+                          time={formData?.contactTimeEnd}
+                          setTime={(value) => handleContactTimeChange('end', value)}
+                          start={0}
+                          end={24}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className={styles.introduction}>
-                    <label htmlFor='introduction'>한줄소개</label>
-                    <textarea
-                      id='introduction'
-                      name='introduction'
-                      rows='3'
-                      maxLength='100'
-                      onChange={handlerTextChange}
-                      defaultValue={formData?.introduction}
-                    />
-                    <div className={styles.wordCnt}>
-                      <span>{formData?.wordCnt}/100</span>
+                    <div className='input_wrapper'>
+                      <label htmlFor='introduction'>한줄소개</label>
+                      <div>
+                        <textarea
+                          id='introduction'
+                          name='introduction'
+                          rows='3'
+                          maxLength='100'
+                          onChange={handlerTextChange}
+                          defaultValue={formData?.introduction}
+                        />
+                        <div className={styles.wordCnt}>
+                          <span>{formData?.wordCnt}/100</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </section>
-          <section>
-            <div>
-              <div className={styles.location}>
-                <h2>활동 지역</h2>
-                <div className='checkbox_wrapper'>
-                  <input type='checkbox' id='all' onChange={handleAllLocationChange} />
-                  <label htmlFor='all'>전체 선택</label>
-                </div>
-                <div className={styles.checkbox_list_wrapper}>
-                  <FormLocationList
-                    onChange={(e) => handleCheckboxChange(e.currentTarget.checked, e.currentTarget.value)}
-                  />
-                </div>
-              </div>
+          <section className={styles.location}>
+            <h3>활동 지역</h3>
+            <div className='checkbox_wrapper'>
+              <input type='checkbox' id='all' onChange={handleAllLocationChange} />
+              <label htmlFor='all'>전체 선택</label>
+            </div>
+            <div className={styles.checkbox_list_wrapper}>
+              <FormLocationList
+                onChange={(e) => handleCheckboxChange(e.currentTarget.checked, e.currentTarget.value)}
+              />
             </div>
           </section>
           <section className={styles.career}>
-            <h2>경력</h2>
-            <div>
+            <h3>
+              경력
               <button type='button' onClick={addCareer}>
                 +
               </button>
-            </div>
+            </h3>
             <div name='careerDiv'>
               {formData?.career?.length > 0 ? (
                 formData?.career?.map((careerItem, index) => renderCareerItem(careerItem, index))
@@ -344,12 +350,12 @@ const Profile = ({ profile }) => {
           </section>
 
           <section className={styles.certificate}>
-            <h2>자격증</h2>
-            <div>
+            <h3>
+              자격증
               <button type='button' onClick={addCertificate}>
                 +
               </button>
-            </div>
+            </h3>
             {formData?.certificate?.length > 0 ? (
               formData?.certificate?.map((certificateItem, index) => renderCertificateItem(certificateItem, index))
             ) : (
@@ -357,11 +363,11 @@ const Profile = ({ profile }) => {
             )}
           </section>
           <section className={styles.mainService}>
-            <h2>대표서비스</h2>
-            <div className={styles.checkbox_list_wrapper}>
+            <h3>대표서비스</h3>
+            <div>
               {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((service) => (
                 <div key={service}>
-                  <label>
+                  <span>
                     <input
                       type='checkbox'
                       name='service'
@@ -372,12 +378,12 @@ const Profile = ({ profile }) => {
                       }}
                     />
                     {service}
-                  </label>
+                  </span>
                 </div>
               ))}
             </div>
           </section>
-          <div>
+          <div className='button_wrapper'>
             <button type='button' onClick={handleUpdateProfile}>
               수정하기
             </button>

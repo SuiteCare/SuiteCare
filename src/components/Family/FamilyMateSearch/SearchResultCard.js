@@ -29,7 +29,7 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
         </div>
         <div className={styles.userInfo}>
           <label>희망시급</label>
-          <span>{data.desired_wage.toLocaleString()}원 이상</span>
+          <span>{data.desired_wage?.toLocaleString()}원 이상</span>
         </div>
       </div>
       <div className={styles.search_button_wrapper}>
