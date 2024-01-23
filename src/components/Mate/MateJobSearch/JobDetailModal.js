@@ -45,26 +45,17 @@ const JobDetailModal = ({ modalData, closeModal }) => {
             간병 정보
           </div>
           <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-            환자 상세정보
+            환자 정보
           </div>
         </div>
 
         {activeTab === 0 && (
           <>
             <div className={styles.info_section}>
-              <h5>환자 정보</h5>
-              <div className={`${styles.info_wrapper} ${styles.single}`}>
-                <label>진단명</label>
-                <span>{modalData.diagnosis_name}</span>
-              </div>
-            </div>
-            <hr />
-            <div className={styles.info_section}>
               <h5>보호자 정보</h5>
               <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>보호자 연락처</label>
                 <div>
-                  <p>✉️{modalData.family_email || '이메일 정보가 없습니다.'}</p>
                   <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
                 </div>
               </div>

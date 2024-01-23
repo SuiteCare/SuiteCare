@@ -68,7 +68,7 @@ const PendingReservationCard = ({ data, mateList }) => {
             styles={styles}
             fullData={{
               patient: {
-                family_id: data.family_id,
+                member_id: data.member_id,
                 patient_id: data.patient_id,
                 name: data.name,
                 diagnosis_name: data.diagnosis_name,

@@ -18,7 +18,7 @@ const MateJobSearch = () => {
     ['searchData', condition],
     async () => {
       console.log('request params', condition);
-      const { data } = await axiosInstance.get('/api/v1/search', { params: condition });
+      const { data } = await axiosInstance.get('/api/v1/search/reservation', { params: condition });
       return data;
     },
     {

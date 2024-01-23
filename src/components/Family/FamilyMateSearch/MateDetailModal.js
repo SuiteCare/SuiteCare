@@ -26,7 +26,6 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) 
               수행한 간병 <b>{modalData.care_times}</b>건<span>|</span>
               <StarRating rate={modalData.rate} /> {modalData.rate.toFixed(1)}
             </p>
-            <p>✉️{modalData.mate_email || '이메일 정보가 없습니다.'}</p>
             <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
           </div>
         </div>
