@@ -8,6 +8,7 @@ import usePatientList from '@/hooks/usePatientList';
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
+import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
@@ -162,7 +163,7 @@ const ReservationForm = () => {
               <div className={styles.reservation_info_wrapper}>
                 <div className='input_wrapper'>
                   <label>주소</label>
-                  <div className={styles.input_with_button}>
+                  <div className={styles.address_section}>
                     <span>장소 종류</span>
                     <select name='location' onChange={handleInputChange}>
                       <option value='병원'>병원</option>
@@ -174,7 +175,11 @@ const ReservationForm = () => {
                       <span>지번주소</span>
                       <span>상세주소</span>
                     </div>
-                    <DaumPostcode address={address} setAddress={setAddress} />
+                    {formData.location === '병원' ? (
+                      <KakaoPostcode address={address} setAddress={setAddress} />
+                    ) : (
+                      <DaumPostcode address={address} setAddress={setAddress} />
+                    )}
                   </div>
                 </div>
 

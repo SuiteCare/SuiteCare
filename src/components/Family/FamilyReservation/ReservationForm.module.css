@@ -12,7 +12,7 @@
   cursor: pointer;
 }
 
-.ReservationForm p {
+.ReservationForm div > div > div > p {
   display: inline-block;
 }
 
@@ -36,23 +36,23 @@ div.grid_wrapper > div:first-child {
   cursor: pointer;
 }
 
-.input_with_button {
+.address_section {
   display: grid;
   grid-template-columns: 8rem 1fr;
   align-items: center;
   column-gap: 1rem;
 }
 
-.input_with_button span {
+.address_section > span {
   font-weight: 500;
   color: var(--deep-brown);
 }
 
-.input_with_button select:first-of-type {
+.address_section select:first-of-type {
   width: fit-content;
 }
 
-.input_with_button button {
+.address_section div > button {
   background: var(--beige-01);
   font-weight: 400;
   color: var(--deep-brown);

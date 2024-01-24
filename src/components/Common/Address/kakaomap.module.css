@@ -36,11 +36,7 @@
   background: rgba(255, 255, 255, 0.8);
 }
 .menu_wrap hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid var(--beige-01);
-  margin: 3px 0;
+  margin: 8px 0 !important;
 }
 .menu_wrap .option {
   text-align: center;
@@ -53,14 +49,28 @@
   padding: 4px 1rem;
   font-weight: 400;
 }
+.menu_wrap .option input {
+  width: calc(100% - 4rem - 3px);
+}
 .menu_wrap li {
   list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid var(--light-gray);
+  align-items: center;
+}
+.menu_wrap li > button {
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  background: var(--deep-brown);
+  font-weight: 400;
+  font-size: 0.8rem;
 }
 .info {
   line-height: 1.8;
-  border-bottom: 1px solid var(--light-gray);
-  padding-bottom: 5px;
-  margin-bottom: 5px;
   cursor: pointer;
   margin-left: 4rem;
 }
@@ -70,12 +80,14 @@
 }
 .pagination a {
   display: inline-block;
-  margin-right: 10px;
+  padding: 0 5px;
+  margin: 0 2px;
 }
 .pagination .on {
   font-weight: bold;
   cursor: default;
-  color: #777;
+  color: var(--brown-01);
+  border-bottom: 4px solid var(--brown-01);
 }
 
 .markerbg {
@@ -83,7 +95,7 @@
   position: absolute;
   width: 36px;
   height: 37px;
-  margin: 10px 0 0 10px;
+  margin-left: 10px;
   background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
 }
 .marker_1 {
