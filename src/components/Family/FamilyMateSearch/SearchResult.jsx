@@ -71,7 +71,7 @@ const SearchResult = ({ data, type }) => {
     <div className={`${styles.SearchResult} Form_wide`}>
       <h3>
         {type === 'search'
-          ? data.length
+          ? data?.length
             ? `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`
             : '나에게 꼭 맞는 메이트님을 찾아보세요!'
           : '스위트케어가 추천하는 메이트'}

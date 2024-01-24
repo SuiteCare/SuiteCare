@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useQuery } from 'react-query';
+
+import axiosInstance from '@/services/axiosInstance';
 
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
+import Loading from '@/components/Common/Modal/Loading';
 
 const FamilyMateSearch = () => {
-  const [searchCondition, setSearchCondition] = useState({});
-  const [searchData, setSearchData] = useState({});
   const [suggestionData, setSuggestionData] = useState({});
 
   const getSuggestionData = () => {
@@ -45,63 +47,36 @@ const FamilyMateSearch = () => {
     ]);
   }, []);
 
+  const [condition, setCondition] = useState({});
+
+  const {
+    data: searchData,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['searchData', condition],
+    async () => {
+      console.log('request params', condition);
+      const { data } = await axiosInstance.get('/api/v1/search/mate', { params: condition });
+      return data;
+    },
+    {
+      enabled: Object.keys(condition).length > 0,
+    },
+  );
+
   const handleSearch = async ($condition) => {
     console.log($condition);
-    setSearchCondition($condition);
-    setSearchData([
-      {
-        mate_id: 'kim',
-        mate_name: '테스트성명',
-        gender: 'F',
-        birthday: '1994-01-12',
-        address: '서울시 중구',
-        main_service: '외출동행, 목욕, 요리, 청소, 재활운동보조, 빨래, 운전',
-        wage: 17800,
-        profile_picture_filename: '',
-        introduction:
-          '잘 부탁드립니다. 100자 제한 걸어둘 거니까 이것도 100자는 보여야 할 텐데 100자가 어느 정도지? 까지가 60자 정도니까 100자는 대충 두 줄 정도를 더 먹겠구나 여기까지',
-        tel: '0505-1234-1234',
-        rate: 4.5,
-        care_times: 4,
-      },
-      {
-        mate_id: 'park',
-        mate_name: '테스트성명2',
-        gender: 'M',
-        birthday: '1991-07-04',
-        address: '서울시 성북구',
-        main_service: '빨래, 운전',
-        wage: 32000,
-        profile_picture_filename: '',
-        introduction: '',
-        rate: 3.9,
-        care_times: 21,
-      },
-    ]);
-    // setSearchData(await getSearchData(searchCondition));
+    setCondition($condition);
   };
 
-  async function getSearchData($condition) {
-    try {
-      const response = await axios.get('/api/v1/familymatesearch', { params: $condition });
-      const msg = response.headers.get('msg');
-      if (response.status === 200 && msg === 'success') {
-        alert(response.data);
-        console.log(response.data);
-        return response.data;
-      }
-      if (msg === 'fail') {
-        alert('검색 실패');
-        return {};
-      }
-    } catch (error) {
-      console.error('Error occurred while fetching search data:', error);
-      return {};
-    }
+  if (isError) {
+    alert('검색 실패');
   }
 
   return (
     <div className='FamilyMateSearch content_wrapper'>
+      {isLoading ? <Loading /> : ''}
       <SearchForm onSearch={handleSearch} />
       <SearchResult data={searchData} type='search' />
 

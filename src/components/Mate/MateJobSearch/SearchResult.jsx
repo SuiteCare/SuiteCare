@@ -1,7 +1,10 @@
 import { React, useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { useMutation } from 'react-query';
 
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
@@ -55,6 +58,40 @@ const SearchResult = ({ data }) => {
 
   const sortedData = [...data].sort(sortOptions[sortOption]);
 
+  const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
+
+  const MateJobApplication = async (body) => {
+    const response = await axiosInstance.post('/api/v1/apply', body);
+    return response.data;
+  };
+
+  const router = useRouter();
+
+  const mutation = useMutation(MateJobApplication, {
+    onSuccess: (applicationResult) => {
+      if (applicationResult === 1) {
+        alert('간병 지원이 완료되었습니다.');
+      } else if (applicationResult === 0) {
+        if (confirm('간병 지원을 위해서는 메이트 프로필 작성이 필요합니다.\n프로필 작성 페이지로 이동하시겠습니까?')) {
+          router.push('/mate/mypage/profile');
+        }
+      } else {
+        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+      }
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  const handleApply = (reservation_id) => {
+    const body = {
+      mate_id: loginId,
+      reservation_id,
+    };
+    mutation.mutate(body);
+  };
+
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
       <div className={styles.search_header}>
@@ -70,13 +107,18 @@ const SearchResult = ({ data }) => {
       <div className={styles.card_wrapper}>
         {sortedData.length > 0 ? (
           sortedData.map((item) => (
-            <SearchResultCard data={item} key={item.id} showDetail={() => handleShowModal(item)} />
+            <SearchResultCard
+              data={item}
+              key={item.id}
+              showDetail={() => handleShowModal(item)}
+              handleApply={handleApply}
+            />
           ))
         ) : (
           <div className='no_result'>검색 결과가 없습니다.</div>
         )}
       </div>
-      {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} />}
+      {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />}
     </div>
   );
 };
