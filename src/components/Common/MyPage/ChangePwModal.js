@@ -30,33 +30,30 @@ const ChangePwModal = ({ modalData, closeModal }) => {
     fetchData();
   }, []);
 
+
   const handleChangePwClick = async () => {
-    if (dbPw === pw.value) {
-      console.log(pw.value);
-      if (newPw.value === newPwCheck.value) {
-        console.log(newPw.value);
-        const body = {
-          login_id: loginInfo.login_id,
-          password: newPw.value,
-        };
-        const response = await axios
-          .post('/api/v1/changepw', body)
-          .then((response) => {
-            if (response.data) {
-              alert('비밀번호 변경이 완료되었습니다.');
-              closeModal();
-            } else {
-              alert('실패..');
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      } else {
-        alert('입력하신 새 비밀번호가 다릅니다.');
-      }
+    if (newPw.value === newPwCheck.value) {
+      const body = {
+        login_id: loginInfo.login_id,
+        originPassword: pw.value,
+        newPassword: newPw.value,
+        newPasswordCheck: newPwCheck.value,
+      };
+      const response = await axios
+        .post('/api/v1/changepw', body)
+        .then((response) => {
+          if (response.data === 0) {
+            alert('현재 비밀번호를 다시 확인해주세요.');
+          } else {
+            alert('비밀번호 변경이 완료되었습니다.');
+            closeModal();
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
-      alert('현재 비밀번호를 다시 확인해주세요.');
+      alert('입력하신 새 비밀번호가 다릅니다.');
     }
   };
 

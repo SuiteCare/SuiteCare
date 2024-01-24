@@ -408,8 +408,6 @@ select {
 
 select {
   min-width: 220px;
-  position: relative;
-  top: -1px;
 }
 
 input[type='text']:focus,
@@ -448,6 +446,13 @@ label {
 
 input[type='checkbox'] {
   display: inline;
+}
+
+.timepicker_wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: 1rem;
 }
 
 .time_picker select {
@@ -495,13 +500,10 @@ input[type='checkbox'] {
 .tab_wrapper {
   border-bottom: 1px solid var(--normal-gray);
   margin-bottom: 1rem;
-}
-
-.tab_wrapper ul {
   display: flex;
 }
 
-.tab_wrapper li {
+.tab_wrapper div {
   cursor: pointer;
   border: 1px solid transparent;
   border-top-left-radius: 10px;
@@ -509,14 +511,14 @@ input[type='checkbox'] {
   padding: 18px 2rem 12px 2rem;
 }
 
-.tab_wrapper li:hover {
+.tab_wrapper div:hover {
   background-color: var(--very-light-gray);
 }
 
 .tab_wrapper .active {
   font-weight: 500;
   border: 1px solid var(--normal-gray);
-  border-bottom: none;
+  border-bottom: 1px solid white;
   padding-top: 16px;
   padding-bottom: 14px;
   position: relative;
@@ -625,4 +627,17 @@ input[type='checkbox'] {
 .DaumPostcode > input:not(:first-of-type),
 .KakaoPostcode > input:not(:first-of-type) {
   width: 100%;
+}
+
+/* 11. Etc  --------------------------------------------------- */
+
+.no_result {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  background-color: var(--very-light-gray);
+  text-align: center;
+  padding: 5rem;
+  border-radius: 10px;
+  width: 100%;
+  margin: 0 auto;
 }

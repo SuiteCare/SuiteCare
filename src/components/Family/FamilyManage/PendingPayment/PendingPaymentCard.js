@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import styles from './PaymentCard.module.css';
+import styles from '../PaymentCard.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 
 import { calAge, genderToKo } from '@/utils/calculators';

@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import styles from './SearchResultCard.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
@@ -8,12 +10,26 @@ const SearchResultCard = ({ data, showDetail }) => {
   const weekDays = data.day.split(',').map((e) => weekdayDic[e]);
   const [startTime, endTime] = [data.start_time.slice(0, 5), data.end_time.slice(0, 5)];
 
-  const handleApply = () => {
-    alert('지원 기능 개발 중');
+  const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
+  const handleApply = async (reservation_id) => {
+    const body = {
+      mate_id: loginId,
+      reservation_id,
+    };
+    try {
+      const response = await axios.post('/api/v1/apply', body);
+      if (response.data === 1) {
+        alert('간병 지원이 완료되었습니다.');
+      } else {
+        alert('오류로 간병 지원에 실패했습니다.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const expiredAlert = () => {
-    alert('만료된 건입니다.');
+    alert('만료된 간병입니다.');
   };
 
   return (
@@ -89,7 +105,7 @@ const SearchResultCard = ({ data, showDetail }) => {
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
         <button onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>상세정보 보기</button>
-        <button onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.mate_id)}>간병 지원하기</button>
+        <button onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>간병 지원하기</button>
       </div>
 
       {/* bottom */}

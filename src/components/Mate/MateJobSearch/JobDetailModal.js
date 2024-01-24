@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
 
@@ -13,6 +14,24 @@ const JobDetailModal = ({ modalData, closeModal }) => {
   const weekDays = modalData.day.split(',').map((e) => weekdayDic[e]);
   const [startTime, endTime] = [modalData.start_time.slice(0, 5), modalData.end_time.slice(0, 5)];
 
+  const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
+  const handleApply = async (reservation_id) => {
+    const body = {
+      mate_id: loginId,
+      reservation_id,
+    };
+    try {
+      const response = await axios.post('/api/v1/apply', body);
+      if (response.data === 1) {
+        alert('간병 지원이 완료되었습니다.');
+      } else {
+        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -22,14 +41,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
         {/* 시작 */}
         <div className='tab_wrapper'>
-          <ul>
-            <li onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
-              간병 정보
-            </li>
-            <li onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
-              환자 상세정보
-            </li>
-          </ul>
+          <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+            간병 정보
+          </div>
+          <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+            환자 상세정보
+          </div>
         </div>
 
         {activeTab === 0 && (
@@ -61,7 +78,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
                 <label>간병지 주소</label>
                 <div>
                   <span
-                    className={`${styles.location} ${modalData.location === '자택' ? styles.house : styles.hospital}`}
+                    className={`${styles.location} ${modalData.location === '자택' ? styles.home : styles.hospital}`}
                   >
                     {modalData.location}
                   </span>
@@ -121,7 +138,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
-                  <label>나이</label>
+                  <label>나이/성별</label>
                   <span>만 {calAge(modalData.birthday)}세</span>
                 </div>
 
@@ -132,12 +149,12 @@ const JobDetailModal = ({ modalData, closeModal }) => {
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>키</label>
-                  <span>{modalData.patient_height} cm</span>
+                  <span>{modalData.height} cm</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>몸무게</label>
-                  <span>{modalData.patient_weight} kg</span>
+                  <span>{modalData.weight} kg</span>
                 </div>
               </div>
             </div>
@@ -202,7 +219,7 @@ const JobDetailModal = ({ modalData, closeModal }) => {
         {/* 끝 */}
 
         <div className={styles.button_wrapper}>
-          <button type='submit' onClick={() => handleApply(modalData.mate_id)}>
+          <button type='submit' onClick={() => handleApply(modalData.id)}>
             간병 지원하기
           </button>
         </div>

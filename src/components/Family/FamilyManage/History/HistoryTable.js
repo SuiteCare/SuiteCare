@@ -1,4 +1,4 @@
-import styles from './FamilyManageTable.module.css';
+import styles from '../FamilyManageTable.module.css';
 
 const HistoryTable = ({ data }) => {
   return (

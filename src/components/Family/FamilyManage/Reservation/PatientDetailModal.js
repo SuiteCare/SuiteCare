@@ -24,7 +24,7 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
               <h5>환자 기본정보</h5>
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>진단명</label>
-                <span>{modalData.diagnosis}</span>
+                <span>{modalData.diagnosis_name}</span>
               </div>
 
               <div className={styles.info_grid}>

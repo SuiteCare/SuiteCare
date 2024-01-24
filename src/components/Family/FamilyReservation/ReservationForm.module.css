@@ -36,13 +36,6 @@ div.grid_wrapper > div:first-child {
   cursor: pointer;
 }
 
-.timepicker_wrapper {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  margin-right: 1rem;
-}
-
 .address_section {
   display: grid;
   grid-template-columns: 8rem 1fr;
@@ -63,6 +56,14 @@ div.grid_wrapper > div:first-child {
   background: var(--beige-01);
   font-weight: 400;
   color: var(--deep-brown);
+}
+
+.patient_info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: calc(100% - 2rem);
+  padding: 1rem 0;
 }
 
 @media (max-width: 1200px) {

@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import Header from '@/components/Family/FamilyHeader/FamilyHeader';
 import Profile from '@/components/Mate/MateMyPage/Profile';
+import MateMyPageSidebar from '@/components/Mate/MateMyPage/MateMyPageSidebar';
 
 const ProfilePage = () => {
   const [data, setData] = useState([]);
@@ -28,7 +29,16 @@ const ProfilePage = () => {
   return (
     <div>
       <Header />
-      <Profile profile={data} />
+      <div className='page_with_sidebar'>
+        <MateMyPageSidebar activeMenu='profile' />
+        <div className='content_wrapper'>
+          <div className='title_wrapper'>
+            <h1>메이트 프로필</h1>
+            <span>나의 이력 정보를 등록하고 수정할 수 있습니다.</span>
+          </div>
+          <Profile profile={data} />
+        </div>
+      </div>
     </div>
   );
 };
