@@ -611,15 +611,18 @@ input[type='checkbox'] {
 
 /* 10. Address  --------------------------------------------------- */
 
-.DaumPostcode > input:first-of-type {
+.DaumPostcode > input:first-of-type,
+.KakaoPostcode > input:first-of-type {
   width: calc(100% - 11rem);
   margin-right: 1rem;
 }
 
-.DaumPostcode button {
+.DaumPostcode > button,
+.KakaoPostcode > button {
   width: 10rem;
 }
 
-.DaumPostcode > input:not(:first-of-type) {
+.DaumPostcode > input:not(:first-of-type),
+.KakaoPostcode > input:not(:first-of-type) {
   width: 100%;
 }

@@ -5,7 +5,7 @@ import useModal from '@/hooks/useModal.js';
 import styles from '@/components/Common/Modal/Modal.module.css';
 import mapstyles from './kakaomap.module.css';
 
-const KakaoMapSearch = ({ address, closeModal }) => {
+const KakaoMapModal = ({ setAddress, closeModal }) => {
   const { handleContentClick } = useModal();
 
   const [map, setMap] = useState(null);
@@ -40,30 +40,14 @@ const KakaoMapSearch = ({ address, closeModal }) => {
     };
   }, []);
 
-  const searchPlaces = () => {
-    const trimmedKeyword = keyword.trim();
+  const displayInfowindow = (marker, title) => {
+    infowindow.setContent(`<div class=${mapstyles.info_window_content}>${title}</div>`);
+    infowindow.open(map, marker);
 
-    if (!trimmedKeyword) {
-      alert('병원 이름을 입력하세요.');
-      return;
-    }
+    const currentPosition = marker.getPosition();
+    const newCenter = new window.kakao.maps.LatLng(currentPosition.getLat(), currentPosition.getLng() - 0.002);
 
-    const placesService = new window.kakao.maps.services.Places();
-    placesService.keywordSearch(trimmedKeyword, placesSearchCB);
-  };
-
-  const placesSearchCB = (data, status, pagination) => {
-    if (status === window.kakao.maps.services.Status.OK) {
-      setMarkers([]);
-      setPlaces(data);
-      displayPlaces(data);
-      setPagination(pagination);
-      displayPagination(pagination);
-    } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
-      alert('검색 결과가 존재하지 않습니다.');
-    } else if (status === window.kakao.maps.services.Status.ERROR) {
-      alert('검색 중 오류가 발생했습니다.');
-    }
+    map.panTo(newCenter);
   };
 
   const addMarker = (position, idx, title) => {
@@ -140,16 +124,6 @@ const KakaoMapSearch = ({ address, closeModal }) => {
     paginationEl.appendChild(fragment);
   };
 
-  const displayInfowindow = (marker, title) => {
-    infowindow.setContent(`<div class=${mapstyles.info_window_content}>${title}</div>`);
-    infowindow.open(map, marker);
-
-    const currentPosition = marker.getPosition();
-    const newCenter = new window.kakao.maps.LatLng(currentPosition.getLat(), currentPosition.getLng() - 0.002);
-
-    map.panTo(newCenter);
-  };
-
   // 검색 결과 항목 클릭 시 지도 이동하는 함수
   const handlePlaceClick = (place) => {
     const selectedMarker = markers.find((markerInfo, index) => index === place.index);
@@ -158,17 +132,64 @@ const KakaoMapSearch = ({ address, closeModal }) => {
     }
   };
 
-  // 주소에서 우편번호 추출
-  function extractPostalCode(address) {
-    // Daumpostcode로 보내야되나;; 어쩐다..... 그다음ㅇㅔ 거기서 주소추출하게해야하나 흠
-  }
+  const placesSearchCB = (data, status, pagination) => {
+    if (status === window.kakao.maps.services.Status.OK) {
+      setMarkers([]);
+      setPlaces(data);
+      displayPlaces(data);
+      setPagination(pagination);
+      displayPagination(pagination);
+    } else if (status === window.kakao.maps.services.Status.ZERO_RESULT) {
+      alert('검색 결과가 존재하지 않습니다.');
+    } else if (status === window.kakao.maps.services.Status.ERROR) {
+      alert('검색 중 오류가 발생했습니다.');
+    }
+  };
 
-  const handleSelectButtonClick = (place) => {
-    const { address_name, road_address_name } = place;
-    const postcode = extractPostalCode(road_address_name);
-    console.log(postcode, address_name, road_address_name);
+  const searchPlaces = () => {
+    const trimmedKeyword = keyword.trim();
 
-    // address state를 전달받아서 거기다 저장하면 됨
+    if (!trimmedKeyword) {
+      alert('병원 이름을 입력하세요.');
+      return;
+    }
+
+    const placesService = new window.kakao.maps.services.Places();
+    placesService.keywordSearch(trimmedKeyword, placesSearchCB);
+  };
+
+  const getDetailAddress = async ($address) => {
+    const geocoder = new window.kakao.maps.services.Geocoder();
+
+    return new Promise((resolve, reject) => {
+      geocoder.addressSearch($address, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          resolve(result[0].road_address);
+        } else {
+          console.error('우편번호 검색 실패');
+          reject('우편번호 검색 실패');
+        }
+      });
+    });
+  };
+
+  const handleSelectButtonClick = async (place) => {
+    const { place_name, address_name, road_address_name } = place;
+
+    try {
+      const { zone_no, building_name } = await getDetailAddress(address_name || road_address_name);
+
+      setAddress({
+        postcode: zone_no,
+        jibunAddress: address_name,
+        roadAddress: road_address_name,
+        detailAddress: `${building_name} (${place_name}) `,
+      });
+      closeModal();
+    } catch (error) {
+      console.error('우편번호 검색 실패', error);
+      alert('주소 찾기에 실패했습니다.');
+    }
   };
 
   return (
@@ -179,16 +200,17 @@ const KakaoMapSearch = ({ address, closeModal }) => {
 
           <div id='menu_wrap' className={`${mapstyles.bg_white} ${mapstyles.menu_wrap}`}>
             <div className={mapstyles.option}>
-              <form
-                onSubmit={(e) => {
+              <h4>병원 찾기</h4>
+              <input type='text' value={keyword} onChange={(e) => setKeyword(e.target.value)} id='keyword' />
+              <button
+                type='submit'
+                onClick={(e) => {
                   e.preventDefault();
                   searchPlaces();
                 }}
               >
-                <h4>병원 찾기</h4>
-                <input type='text' value={keyword} onChange={(e) => setKeyword(e.target.value)} id='keyword' />
-                <button type='submit'>검색</button>
-              </form>
+                검색
+              </button>
             </div>
             <hr />
             {/* 검색 결과를 표시하는 부분 */}
@@ -219,4 +241,4 @@ const KakaoMapSearch = ({ address, closeModal }) => {
   );
 };
 
-export default KakaoMapSearch;
+export default KakaoMapModal;
