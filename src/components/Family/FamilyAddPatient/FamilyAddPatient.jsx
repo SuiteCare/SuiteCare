@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
+import axiosInstance from '@/services/axiosInstance';
+
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
@@ -108,7 +110,7 @@ const FamilyAddPatient = ({ idQuery }) => {
     e.preventDefault();
 
     const submitData = {
-      family_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
+      member_id: JSON.parse(sessionStorage.getItem('login_info')).login_id,
       ...formData,
     };
     console.log(submitData);

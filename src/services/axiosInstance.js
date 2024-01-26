@@ -11,6 +11,9 @@ const axiosInstance = axios.create({
   },
 });
 
+const maxRetries = 3;
+const retryDelay = 1000; // 1초
+
 // Request Interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
@@ -36,9 +39,21 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    // 응답 상태 코드 200이 아닌 경우
-    console.error('Response Error, 응답 에러', error);
-    return Promise.reject(error);
+    const { config, response } = error;
+
+    // 에러 상태 코드가 재시도할만한 상태인 경우
+    if (response && response.status >= 500 && response.status < 600) {
+      // 재시도 횟수가 최대 횟수를 초과하지 않으면 재시도
+      if (!config.__retryCount || config.__retryCount < maxRetries) {
+        config.__retryCount = config.__retryCount || 0;
+        config.__retryCount += 1;
+
+        // 딜레이 후 재시도
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(axiosInstance(config)), retryDelay);
+        });
+      }
+    }
   },
 );
 

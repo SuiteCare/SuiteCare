@@ -44,7 +44,7 @@ const ReservationForm = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setFormData({ ...formData, family_id: loginId });
+      setFormData({ ...formData, member_id: loginId });
       setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
     }
   }, []);
@@ -102,7 +102,7 @@ const ReservationForm = () => {
     if (!validateAddress()) return false;
 
     const body = {
-      family_id: loginId,
+      member_id: loginId,
       patient_id: patientInfo?.id,
       ...formData,
       start_time: startTime,

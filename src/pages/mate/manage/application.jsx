@@ -1,23 +1,21 @@
 import MateHeader from '@/components/Mate/MateHeader/MateHeader';
-import MateCalendar from '@/components/Mate/MateManage/MateCalendar';
 import MateManageSidebar from '@/components/Mate/MateManage/MateManageSidebar';
 
-const MateCalendarPage = () => {
+const MateJobListPage = () => {
   return (
     <>
       <MateHeader />
       <div className='page_with_sidebar'>
-        <MateManageSidebar activeMenu='calendar' />
+        <MateManageSidebar activeMenu='application' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
-            <h1>내 일정 정보</h1>
-            <span>내가 진행할 간병 일정 정보를 확인할 수 있습니다.</span>
+            <h1>공고 지원 목록</h1>
+            <span>내가 지원한 간병 공고에 대한 정보를 확인할 수 있습니다.</span>
           </div>
-          <MateCalendar />
         </div>
       </div>
     </>
   );
 };
 
-export default MateCalendarPage;
+export default MateJobListPage;

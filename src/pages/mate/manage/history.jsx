@@ -6,7 +6,7 @@ const MateHistoryPage = () => {
     <>
       <MateHeader />
       <div className='page_with_sidebar'>
-        <MateManageSidebar />
+        <MateManageSidebar activeMenu='history' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>간병 수행 내역</h1>
