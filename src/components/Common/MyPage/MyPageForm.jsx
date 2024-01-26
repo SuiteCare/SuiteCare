@@ -2,8 +2,10 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useQuery } from 'react-query';
 
 import useLoginInfo from '@/hooks/useLoginInfo';
+import axiosInstance from '@/services/axiosInstance';
 
 import ChangePwModal from './ChangePwModal';
 import styles from './MyPageForm.module.css';
@@ -19,23 +21,17 @@ const MyPageForm = () => {
     role: '',
   });
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && token) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('/api/v1/mypage', {
-            params: {
-              id,
-            },
-          });
-          setMyData(response.data);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
-      fetchData();
-    }
-  }, [token]);
+  const { data, isError, isLoading } = useQuery(
+    ['mypage', token],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
+      setMyData(response.data);
+      return response.data;
+    },
+    {
+      enabled: Boolean(token),
+    },
+  );
 
   const [changePwModalOn, setChangePwModalOn] = useState(false);
 
