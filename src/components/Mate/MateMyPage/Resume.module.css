@@ -1,10 +1,10 @@
-.Profile section {
+.Resume section {
   padding-bottom: 3rem;
   margin-bottom: 3rem;
   border-bottom: 1px solid var(--light-gray);
 }
 
-.Profile h3 > button {
+.Resume h3 > button {
   padding: 0;
   margin-left: 1rem;
   width: 3rem;
@@ -34,4 +34,11 @@
 .mainService > div {
   display: flex;
   gap: 2rem;
+}
+
+.wordCnt {
+  font-size: 0.9rem;
+  color: var(--gray);
+  display: inline-block;
+  margin-left: 4px;
 }

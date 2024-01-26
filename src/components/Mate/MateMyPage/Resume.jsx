@@ -1,26 +1,26 @@
 import { useEffect, useState } from 'react';
 
-import styles from './Profile.module.css';
+import styles from './Resume.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 import { calAge } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
 
-const Profile = ({ profile }) => {
+const Resume = ({ data }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
     setFormData({
-      contactTimeStart: profile?.mate?.contact_time_start,
-      contactTimeEnd: profile?.mate?.contact_time_end,
-      introduction: profile?.mate?.introduction || '',
-      wordCnt: (profile?.mate?.introduction || '').length,
-      mainServiceData: profile?.mainService?.map((it) => it.main_service_name) || [],
-      checkedLoc: profile?.location?.map((it) => it.location_name) || [],
-      career: profile?.career || [],
-      certificate: profile?.certificate || [],
+      contactTimeStart: data.resume?.mate?.contact_time_start,
+      contactTimeEnd: data.resume?.mate?.contact_time_end,
+      introduction: data.resume?.mate?.introduction || '',
+      wordCnt: (data.resume?.mate?.introduction || '').length,
+      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
+      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
+      career: data.resume?.career || [],
+      certificate: data.resume?.certificate || [],
     });
-  }, [profile]);
+  }, [data]);
 
   console.log(formData);
 
@@ -247,7 +247,9 @@ const Profile = ({ profile }) => {
     </div>
   );
 
-  const handleUpdateProfile = async () => {
+  const handleUpdateResume = async () => {
+    const method = data.resume.location ? 'patch' : 'post';
+
     try {
       const body = {
         ...formData,
@@ -259,9 +261,9 @@ const Profile = ({ profile }) => {
   };
 
   return (
-    <div className={styles.Profile}>
+    <div className={styles.Resume}>
       <div className={styles.form_wrapper}>
-        <form name='profile'>
+        <form name='resume'>
           <section>
             <h3>기본정보</h3>
             <div className={styles.introduce}>
@@ -271,11 +273,11 @@ const Profile = ({ profile }) => {
               </div>
               <div className={styles.basicInfo}>
                 <div>
-                  <h2>{profile?.mate?.name}</h2>
+                  <h2>{data.mypage.name}</h2>
                 </div>
                 <div>
                   <p>
-                    {profile?.mate?.gender === 'M' ? '남' : '여'} / 만 {calAge(profile?.mate?.birthday)} 세
+                    {data.mypage.gender === 'M' ? '남' : '여'} / 만 {calAge(data.mypage.birthday)} 세
                   </p>
                 </div>
                 <div>
@@ -301,20 +303,20 @@ const Profile = ({ profile }) => {
                   </div>
                   <div className={styles.introduction}>
                     <div className='input_wrapper'>
-                      <label htmlFor='introduction'>한줄소개</label>
                       <div>
-                        <textarea
-                          id='introduction'
-                          name='introduction'
-                          rows='3'
-                          maxLength='100'
-                          onChange={handlerTextChange}
-                          defaultValue={formData?.introduction}
-                        />
+                        <label htmlFor='introduction'>한줄소개</label>
                         <div className={styles.wordCnt}>
-                          <span>{formData?.wordCnt}/100</span>
+                          <span>({formData?.wordCnt}/100)</span>
                         </div>
                       </div>
+                      <textarea
+                        id='introduction'
+                        name='introduction'
+                        rows='1'
+                        maxLength='100'
+                        onChange={handlerTextChange}
+                        defaultValue={formData?.introduction}
+                      />
                     </div>
                   </div>
                 </div>
@@ -384,8 +386,8 @@ const Profile = ({ profile }) => {
             </div>
           </section>
           <div className='button_wrapper'>
-            <button type='button' onClick={handleUpdateProfile}>
-              수정하기
+            <button type='button' onClick={handleUpdateResume}>
+              {data.resume.location ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>
@@ -394,4 +396,4 @@ const Profile = ({ profile }) => {
   );
 };
 
-export default Profile;
+export default Resume;
