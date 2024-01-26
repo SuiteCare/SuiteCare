@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 import styles from './Resume.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
+import defaultProfile from '@/assets/default_profile.jpg';
 
-import { calAge } from '@/utils/calculators';
+import { calAge, genderToKo, minWage } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
 
 const Resume = ({ data }) => {
+  console.log(data);
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
@@ -267,57 +270,69 @@ const Resume = ({ data }) => {
           <section>
             <h3>기본정보</h3>
             <div className={styles.introduce}>
-              <div className={styles.img_wrapper}>
-                {/* <img /> */}
-                {/* <input type='file' /> */}
-              </div>
-              <div className={styles.basicInfo}>
-                <div>
-                  <h2>{data.mypage.name}</h2>
+              <div className='input_wrapper'>
+                <div className={styles.img_wrapper}>
+                  {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
+                  <input type='file' />
                 </div>
-                <div>
-                  <p>
-                    {data.mypage.gender === 'M' ? '남' : '여'} / 만 {calAge(data.mypage.birthday)} 세
-                  </p>
-                </div>
-                <div>
-                  <div className={styles.contact}>
-                    <div className='input_wrapper'>
-                      <label htmlFor='contact'>연락 가능 시간</label>
-                      <div className='timepicker_wrapper'>
-                        <TimePicker
-                          time={formData?.contactTimeStart}
-                          setTime={(value) => handleContactTimeChange('start', value)}
-                          start={0}
-                          end={24}
-                        />
-                        ~
-                        <TimePicker
-                          time={formData?.contactTimeEnd}
-                          setTime={(value) => handleContactTimeChange('end', value)}
-                          start={0}
-                          end={24}
-                        />
-                      </div>
-                    </div>
+                <div className={styles.basicInfo}>
+                  <div>
+                    <h2>{data.mypage.name}</h2>
                   </div>
-                  <div className={styles.introduction}>
-                    <div className='input_wrapper'>
-                      <div>
-                        <label htmlFor='introduction'>한줄소개</label>
-                        <div className={styles.wordCnt}>
-                          <span>({formData?.wordCnt}/100)</span>
-                        </div>
-                      </div>
-                      <textarea
-                        id='introduction'
-                        name='introduction'
-                        rows='1'
-                        maxLength='100'
-                        onChange={handlerTextChange}
-                        defaultValue={formData?.introduction}
+                  <div>
+                    <p>
+                      {genderToKo(data.mypage.gender)}성 / {data.mypage.birthday} (만 {calAge(data.mypage.birthday)} 세)
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className={styles.contact}>
+                  <div className='input_wrapper'>
+                    <label htmlFor='contact'>연락 가능 시간</label>
+                    <div className='timepicker_wrapper'>
+                      <TimePicker
+                        time={formData?.contactTimeStart}
+                        setTime={(value) => handleContactTimeChange('start', value)}
+                        start={0}
+                        end={24}
+                      />
+                      ~
+                      <TimePicker
+                        time={formData?.contactTimeEnd}
+                        setTime={(value) => handleContactTimeChange('end', value)}
+                        start={0}
+                        end={24}
                       />
                     </div>
+                  </div>
+                </div>
+
+                <div className={styles.wage}>
+                  <div className='input_wrapper'>
+                    <label>희망 시급</label>
+                    <div>
+                      <input type='number' min={minWage} step={10} />원
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.introduction}>
+                  <div className='input_wrapper'>
+                    <div>
+                      <label htmlFor='introduction'>한줄소개</label>
+                      <div className={styles.wordCnt}>
+                        <span>({formData?.wordCnt}/100)</span>
+                      </div>
+                    </div>
+                    <textarea
+                      id='introduction'
+                      name='introduction'
+                      rows='1'
+                      maxLength='100'
+                      onChange={handlerTextChange}
+                      defaultValue={formData?.introduction}
+                    />
                   </div>
                 </div>
               </div>

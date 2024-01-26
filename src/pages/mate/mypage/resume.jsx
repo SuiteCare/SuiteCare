@@ -65,8 +65,8 @@ const ResumePage = () => {
         <MateMyPageSidebar activeMenu='resume' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
-            <h1>메이트 프로필</h1>
-            <span>나의 이력 정보를 등록하고 수정할 수 있습니다.</span>
+            <h1>메이트 이력서</h1>
+            <span>나의 간병이력 정보를 등록하고 수정할 수 있습니다.</span>
           </div>
           <Resume data={data} />
         </div>
