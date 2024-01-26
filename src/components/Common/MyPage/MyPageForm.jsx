@@ -31,11 +31,7 @@ const MyPageForm = () => {
               Authorization: `Bearer ${token}`,
             },
           });
-          if (id == response.data.id) {
-            setMyData(...response.data);
-          } else {
-            alert('오류가 발생했습니다.');
-          }
+          setMyData(response.data);
         } catch (error) {
           console.error('Error:', error);
         }
