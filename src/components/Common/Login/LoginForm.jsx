@@ -35,7 +35,8 @@ const LoginForm = ({ type }) => {
 
         const response = await axios.post('/api/v1/login', body);
         if (response.data) {
-          sessionStorage.setItem('login_info', JSON.stringify({ login_id: response.data, role: body.role }));
+          const { id, login_id, token } = response.data;
+          sessionStorage.setItem('login_info', JSON.stringify({ id, login_id, token, role }));
           navigator.push(`/${type}/main`);
         } else {
           setLoginFail(true);

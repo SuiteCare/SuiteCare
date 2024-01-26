@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import usePatientList from '@/hooks/usePatientList';
 // import usePatientList from '@/services/apis/usePatientList';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
@@ -16,8 +17,9 @@ import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calcula
 const ReservationForm = () => {
   const navigator = useRouter();
 
-  const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList(loginId);
+  const { token, id } = useLoginInfo();
+
+  const patientList = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
@@ -118,8 +120,13 @@ const ReservationForm = () => {
     };
 
     try {
-      console.log('wjsekf', body);
-      const response = await axios.post('/api/v1/reservation', body);
+      console.log('확인용', body);
+      const response = await axios.post('/api/v1/reservation', {
+        body,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {

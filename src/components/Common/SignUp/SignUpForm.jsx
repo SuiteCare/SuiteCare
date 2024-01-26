@@ -54,7 +54,9 @@ const SignUpForm = ({ type }) => {
 
     if (formData.login_id) {
       try {
-        const response = await axios.get('/api/v1/member', { params: { login_id: formData.login_id } });
+        const response = await axios.get(`/api/v1/patient/${formData.login_id}`, {
+          params: { login_id: formData.login_id },
+        });
         const { data } = response;
 
         if (data !== 0) {
@@ -115,7 +117,7 @@ const SignUpForm = ({ type }) => {
         role,
       };
 
-      const response = await axios.post('/api/v1/member', body);
+      const response = await axios.post('/api/v1/signup', body);
       if (response.data) {
         alert('회원가입이 완료되었습니다.');
         navigator.push(`/${type}/login`);

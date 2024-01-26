@@ -1,23 +1,31 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const usePatientList = ($id) => {
+import useLoginInfo from './useLoginInfo';
+
+const usePatientList = () => {
   const [patientList, setPatientList] = useState([]);
+  const { token, id } = useLoginInfo();
 
   useEffect(() => {
     const getPatientList = async () => {
       try {
-        const response = await axios.get('/api/v1/patient', { params: { id: $id } });
+        const response = await axios.get('/api/v1/patient', {
+          params: { id },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setPatientList(response.data);
       } catch (error) {
         console.error('Error:', error);
       }
     };
 
-    if ($id) {
+    if (id) {
       getPatientList();
     }
-  }, [$id]);
+  }, [id]);
 
   return patientList;
 };

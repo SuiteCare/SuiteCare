@@ -3,6 +3,8 @@ import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
 
+import useLoginInfo from '@/hooks/useLoginInfo';
+
 import SearchForm from './JobSearchForm';
 import SearchResult from './SearchResult';
 import Loading from '@/components/Common/Modal/Loading';
