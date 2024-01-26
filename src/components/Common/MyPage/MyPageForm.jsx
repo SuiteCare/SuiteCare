@@ -27,9 +27,6 @@ const MyPageForm = () => {
             params: {
               id,
             },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
           });
           setMyData(response.data);
         } catch (error) {

@@ -121,12 +121,7 @@ const ReservationForm = () => {
 
     try {
       console.log('확인용', body);
-      const response = await axios.post('/api/v1/reservation', {
-        body,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post('/api/v1/reservation', body);
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {

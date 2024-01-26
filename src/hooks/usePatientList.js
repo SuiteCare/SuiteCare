@@ -12,9 +12,6 @@ const usePatientList = () => {
       try {
         const response = await axios.get('/api/v1/patient', {
           params: { id },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         });
         setPatientList(response.data);
       } catch (error) {
