@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import Header from '@/components/Family/FamilyHeader/FamilyHeader';
+import Header from '@/components/Mate/MateHeader/MateHeader';
 import MateMyPageSidebar from '@/components/Mate/MateMyPage/MateMyPageSidebar';
 
-const ProfilePage = () => {
+const MateMyPageIndex = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('./mypage/profile');
+    router.push('./mypage/resume');
   }, []);
 
   return (
@@ -21,4 +21,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default MateMyPageIndex;

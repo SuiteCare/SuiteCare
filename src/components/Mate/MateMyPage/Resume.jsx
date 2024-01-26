@@ -1,28 +1,15 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
-import styles from './Profile.module.css';
+import styles from './Resume.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
+import defaultProfile from '@/assets/default_profile.jpg';
 
-import { calAge } from '@/utils/calculators';
+import { calAge, genderToKo, minWage } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
 
-const Profile = ({ profile }) => {
+const Resume = ({ data }) => {
   const [formData, setFormData] = useState({});
-
-  useEffect(() => {
-    setFormData({
-      contactTimeStart: profile?.mate?.contact_time_start,
-      contactTimeEnd: profile?.mate?.contact_time_end,
-      introduction: profile?.mate?.introduction || '',
-      wordCnt: (profile?.mate?.introduction || '').length,
-      mainServiceData: profile?.mainService?.map((it) => it.main_service_name) || [],
-      checkedLoc: profile?.location?.map((it) => it.location_name) || [],
-      career: profile?.career || [],
-      certificate: profile?.certificate || [],
-    });
-  }, [profile]);
-
-  console.log(formData);
 
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
@@ -32,13 +19,14 @@ const Profile = ({ profile }) => {
     }));
   };
 
+  const [wordCnt, setWordCnt] = useState((data.resume?.mate?.introduction || '').length || 0);
   const handlerTextChange = (e) => {
     const { value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
       introduction: value,
-      wordCnt: value.length,
     }));
+    setWordCnt(value.length);
   };
 
   useEffect(() => {
@@ -247,7 +235,24 @@ const Profile = ({ profile }) => {
     </div>
   );
 
-  const handleUpdateProfile = async () => {
+  const handleUpdateResume = async () => {
+    if (!formData.wage) {
+      alert('희망 최소시급을 입력하세요.');
+      return false;
+    }
+
+    if (!formData.checkedLoc.length) {
+      alert('최소 1개의 활동 지역을 선택하세요.');
+      return false;
+    }
+
+    if (!formData.mainServiceData.length) {
+      alert('최소 1개의 대표서비스를 입력하세요.');
+      return false;
+    }
+
+    const method = data.resume.location ? 'patch' : 'post';
+
     try {
       const body = {
         ...formData,
@@ -257,63 +262,122 @@ const Profile = ({ profile }) => {
       console.error('업데이트 실패:', error);
     }
   };
+  const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
+  const handleWageCheckbox = (e) => {
+    if (e.target.checked) {
+      setIsWageInputDisabled(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        wage: '무관',
+      }));
+    } else {
+      setIsWageInputDisabled(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        wage: minWage,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    setFormData({
+      contactTimeStart: data.resume?.mate?.contact_time_start || '09:00',
+      contactTimeEnd: data.resume?.mate?.contact_time_end || '21:00',
+      introduction: data.resume?.mate?.introduction || '',
+      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
+      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
+      career: data.resume?.career || [],
+      certificate: data.resume?.certificate || [],
+      wage: minWage,
+    });
+  }, [data]);
 
   return (
-    <div className={styles.Profile}>
+    <div className={styles.Resume}>
       <div className={styles.form_wrapper}>
-        <form name='profile'>
+        <form name='resume'>
           <section>
             <h3>기본정보</h3>
             <div className={styles.introduce}>
-              <div className={styles.img_wrapper}>
-                {/* <img /> */}
-                {/* <input type='file' /> */}
+              <div className='input_wrapper'>
+                <div className={styles.img_wrapper}>
+                  {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
+                  <input type='file' />
+                </div>
+                <div className={styles.basicInfo}>
+                  <div>
+                    <h2>{data.mypage.name}</h2>
+                  </div>
+                  <div>
+                    <p>
+                      {genderToKo(data.mypage.gender)}성 / {data.mypage.birthday} (만 {calAge(data.mypage.birthday)} 세)
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className={styles.basicInfo}>
-                <div>
-                  <h2>{profile?.mate?.name}</h2>
+              <div>
+                <div className={styles.contact}>
+                  <div className='input_wrapper'>
+                    <label htmlFor='contact'>연락 가능 시간</label>
+                    <div className='timepicker_wrapper'>
+                      <TimePicker
+                        time={formData?.contactTimeStart}
+                        setTime={(value) => handleContactTimeChange('start', value)}
+                        start={0}
+                        end={24}
+                      />
+                      ~
+                      <TimePicker
+                        time={formData?.contactTimeEnd}
+                        setTime={(value) => handleContactTimeChange('end', value)}
+                        start={0}
+                        end={24}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p>
-                    {profile?.mate?.gender === 'M' ? '남' : '여'} / 만 {calAge(profile?.mate?.birthday)} 세
-                  </p>
-                </div>
-                <div>
-                  <div className={styles.contact}>
-                    <div className='input_wrapper'>
-                      <label htmlFor='contact'>연락 가능 시간</label>
-                      <div className='timepicker_wrapper'>
-                        <TimePicker
-                          time={formData?.contactTimeStart}
-                          setTime={(value) => handleContactTimeChange('start', value)}
-                          start={0}
-                          end={24}
-                        />
-                        ~
-                        <TimePicker
-                          time={formData?.contactTimeEnd}
-                          setTime={(value) => handleContactTimeChange('end', value)}
-                          start={0}
-                          end={24}
-                        />
+
+                <div className={styles.wage}>
+                  <div className='input_wrapper'>
+                    <label>희망 최소 시급</label>
+                    <div>
+                      <input
+                        type='number'
+                        min={minWage}
+                        max={1000000}
+                        step={10}
+                        disabled={isWageInputDisabled}
+                        value={formData.wage}
+                        onChange={(e) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            wage: e.target.value,
+                          }))
+                        }
+                      />
+                      원
+                      <div className='checkbox_wrapper'>
+                        <input type='checkbox' onChange={(e) => handleWageCheckbox(e)} />
+                        <span>무관</span>
                       </div>
                     </div>
                   </div>
-                  <div className={styles.introduction}>
-                    <div className='input_wrapper'>
-                      <label htmlFor='introduction'>한줄소개</label>
-                      <div>
-                        <textarea
-                          id='introduction'
-                          name='introduction'
-                          rows='3'
-                          maxLength='100'
-                          onChange={handlerTextChange}
-                          defaultValue={formData?.introduction}
-                        />
-                        <div className={styles.wordCnt}>
-                          <span>{formData?.wordCnt}/100</span>
-                        </div>
+                </div>
+
+                <div className={styles.introduction}>
+                  <div className='input_wrapper'>
+                    <label htmlFor='introduction'>한줄소개</label>
+                    <div>
+                      <textarea
+                        id='introduction'
+                        name='introduction'
+                        rows='1'
+                        maxLength='100'
+                        onChange={handlerTextChange}
+                        defaultValue={formData?.introduction}
+                      />
+                      <div className={styles.wordCnt}>
+                        <span>({wordCnt}/100)</span>
                       </div>
                     </div>
                   </div>
@@ -384,8 +448,8 @@ const Profile = ({ profile }) => {
             </div>
           </section>
           <div className='button_wrapper'>
-            <button type='button' onClick={handleUpdateProfile}>
-              수정하기
+            <button type='button' onClick={handleUpdateResume}>
+              {data.resume.location ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>
@@ -394,4 +458,4 @@ const Profile = ({ profile }) => {
   );
 };
 
-export default Profile;
+export default Resume;
