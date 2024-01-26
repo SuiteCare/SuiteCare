@@ -9,23 +9,7 @@ import { calAge, genderToKo, minWage } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
 
 const Resume = ({ data }) => {
-  console.log(data);
   const [formData, setFormData] = useState({});
-
-  useEffect(() => {
-    setFormData({
-      contactTimeStart: data.resume?.mate?.contact_time_start,
-      contactTimeEnd: data.resume?.mate?.contact_time_end,
-      introduction: data.resume?.mate?.introduction || '',
-      wordCnt: (data.resume?.mate?.introduction || '').length,
-      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
-      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
-      career: data.resume?.career || [],
-      certificate: data.resume?.certificate || [],
-    });
-  }, [data]);
-
-  console.log(formData);
 
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
@@ -35,13 +19,14 @@ const Resume = ({ data }) => {
     }));
   };
 
+  const [wordCnt, setWordCnt] = useState((data.resume?.mate?.introduction || '').length || 0);
   const handlerTextChange = (e) => {
     const { value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
       introduction: value,
-      wordCnt: value.length,
     }));
+    setWordCnt(value.length);
   };
 
   useEffect(() => {
@@ -251,6 +236,21 @@ const Resume = ({ data }) => {
   );
 
   const handleUpdateResume = async () => {
+    if (!formData.wage) {
+      alert('희망 최소시급을 입력하세요.');
+      return false;
+    }
+
+    if (!formData.checkedLoc.length) {
+      alert('최소 1개의 활동 지역을 선택하세요.');
+      return false;
+    }
+
+    if (!formData.mainServiceData.length) {
+      alert('최소 1개의 대표서비스를 입력하세요.');
+      return false;
+    }
+
     const method = data.resume.location ? 'patch' : 'post';
 
     try {
@@ -262,6 +262,35 @@ const Resume = ({ data }) => {
       console.error('업데이트 실패:', error);
     }
   };
+  const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
+  const handleWageCheckbox = (e) => {
+    if (e.target.checked) {
+      setIsWageInputDisabled(true);
+      setFormData((prevData) => ({
+        ...prevData,
+        wage: '무관',
+      }));
+    } else {
+      setIsWageInputDisabled(false);
+      setFormData((prevData) => ({
+        ...prevData,
+        wage: minWage,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    setFormData({
+      contactTimeStart: data.resume?.mate?.contact_time_start || '09:00',
+      contactTimeEnd: data.resume?.mate?.contact_time_end || '21:00',
+      introduction: data.resume?.mate?.introduction || '',
+      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
+      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
+      career: data.resume?.career || [],
+      certificate: data.resume?.certificate || [],
+      wage: minWage,
+    });
+  }, [data]);
 
   return (
     <div className={styles.Resume}>
@@ -310,29 +339,47 @@ const Resume = ({ data }) => {
 
                 <div className={styles.wage}>
                   <div className='input_wrapper'>
-                    <label>희망 시급</label>
+                    <label>희망 최소 시급</label>
                     <div>
-                      <input type='number' min={minWage} step={10} />원
+                      <input
+                        type='number'
+                        min={minWage}
+                        max={1000000}
+                        step={10}
+                        disabled={isWageInputDisabled}
+                        value={formData.wage}
+                        onChange={(e) =>
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            wage: e.target.value,
+                          }))
+                        }
+                      />
+                      원
+                      <div className='checkbox_wrapper'>
+                        <input type='checkbox' onChange={(e) => handleWageCheckbox(e)} />
+                        <span>무관</span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 <div className={styles.introduction}>
                   <div className='input_wrapper'>
+                    <label htmlFor='introduction'>한줄소개</label>
                     <div>
-                      <label htmlFor='introduction'>한줄소개</label>
+                      <textarea
+                        id='introduction'
+                        name='introduction'
+                        rows='1'
+                        maxLength='100'
+                        onChange={handlerTextChange}
+                        defaultValue={formData?.introduction}
+                      />
                       <div className={styles.wordCnt}>
-                        <span>({formData?.wordCnt}/100)</span>
+                        <span>({wordCnt}/100)</span>
                       </div>
                     </div>
-                    <textarea
-                      id='introduction'
-                      name='introduction'
-                      rows='1'
-                      maxLength='100'
-                      onChange={handlerTextChange}
-                      defaultValue={formData?.introduction}
-                    />
                   </div>
                 </div>
               </div>

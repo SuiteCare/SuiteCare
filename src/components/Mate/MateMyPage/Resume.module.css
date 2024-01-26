@@ -36,11 +36,13 @@
   gap: 2rem;
 }
 
+.introduction textarea {
+  width: 100%;
+}
+
 .wordCnt {
   font-size: 0.9rem;
   color: var(--gray);
-  display: inline-block;
-  margin-left: 4px;
 }
 
 .basicInfo {
