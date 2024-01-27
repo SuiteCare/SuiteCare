@@ -216,20 +216,22 @@ const KakaoMapModal = ({ setAddress, closeModal }) => {
             {/* 검색 결과를 표시하는 부분 */}
             <ul>
               {places.map((place, index) => (
-                <li key={index} onClick={() => handlePlaceClick({ ...place, index })}>
-                  <span className={`${mapstyles.markerbg} ${mapstyles[`marker_${index + 1}`]}`} />
-                  <div className={mapstyles.info}>
-                    <h6>{place.place_name}</h6>
-                    {place.road_address_name ? (
-                      <span>{place.road_address_name}</span>
-                    ) : (
-                      <span>{place.address_name}</span>
-                    )}
-                    <p className={mapstyles.tel}>📞{place.phone || '정보 없음'}</p>
+                <li key={place.id}>
+                  <div onClick={() => handlePlaceClick({ ...place, index })}>
+                    <span className={`${mapstyles.markerbg} ${mapstyles[`marker_${index + 1}`]}`} />
+                    <div className={mapstyles.info}>
+                      <h6>{place.place_name}</h6>
+                      {place.road_address_name ? (
+                        <span>{place.road_address_name}</span>
+                      ) : (
+                        <span>{place.address_name}</span>
+                      )}
+                      <p className={mapstyles.tel}>📞{place.phone || '정보 없음'}</p>
+                    </div>
+                    <button type='button' onClick={() => handleSelectButtonClick(place)}>
+                      선택
+                    </button>
                   </div>
-                  <button type='button' onClick={() => handleSelectButtonClick(place)}>
-                    선택
-                  </button>
                 </li>
               ))}
             </ul>
