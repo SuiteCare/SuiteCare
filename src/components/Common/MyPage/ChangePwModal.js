@@ -1,56 +1,30 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-
 import styles from '../Modal/Modal.module.css';
+import axiosInstance from "@/services/axiosInstance";
 
 const ChangePwModal = ({ closeModal }) => {
   const handleContentClick = (e) => {
     e.stopPropagation();
   };
-  const [dbPw, setDbPw] = useState();
-  const loginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (loginInfo && loginInfo.login_id) {
-        try {
-          const response = await axios.get('/api/v1/mypage', {
-            params: {
-              id: loginInfo.login_id,
-            },
-          });
-          setDbPw(response.data.password);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      } else {
-        alert('로그인이 필요합니다.');
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleChangePwClick = async () => {
     if (newPw.value === newPwCheck.value) {
       const body = {
-        login_id: loginInfo.login_id,
         originPassword: pw.value,
         newPassword: newPw.value,
         newPasswordCheck: newPwCheck.value,
       };
-      const response = await axios
-        .post('/api/v1/changepw', body)
-        .then((response) => {
-          if (response.data === 0) {
-            alert('현재 비밀번호를 다시 확인해주세요.');
-          } else {
-            alert('비밀번호 변경이 완료되었습니다.');
-            closeModal();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+
+      try {
+      const response = await axiosInstance.post('/api/v1/changepassword', body)
+        if (response.data === 0) {
+          alert('현재 비밀번호를 다시 확인해주세요.');
+        } else {
+          alert('비밀번호 변경이 완료되었습니다.');
+          closeModal();
+        }
+      } catch(error) {
+        console.error(error);
+      }
     } else {
       alert('입력하신 새 비밀번호가 다릅니다.');
     }
