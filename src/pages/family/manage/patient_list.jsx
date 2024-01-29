@@ -9,7 +9,7 @@ import PatientList from '@/components/Family/FamilyManage/PatientList/PatientLis
 
 const FamilyPatientListPage = () => {
   const { id } = useLoginInfo();
-  const patientList = usePatientList(id);
+  const { patientList } = usePatientList(id);
 
   return (
     <>

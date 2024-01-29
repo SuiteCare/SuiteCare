@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 
 import axiosInstance from '../axiosInstance';
 
-const usePatientList = ({ id }) => {
+const usePatientList = (id) => {
   const {
     data: patientList,
     isError,

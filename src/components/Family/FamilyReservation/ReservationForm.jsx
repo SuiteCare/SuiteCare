@@ -20,7 +20,7 @@ const ReservationForm = () => {
 
   const { id } = useLoginInfo();
 
-  const patientList = usePatientList(id);
+  const { patientList } = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
   const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()

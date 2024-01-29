@@ -1,29 +1,27 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+
+import axiosInstance from '@/services/axiosInstance';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
 export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
   const [activeTab, setActiveTab] = useState(0);
 
-  const [patientDetail, setPatientDetail] = useState('');
-
-  useEffect(() => {
-    const getPatientDetail = async () => {
-      if (typeof window !== 'undefined') {
-        try {
-          const response = await axios.get(`/api/v1/patientDetail/${id}`);
-          if (response.data) {
-            setPatientDetail(response.data);
-          }
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
-    getPatientDetail();
-  }, [id]);
+  const {
+    data: patientDetail,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['patientDetail', id],
+    async () => {
+      const response = await axiosInstance.get(`/api/v1/patientDetail/${id}`);
+      return response.data;
+    },
+    {
+      enabled: Boolean(id),
+    },
+  );
 
   return (
     <>
@@ -82,52 +80,52 @@ export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
             <div className={styles.info_grid}>
               <div className='input_wrapper'>
                 <label>의식 상태</label>
-                <span>{patientDetail.consciousness_state}</span>
+                <span>{patientDetail?.consciousness_state}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>식사 보조</label>
-                <span>{patientDetail.meal_care_state}</span>
+                <span>{patientDetail?.meal_care_state}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>용변 보조</label>
-                <span>{patientDetail.toilet_care_state}</span>
+                <span>{patientDetail?.toilet_care_state}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>마비 상태</label>
-                <span>{patientDetail.paralysis_state}</span>
+                <span>{patientDetail?.paralysis_state}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>거동 상태</label>
-                <span>{patientDetail.behavioral_state}</span>
+                <span>{patientDetail?.behavioral_state}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>욕창</label>
-                <span>{patientDetail.is_bedsore === 'Y' ? '있음' : '없음'}</span>
+                <span>{patientDetail?.is_bedsore === 'Y' ? '있음' : '없음'}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>석션</label>
-                <span>{patientDetail.need_suction === 'Y' ? '있음' : '없음'}</span>
+                <span>{patientDetail?.need_suction === 'Y' ? '있음' : '없음'}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>주기적 외래 진료</label>
-                <span>{patientDetail.need_outpatient === 'Y' ? '있음' : '없음'}</span>
+                <span>{patientDetail?.need_outpatient === 'Y' ? '있음' : '없음'}</span>
               </div>
 
               <div className='input_wrapper'>
                 <label>야간 간병 필요</label>
-                <span>{patientDetail.need_night_care === 'Y' ? '있음' : '없음'}</span>
+                <span>{patientDetail?.need_night_care === 'Y' ? '있음' : '없음'}</span>
               </div>
             </div>
             <div className='input_wrapper'>
               <label>비고</label>
-              <span className={styles.introduction}>{patientDetail.notice}</span>
+              <span className={styles.introduction}>{patientDetail?.notice}</span>
             </div>
             {/* 상세정보 끝 */}
           </div>
@@ -138,7 +136,7 @@ export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
             type='button'
             onClick={() =>
               window.confirm('입력된 내용이 초기화됩니다. 환자 정보 수정 페이지로 이동하시겠습니까?')
-                ? navigator.push(`/family/addpatient/${patientDetail.id}`)
+                ? navigator.push(`/family/addpatient/${id}`)
                 : ''
             }
           >

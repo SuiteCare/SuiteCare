@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from '../FamilyManageTable.module.css';
 import PatientDetailModal from '../Reservation/PatientDetailModal';
@@ -18,15 +18,16 @@ const PatientList = ({ data }) => {
   const getPatientDetail = async ($event) => {
     setModalData($event);
     try {
-      const patientPromise = axios.get(`/api/v1/patient/${$event.id}`);
-      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${$event.id}`);
+      const patientPromise = axiosInstance.get(`/api/v1/patient/${$event.id}`);
+      const patientDetailPromise = axiosInstance.get(`/api/v1/patientDetail/${$event.id}`);
 
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
-      setModalData({
+      setModalData((prevData) => ({
+        ...prevData,
         ...patientResponse.data,
         ...patientDetailResponse.data,
-      });
+      }));
     } catch (error) {
       console.error(error);
     }
@@ -59,7 +60,7 @@ const PatientList = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data.length === 0 ? (
+          {data?.length === 0 ? (
             <tr>
               <td colSpan={8}>
                 <br />
@@ -71,7 +72,7 @@ const PatientList = ({ data }) => {
               </td>
             </tr>
           ) : (
-            data.map((e, index) => (
+            data?.map((e, index) => (
               <tr key={e}>
                 <td>{index + 1}</td>
                 <td>{e.name}</td>

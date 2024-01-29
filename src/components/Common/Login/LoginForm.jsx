@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
+
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from './LoginForm.module.css';
 
@@ -33,7 +34,7 @@ const LoginForm = ({ type }) => {
           role,
         };
 
-        const response = await axios.post('/api/v1/login', body);
+        const response = await axiosInstance.post('/api/v1/login', body);
         if (response.data) {
           const { id, login_id, token } = response.data;
           localStorage.setItem('login_info', JSON.stringify({ id, login_id, role }));
