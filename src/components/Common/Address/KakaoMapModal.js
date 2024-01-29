@@ -228,7 +228,11 @@ const KakaoMapModal = ({ setAddress, closeModal }) => {
                       )}
                       <p className={mapstyles.tel}>📞{place.phone || '정보 없음'}</p>
                     </div>
-                    <button type='button' onClick={() => handleSelectButtonClick(place)}>
+                    <button
+                      type='button'
+                      className={mapstyles.selectBtn}
+                      onClick={() => handleSelectButtonClick(place)}
+                    >
                       선택
                     </button>
                   </div>

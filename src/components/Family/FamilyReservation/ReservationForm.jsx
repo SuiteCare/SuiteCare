@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import { useMutation } from 'react-query';
 
+import axiosInstance from '@/services/axiosInstance';
 import usePatientList from '@/hooks/usePatientList';
 // import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
@@ -43,13 +44,6 @@ const ReservationForm = () => {
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
   const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setFormData({ ...formData, member_id: loginId });
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
-    }
-  }, []);
 
   const handlePatientSelectChange = (e) => {
     if (e.target.value === 'add') {
@@ -104,7 +98,7 @@ const ReservationForm = () => {
     if (!validateAddress()) return false;
 
     const body = {
-      member_id: loginId,
+      member_id: id,
       patient_id: patientInfo?.id,
       ...formData,
       start_time: startTime,
@@ -121,13 +115,18 @@ const ReservationForm = () => {
 
     try {
       console.log('확인용', body);
-      const response = await axios.post('/api/v1/reservation', {
-        body,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const mutation = useMutation(async () => {
+        const response = await axiosInstance.post('/api/v1/reservation', body, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        return response.data;
       });
-      if (response.data) {
+
+      mutation.mutate();
+
+      if (mutation.isSuccess) {
         alert('예약 신청이 완료되었습니다.');
       } else {
         alert('예약 신청에 실패하였습니다.');
