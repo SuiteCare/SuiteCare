@@ -1,20 +1,15 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
 
-import usePatientList from '@/hooks/usePatientList';
+import usePatientList from '@/services/apis/usePatientList';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 import FamilyManageSidebar from '@/components/Family/FamilyManage/FamilyManageSidebar';
 import PatientList from '@/components/Family/FamilyManage/PatientList/PatientList';
 
 const FamilyPatientListPage = () => {
-  const [loginId, setLoginId] = useState(null);
-  const patientList = usePatientList(loginId);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
-    }
-  }, []);
+  const { id } = useLoginInfo();
+  const patientList = usePatientList(id);
 
   return (
     <>

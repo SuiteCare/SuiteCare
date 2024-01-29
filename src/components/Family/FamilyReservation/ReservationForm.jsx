@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
-import usePatientList from '@/hooks/usePatientList';
-// import usePatientList from '@/services/apis/usePatientList';
+import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
+import useAlert from '@/hooks/useAlert';
 
 import styles from './ReservationForm.module.css';
 import { PatientInfo } from './PatientInfo';
@@ -16,8 +16,9 @@ import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calcula
 
 const ReservationForm = () => {
   const navigator = useRouter();
+  const { openAlert, alertComponent } = useAlert();
 
-  const { token, id } = useLoginInfo();
+  const { id } = useLoginInfo();
 
   const patientList = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
@@ -84,17 +85,11 @@ const ReservationForm = () => {
     }
   };
 
-  const validateAddress = () => {
-    if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress) {
-      alert('주소를 입력하세요.');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateAddress()) return false;
+    if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress)
+      return openAlert('주소를 입력하세요.');
+    if (weekdayBoolean.every((day) => !day)) return openAlert('간병 요일을 선택하세요.');
 
     const body = {
       member_id: id,
@@ -114,7 +109,7 @@ const ReservationForm = () => {
 
     try {
       console.log('확인용', body);
-      const response = await axios.post('/api/v1/reservation', body);
+      const response = await axiosInstance.post('/api/v1/reservation', body);
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {
@@ -127,6 +122,7 @@ const ReservationForm = () => {
 
   return (
     <div className={`${styles.ReservationForm} content_wrapper`}>
+      {alertComponent}
       <form onSubmit={handleSubmit}>
         <div className='input_wrapper'>
           <label>간병받을 환자</label>

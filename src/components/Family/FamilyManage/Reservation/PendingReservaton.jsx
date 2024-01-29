@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
 import usePatientList from '@/services/apis/usePatientList';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './PendingReservation.module.css';
 import PendingReservationCard from './PendingReservationCard';
@@ -12,29 +13,21 @@ import Loading from '@/components/Common/Modal/Loading';
 const PendingReservation = () => {
   const navigator = useRouter();
 
-  const [loginId, setLoginId] = useState(null);
-  const { isError, isLoading, patientList } = usePatientList(loginId);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
-    } else {
-      return null;
-    }
-  }, []);
+  const { id } = useLoginInfo();
+  const { isError, isLoading, patientList } = usePatientList(id);
 
   const {
     data: reservationList,
     isError: isResListError,
     isLoading: isResListLoading,
   } = useQuery(
-    ['reservationList', loginId],
+    ['reservationList', id],
     async () => {
-      const { data } = await axiosInstance.get('/api/v1/pendingReservation', { params: { id: loginId } });
+      const { data } = await axiosInstance.get('/api/v1/pendingReservation', { params: { id } });
       return data.reverse();
     },
     {
-      enabled: Boolean(loginId),
+      enabled: Boolean(id),
     },
   );
 
