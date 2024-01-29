@@ -2,12 +2,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
+import { useMutation } from 'react-query';
+
+import useAlert from '@/hooks/useAlert';
+import axiosInstance from '@/services/axiosInstance';
 
 import formInputInfos from './FormInputInfos';
 import styles from './SignUpForm.module.css';
 
 const SignUpForm = ({ type }) => {
   const navigator = useRouter();
+  const { isAlertVisible, openAlert, AlertComponent } = useAlert();
 
   // type에 따라 변경될 값을 모아 둔 함수
   const valueSet = ($type) => {
@@ -48,30 +53,31 @@ const SignUpForm = ({ type }) => {
   // 아이디 중복확인
   const [isAvailableID, setIsAvailableID] = useState(false);
   const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
+  const checkDuplicateIDMutation = useMutation((login_id) =>
+    axiosInstance.get(`/api/v1/check/id`, { params: { login_id } }),
+  );
+
   const checkDuplicateID = async () => {
     if (!userIDRegex.test(formData.login_id))
-      return alert('아이디는 4글자 이상의 영문, 숫자, 혹은 밑줄 (_)로 구성되어야 합니다.');
+      return openAlert('아이디는 4글자 이상의 영문, 숫자, 혹은 밑줄 (_)로 구성되어야 합니다.');
 
     if (formData.login_id) {
       try {
-        const response = await axios.get(`/api/v1/patient/${formData.login_id}`, {
-          params: { login_id: formData.login_id },
-        });
+        const response = await checkDuplicateIDMutation.mutateAsync(formData.login_id);
         const { data } = response;
 
         if (data !== 0) {
-          alert('이미 사용 중인 아이디입니다.');
           setIsAvailableID(false);
-        } else {
-          alert('사용 가능한 아이디입니다.');
-          setIsAvailableID(true);
+          return openAlert('이미 사용 중인 아이디입니다.');
         }
+        setIsAvailableID(true);
+        return openAlert('사용 가능한 아이디입니다.');
       } catch (error) {
         console.error('Error:', error);
       }
     } else {
-      alert('아이디를 입력하세요.');
       setIsAvailableID(false);
+      return openAlert('아이디를 입력하세요.');
     }
   };
 
@@ -81,12 +87,15 @@ const SignUpForm = ({ type }) => {
     e.preventDefault();
 
     if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(formData.tel)) {
-      return alert('휴대폰 번호를 올바르게 입력하십시오.');
+      return openAlert('휴대폰 번호를 올바르게 입력하십시오.');
     }
 
     if (formData.tel) {
-      alert(`인증 api 연동 전 임시 인증 완료`);
+      if (isPhoneCertificated) {
+        return openAlert('휴대폰 인증이 완료된 상태입니다.');
+      }
       setIsPhoneCertificated(true);
+      return openAlert(`인증 api 연동 전 임시 인증 완료`);
     }
   };
 
@@ -100,11 +109,11 @@ const SignUpForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!isAvailableID) return alert('아이디 중복확인이 필요합니다.');
-    if (!formData.password) return alert('비밀번호를 입력하세요.');
-    if (formData.password !== formData.pw_check) return alert('비밀번호가 일치하지 않습니다.');
-    if (!formData.name) return alert('성명을 입력하세요.');
-    if (!isPhoneCertificated) return alert('휴대폰 본인인증이 필요합니다.');
+    if (!isAvailableID) return openAlert('아이디 중복확인이 필요합니다.');
+    if (!formData.password) return openAlert('비밀번호를 입력하세요.');
+    if (formData.password !== formData.pw_check) return openAlert('비밀번호가 일치하지 않습니다.');
+    if (!formData.name) return openAlert('성명을 입력하세요.');
+    if (!isPhoneCertificated) return openAlert('휴대폰 본인인증이 필요합니다.');
 
     try {
       const role = type === 'mate' ? 'M' : 'F';
@@ -119,10 +128,10 @@ const SignUpForm = ({ type }) => {
 
       const response = await axios.post('/api/v1/signup', body);
       if (response.data) {
-        alert('회원가입이 완료되었습니다.');
+        openAlert('회원가입이 완료되었습니다.');
         navigator.push(`/${type}/login`);
       } else {
-        alert('회원가입에 실패하였습니다.');
+        openAlert('회원가입에 실패하였습니다.');
       }
     } catch (error) {
       console.error(error);
@@ -150,47 +159,50 @@ const SignUpForm = ({ type }) => {
   };
 
   return (
-    <div className='Form_narrow'>
-      <div className='input_wrapper'>
-        <label>회원 구분</label>
-        <div className='input_radio'>
-          <div className={styles.radio_user_type} onClick={handleRadioClick}>
-            <input type='radio' value='family' checked={type === 'family'} />
-            <span>패밀리 회원 (간병 서비스 이용자)</span>
+    <>
+      {isAlertVisible && AlertComponent}
+      <div className='Form_narrow'>
+        <div className='input_wrapper'>
+          <label>회원 구분</label>
+          <div className='input_radio'>
+            <div className={styles.radio_user_type} onClick={handleRadioClick}>
+              <input type='radio' value='family' checked={type === 'family'} />
+              <span>패밀리 회원 (간병 서비스 이용자)</span>
+            </div>
+            <div className={styles.radio_user_type} onClick={handleRadioClick}>
+              <input type='radio' value='mate' checked={type === 'mate'} />
+              <span>메이트 회원 (간병인)</span>
+            </div>
           </div>
-          <div className={styles.radio_user_type} onClick={handleRadioClick}>
-            <input type='radio' value='mate' checked={type === 'mate'} />
-            <span>메이트 회원 (간병인)</span>
-          </div>
         </div>
-      </div>
-      <hr />
-      <form name='signup' method='post' onSubmit={handleSubmit}>
-        <div className='input_with_button'>
-          {formInputs('login_id')}
-          <button type='button' onClick={checkDuplicateID}>
-            중복확인
-          </button>
-        </div>
-
-        {formInputs('password')}
-        {formInputs('pw_check')}
-        {formInputs('name')}
-
-        <div className='input_with_button'>
-          {formInputs('tel')}
-          <button type='button' onClick={handlePhoneCertification}>
-            본인인증
-          </button>
-        </div>
-
         <hr />
+        <form name='signup' method='post' onSubmit={handleSubmit}>
+          <div className='input_with_button'>
+            {formInputs('login_id')}
+            <button type='button' onClick={checkDuplicateID}>
+              중복확인
+            </button>
+          </div>
 
-        <div className='button_wrapper'>
-          <button type='submit'>{valueSet(type).buttonText}</button>
-        </div>
-      </form>
-    </div>
+          {formInputs('password')}
+          {formInputs('pw_check')}
+          {formInputs('name')}
+
+          <div className='input_with_button'>
+            {formInputs('tel')}
+            <button type='button' onClick={handlePhoneCertification}>
+              본인인증
+            </button>
+          </div>
+
+          <hr />
+
+          <div className='button_wrapper'>
+            <button type='submit'>{valueSet(type).buttonText}</button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

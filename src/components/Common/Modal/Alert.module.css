@@ -1,0 +1,18 @@
+.Alert {
+  color: white;
+  z-index: 9999;
+  background-color: #000c;
+  position: fixed;
+  top: 75%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  box-shadow: 0 0 10px 0px #0008;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.active {
+  opacity: 1;
+  transform: translate(-50%, -65%);
+}
