@@ -26,12 +26,13 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
   useEffect(() => {
     const checkLogin = () => {
       if (typeof window !== 'undefined') {
-        const loginInfo = sessionStorage.getItem('login_info');
-        if (loginInfo && JSON.parse(loginInfo).login_id) {
+        const loginInfo = localStorage.getItem('login_info');
+        const accessToken = localStorage.getItem('access_token');
+        if (accessToken && JSON.parse(loginInfo)?.login_id) {
           console.log('ok');
         } else {
           alert('로그인이 필요합니다.');
-          navigator.push('/');
+          navigator.push('./login');
         }
       }
     };

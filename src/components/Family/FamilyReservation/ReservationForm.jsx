@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
 import usePatientList from '@/hooks/usePatientList';
@@ -115,18 +114,8 @@ const ReservationForm = () => {
 
     try {
       console.log('확인용', body);
-      const mutation = useMutation(async () => {
-        const response = await axiosInstance.post('/api/v1/reservation', body, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        return response.data;
-      });
-
-      mutation.mutate();
-
-      if (mutation.isSuccess) {
+      const response = await axios.post('/api/v1/reservation', body);
+      if (response.data) {
         alert('예약 신청이 완료되었습니다.');
       } else {
         alert('예약 신청에 실패하였습니다.');

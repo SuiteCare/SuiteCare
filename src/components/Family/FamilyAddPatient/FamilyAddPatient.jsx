@@ -39,15 +39,9 @@ const FamilyAddPatient = ({ idQuery }) => {
     try {
       const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, {
         params: { id: idQuery },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
       const patientDetailPromise = axios.get(`/api/v1/patientDetail/${idQuery}`, {
         params: { id: idQuery },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       });
 
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
@@ -130,12 +124,7 @@ const FamilyAddPatient = ({ idQuery }) => {
 
     const response = idQuery
       ? await axios
-          .patch(`/api/v1/patient/${idQuery}`, {
-            body,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .patch(`/api/v1/patient/${idQuery}`, body)
           .then((response) => {
             if (response.data === 1) {
               alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
@@ -148,12 +137,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             console.error(error);
           })
       : await axios
-          .post('/api/v1/patient', {
-            body,
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+          .post('/api/v1/patient', body)
           .then((response) => {
             if (response.data === 1) {
               alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
@@ -174,9 +158,6 @@ const FamilyAddPatient = ({ idQuery }) => {
     await axios
       .delete(`/api/v1/patient/${idQuery}`, {
         params: { id: idQuery },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
       })
       .then((response) => {
         if (response.data === 1) {

@@ -1,31 +1,25 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useQuery } from 'react-query';
 
 import useLoginInfo from './useLoginInfo';
+import axiosInstance from '@/services/axiosInstance';
 
 const usePatientList = () => {
-  const [patientList, setPatientList] = useState([]);
-  const { token, id } = useLoginInfo();
+  const { id } = useLoginInfo();
 
-  useEffect(() => {
-    const getPatientList = async () => {
-      try {
-        const response = await axios.get('/api/v1/patient', {
-          params: { id },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setPatientList(response.data);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    if (id) {
-      getPatientList();
-    }
-  }, [id]);
+  const {
+    data: patientList,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['patientList', id],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/patient', { params: { id } });
+      return response.data;
+    },
+    {
+      enabled: Boolean(id),
+    },
+  );
 
   return patientList;
 };

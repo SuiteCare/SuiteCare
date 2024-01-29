@@ -22,6 +22,9 @@ axiosInstance.interceptors.request.use(
     // 참고 자료: https://velog.io/@xmun74/axios-interceptors-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
 
     // console.log('Starting Request', config);
+
+    const accessToken = localStorage.getItem('access_token');
+    config.headers.Authorization = `Bearer ${accessToken}`;
     return config;
   },
   (error) => {
@@ -36,6 +39,16 @@ axiosInstance.interceptors.response.use(
   (response) => {
     // 응답 로직
     // console.log('Response:', response);
+
+    if (response.headers.authorization) {
+      const newAccessToken = response?.headers?.authorization;
+      localStorage.removeItem('access_token'); // 만료된 access토큰 삭제
+      localStorage.setItem('access_token', newAccessToken); // 새걸로 교체
+      response.config.headers = {
+        authorization: `${newAccessToken}`,
+      };
+    }
+
     return response;
   },
   (error) => {

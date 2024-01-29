@@ -1,9 +1,11 @@
 /* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
+import { useMutation, useQuery } from 'react-query';
 
 import useLoginInfo from '@/hooks/useLoginInfo';
+import axiosInstance from '@/services/axiosInstance';
+import useModal from '@/hooks/useModal';
 
 import ChangePwModal from './ChangePwModal';
 import styles from './MyPageForm.module.css';
@@ -12,73 +14,64 @@ const MyPageForm = () => {
   const navigator = useRouter();
 
   const { token, id, login_id } = useLoginInfo();
+  const [tel, setTel] = useState('');
 
-  const [myData, setMyData] = useState({
-    name: '',
-    tel: '',
-    role: '',
-  });
+  const { data, isError, isLoading } = useQuery(
+    ['mypage', token],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
+      return response.data;
+    },
+    {
+      enabled: Boolean(token),
+    },
+  );
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && token) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('/api/v1/mypage', {
-            params: {
-              id,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setMyData(response.data);
-        } catch (error) {
-          console.error('Error:', error);
-        }
-      };
-      fetchData();
+    if (data) {
+      setTel(data.tel);
     }
-  }, [token]);
+  }, [data]);
 
-  const [changePwModalOn, setChangePwModalOn] = useState(false);
-
-  const closeModal = () => {
-    setChangePwModalOn(false);
-  };
+  const { isModalVisible, openModal, closeModal } = useModal();
 
   const handlePhoneCertification = (event) => {
     event.preventDefault();
 
-    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(myData.tel)) {
-      alert(`인증 api 연동 필요\n${myData.tel}`);
+    if (/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/.test(tel)) {
+      alert(`인증 api 연동 필요\n${tel}`);
     } else {
       alert('휴대폰 번호를 올바르게 입력하십시오.');
     }
   };
 
-  const handleModifyClick = async (event) => {
-    event.preventDefault();
-
-    const body = {
-      login_id,
-      tel: myData.tel.replaceAll('-', ''),
-    };
-
-    try {
-      const response = await axios.post('/api/v1/modify', body);
-      if (response.data) {
-        alert('정보 수정 완료!!!');
-
-        if (myData?.role === 'F') {
-          navigator.push(`/family/main`);
+  const submitModification = useMutation(
+    async () => {
+      const response = await axiosInstance.patch('/api/v1/member', {
+        tel: tel.replaceAll('-', ''),
+      });
+      console.log(tel, data.tel);
+      return response.data;
+    },
+    {
+      onSuccess: ($data) => {
+        if ($data) {
+          alert('내 정보 수정에 성공하였습니다.');
+          navigator.reload();
         } else {
-          navigator.push(`/mate/main`);
+          alert('내 정보 수정에 실패하였습니다.');
         }
-      } else {
-        alert('실패..');
-      }
-    } catch (error) {
-      console.error(error);
+      },
+    },
+  );
+
+  const handleModifyClick = async (e) => {
+    e.preventDefault();
+
+    if (tel !== data.tel) {
+      submitModification.mutate();
+    } else {
+      alert('변경된 정보가 없습니다.');
     }
   };
 
@@ -93,15 +86,15 @@ const MyPageForm = () => {
 
         <div className='input_wrapper'>
           <label>비밀번호</label>
-          <button type='button' className={styles.change_button} onClick={() => setChangePwModalOn(true)}>
+          <button type='button' className={styles.change_button} onClick={openModal}>
             비밀번호 변경
           </button>
-          {changePwModalOn && <ChangePwModal modalData={changePwModalOn} closeModal={closeModal} />}
+          {isModalVisible && <ChangePwModal closeModal={closeModal} />}
         </div>
 
         <div className='input_wrapper'>
           <label>성명</label>
-          <input type='text' name='name' id='name' readOnly value={myData.name} />
+          <input type='text' name='name' id='name' readOnly value={data?.name} />
         </div>
 
         <div className='input_wrapper'>
@@ -112,14 +105,9 @@ const MyPageForm = () => {
                 type='text'
                 placeholder='010-0000-0000'
                 id='tel'
-                value={myData.tel}
+                value={tel}
                 maxLength={13}
-                onChange={(e) =>
-                  setMyData((prevData) => ({
-                    ...prevData,
-                    tel: e.target.value,
-                  }))
-                }
+                onChange={(e) => setTel(e.target.value)}
               />
             </div>
             <button type='button' onClick={handlePhoneCertification}>
