@@ -12,7 +12,7 @@ import styles from './SignUpForm.module.css';
 
 const SignUpForm = ({ type }) => {
   const navigator = useRouter();
-  const { isAlertVisible, openAlert, AlertComponent } = useAlert();
+  const { openAlert, alertComponent } = useAlert();
 
   // type에 따라 변경될 값을 모아 둔 함수
   const valueSet = ($type) => {
@@ -159,50 +159,48 @@ const SignUpForm = ({ type }) => {
   };
 
   return (
-    <>
-      {isAlertVisible && AlertComponent}
-      <div className='Form_narrow'>
-        <div className='input_wrapper'>
-          <label>회원 구분</label>
-          <div className='input_radio'>
-            <div className={styles.radio_user_type} onClick={handleRadioClick}>
-              <input type='radio' value='family' checked={type === 'family'} />
-              <span>패밀리 회원 (간병 서비스 이용자)</span>
-            </div>
-            <div className={styles.radio_user_type} onClick={handleRadioClick}>
-              <input type='radio' value='mate' checked={type === 'mate'} />
-              <span>메이트 회원 (간병인)</span>
-            </div>
+    <div className='Form_narrow'>
+      {alertComponent}
+      <div className='input_wrapper'>
+        <label>회원 구분</label>
+        <div className='input_radio'>
+          <div className={styles.radio_user_type} onClick={handleRadioClick}>
+            <input type='radio' value='family' checked={type === 'family'} />
+            <span>패밀리 회원 (간병 서비스 이용자)</span>
+          </div>
+          <div className={styles.radio_user_type} onClick={handleRadioClick}>
+            <input type='radio' value='mate' checked={type === 'mate'} />
+            <span>메이트 회원 (간병인)</span>
           </div>
         </div>
-        <hr />
-        <form name='signup' method='post' onSubmit={handleSubmit}>
-          <div className='input_with_button'>
-            {formInputs('login_id')}
-            <button type='button' onClick={checkDuplicateID}>
-              중복확인
-            </button>
-          </div>
-
-          {formInputs('password')}
-          {formInputs('pw_check')}
-          {formInputs('name')}
-
-          <div className='input_with_button'>
-            {formInputs('tel')}
-            <button type='button' onClick={handlePhoneCertification}>
-              본인인증
-            </button>
-          </div>
-
-          <hr />
-
-          <div className='button_wrapper'>
-            <button type='submit'>{valueSet(type).buttonText}</button>
-          </div>
-        </form>
       </div>
-    </>
+      <hr />
+      <form name='signup' method='post' onSubmit={handleSubmit}>
+        <div className='input_with_button'>
+          {formInputs('login_id')}
+          <button type='button' onClick={checkDuplicateID}>
+            중복확인
+          </button>
+        </div>
+
+        {formInputs('password')}
+        {formInputs('pw_check')}
+        {formInputs('name')}
+
+        <div className='input_with_button'>
+          {formInputs('tel')}
+          <button type='button' onClick={handlePhoneCertification}>
+            본인인증
+          </button>
+        </div>
+
+        <hr />
+
+        <div className='button_wrapper'>
+          <button type='submit'>{valueSet(type).buttonText}</button>
+        </div>
+      </form>
+    </div>
   );
 };
 

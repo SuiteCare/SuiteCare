@@ -21,12 +21,11 @@ const useAlert = () => {
     setIsAlertVisible(false);
   };
 
-  const AlertComponent = isAlertVisible && <Alert key={Date.now()} {...alertCondition} closeAlert={closeAlert} />;
+  const alertComponent = isAlertVisible && <Alert key={Date.now()} {...alertCondition} closeAlert={closeAlert} />;
 
   return {
-    isAlertVisible,
     openAlert,
-    AlertComponent,
+    alertComponent,
   };
 };
 
