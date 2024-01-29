@@ -5,8 +5,9 @@ const useLoginInfo = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const sessionLoginInfo = JSON.parse(sessionStorage.getItem('login_info'));
-      setLoginInfo(sessionLoginInfo);
+      const localLoginInfo = JSON.parse(localStorage.getItem('login_info'));
+      const accessToken = localStorage.getItem('access_token');
+      setLoginInfo({ ...localLoginInfo, token: accessToken });
     }
   }, []);
 

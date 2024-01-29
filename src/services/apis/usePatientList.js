@@ -8,7 +8,7 @@ const usePatientList = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setLoginId(JSON.parse(sessionStorage.getItem('login_info'))?.login_id);
+      setLoginId(JSON.parse(localStorage.getItem('login_info'))?.login_id);
     } else {
       // 서버에서는 아무것도 렌더링 하지 않음
       return null;

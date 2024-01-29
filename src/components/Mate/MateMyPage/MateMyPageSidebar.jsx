@@ -11,8 +11,8 @@ const MateMyPageSidebar = ({ activeMenu }) => {
       <div className={`${styles.menu} ${activeMenu === 'resume' ? styles.active : ''}`}>
         <Link href={`${defaultUrl}/resume`}>메이트 이력서</Link>
       </div>
-      <div className={`${styles.menu} ${activeMenu === 'userinfo' ? styles.active : ''}`}>
-        <Link href={`${defaultUrl}/userinfo`}>내 정보 수정</Link>
+      <div className={`${styles.menu} ${activeMenu === 'mypage' ? styles.active : ''}`}>
+        <Link href={`${defaultUrl}/mypage`}>내 정보 수정</Link>
       </div>
     </div>
   );
