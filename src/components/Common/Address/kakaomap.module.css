@@ -52,7 +52,7 @@
 .menu_wrap .option input {
   width: calc(100% - 4rem - 3px);
 }
-.menu_wrap li {
+.menu_wrap li > div {
   list-style: none;
   display: grid;
   grid-template-columns: 1fr 50px;
@@ -61,19 +61,20 @@
   border-bottom: 1px solid var(--light-gray);
   align-items: center;
 }
-.menu_wrap li > button {
+.selectBtn {
   height: 40px;
   width: 40px;
   border-radius: 100%;
-  background: var(--deep-brown);
-  font-weight: 400;
+  background: var(--deep-brown) !important;
   font-size: 0.8rem;
+  color: white !important;
 }
 .info {
   line-height: 1.8;
   cursor: pointer;
   margin-left: 4rem;
 }
+
 .pagination {
   margin: 10px auto;
   text-align: center;

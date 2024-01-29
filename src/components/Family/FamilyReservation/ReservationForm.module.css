@@ -52,7 +52,7 @@ div.grid_wrapper > div:first-child {
   width: fit-content;
 }
 
-.address_section div > button {
+div.address_section div > button {
   background: var(--beige-01);
   font-weight: 400;
   color: var(--deep-brown);
