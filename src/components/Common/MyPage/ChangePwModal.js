@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import styles from '../Modal/Modal.module.css';
 
-const ChangePwModal = ({ modalData, closeModal }) => {
+const ChangePwModal = ({ closeModal }) => {
   const handleContentClick = (e) => {
     e.stopPropagation();
   };
@@ -29,7 +29,6 @@ const ChangePwModal = ({ modalData, closeModal }) => {
     };
     fetchData();
   }, []);
-
 
   const handleChangePwClick = async () => {
     if (newPw.value === newPwCheck.value) {
@@ -64,15 +63,15 @@ const ChangePwModal = ({ modalData, closeModal }) => {
           <span onClick={closeModal} />
         </div>
 
-        <div className={styles.info_wrapper}>
+        <div className='input_wrapper'>
           <label>현재 비밀번호</label>
           <input type='password' placeholder='기존 비밀번호 입력' id='pw' />
         </div>
-        <div className={styles.info_wrapper}>
+        <div className='input_wrapper'>
           <label>새 비밀번호</label>
           <input type='password' placeholder='새 비밀번호 입력' id='newPw' />
         </div>
-        <div className={styles.info_wrapper}>
+        <div className='input_wrapper'>
           <label>새 비밀번호 확인</label>
           <input type='password' placeholder='새 비밀번호 확인' id='newPwCheck' />
         </div>
