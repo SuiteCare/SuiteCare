@@ -39,6 +39,7 @@ const LoginForm = ({ type }) => {
           const { id, login_id, token } = response.data;
           localStorage.setItem('login_info', JSON.stringify({ id, login_id, role }));
           localStorage.setItem('access_token', token);
+          localStorage.setItem('expiration_time', new Date().getTime() + 60 * 60 * 1000); // ms 단위, 1시간 뒤에 만료
           navigator.push(`/${type}/main`);
         } else {
           setLoginFail(true);
