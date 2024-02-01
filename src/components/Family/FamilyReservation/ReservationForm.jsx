@@ -89,7 +89,18 @@ const ReservationForm = () => {
     e.preventDefault();
     if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress)
       return openAlert('주소를 입력하세요.');
-    if (weekdayBoolean.every((day) => !day)) return openAlert('간병 요일을 선택하세요.');
+
+    if (
+      countWeekdays(
+        formData.start_date,
+        formData.end_date,
+        weekdayBoolean.reduce((acc, v, i) => {
+          if (v) acc.push(i);
+          return acc;
+        }, []),
+      ) === 0
+    )
+      return openAlert('간병 기간 및 출퇴근요일 설정이 올바르지 않습니다.');
 
     const body = {
       member_id: id,

@@ -7,6 +7,8 @@ import styles from './HeaderCore.module.css';
 import Logo from '@/assets/logo-white.png';
 import Dropdown from './Dropdown';
 
+import logout from '@/utils/logout';
+
 const HeaderCore = ({ type, isCheckLogin = true }) => {
   const [familyMenuOpen, setFamilyMenuOpen] = useState(false);
   const [mateMenuOpen, setMateMenuOpen] = useState(false);
@@ -28,11 +30,13 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
       if (typeof window !== 'undefined') {
         const loginInfo = localStorage.getItem('login_info');
         const accessToken = localStorage.getItem('access_token');
-        if (accessToken && JSON.parse(loginInfo)?.login_id) {
+        const expirationTime = localStorage.getItem('expiration_time');
+        if (accessToken && JSON.parse(loginInfo)?.login_id && expirationTime >= new Date().getTime()) {
           console.log('ok');
         } else {
+          logout();
           alert('로그인이 필요합니다.');
-          navigator.push('./login');
+          navigator.push(`/${type}/login`);
         }
       }
     };
