@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
-import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 
 import HistoryTable from './HistoryTable';
@@ -11,7 +10,6 @@ import Loading from '@/components/Common/Modal/Loading';
 const FamilyHistory = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { id } = useLoginInfo();
-  const { isError, isLoading, patientList } = usePatientList(id);
 
   const {
     data: reservationList,
@@ -29,10 +27,11 @@ const FamilyHistory = () => {
   );
 
   console.log('res:', reservationList);
+  console.log('error:', isResListError);
 
   return (
     <div className='FamilyHistory'>
-      {isLoading || isResListLoading ? <Loading /> : ''}
+      {isResListLoading ? <Loading /> : ''}
       <div style={{ textAlign: 'right' }}>
         <button type='button' onClick={() => navigator.push('/family/reservation')}>
           간병 예약하기

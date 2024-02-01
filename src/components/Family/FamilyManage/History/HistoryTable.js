@@ -1,6 +1,15 @@
+import useLoginInfo from '@/hooks/useLoginInfo';
+import usePatientList from '@/services/apis/usePatientList';
+
 import styles from '../FamilyManageTable.module.css';
 
 const HistoryTable = ({ data }) => {
+  const { id } = useLoginInfo();
+  const { isError, isLoading, patientList } = usePatientList(id);
+  const selectPatient = ($id) => patientList?.filter((e) => e.id === $id)[0];
+  console.log(selectPatient(1));
+  console.log(patientList);
+
   return (
     <table className={styles.FamilyManageTable}>
       <thead>
@@ -18,15 +27,15 @@ const HistoryTable = ({ data }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((e) => (
+        {data?.map((e) => (
           <tr key={e}>
             <td>{e.status}</td>
             <td>{e.create_at}</td>
             <td>{e.update_at || '예약 미체결'}</td>
             <td>{e.payment_at || '결제 미처리'}</td>
             <td>{e.mate_name || '간병인 미배정'}</td>
-            <td>{e.patient_name}</td>
-            <td>{e.diagnosis}</td>
+            <td>{selectPatient(e.id).name}</td>
+            <td>{selectPatient(e.id).diagnosis_name}</td>
             <td>{e.start_date}</td>
             <td>{e.end_date}</td>
             <td>
