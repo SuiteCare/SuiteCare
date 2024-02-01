@@ -20,7 +20,7 @@ const HistoryTable = ({ data }) => {
       <tbody>
         {data.map((e) => (
           <tr key={e}>
-            <td>{e.reservation_status}</td>
+            <td>{e.status}</td>
             <td>{e.create_at}</td>
             <td>{e.update_at || '예약 미체결'}</td>
             <td>{e.payment_at || '결제 미처리'}</td>
