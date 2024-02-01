@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import Header from '@/components/Family/FamilyHeader/FamilyHeader';
+
 import logout from '@/utils/logout';
 
 const LogoutPage = () => {
@@ -11,7 +13,12 @@ const LogoutPage = () => {
       navigator.push('/');
     }
   }, []);
-  return <>로그아웃이 완료되었습니다.</>;
+  return (
+    <>
+      <Header />
+      <div className='content_wrapper'>로그아웃 처리 중...</div>
+    </>
+  );
 };
 
 export default LogoutPage;
