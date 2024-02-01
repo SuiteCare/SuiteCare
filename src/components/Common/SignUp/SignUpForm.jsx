@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import { useMutation } from 'react-query';
 
 import useAlert from '@/hooks/useAlert';
@@ -126,7 +125,7 @@ const SignUpForm = ({ type }) => {
         role,
       };
 
-      const response = await axios.post('/api/v1/signup', body);
+      const response = await axiosInstance.post('/api/v1/signup', body);
       if (response.data) {
         openAlert('회원가입이 완료되었습니다.');
         navigator.push(`/${type}/login`);

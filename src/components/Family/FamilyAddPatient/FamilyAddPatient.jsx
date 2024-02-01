@@ -13,7 +13,7 @@ import random from '@/utils/FamilyAddPatient';
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
 
-  const { token, id } = useLoginInfo();
+  const { id } = useLoginInfo();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -37,10 +37,10 @@ const FamilyAddPatient = ({ idQuery }) => {
   // 정보 받아옴
   const getPatientData = async () => {
     try {
-      const patientPromise = axios.get(`/api/v1/patient/${idQuery}`, {
+      const patientPromise = axiosInstance.get(`/api/v1/patient/${idQuery}`, {
         params: { id: idQuery },
       });
-      const patientDetailPromise = axios.get(`/api/v1/patientDetail/${idQuery}`, {
+      const patientDetailPromise = axiosInstance.get(`/api/v1/patientDetail/${idQuery}`, {
         params: { id: idQuery },
       });
 
@@ -123,7 +123,7 @@ const FamilyAddPatient = ({ idQuery }) => {
     console.log(body);
 
     const response = idQuery
-      ? await axios
+      ? await axiosInstance
           .patch(`/api/v1/patient/${idQuery}`, body)
           .then((response) => {
             if (response.data === 1) {
@@ -136,7 +136,7 @@ const FamilyAddPatient = ({ idQuery }) => {
           .catch((error) => {
             console.error(error);
           })
-      : await axios
+      : await axiosInstance
           .post('/api/v1/patient', body)
           .then((response) => {
             if (response.data === 1) {
@@ -155,7 +155,7 @@ const FamilyAddPatient = ({ idQuery }) => {
   const handleClickDelete = async (e) => {
     e.preventDefault();
 
-    await axios
+    await axiosInstance
       .delete(`/api/v1/patient/${idQuery}`, {
         params: { id: idQuery },
       })
@@ -235,7 +235,7 @@ const FamilyAddPatient = ({ idQuery }) => {
           {idQuery ? (
             <>
               <button type='button' onClick={handleClickDelete}>
-                삭제
+                환자 삭제
               </button>
               <button type='submit'>정보 수정</button>
             </>

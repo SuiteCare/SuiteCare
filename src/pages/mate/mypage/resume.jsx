@@ -1,36 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import Header from '@/components/Mate/MateHeader/MateHeader';
 import Resume from '@/components/Mate/MateMyPage/Resume';
 import MateMyPageSidebar from '@/components/Mate/MateMyPage/MateMyPageSidebar';
 
 const ResumePage = () => {
-  const [loginId, setLoginId] = useState('');
+  const { id } = useLoginInfo();
+
   const [data, setData] = useState({
     mypage: '',
     resume: '',
   });
-
-  useEffect(() => {
-    setLoginId(JSON.parse(sessionStorage.getItem('login_info')).login_id);
-  }, []);
 
   const {
     data: mypageData,
     isMypageError,
     isMypageLoading,
   } = useQuery(
-    ['mypageData', loginId],
+    ['mypageData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mypage', { params: { id: loginId } });
+      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
       return response.data;
     },
     {
-      enabled: Boolean(loginId),
+      enabled: Boolean(id),
     },
   );
 
@@ -39,13 +36,13 @@ const ResumePage = () => {
     isResumeError,
     isResumeLoading,
   } = useQuery(
-    ['mypageData', loginId],
+    ['mypageData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mate/resume', { params: { id: loginId } });
+      const response = await axiosInstance.get('/api/v1/mate/resume', { params: { id } });
       return response.data;
     },
     {
-      enabled: Boolean(loginId),
+      enabled: Boolean(id),
     },
   );
 

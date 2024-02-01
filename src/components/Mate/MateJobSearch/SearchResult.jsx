@@ -5,6 +5,7 @@ import { useMutation } from 'react-query';
 
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
@@ -14,6 +15,8 @@ const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
   const [sortOption, setSortOption] = useState('');
   const [modalData, setModalData] = useState({});
+
+  const { id } = useLoginInfo();
 
   const handleShowModal = async (defaultData) => {
     const getPatientDetail = async () => {
@@ -58,8 +61,6 @@ const SearchResult = ({ data }) => {
 
   const sortedData = [...data].sort(sortOptions[sortOption]);
 
-  const loginId = JSON.parse(sessionStorage.getItem('login_info')).login_id;
-
   const MateJobApplication = async (body) => {
     const response = await axiosInstance.post('/api/v1/apply', body);
     return response.data;
@@ -86,7 +87,7 @@ const SearchResult = ({ data }) => {
 
   const handleApply = (reservation_id) => {
     const body = {
-      mate_id: loginId,
+      mate_id: id,
       reservation_id,
     };
     mutation.mutate(body);
