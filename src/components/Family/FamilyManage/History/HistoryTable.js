@@ -6,7 +6,8 @@ import styles from '../FamilyManageTable.module.css';
 const HistoryTable = ({ data }) => {
   const { id } = useLoginInfo();
   const { isError, isLoading, patientList } = usePatientList(id);
-  const selectPatient = ($id) => patientList?.find((e) => e.id === $id);
+  const selectPatient = ($id) => patientList?.filter((e) => e.id === $id)[0];
+  console.log(selectPatient(1));
   console.log(patientList);
 
   return (
@@ -25,27 +26,23 @@ const HistoryTable = ({ data }) => {
           <th>예약 상세정보</th>
         </tr>
       </thead>
-
       <tbody>
-        {data?.map((e) => {
-          const patient = selectPatient(e.patient_id);
-          return (
-            <tr key={e.id}>
-              <td>{e.status === 'P' ? '진행중' : '예약완료'}</td>
-              <td>{e.create_at}</td>
-              <td>{e.update_at || '예약 미체결'}</td>
-              <td>{e.payment_at || '결제 미처리'}</td>
-              <td>{e.mate_name || '간병인 미배정'}</td>
-              <td>{patient?.name}</td>
-              <td>{patient?.diagnosis_name}</td>
-              <td>{e.start_date}</td>
-              <td>{e.end_date}</td>
-              <td>
-                <button type='button'>상세정보 보기</button>
-              </td>
-            </tr>
-          );
-        })}
+        {data?.map((e) => (
+          <tr key={e}>
+            <td>{e.status}</td>
+            <td>{e.create_at}</td>
+            <td>{e.update_at || '예약 미체결'}</td>
+            <td>{e.payment_at || '결제 미처리'}</td>
+            <td>{e.mate_name || '간병인 미배정'}</td>
+            <td>{selectPatient(e.id).name}</td>
+            <td>{selectPatient(e.id).diagnosis_name}</td>
+            <td>{e.start_date}</td>
+            <td>{e.end_date}</td>
+            <td>
+              <button type='button'>상세정보 보기</button>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
