@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './login.module.css';
 import LoginForm from '@/components/Common/Login/LoginForm';
 import FamilyHeader from '@/components/Family/FamilyHeader/FamilyHeader';
 
 const LoginPage = () => {
+  const navigavor = useRouter();
+  const { id } = useLoginInfo();
+
+  useEffect(() => {
+    if (id) {
+      navigavor.push('/family/main');
+    }
+  }, [id]);
+
   return (
     <div className={styles.login}>
       <FamilyHeader isCheckLogin={false} />

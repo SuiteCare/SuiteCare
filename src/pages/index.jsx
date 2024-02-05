@@ -26,6 +26,7 @@ const Home = () => {
     ReactGA.pageview(window.location.pathname);
   }, []);
 
+  if (isError) return <div>서버 에러</div>;
   if (isLoading) return <Loading />;
 
   return (

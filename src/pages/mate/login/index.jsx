@@ -1,10 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './login.module.css';
 import LoginForm from '@/components/Common/Login/LoginForm';
 import MateHeader from '@/components/Mate/MateHeader/MateHeader';
 
 const LoginPage = () => {
+  const navigavor = useRouter();
+  const { id } = useLoginInfo();
+
+  useEffect(() => {
+    if (id) {
+      navigavor.push('/mate/main');
+    }
+  }, [id]);
+
   return (
     <div className={styles.login}>
       <MateHeader isCheckLogin={false} />
