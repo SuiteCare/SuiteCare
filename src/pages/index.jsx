@@ -9,6 +9,7 @@ import Header from '@/components/Home/Header';
 import Footer from '@/components/Home/Footer';
 import Contact from '@/components/Home/Contact';
 import About from '@/components/Home/About';
+import Loading from '@/components/Common/Modal/Loading';
 
 const Home = () => {
   const {
@@ -24,6 +25,9 @@ const Home = () => {
     ReactGA.initialize('UA-110570651-1');
     ReactGA.pageview(window.location.pathname);
   }, []);
+
+  if (isError) return <div>서버 에러</div>;
+  if (isLoading) return <Loading />;
 
   return (
     <div className={styles.Home}>

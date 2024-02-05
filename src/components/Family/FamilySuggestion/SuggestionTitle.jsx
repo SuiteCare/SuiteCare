@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 
 import usePatientList from '@/services/apis/usePatientList';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './Suggestion.module.css';
+import Loading from '@/components/Common/Modal/Loading';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
 const SuggestionTitle = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
 
-  const { patientList, isLoading, isError } = usePatientList();
+  const { id } = useLoginInfo();
 
-  if (isLoading) return <div>Loading...</div>;
+  const { patientList, isLoading, isError } = usePatientList(id);
+
+  if (isLoading) return <Loading />;
   if (isError) return <div>환자 리스트를 불러오지 못했습니다.</div>;
 
   const patientInfo = patientList?.find((patient) => patient.id === Number(selectedPatient));
