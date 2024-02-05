@@ -18,7 +18,7 @@ const FamilyHistory = () => {
   } = useQuery(
     ['reservationList', id],
     async () => {
-      const { data } = await axiosInstance.get('/api/v1/history', { params: { id } });
+      const { data } = await axiosInstance.get('/api/v1/reservationHistory', { params: { id } });
       return data.reverse();
     },
     {
