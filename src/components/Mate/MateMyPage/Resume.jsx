@@ -4,12 +4,23 @@ import Image from 'next/image';
 import styles from './Resume.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 import defaultProfile from '@/assets/default_profile.jpg';
+import { renderCareerItem, renderCertificateItem } from './rederInput';
 
 import { calAge, genderToKo, minWage } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
 
 const Resume = ({ data }) => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    profilePictureFilename: '',
+    contactTimeStart: '09:00',
+    contactTimeEnd: '21:00',
+    introduction: '',
+    mainServiceData: [],
+    checkedLoc: [],
+    career: [],
+    certificate: [],
+    wage: minWage,
+  });
 
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
@@ -71,14 +82,16 @@ const Resume = ({ data }) => {
 
   const addCareer = () => {
     setFormData((prevFormData) => {
+      const lastCareer = prevFormData.career[prevFormData.career.length - 1];
       const newCareer = {
-        id: Date.now(),
+        id: (lastCareer ? lastCareer.id : 0) + 1,
       };
       return { ...prevFormData, career: [...(prevFormData.career || []), newCareer] };
     });
   };
 
   const deleteCareer = (id) => {
+    console.log(id, '번째 경력이 지워짐');
     setFormData((prevFormData) => {
       return { ...prevFormData, career: prevFormData.career.filter((it) => it.id !== id) };
     });
@@ -86,8 +99,9 @@ const Resume = ({ data }) => {
 
   const addCertificate = () => {
     setFormData((prevFormData) => {
+      const lastCertificate = prevFormData.certificate[prevFormData.certificate.length - 1];
       const newCertificate = {
-        id: Date.now(),
+        id: (lastCertificate ? lastCertificate.id : 0) + 1,
       };
       return { ...prevFormData, certificate: [...(prevFormData.certificate || []), newCertificate] };
     });
@@ -113,14 +127,6 @@ const Resume = ({ data }) => {
     });
   };
 
-  const renderOptions = (options) => {
-    return options?.map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ));
-  };
-
   const handleItemChange = (e, index, type) => {
     const { name, value } = e.target;
 
@@ -143,97 +149,9 @@ const Resume = ({ data }) => {
         default:
           break;
       }
-
       return updatedData;
     });
   };
-
-  const renderCareerItem = (careerItem, index) => (
-    <div key={`career-${index}`} className={styles.career_item}>
-      <select name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
-        {renderOptions([
-          '경력명',
-          '간호사',
-          '호스피스 간호사',
-          '요양보호사',
-          '간병인',
-          '물리치료사',
-          '재활치료사',
-          '사회복지사',
-        ])}
-      </select>
-      <input
-        type='text'
-        id='name'
-        name='career_detail'
-        placeholder='경력 세부내용'
-        value={careerItem.name}
-        onChange={(e) => handleItemChange(e, index, 'career')}
-      />
-      <div>
-        <input
-          type='date'
-          id='date_start'
-          name='data_start'
-          value={careerItem.date_start}
-          onChange={(e) => handleItemChange(e, index, 'career')}
-        />
-        ~
-        <input
-          type='date'
-          id='date_end'
-          name='data_end'
-          value={careerItem.date_end}
-          onChange={(e) => handleItemChange(e, index, 'career')}
-        />
-      </div>
-      <button type='button' onClick={() => deleteCareer(careerItem.id)}>
-        X
-      </button>
-    </div>
-  );
-
-  const renderCertificateItem = (certificateItem, index) => (
-    <div key={`certificate-${index}`} className={styles.certificate_item}>
-      <input
-        name='certificate_name'
-        type='text'
-        placeholder='자격증명'
-        value={certificateItem.certificate_name}
-        onChange={(e) => handleItemChange(e, index, 'certificate')}
-      />
-      <input
-        name='certificate_code'
-        type='text'
-        placeholder='자격증 코드'
-        value={certificateItem.certificate_code}
-        onChange={(e) => handleItemChange(e, index, 'certificate')}
-      />
-      <div>
-        <div>
-          <label htmlFor='qualification_date'>취득일</label>
-          <input
-            type='date'
-            name='qualification_date'
-            value={certificateItem.qualification_date}
-            onChange={(e) => handleItemChange(e, index, 'certificate')}
-          />
-        </div>
-        <div>
-          <label htmlFor='expired_date'>만료일</label>
-          <input
-            type='date'
-            name='expired_date'
-            value={certificateItem.expired_date}
-            onChange={(e) => handleItemChange(e, index, 'certificate')}
-          />
-        </div>
-      </div>
-      <button type='button' onClick={() => deleteCertificate(certificateItem.id)}>
-        X
-      </button>
-    </div>
-  );
 
   const handleUpdateResume = async () => {
     if (!formData.wage) {
@@ -262,6 +180,7 @@ const Resume = ({ data }) => {
       console.error('업데이트 실패:', error);
     }
   };
+
   const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
   const handleWageCheckbox = (e) => {
     if (e.target.checked) {
@@ -279,18 +198,31 @@ const Resume = ({ data }) => {
     }
   };
 
-  useEffect(() => {
+  const initializeFormData = ($data) => {
     setFormData({
-      contactTimeStart: data.resume?.mate?.contact_time_start || '09:00',
-      contactTimeEnd: data.resume?.mate?.contact_time_end || '21:00',
-      introduction: data.resume?.mate?.introduction || '',
-      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
-      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
-      career: data.resume?.career || [],
-      certificate: data.resume?.certificate || [],
-      wage: minWage,
+      profilePictureFilename: $data.resume?.mate?.profile_picture_filename || defaultProfile,
+      contactTimeStart: $data.resume?.mate?.contact_time_start || '09:00',
+      contactTimeEnd: $data.resume?.mate?.contact_time_end || '21:00',
+      introduction: $data.resume?.mate?.introduction || '',
+      mainServiceData: $data.resume?.mainService?.map((it) => it.name) || [],
+      checkedLoc: $data.resume?.location?.map((it) => it.name) || [],
+      career: $data.resume?.career || [],
+      certificate: $data.resume?.certificate || [],
+      wage: $data.resume?.mate?.desired_wage || minWage,
     });
+  };
+
+  useEffect(() => {
+    initializeFormData(data);
   }, [data]);
+
+  const handleFileChange = ($event) => {
+    const file = $event.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      profilePictureFilename: file,
+    }));
+  };
 
   return (
     <div className={styles.Resume}>
@@ -301,8 +233,11 @@ const Resume = ({ data }) => {
             <div className={styles.introduce}>
               <div className='input_wrapper'>
                 <div className={styles.img_wrapper}>
-                  {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
-                  <input type='file' />
+                  <Image
+                    src={formData.profilePictureFilename || data.profile_picture_filename || defaultProfile}
+                    alt='profile_picture'
+                  />
+                  <input type='file' onChange={handleFileChange} />
                 </div>
                 <div className={styles.basicInfo}>
                   <div>
@@ -404,13 +339,29 @@ const Resume = ({ data }) => {
                 +
               </button>
             </h3>
-            <div name='careerDiv'>
-              {formData?.career?.length > 0 ? (
-                formData?.career?.map((careerItem, index) => renderCareerItem(careerItem, index))
-              ) : (
-                <div />
-              )}
-            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>경력 종류</th>
+                  <th>경력 세부내용</th>
+                  <th>경력 기간</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {formData?.career?.length > 0 ? (
+                  formData?.career?.map((careerItem, index) =>
+                    renderCareerItem(careerItem, index, handleItemChange, deleteCareer),
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan={4}>
+                      <span>경력 정보를 추가해 주세요.</span>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </section>
 
           <section className={styles.certificate}>
@@ -420,11 +371,30 @@ const Resume = ({ data }) => {
                 +
               </button>
             </h3>
-            {formData?.certificate?.length > 0 ? (
-              formData?.certificate?.map((certificateItem, index) => renderCertificateItem(certificateItem, index))
-            ) : (
-              <div />
-            )}
+            <table>
+              <thead>
+                <tr>
+                  <th>자격증명</th>
+                  <th>자격증 코드</th>
+                  <th>취득일</th>
+                  <th>만료일</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>
+                {formData?.certificate?.length > 0 ? (
+                  formData?.certificate?.map((certificateItem, index) =>
+                    renderCertificateItem(certificateItem, index, handleItemChange, deleteCertificate),
+                  )
+                ) : (
+                  <tr>
+                    <td colSpan={5}>
+                      <span>보유 자격증을 추가해 주세요.</span>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </section>
           <section className={styles.mainService}>
             <h3>대표서비스</h3>
