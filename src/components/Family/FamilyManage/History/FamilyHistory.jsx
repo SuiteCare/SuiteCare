@@ -18,7 +18,7 @@ const FamilyHistory = () => {
   } = useQuery(
     ['reservationList', id],
     async () => {
-      const { data } = await axiosInstance.get('/api/v1/history', { params: { id } });
+      const { data } = await axiosInstance.get('/api/v1/reservationHistory', { params: { id } });
       return data.reverse();
     },
     {
@@ -46,15 +46,12 @@ const FamilyHistory = () => {
         </div>
       </div>
       {activeTab === 0 && <HistoryTable data={reservationList} />}
-      {activeTab === 1 && (
-        <HistoryTable
-          data={[
-            { date: '2023-12-25', name: '간병인4' },
-            { date: '2023-12-23', name: '간병인5' },
-            { date: '2023-12-19', name: '간병인6' },
-          ]}
-        />
-      )}{' '}
+      {activeTab === 1 &&
+        (reservationList.filter((e) => e.status === 'C').length > 0 ? (
+          <HistoryTable data={reservationList.filter((e) => e.status === 'C')} />
+        ) : (
+          <p style={{ textAlign: 'center' }}>예약 완료된 건이 없습니다.</p>
+        ))}
     </div>
   );
 };
