@@ -66,6 +66,7 @@ const SearchResult = ({ data, type }) => {
       return {};
     }
   }
+  console.log(data);
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
@@ -77,7 +78,7 @@ const SearchResult = ({ data, type }) => {
           : '스위트케어가 추천하는 메이트'}
       </h3>
       {data && data.length > 0 ? (
-        data.map((e) => <SearchResultCard data={e} key={e.id} showDetail={() => handleShowModal(e)} />)
+        data.map((e) => <SearchResultCard data={e} key={e.mate_id} showDetail={() => handleShowModal(e)} />)
       ) : (
         <div className='no_result'>검색 결과가 없습니다.</div>
       )}

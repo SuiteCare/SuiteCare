@@ -48,14 +48,14 @@ const ReservationForm = () => {
   const handlePatientSelectChange = (e) => {
     if (e.target.value === 'add') {
       if (window.confirm('입력된 내용이 초기화됩니다. 환자 추가 페이지로 이동하시겠습니까?')) {
-        navigator.push('/family/addpatient');
+        navigator.push('/family/addPatient');
       }
     } else {
       const selectedPatient = patientList.filter((v) => v.id === +e.target.value)[0];
       setPatientInfo(selectedPatient);
       setFormData((prevData) => ({
         ...prevData,
-        patient_id: selectedPatient.id,
+        patient_id: selectedPatient?.id,
       }));
     }
   };

@@ -2,26 +2,41 @@ import { useState } from 'react';
 
 import axiosInstance from '@/services/axiosInstance';
 import useModal from '@/hooks/useModal';
+import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from '../Modal/Modal.module.css';
 
 const ChangePwModal = ({ closeModal }) => {
   const { handleContentClick } = useModal();
+  const { id } = useLoginInfo();
 
-  const [pw, setPw] = useState('');
-  const [newPw, setNewPw] = useState('');
-  const [newPwCheck, setNewPwCheck] = useState('');
+  const [formData, setFormData] = useState({
+    pw: '',
+    newPw: '',
+    newPwCheck: '',
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleChangePwClick = async () => {
+    const { pw, newPw, newPwCheck } = formData;
+
     if (newPw === newPwCheck) {
       const body = {
+        login_id: id,
         originPassword: pw,
         newPassword: newPw,
         newPasswordCheck: newPwCheck,
       };
 
       try {
-        const response = await axiosInstance.post('/api/v1/changepassword', body);
+        const response = await axiosInstance.post('/api/v1/changepw', body);
         if (response.data === 0) {
           alert('현재 비밀번호를 다시 확인해주세요.');
         } else {
@@ -48,9 +63,9 @@ const ChangePwModal = ({ closeModal }) => {
           <input
             type='password'
             placeholder='기존 비밀번호 입력'
-            id='pw'
-            value={pw}
-            onChange={(e) => setPw(e.target.value)}
+            name='pw'
+            value={formData.pw}
+            onChange={handleChange}
           />
         </div>
         <div className='input_wrapper'>
@@ -58,9 +73,9 @@ const ChangePwModal = ({ closeModal }) => {
           <input
             type='password'
             placeholder='새 비밀번호 입력'
-            id='newPw'
-            value={newPw}
-            onChange={(e) => setNewPw(e.target.value)}
+            name='newPw'
+            value={formData.newPw}
+            onChange={handleChange}
           />
         </div>
         <div className='input_wrapper'>
@@ -68,9 +83,9 @@ const ChangePwModal = ({ closeModal }) => {
           <input
             type='password'
             placeholder='새 비밀번호 확인'
-            id='newPwCheck'
-            value={newPwCheck}
-            onChange={(e) => setNewPwCheck(e.target.value)}
+            name='newPwCheck'
+            value={formData.newPwCheck}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.button_wrapper}>
