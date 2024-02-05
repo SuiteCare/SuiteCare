@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
 import useModal from '@/hooks/useModal';
@@ -6,9 +7,13 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from '../Modal/Modal.module.css';
 
+import logout from '@/utils/logout';
+
 const ChangePwModal = ({ closeModal }) => {
   const { handleContentClick } = useModal();
   const { id } = useLoginInfo();
+
+  const navigator = useRouter();
 
   const [formData, setFormData] = useState({
     pw: '',
@@ -36,12 +41,14 @@ const ChangePwModal = ({ closeModal }) => {
       };
 
       try {
-        const response = await axiosInstance.post('/api/v1/changepw', body);
+        const response = await axiosInstance.post('/api/v1/changepassword', body);
         if (response.data === 0) {
           alert('현재 비밀번호를 다시 확인해주세요.');
         } else {
-          alert('비밀번호 변경이 완료되었습니다.');
+          alert('비밀번호 변경이 완료되었습니다. 변경된 비밀번호로 로그인하세요');
           closeModal();
+          logout();
+          navigator.push(`/${window.location.pathname.split('/')[1]}/login`);
         }
       } catch (error) {
         console.error(error);
