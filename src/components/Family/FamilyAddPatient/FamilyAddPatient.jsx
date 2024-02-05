@@ -125,8 +125,8 @@ const FamilyAddPatient = ({ idQuery }) => {
     const response = idQuery
       ? await axiosInstance
           .patch(`/api/v1/patient/${idQuery}`, body)
-          .then((response) => {
-            if (response.data === 1) {
+          .then((res) => {
+            if (res.data === 1) {
               alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
               navigator.push('/family/manage/patient_list');
             } else {
@@ -138,8 +138,8 @@ const FamilyAddPatient = ({ idQuery }) => {
           })
       : await axiosInstance
           .post('/api/v1/patient', body)
-          .then((response) => {
-            if (response.data === 1) {
+          .then((res) => {
+            if (res.data === 1) {
               alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
               navigator.push('/family/main');
             } else {
@@ -159,8 +159,8 @@ const FamilyAddPatient = ({ idQuery }) => {
       .delete(`/api/v1/patient/${idQuery}`, {
         params: { id: idQuery },
       })
-      .then((response) => {
-        if (response.data === 1) {
+      .then((res) => {
+        if (res.data === 1) {
           alert(`${formData.basic.name} 님의 환자 정보가 삭제되었습니다.`);
           navigator.push('/family/manage/patient_list');
         } else {

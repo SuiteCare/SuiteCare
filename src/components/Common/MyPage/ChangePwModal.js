@@ -18,10 +18,10 @@ const ChangePwModal = ({ closeModal }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+    }));
   };
 
   const handleChangePwClick = async () => {
