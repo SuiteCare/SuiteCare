@@ -73,8 +73,8 @@ const SearchResult = ({ data }) => {
       if (applicationResult === 1) {
         alert('간병 지원이 완료되었습니다.');
       } else if (applicationResult === 0) {
-        if (confirm('간병 지원을 위해서는 메이트 프로필 작성이 필요합니다.\n프로필 작성 페이지로 이동하시겠습니까?')) {
-          router.push('/mate/mypage/profile');
+        if (confirm('간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?')) {
+          router.push('/mate/mypage/resume');
         }
       } else {
         alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
