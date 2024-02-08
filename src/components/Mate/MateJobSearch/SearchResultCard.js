@@ -84,8 +84,12 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       {/* body */}
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
-        <button onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>상세정보 보기</button>
-        <button onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>간병 지원하기</button>
+        <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
+          상세정보 보기
+        </button>
+        <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
+          간병 지원하기
+        </button>
       </div>
 
       {/* bottom */}

@@ -74,10 +74,10 @@ const LoginForm = ({ type }) => {
               <p>아이디와 비밀번호가 일치하지 않습니다.</p>
             </div>
           )}
-          <button className={styles.button} type='submit'>
+          <button type='submit' className={styles.button}>
             로그인
           </button>
-          <button className={styles.button} onClick={() => navigator.push(`/${type}/signup`)} type='button'>
+          <button type='button' className={styles.button} onClick={() => navigator.push(`/${type}/signup`)}>
             회원가입
           </button>
         </form>

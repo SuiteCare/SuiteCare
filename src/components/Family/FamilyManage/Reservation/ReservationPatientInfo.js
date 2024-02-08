@@ -65,7 +65,9 @@ const ReservationPatientInfo = ({ styles, fullData }) => {
           </div>
         </div>
         <div className={styles.search_button_wrapper}>
-          <button onClick={() => handleDetailClick(fullData.patient.patient_id)}>환자 상세정보</button>
+          <button type='button' onClick={() => handleDetailClick(fullData.patient.patient_id)}>
+            환자 상세정보
+          </button>
         </div>
       </div>
       {/* 간병 정보 시작 */}
