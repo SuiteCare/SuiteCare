@@ -1,42 +1,23 @@
 import React, { useState } from 'react';
 
 import useModal from '@/hooks/useModal';
-import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
 import usePatientList from '@/services/apis/usePatientList';
 
-import ReservationDetailModal from '../Reservation/PatientDetailModal';
+import ReservationDetailModal from './ReservationDetailModal';
 import styles from '../FamilyManageTable.module.css';
 
 const HistoryTable = ({ data }) => {
   const { id } = useLoginInfo();
-  const { isError, isLoading, patientList } = usePatientList(id);
-  const selectPatient = ($id) => patientList?.find((e) => e.id === $id);
-  console.log(patientList);
-
-  const [modalData, setModalData] = useState({});
   const { isModalVisible, openModal, closeModal } = useModal();
+  const { isError, isLoading, patientList } = usePatientList(id);
 
-  const getPatientDetail = async ($event) => {
-    setModalData($event);
-    try {
-      const patientPromise = axiosInstance.get(`/api/v1/patient/${$event.id}`);
-      const patientDetailPromise = axiosInstance.get(`/api/v1/patientDetail/${$event.id}`);
+  const selectPatient = ($id) => patientList?.find((e) => e.id === $id);
 
-      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
-
-      setModalData((prevData) => ({
-        ...prevData,
-        ...patientResponse.data,
-        ...patientDetailResponse.data,
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [reservationId, setReservationId] = useState(-1);
 
   const handleDetailClick = ($event) => {
-    getPatientDetail($event);
+    setReservationId($event.id);
     openModal();
   };
 
@@ -63,7 +44,9 @@ const HistoryTable = ({ data }) => {
             const patient = selectPatient(e.patient_id);
             return (
               <tr key={e.id}>
-                <td>{e.status === 'P' ? '진행중' : '예약완료'}</td>
+                <td>
+                  {e.status === 'P' ? '대기중' : e.status === 'C' ? '진행중' : e.status === 'F' ? '종료' : '오류'}
+                </td>
                 <td>{e.create_at}</td>
                 <td>{e.update_at || '예약 미체결'}</td>
                 <td>{e.payment_at || '결제 미처리'}</td>
@@ -82,7 +65,12 @@ const HistoryTable = ({ data }) => {
           })}
         </tbody>
       </table>
-      {isModalVisible && <ReservationDetailModal modalData={modalData} closeModal={closeModal} />}
+      {isModalVisible && (
+        <ReservationDetailModal
+          selectedReservation={data.find((e) => e.id === reservationId)}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   );
 };

@@ -641,3 +641,10 @@ input[type='checkbox'] {
   width: 100%;
   margin: 0 auto;
 }
+
+.error {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  padding: 4rem;
+}
