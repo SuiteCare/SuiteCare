@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
+import axiosInstance from '@/services/axiosInstance';
+
 import styles from './HeaderCore.module.css';
 import Logo from '@/assets/logo-white.png';
 import Dropdown from './Dropdown';
@@ -26,18 +28,29 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
   const navigator = useRouter();
 
   useEffect(() => {
-    const checkLogin = () => {
+    const checkLogin = async () => {
       if (typeof window !== 'undefined') {
         const loginInfo = localStorage.getItem('login_info');
         const accessToken = localStorage.getItem('access_token');
         const expirationTime = localStorage.getItem('expiration_time');
+
         if (accessToken && JSON.parse(loginInfo)?.login_id && expirationTime >= new Date().getTime()) {
-          console.log('ok');
-        } else {
-          logout();
-          alert('로그인이 필요합니다.');
-          navigator.push(`/${type}/login`);
+          try {
+            const response = await axiosInstance.get('/api/v1/mypage', {
+              params: { id: JSON.parse(loginInfo).login_id },
+            });
+            if (response) {
+              console.log('ok');
+              return true;
+            }
+          } catch (error) {
+            console.error(error);
+          }
         }
+
+        logout();
+        alert('로그인이 필요합니다.');
+        navigator.push(`/${type}/login`);
       }
     };
 
@@ -51,7 +64,11 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
       </Link>
       <div className='nav_wrapper'>
         <ul className='menu_wrapper'>
-          <button onClick={() => toggleMenu('mate')} className={`${type === 'mate' ? styles.active : ''} mate-button`}>
+          <button
+            type='button'
+            onClick={() => toggleMenu('mate')}
+            className={`${type === 'mate' ? styles.active : ''} mate-button`}
+          >
             <span>간병 일감 찾기</span>
           </button>
           {mateMenuOpen && <Dropdown type='mate' isOpen />}

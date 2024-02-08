@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+import axiosInstance from '@/services/axiosInstance';
+import useAlert from '@/hooks/useAlert';
+
 import styles from './Resume.module.css';
 import Career from './Career';
 import Certificate from './Certificate';
@@ -7,8 +10,6 @@ import Location from './Location';
 import UserInfo from './UserInfo';
 
 import { minWage } from '@/utils/calculators';
-import axiosInstance from "@/services/axiosInstance";
-import useAlert from "@/hooks/useAlert";
 
 const Resume = ({ data }) => {
   const [formData, setFormData] = useState({
@@ -88,7 +89,7 @@ const Resume = ({ data }) => {
         ...formData,
       };
 
-      if(method === 'post') {
+      if (method === 'post') {
         const response = await axiosInstance.post('/api/v1/mate/resume', body);
         if (response.data) {
           openAlert('이력서 등록이 완료되었습니다.');
