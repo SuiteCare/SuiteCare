@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-
-import axiosInstance from '@/services/axiosInstance';
 
 import styles from './HeaderCore.module.css';
 import Logo from '@/assets/logo-white.png';
 import Dropdown from './Dropdown';
-
-import logout from '@/utils/logout';
+import MenuRoute from './MenuRoute';
 
 const HeaderCore = ({ type, isCheckLogin = true }) => {
   const [familyMenuOpen, setFamilyMenuOpen] = useState(false);
@@ -24,38 +20,6 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
       setFamilyMenuOpen(false);
     }
   };
-
-  const navigator = useRouter();
-
-  useEffect(() => {
-    const checkLogin = async () => {
-      if (typeof window !== 'undefined') {
-        const loginInfo = localStorage.getItem('login_info');
-        const accessToken = localStorage.getItem('access_token');
-        const expirationTime = localStorage.getItem('expiration_time');
-
-        if (accessToken && JSON.parse(loginInfo)?.login_id && expirationTime >= new Date().getTime()) {
-          try {
-            const response = await axiosInstance.get('/api/v1/mypage', {
-              params: { id: JSON.parse(loginInfo).login_id },
-            });
-            if (response) {
-              console.log('ok');
-              return true;
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-
-        logout();
-        alert('로그인이 필요합니다.');
-        navigator.push(`/${type}/login`);
-      }
-    };
-
-    if (isCheckLogin) checkLogin();
-  }, []);
 
   return (
     <div className={styles.HeaderCore}>
@@ -81,6 +45,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
           {familyMenuOpen && <Dropdown type='family' isOpen />}
         </ul>
       </div>
+      {isCheckLogin && <MenuRoute type={type} />}
     </div>
   );
 };
