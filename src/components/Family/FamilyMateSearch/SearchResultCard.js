@@ -33,11 +33,17 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
         </div>
       </div>
       <div className={styles.search_button_wrapper}>
-        <button onClick={() => showDetail(data.mate_id)}>상세정보 보기</button>
+        <button type='button' onClick={() => showDetail(data.mate_id)}>
+          상세정보 보기
+        </button>
         {handleConfirm ? (
-          <button onClick={() => handleConfirm(data.mate_id)}>간병인 선택하기</button>
+          <button type='submit' onClick={() => handleConfirm(data.mate_id)}>
+            간병인 선택하기
+          </button>
         ) : (
-          <button onClick={() => handleApply(data.mate_id)}>간병 신청하기</button>
+          <button type='submit' onClick={() => handleApply(data.mate_id)}>
+            간병 신청하기
+          </button>
         )}
       </div>
     </div>
