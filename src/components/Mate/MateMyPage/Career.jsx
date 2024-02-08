@@ -45,7 +45,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
         <input
           type='text'
           id='name'
-          name='career_detail'
+          name='name'
           placeholder='경력 세부내용'
           value={careerItem.name}
           onChange={(e) => handleItemChange(e, index, 'career')}
@@ -55,7 +55,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
         <input
           type='date'
           id='date_start'
-          name='data_start'
+          name='date_start'
           value={careerItem.date_start}
           onChange={(e) => handleItemChange(e, index, 'career')}
         />
@@ -63,7 +63,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
         <input
           type='date'
           id='date_end'
-          name='data_end'
+          name='date_end'
           value={careerItem.date_end}
           onChange={(e) => handleItemChange(e, index, 'career')}
         />

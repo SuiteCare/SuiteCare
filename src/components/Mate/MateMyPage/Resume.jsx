@@ -7,6 +7,8 @@ import Location from './Location';
 import UserInfo from './UserInfo';
 
 import { minWage } from '@/utils/calculators';
+import axiosInstance from "@/services/axiosInstance";
+import useAlert from "@/hooks/useAlert";
 
 const Resume = ({ data }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,8 @@ const Resume = ({ data }) => {
     certificate: [],
     wage: minWage,
   });
+
+  const { openAlert, alertComponent } = useAlert();
 
   const changeHandler = (checked, id) => {
     setFormData((prevFormData) => {
@@ -77,13 +81,21 @@ const Resume = ({ data }) => {
       return false;
     }
 
-    const method = data.resume.location ? 'patch' : 'post';
+    const method = data.resume.mate ? 'patch' : 'post';
 
     try {
       const body = {
         ...formData,
       };
-      console.log('업데이트 완료:', body);
+
+      if(method === 'post') {
+        const response = await axiosInstance.post('/api/v1/mate/resume', body);
+        if (response.data) {
+          openAlert('이력서 등록이 완료되었습니다.');
+        } else {
+          openAlert('이력서 등록에 실패하였습니다.');
+        }
+      }
     } catch (error) {
       console.error('업데이트 실패:', error);
     }
@@ -109,6 +121,7 @@ const Resume = ({ data }) => {
 
   return (
     <div className={styles.Resume}>
+      {alertComponent}
       <div className={styles.form_wrapper}>
         <form name='resume'>
           <section className={styles.userinfo}>
@@ -151,7 +164,7 @@ const Resume = ({ data }) => {
 
           <div className='button_wrapper'>
             <button type='button' onClick={handleUpdateResume}>
-              {data.resume.location ? '수정하기' : '등록하기'}
+              {data.resume.mate ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>

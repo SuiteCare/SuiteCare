@@ -36,7 +36,7 @@ const ResumePage = () => {
     isResumeError,
     isResumeLoading,
   } = useQuery(
-    ['mypageData', id],
+    ['resumeData', id],
     async () => {
       const response = await axiosInstance.get('/api/v1/mate/resume', { params: { id } });
       return response.data;
