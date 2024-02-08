@@ -76,7 +76,9 @@ const SearchResult = ({ data }) => {
         if (confirm('간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?')) {
           router.push('/mate/mypage/resume');
         }
-      } else {
+      } else if (applicationResult === 2) {
+        alert('이미 지원한 공고입니다.');
+      }else {
         alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
       }
     },
