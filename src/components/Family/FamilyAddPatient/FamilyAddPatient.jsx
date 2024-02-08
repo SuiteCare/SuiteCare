@@ -140,7 +140,9 @@ const FamilyAddPatient = ({ idQuery }) => {
           .post('/api/v1/patient', body)
           .then((res) => {
             if (res.data === 1) {
-              alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
+              if (confirm(`${body.name} 님의 환자 정보가 등록되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
+                navigator.push('/family/manage/patient_list');
+              }
               navigator.push('/family/main');
             } else {
               alert('환자 정보 등록에 실패하였습니다.');
