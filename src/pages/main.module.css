@@ -10,12 +10,6 @@
   width: 90%;
 }
 
-@media (max-width: 900px) {
-  .Main.Main.Family {
-    grid-template-columns: 1fr;
-  }
-}
-
 .Main.Mate {
   grid-template-columns: repeat(2, 1fr);
 }
@@ -88,4 +82,76 @@
   background-image: url('../assets/main6.jpg');
   background-size: cover;
   position: relative;
+}
+
+@media (max-width: 900px) {
+  .Main {
+    display: grid;
+    gap: 2.5rem;
+    margin: 5rem auto;
+  }
+
+  .Main.Main.Family {
+    grid-template-columns: 1fr;
+  }
+
+  .Main .MainCard {
+    height: 16rem;
+  }
+
+  .Main .MainCard p {
+    position: absolute;
+    top: 190px;
+    color: white;
+  }
+
+  .Main .MainCard span {
+    position: absolute;
+    top: 225px;
+    color: white;
+  }
+
+  .Main.Family .MainCard:nth-child(1) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main1.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(2) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main2.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(3) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main3.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(4) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main4.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(5) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main5.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+
+  .Main.Family .MainCard:last-child {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main6.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
 }
