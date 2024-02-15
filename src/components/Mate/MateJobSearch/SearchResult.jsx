@@ -73,12 +73,16 @@ const SearchResult = ({ data }) => {
       if (applicationResult === 1) {
         alert('간병 지원이 완료되었습니다.');
       } else if (applicationResult === 0) {
-        if (confirm('간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?')) {
+        if (
+          window.confirm(
+            '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
+          )
+        ) {
           router.push('/mate/mypage/resume');
         }
       } else if (applicationResult === 2) {
         alert('이미 지원한 공고입니다.');
-      }else {
+      } else {
         alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
       }
     },
@@ -87,10 +91,10 @@ const SearchResult = ({ data }) => {
     },
   });
 
-  const handleApply = (reservation_id) => {
+  const handleApply = (reservationId) => {
     const body = {
       mate_id: id,
-      reservation_id,
+      reservation_id: reservationId,
     };
     mutation.mutate(body);
   };
