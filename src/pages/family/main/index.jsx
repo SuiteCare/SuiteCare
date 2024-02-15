@@ -14,7 +14,7 @@ const Main = () => {
   };
 
   const cards = MenuList.map((e) => (
-    <MainCard key={e} title={e.title} description={e.description} onClick={() => navigateTo(`family/${e.url}`)} />
+    <MainCard key={e.title} title={e.title} description={e.description} onClick={() => navigateTo(`family/${e.url}`)} />
   ));
 
   return (
