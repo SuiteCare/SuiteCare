@@ -63,12 +63,7 @@ const PatientList = ({ data }) => {
           {data?.length === 0 ? (
             <tr>
               <td colSpan={8}>
-                <br />
-                <br />
-                <span>등록한 환자가 없습니다.</span>
-                <br />
-                <br />
-                <br />
+                <div className='error'>등록한 환자가 없습니다.</div>
               </td>
             </tr>
           ) : (

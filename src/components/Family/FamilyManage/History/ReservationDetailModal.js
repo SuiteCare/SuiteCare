@@ -69,7 +69,11 @@ const ReservationDetailModal = ({ selectedReservation, closeModal }) => {
                 <ReservationData styles={styles} reservationData={{ ...selectedReservation, ...reservationData }} />
               )}
               {activeTab === 1 && (
-                <PatientData styles={styles} patientData={patientData} patientDetailData={patientDetailData} />
+                <PatientData
+                  styles={styles}
+                  patientData={{ ...patientData, ...selectedReservation.patient_id }}
+                  patientDetailData={patientDetailData}
+                />
               )}
             </>
           )}

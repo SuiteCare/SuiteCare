@@ -98,7 +98,7 @@ const PatientData = ({ styles, patientData, patientDetailData }) => {
         {/* 상세정보 끝 */}
       </div>
       <div className={styles.button_wrapper}>
-        <button type='button' onClick={() => navigator.push(`/family/addpatient/${patientDetailData.id}`)}>
+        <button type='button' onClick={() => navigator.push(`/family/addpatient/${patientData.patient_id}`)}>
           정보 수정하기
         </button>
       </div>
