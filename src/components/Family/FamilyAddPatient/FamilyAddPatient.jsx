@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 
 import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
@@ -122,35 +121,31 @@ const FamilyAddPatient = ({ idQuery }) => {
     };
     console.log(body);
 
-    const response = idQuery
-      ? await axiosInstance
-          .patch(`/api/v1/patient/${idQuery}`, body)
-          .then((res) => {
-            if (res.data === 1) {
-              alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
-              navigator.push('/family/manage/patient_list');
-            } else {
-              alert('환자 정보 수정에 실패하였습니다.');
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          })
-      : await axiosInstance
-          .post('/api/v1/patient', body)
-          .then((res) => {
-            if (res.data === 1) {
-              if (confirm(`${body.name} 님의 환자 정보가 등록되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
-                navigator.push('/family/manage/patient_list');
-              }
-              navigator.push('/family/main');
-            } else {
-              alert('환자 정보 등록에 실패하였습니다.');
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+    try {
+      const response = idQuery
+        ? await axiosInstance.patch(`/api/v1/patient/${idQuery}`, body)
+        : await axiosInstance.post('/api/v1/patient', body);
+
+      if (response.data === 1) {
+        if (idQuery) {
+          alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
+          if (confirm(`${body.name} 님의 환자 정보가 등록되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
+            navigator.push('/family/manage/patient_list');
+          }
+          navigator.push('/family/main');
+        } else {
+          alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
+          navigator.push('/family/main');
+        }
+      } else if (idQuery) {
+        alert('환자 정보 수정에 실패하였습니다.');
+      } else {
+        alert('환자 정보 등록에 실패하였습니다.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('요청을 처리하는 중 오류가 발생했습니다.');
+    }
   };
 
   // 정보 삭제
