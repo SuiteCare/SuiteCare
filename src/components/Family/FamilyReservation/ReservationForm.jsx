@@ -119,10 +119,10 @@ const ReservationForm = () => {
     };
 
     try {
-      console.log('확인용', body);
       const response = await axiosInstance.post('/api/v1/reservation', body);
       if (response.data) {
         alert('예약 신청이 완료되었습니다.');
+        navigator.push('./main');
       } else {
         alert('예약 신청에 실패하였습니다.');
       }

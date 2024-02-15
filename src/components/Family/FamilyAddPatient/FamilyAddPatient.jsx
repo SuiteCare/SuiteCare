@@ -129,7 +129,10 @@ const FamilyAddPatient = ({ idQuery }) => {
       if (response.data === 1) {
         if (idQuery) {
           alert(`${body.name} 님의 환자 정보가 수정되었습니다.`);
-          navigator.push('/family/manage/patient_list');
+          if (confirm(`${body.name} 님의 환자 정보가 등록되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
+            navigator.push('/family/manage/patient_list');
+          }
+          navigator.push('/family/main');
         } else {
           alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
           navigator.push('/family/main');
