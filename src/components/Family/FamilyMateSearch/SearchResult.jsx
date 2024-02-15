@@ -66,17 +66,20 @@ const SearchResult = ({ data, type }) => {
       return {};
     }
   }
-  console.log(data);
+
+  const renderSearchMessage = () => {
+    if (type === 'search') {
+      if (data && data.length > 0) {
+        return `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`;
+      }
+      return '나에게 꼭 맞는 메이트님을 찾아보세요!';
+    }
+    return '스위트케어가 추천하는 메이트';
+  };
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
-      <h3>
-        {type === 'search'
-          ? data?.length
-            ? `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`
-            : '나에게 꼭 맞는 메이트님을 찾아보세요!'
-          : '스위트케어가 추천하는 메이트'}
-      </h3>
+      <h3>{renderSearchMessage()}</h3>
       {data && data.length > 0 ? (
         data.map((e) => <SearchResultCard data={e} key={e.mate_id} showDetail={() => handleShowModal(e)} />)
       ) : (
