@@ -24,14 +24,14 @@ const MenuRoute = ({ type }) => {
     const { role } = loginInfo;
     const destination = window.location.pathname.split('/')[1];
     if (destination === 'mate' && role === 'F') {
-      if (confirm('메이트-패밀리 통합 회원으로 전환하시겠습니까?')) {
+      if (window.confirm('메이트-패밀리 통합 회원으로 전환하시겠습니까?')) {
         updateRole('mate', 'A');
       } else {
         alert('패밀리 회원은 메이트 메뉴에 접근할 수 없습니다.');
         navigator.back();
       }
     } else if (destination === 'family' && role === 'M') {
-      if (confirm('패밀리-메이트 통합 회원으로 전환하시겠습니까?')) {
+      if (window.confirm('패밀리-메이트 통합 회원으로 전환하시겠습니까?')) {
         updateRole('family', 'A');
       } else {
         alert('메이트 회원은 패밀리 메뉴에 접근할 수 없습니다.');
