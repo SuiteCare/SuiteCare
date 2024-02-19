@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
@@ -50,7 +51,7 @@ const SearchResult = ({ data, type }) => {
 
   async function getModalData($mateId) {
     try {
-      const response = await axios.get('/api/v1/familymatesearch', { params: $mateId });
+      const response = await axiosInstance.get('/api/v1/familymatesearch', { params: $mateId });
       const msg = response.headers.get('msg');
       if (response.status === 200 && msg === 'success') {
         alert(response.data);

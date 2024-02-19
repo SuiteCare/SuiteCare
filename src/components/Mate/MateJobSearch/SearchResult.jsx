@@ -23,8 +23,8 @@ const SearchResult = ({ data }) => {
       if (typeof window !== 'undefined') {
         try {
           const [response1, response2] = await Promise.all([
-            axios.get(`/api/v1/patient/${defaultData.patient_id}`),
-            axios.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
+            axiosInstance.get(`/api/v1/patient/${defaultData.patient_id}`),
+            axiosInstance.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
           ]);
 
           setModalData({

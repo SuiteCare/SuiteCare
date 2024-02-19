@@ -42,7 +42,7 @@ const SignUpForm = ({ type }) => {
 
   // form 데이터를 state에 저장
   const [formData, setFormData] = useState({
-    login_id: '',
+    id: '',
     password: '',
     pw_check: '',
     name: '',
@@ -52,17 +52,15 @@ const SignUpForm = ({ type }) => {
   // 아이디 중복확인
   const [isAvailableID, setIsAvailableID] = useState(false);
   const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
-  const checkDuplicateIDMutation = useMutation((login_id) =>
-    axiosInstance.get(`/api/v1/check/id`, { params: { login_id } }),
-  );
+  const checkDuplicateIDMutation = useMutation((id) => axiosInstance.get(`/api/v1/check/id`, { params: { id } }));
 
   const checkDuplicateID = async () => {
-    if (!userIDRegex.test(formData.login_id))
+    if (!userIDRegex.test(formData.id))
       return openAlert('아이디는 4글자 이상의 영문, 숫자, 혹은 밑줄 (_)로 구성되어야 합니다.');
 
-    if (formData.login_id) {
+    if (formData.id) {
       try {
-        const response = await checkDuplicateIDMutation.mutateAsync(formData.login_id);
+        const response = await checkDuplicateIDMutation.mutateAsync(formData.id);
         const { data } = response;
 
         if (data !== 0) {
@@ -101,7 +99,7 @@ const SignUpForm = ({ type }) => {
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
-    if (id === 'login_id') setIsAvailableID(false);
+    if (id === 'id') setIsAvailableID(false);
     if (id === 'tel') setIsPhoneCertificated(false);
   };
 
@@ -118,7 +116,7 @@ const SignUpForm = ({ type }) => {
       const role = type === 'mate' ? 'M' : 'F';
 
       const body = {
-        login_id: formData.login_id,
+        id: formData.id,
         password: formData.password,
         name: formData.name,
         tel: formData.tel.replaceAll('-', ''),
@@ -176,7 +174,7 @@ const SignUpForm = ({ type }) => {
       <hr />
       <form name='signup' method='post' onSubmit={handleSubmit}>
         <div className='input_with_button'>
-          {formInputs('login_id')}
+          {formInputs('id')}
           <button type='button' onClick={checkDuplicateID}>
             중복확인
           </button>

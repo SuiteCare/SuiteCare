@@ -13,7 +13,7 @@ import styles from './MyPageForm.module.css';
 const MyPageForm = () => {
   const navigator = useRouter();
 
-  const { token, id, login_id } = useLoginInfo();
+  const { token, id } = useLoginInfo();
   const [tel, setTel] = useState('');
 
   const { data, isError, isLoading } = useQuery(
@@ -81,7 +81,7 @@ const MyPageForm = () => {
       <form name='MyPageForm' method='post'>
         <div className='input_wrapper'>
           <label>아이디</label>
-          <input type='text' name='id' id='id' readOnly value={login_id} />
+          <input type='text' name='id' id='id' readOnly value={id} />
         </div>
 
         <div className='input_wrapper'>
