@@ -1,9 +1,9 @@
 const formInputInfos = {
-  login_id: {
+  id: {
     label: '아이디',
     type: 'text',
-    name: 'login_id',
-    id: 'login_id',
+    name: 'id',
+    id: 'id',
     maxLength: 20,
   },
   password: {

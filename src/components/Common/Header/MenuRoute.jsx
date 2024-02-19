@@ -47,10 +47,10 @@ const MenuRoute = ({ type }) => {
         const accessToken = localStorage.getItem('access_token');
         const expirationTime = localStorage.getItem('expiration_time');
 
-        if (accessToken && JSON.parse(loginInfo)?.login_id && expirationTime >= new Date().getTime()) {
+        if (accessToken && JSON.parse(loginInfo)?.id && expirationTime >= new Date().getTime()) {
           try {
             const response = await axiosInstance.get('/api/v1/mypage', {
-              params: { id: JSON.parse(loginInfo).login_id },
+              params: { id: JSON.parse(loginInfo).id },
             });
             if (response) {
               checkRole(JSON.parse(loginInfo));

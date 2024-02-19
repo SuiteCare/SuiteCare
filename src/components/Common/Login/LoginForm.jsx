@@ -25,20 +25,20 @@ const LoginForm = ({ type }) => {
 
   async function onSubmitHandler(event) {
     event.preventDefault();
-    const role = type === 'mate' ? 'M' : 'F';
+    const pageRole = type === 'mate' ? 'M' : 'F';
 
     if (loginForm.id && loginForm.password) {
       try {
         const body = {
-          login_id: loginForm.id,
+          id: loginForm.id,
           password: loginForm.password,
-          role,
+          role: pageRole,
         };
 
         const response = await axiosInstance.post('/api/v1/login', body);
         if (response.data) {
-          const { id, login_id, token } = response.data;
-          localStorage.setItem('login_info', JSON.stringify({ id, login_id, role }));
+          const { id, role, token } = response.data;
+          localStorage.setItem('login_info', JSON.stringify({ id, role }));
           localStorage.setItem('access_token', token);
           localStorage.setItem('expiration_time', new Date().getTime() + 60 * 60 * 1000); // ms 단위, 1시간 뒤에 만료
           navigator.push(`/${type}/main`);

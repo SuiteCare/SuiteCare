@@ -34,7 +34,7 @@ const ChangePwModal = ({ closeModal }) => {
 
     if (newPw === newPwCheck) {
       const body = {
-        login_id: id,
+        id,
         originPassword: pw,
         newPassword: newPw,
         newPasswordCheck: newPwCheck,
