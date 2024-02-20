@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -9,7 +9,7 @@ const MenuRoute = ({ type }) => {
   const navigator = useRouter();
 
   const updateRole = async ($target) => {
-    const response = await axiosInstance.patch('/api/v1/member', { role: 'A' });
+    const response = await axiosInstance.patch('/api/v1/member/role');
     if (response?.data) {
       alert('통합회원 전환이 완료되었습니다. 다시 로그인하세요.');
       logout();

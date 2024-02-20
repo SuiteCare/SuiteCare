@@ -28,7 +28,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
   const renderCareerItem = (careerItem, index) => (
     <tr key={careerItem.id}>
       <td>
-        <select name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
+        <select defaultValue={careerItem.job_name} name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
           {renderOptions([
             '경력명',
             '간호사',
