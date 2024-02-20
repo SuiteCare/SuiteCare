@@ -24,7 +24,7 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
           name='certificate_name'
           type='text'
           placeholder='자격증명'
-          value={certificateItem.certificate_name}
+          value={certificateItem.name}
           onChange={(e) => handleItemChange(e, index, 'certificate')}
         />
       </td>
@@ -33,7 +33,7 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
           name='certificate_code'
           type='text'
           placeholder='자격증 코드'
-          value={certificateItem.certificate_code}
+          value={certificateItem.code}
           onChange={(e) => handleItemChange(e, index, 'certificate')}
         />
       </td>

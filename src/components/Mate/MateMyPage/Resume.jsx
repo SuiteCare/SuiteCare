@@ -104,7 +104,7 @@ const Resume = ({ data }) => {
 
   const initializeFormData = ($data) => {
     setFormData({
-      profilePictureFilename: $data.resume?.mate?.profile_picture_filename || '',
+      profilePictureFilename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
       contactTimeStart: $data.resume?.mate?.contact_time_start || '09:00',
       contactTimeEnd: $data.resume?.mate?.contact_time_end || '21:00',
       introduction: $data.resume?.mate?.introduction || '',
