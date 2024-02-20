@@ -23,17 +23,29 @@ const Resume = ({ data }) => {
     certificate: [],
     wage: minWage,
   });
+  const [changedData, setChangedData] = useState({});
 
   const { openAlert, alertComponent } = useAlert();
 
-  const changeHandler = (checked, id) => {
+  const handleMainServiceChange = (checked, value) => {
     setFormData((prevFormData) => {
       const updatedData = { ...prevFormData };
 
       if (checked) {
-        updatedData.mainServiceData = [...prevFormData.mainServiceData, id];
+        updatedData.mainServiceData = [...prevFormData.mainServiceData, value];
       } else {
-        updatedData.mainServiceData = prevFormData.mainServiceData.filter((it) => it !== id);
+        updatedData.mainServiceData = prevFormData.mainServiceData.filter((it) => it !== value);
+      }
+
+      return updatedData;
+    });
+    setChangedData((prevData) => {
+      const updatedData = { ...prevData };
+
+      if (checked) {
+        updatedData.mainServiceData = [...formData.mainServiceData, value];
+      } else {
+        updatedData.mainServiceData = formData.mainServiceData.filter((it) => it !== value);
       }
 
       return updatedData;
@@ -64,20 +76,43 @@ const Resume = ({ data }) => {
       }
       return updatedData;
     });
+    setChangedData((prevData) => {
+      const updatedData = { ...prevData };
+
+      switch (type) {
+        case 'career':
+          updatedData.career = formData.career.map((careerItem, i) =>
+            i === index ? { ...careerItem, [name]: value } : careerItem,
+          );
+          break;
+
+        case 'certificate':
+          updatedData.certificate = formData.certificate.map((certificateItem, i) =>
+            i === index ? { ...certificateItem, [name]: value } : certificateItem,
+          );
+          break;
+
+        default:
+          break;
+      }
+      return updatedData;
+    });
   };
 
   const handleUpdateResume = async () => {
-    if (!formData.wage) {
+    const { wage, checkedLoc, mainServiceData } = formData;
+
+    if (!wage) {
       alert('희망 최소시급을 입력하세요.');
       return false;
     }
 
-    if (!formData.checkedLoc.length) {
+    if (!checkedLoc.length) {
       alert('최소 1개의 활동 지역을 선택하세요.');
       return false;
     }
 
-    if (!formData.mainServiceData.length) {
+    if (!mainServiceData.length) {
       alert('최소 1개의 대표서비스를 입력하세요.');
       return false;
     }
@@ -85,17 +120,22 @@ const Resume = ({ data }) => {
     const method = data.resume.mate ? 'patch' : 'post';
 
     try {
-      const body = {
-        ...formData,
-      };
-
+      let body = {};
       if (method === 'post') {
-        const response = await axiosInstance.post('/api/v1/mate/resume', body);
-        if (response.data) {
-          openAlert('이력서 등록이 완료되었습니다.');
-        } else {
-          openAlert('이력서 등록에 실패하였습니다.');
-        }
+        body = {
+          ...formData,
+        };
+      } else if (method === 'patch') {
+        body = {
+          ...changedData,
+        };
+      }
+
+      const response = await axiosInstance[method]('/api/v1/mate/resume', body);
+      if (response.data) {
+        openAlert('이력서 등록이 완료되었습니다.');
+      } else {
+        openAlert('이력서 등록에 실패하였습니다.');
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
@@ -117,7 +157,7 @@ const Resume = ({ data }) => {
   };
 
   useEffect(() => {
-    initializeFormData(data);
+    if (data) initializeFormData(data);
   }, [data]);
 
   return (
@@ -126,19 +166,35 @@ const Resume = ({ data }) => {
       <div className={styles.form_wrapper}>
         <form name='resume'>
           <section className={styles.userinfo}>
-            <UserInfo styles={styles} data={data} formData={formData} setFormData={setFormData} />
+            <UserInfo
+              styles={styles}
+              data={data}
+              formData={formData}
+              setFormData={setFormData}
+              setChangedData={setChangedData}
+            />
           </section>
 
           <section className={styles.location}>
-            <Location styles={styles} formData={formData} setFormData={setFormData} />
+            <Location styles={styles} formData={formData} setFormData={setFormData} setChangedData={setChangedData} />
           </section>
 
           <section className={styles.career}>
-            <Career formData={formData} setFormData={setFormData} handleItemChange={handleItemChange} />
+            <Career
+              formData={formData}
+              setFormData={setFormData}
+              setChangedData={setChangedData}
+              handleItemChange={handleItemChange}
+            />
           </section>
 
           <section className={styles.certificate}>
-            <Certificate formData={formData} setFormData={setFormData} handleItemChange={handleItemChange} />
+            <Certificate
+              formData={formData}
+              setFormData={setFormData}
+              setChangedData={setChangedData}
+              handleItemChange={handleItemChange}
+            />
           </section>
 
           <section className={styles.mainService}>
@@ -153,7 +209,7 @@ const Resume = ({ data }) => {
                       value={service}
                       checked={formData?.mainServiceData?.includes(service)}
                       onChange={(e) => {
-                        changeHandler(e.currentTarget.checked, e.currentTarget.value);
+                        handleMainServiceChange(e.currentTarget.checked, e.currentTarget.value);
                       }}
                     />
                     {service}

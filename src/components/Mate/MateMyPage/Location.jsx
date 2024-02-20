@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
-const Location = ({ styles, formData, setFormData }) => {
+const Location = ({ styles, formData, setFormData, setChangedData }) => {
   const selectAllLocation = (e) => {
     const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
     const isChecked = allLocationCheckboxes.every((checkbox) => checkbox.checked);
@@ -16,6 +16,7 @@ const Location = ({ styles, formData, setFormData }) => {
     e.target.checked = !isChecked;
 
     setFormData((prevFormData) => ({ ...prevFormData, checkedLoc: selectedLocations }));
+    setChangedData((prevFormData) => ({ ...prevFormData, checkedLoc: selectedLocations }));
   };
 
   const handleAllLocationChange = (e) => {
@@ -30,6 +31,17 @@ const Location = ({ styles, formData, setFormData }) => {
         updatedData.checkedLoc = [...prevFormData.checkedLoc, value];
       } else {
         updatedData.checkedLoc = prevFormData.checkedLoc.filter((it) => it !== value);
+      }
+
+      return updatedData;
+    });
+    setChangedData((prevData) => {
+      const updatedData = { ...prevData };
+
+      if (checked) {
+        updatedData.checkedLoc = [...formData.checkedLoc, value];
+      } else {
+        updatedData.checkedLoc = formData.checkedLoc.filter((it) => it !== value);
       }
 
       return updatedData;
