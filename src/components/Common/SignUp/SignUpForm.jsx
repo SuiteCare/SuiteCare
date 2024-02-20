@@ -9,6 +9,8 @@ import axiosInstance from '@/services/axiosInstance';
 import formInputInfos from './FormInputInfos';
 import styles from './SignUpForm.module.css';
 
+import { emailRegex } from '@/utils/regex';
+
 const SignUpForm = ({ type }) => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
@@ -47,14 +49,16 @@ const SignUpForm = ({ type }) => {
     pw_check: '',
     name: '',
     tel: '',
+    email: '',
   });
 
   // 아이디 중복확인
   const [isAvailableID, setIsAvailableID] = useState(false);
-  const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
   const checkDuplicateIDMutation = useMutation((id) => axiosInstance.get(`/api/v1/check/id`, { params: { id } }));
 
   const checkDuplicateID = async () => {
+    const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
+
     if (!userIDRegex.test(formData.id))
       return openAlert('아이디는 4글자 이상의 영문, 숫자, 혹은 밑줄 (_)로 구성되어야 합니다.');
 
@@ -103,13 +107,14 @@ const SignUpForm = ({ type }) => {
     if (id === 'tel') setIsPhoneCertificated(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     if (!isAvailableID) return openAlert('아이디 중복확인이 필요합니다.');
     if (!formData.password) return openAlert('비밀번호를 입력하세요.');
     if (formData.password !== formData.pw_check) return openAlert('비밀번호가 일치하지 않습니다.');
     if (!formData.name) return openAlert('성명을 입력하세요.');
+    if (!emailRegex(formData.email)) return openAlert('이메일을 입력하세요.');
     if (!isPhoneCertificated) return openAlert('휴대폰 본인인증이 필요합니다.');
 
     try {
@@ -120,6 +125,7 @@ const SignUpForm = ({ type }) => {
         password: formData.password,
         name: formData.name,
         tel: formData.tel.replaceAll('-', ''),
+        email: formData.email,
         role,
       };
 
@@ -172,7 +178,7 @@ const SignUpForm = ({ type }) => {
         </div>
       </div>
       <hr />
-      <form name='signup' method='post' onSubmit={handleSubmit}>
+      <form name='signup' method='post' onSubmit={handleSignupSubmit}>
         <div className='input_with_button'>
           {formInputs('id')}
           <button type='button' onClick={checkDuplicateID}>
@@ -183,6 +189,7 @@ const SignUpForm = ({ type }) => {
         {formInputs('password')}
         {formInputs('pw_check')}
         {formInputs('name')}
+        {formInputs('email')}
 
         <div className='input_with_button'>
           {formInputs('tel')}

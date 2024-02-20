@@ -34,6 +34,13 @@ const formInputInfos = {
     maxLength: 13,
     placeholder: '010-0000-0000',
   },
+  email: {
+    label: '이메일',
+    type: 'text',
+    name: 'tel',
+    id: 'email',
+    placeholder: 'xxx@xxxx.xxx',
+  },
 };
 
 export default formInputInfos;
