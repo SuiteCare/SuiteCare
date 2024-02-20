@@ -9,6 +9,8 @@ import axiosInstance from '@/services/axiosInstance';
 import formInputInfos from './FormInputInfos';
 import styles from './SignUpForm.module.css';
 
+import { emailRegex } from '@/utils/regex';
+
 const SignUpForm = ({ type }) => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
@@ -47,14 +49,16 @@ const SignUpForm = ({ type }) => {
     pw_check: '',
     name: '',
     tel: '',
+    email: '',
   });
 
   // 아이디 중복확인
   const [isAvailableID, setIsAvailableID] = useState(false);
-  const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
   const checkDuplicateIDMutation = useMutation((id) => axiosInstance.get(`/api/v1/check/id`, { params: { id } }));
 
   const checkDuplicateID = async () => {
+    const userIDRegex = /^[a-zA-Z0-9_]{4,16}$/;
+
     if (!userIDRegex.test(formData.id))
       return openAlert('아이디는 4글자 이상의 영문, 숫자, 혹은 밑줄 (_)로 구성되어야 합니다.');
 
@@ -92,8 +96,36 @@ const SignUpForm = ({ type }) => {
         return openAlert('휴대폰 인증이 완료된 상태입니다.');
       }
       setIsPhoneCertificated(true);
-      return openAlert(`인증 api 연동 전 임시 인증 완료`);
+      return openAlert(`휴대폰 인증 api 연동 전 임시 인증 완료`);
     }
+  };
+
+  // 이메일 인증
+  const [isEmailCertificated, setIsEmailCertificated] = useState(false);
+  const handleEmailCertification = (e) => {
+    e.preventDefault();
+
+    if (
+      !/(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/.test(
+        formData.email,
+      )
+    ) {
+      console.log(formData.email, emailRegex(formData.email));
+      return openAlert('이메일 주소를 올바르게 입력하십시오.');
+    }
+
+    if (formData.email) {
+      if (isEmailCertificated) {
+        return openAlert('이메일 인증이 완료된 상태입니다.');
+      }
+      setIsEmailCertificated(true);
+      return openAlert(`이메일 인증 api 연동 전 임시 인증 완료`);
+    }
+  };
+
+  const handleClickGender = (e) => {
+    setFormData((prevData) => ({ ...prevData, gender: e.target.value }));
+    console.log(formData);
   };
 
   const handleInputChange = (e) => {
@@ -101,16 +133,23 @@ const SignUpForm = ({ type }) => {
     setFormData((prevData) => ({ ...prevData, [id]: value }));
     if (id === 'id') setIsAvailableID(false);
     if (id === 'tel') setIsPhoneCertificated(false);
+    if (id === 'email') setIsEmailCertificated(false);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSignupSubmit = async (e) => {
     e.preventDefault();
 
     if (!isAvailableID) return openAlert('아이디 중복확인이 필요합니다.');
     if (!formData.password) return openAlert('비밀번호를 입력하세요.');
     if (formData.password !== formData.pw_check) return openAlert('비밀번호가 일치하지 않습니다.');
     if (!formData.name) return openAlert('성명을 입력하세요.');
+    if (!isEmailCertificated) return openAlert('이메일 인증이 필요합니다.');
     if (!isPhoneCertificated) return openAlert('휴대폰 본인인증이 필요합니다.');
+
+    const today = new Date();
+    const dateFourteenYearsAgo = new Date(today.getFullYear() - 14, today.getMonth(), today.getDate()).getTime();
+    if (new Date(formData.birthday).getTime() > dateFourteenYearsAgo)
+      return openAlert('14세 미만은 가입할 수 없습니다.');
 
     try {
       const role = type === 'mate' ? 'M' : 'F';
@@ -120,6 +159,9 @@ const SignUpForm = ({ type }) => {
         password: formData.password,
         name: formData.name,
         tel: formData.tel.replaceAll('-', ''),
+        email: formData.email,
+        gender: formData.gender,
+        birthday: formData.birthday,
         role,
       };
 
@@ -172,7 +214,7 @@ const SignUpForm = ({ type }) => {
         </div>
       </div>
       <hr />
-      <form name='signup' method='post' onSubmit={handleSubmit}>
+      <form name='signup' method='post' onSubmit={handleSignupSubmit}>
         <div className='input_with_button'>
           {formInputs('id')}
           <button type='button' onClick={checkDuplicateID}>
@@ -183,6 +225,40 @@ const SignUpForm = ({ type }) => {
         {formInputs('password')}
         {formInputs('pw_check')}
         {formInputs('name')}
+        {formInputs('birthday')}
+
+        <div className='input_wrapper'>
+          <label>성별</label>
+          <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='M'
+                checked={formData.gender === 'M'}
+                onClick={handleClickGender}
+              />
+              <span>남성</span>
+            </div>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='F'
+                checked={formData.gender === 'F'}
+                onClick={handleClickGender}
+              />
+              <span>여성</span>
+            </div>
+          </div>
+        </div>
+
+        <div className='input_with_button'>
+          {formInputs('email')}
+          <button type='button' onClick={handleEmailCertification}>
+            이메일 인증
+          </button>
+        </div>
 
         <div className='input_with_button'>
           {formInputs('tel')}
