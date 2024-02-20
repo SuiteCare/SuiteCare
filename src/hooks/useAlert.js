@@ -3,25 +3,28 @@ import { useState } from 'react';
 import Alert from '@/components/Common/Modal/Alert';
 
 const useAlert = () => {
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
   const [alertCondition, setAlertCondition] = useState({
     message: '',
     duration: 0,
   });
+
+  const [isActive, setIsActive] = useState(false);
 
   const openAlert = (message, duration = 3) => {
     setAlertCondition({
       message,
       duration,
     });
-    setIsAlertVisible(true);
+    setIsActive(true);
   };
 
   const closeAlert = () => {
-    setIsAlertVisible(false);
+    setIsActive(false);
   };
 
-  const alertComponent = isAlertVisible && <Alert key={Date.now()} {...alertCondition} closeAlert={closeAlert} />;
+  const alertComponent = (
+    <Alert isActive={isActive} setIsActive={setIsActive} {...alertCondition} closeAlert={closeAlert} />
+  );
 
   return {
     openAlert,
