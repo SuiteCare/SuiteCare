@@ -123,6 +123,11 @@ const SignUpForm = ({ type }) => {
     }
   };
 
+  const handleClickGender = (e) => {
+    setFormData((prevData) => ({ ...prevData, gender: e.target.value }));
+    console.log(formData);
+  };
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [id]: value }));
@@ -155,6 +160,7 @@ const SignUpForm = ({ type }) => {
         name: formData.name,
         tel: formData.tel.replaceAll('-', ''),
         email: formData.email,
+        gender: formData.gender,
         birthday: formData.birthday,
         role,
       };
@@ -220,6 +226,32 @@ const SignUpForm = ({ type }) => {
         {formInputs('pw_check')}
         {formInputs('name')}
         {formInputs('birthday')}
+
+        <div className='input_wrapper'>
+          <label>성별</label>
+          <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='M'
+                checked={formData.gender === 'M'}
+                onClick={handleClickGender}
+              />
+              <span>남성</span>
+            </div>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='F'
+                checked={formData.gender === 'F'}
+                onClick={handleClickGender}
+              />
+              <span>여성</span>
+            </div>
+          </div>
+        </div>
 
         <div className='input_with_button'>
           {formInputs('email')}
