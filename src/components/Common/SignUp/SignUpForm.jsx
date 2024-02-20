@@ -96,7 +96,30 @@ const SignUpForm = ({ type }) => {
         return openAlert('휴대폰 인증이 완료된 상태입니다.');
       }
       setIsPhoneCertificated(true);
-      return openAlert(`인증 api 연동 전 임시 인증 완료`);
+      return openAlert(`휴대폰 인증 api 연동 전 임시 인증 완료`);
+    }
+  };
+
+  // 이메일 인증
+  const [isEmailCertificated, setIsEmailCertificated] = useState(false);
+  const handleEmailCertification = (e) => {
+    e.preventDefault();
+
+    if (
+      !/(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/.test(
+        formData.email,
+      )
+    ) {
+      console.log(formData.email, emailRegex(formData.email));
+      return openAlert('이메일 주소를 올바르게 입력하십시오.');
+    }
+
+    if (formData.email) {
+      if (isEmailCertificated) {
+        return openAlert('이메일 인증이 완료된 상태입니다.');
+      }
+      setIsEmailCertificated(true);
+      return openAlert(`이메일 인증 api 연동 전 임시 인증 완료`);
     }
   };
 
@@ -105,6 +128,7 @@ const SignUpForm = ({ type }) => {
     setFormData((prevData) => ({ ...prevData, [id]: value }));
     if (id === 'id') setIsAvailableID(false);
     if (id === 'tel') setIsPhoneCertificated(false);
+    if (id === 'email') setIsEmailCertificated(false);
   };
 
   const handleSignupSubmit = async (e) => {
@@ -114,8 +138,13 @@ const SignUpForm = ({ type }) => {
     if (!formData.password) return openAlert('비밀번호를 입력하세요.');
     if (formData.password !== formData.pw_check) return openAlert('비밀번호가 일치하지 않습니다.');
     if (!formData.name) return openAlert('성명을 입력하세요.');
-    if (!emailRegex(formData.email)) return openAlert('이메일을 입력하세요.');
+    if (!isEmailCertificated) return openAlert('이메일 인증이 필요합니다.');
     if (!isPhoneCertificated) return openAlert('휴대폰 본인인증이 필요합니다.');
+
+    const today = new Date();
+    const dateFourteenYearsAgo = new Date(today.getFullYear() - 14, today.getMonth(), today.getDate()).getTime();
+    if (new Date(formData.birthday).getTime() > dateFourteenYearsAgo)
+      return openAlert('14세 미만은 가입할 수 없습니다.');
 
     try {
       const role = type === 'mate' ? 'M' : 'F';
@@ -126,6 +155,7 @@ const SignUpForm = ({ type }) => {
         name: formData.name,
         tel: formData.tel.replaceAll('-', ''),
         email: formData.email,
+        birthday: formData.birthday,
         role,
       };
 
@@ -189,7 +219,14 @@ const SignUpForm = ({ type }) => {
         {formInputs('password')}
         {formInputs('pw_check')}
         {formInputs('name')}
-        {formInputs('email')}
+        {formInputs('birthday')}
+
+        <div className='input_with_button'>
+          {formInputs('email')}
+          <button type='button' onClick={handleEmailCertification}>
+            이메일 인증
+          </button>
+        </div>
 
         <div className='input_with_button'>
           {formInputs('tel')}
