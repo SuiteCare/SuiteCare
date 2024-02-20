@@ -21,7 +21,7 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
     <tr key={certificateItem.id}>
       <td>
         <input
-          name='certificate_name'
+          name='name'
           type='text'
           placeholder='자격증명'
           value={certificateItem.name}
@@ -30,7 +30,7 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
       </td>
       <td>
         <input
-          name='certificate_code'
+          name='code'
           type='text'
           placeholder='자격증 코드'
           value={certificateItem.code}
