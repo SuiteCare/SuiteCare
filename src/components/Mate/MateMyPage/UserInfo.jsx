@@ -4,9 +4,14 @@ import Image from 'next/image';
 import TimePicker from '@/utils/TimePicker';
 import { calAge, genderToKo, minWage } from '@/utils/calculators';
 
-const UserInfo = ({ styles, data, formData, setFormData }) => {
+const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
+      ...prevData,
+      contactTimeStart: type === 'start' ? value : prevData.contactTimeStart,
+      contactTimeEnd: type === 'end' ? value : prevData.contactTimeEnd,
+    }));
+    setChangedData((prevData) => ({
       ...prevData,
       contactTimeStart: type === 'start' ? value : prevData.contactTimeStart,
       contactTimeEnd: type === 'end' ? value : prevData.contactTimeEnd,
@@ -21,6 +26,10 @@ const UserInfo = ({ styles, data, formData, setFormData }) => {
       introduction: value,
     }));
     setWordCnt(value.length);
+    setChangedData((prevFormData) => ({
+      ...prevFormData,
+      introduction: value,
+    }));
   };
 
   const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
@@ -31,9 +40,17 @@ const UserInfo = ({ styles, data, formData, setFormData }) => {
         ...prevData,
         wage: '무관',
       }));
+      setChangedData((prevData) => ({
+        ...prevData,
+        wage: '무관',
+      }));
     } else {
       setIsWageInputDisabled(false);
       setFormData((prevData) => ({
+        ...prevData,
+        wage: minWage,
+      }));
+      setChangedData((prevData) => ({
         ...prevData,
         wage: minWage,
       }));
@@ -43,6 +60,10 @@ const UserInfo = ({ styles, data, formData, setFormData }) => {
   const handleFileChange = ($event) => {
     const file = $event.target.files[0];
     setFormData((prevData) => ({
+      ...prevData,
+      profilePictureFilename: file.name,
+    }));
+    setChangedData((prevData) => ({
       ...prevData,
       profilePictureFilename: file.name,
     }));
