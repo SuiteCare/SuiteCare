@@ -38,21 +38,21 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       setIsWageInputDisabled(true);
       setFormData((prevData) => ({
         ...prevData,
-        wage: '무관',
+        desired_wage: '무관',
       }));
       setChangedData((prevData) => ({
         ...prevData,
-        wage: '무관',
+        desired_wage: '무관',
       }));
     } else {
       setIsWageInputDisabled(false);
       setFormData((prevData) => ({
         ...prevData,
-        wage: minWage,
+        desired_wage: minWage,
       }));
       setChangedData((prevData) => ({
         ...prevData,
-        wage: minWage,
+        desired_wage: minWage,
       }));
     }
   };
@@ -116,7 +116,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
           </div>
         </div>
 
-        <div className={styles.wage}>
+        <div className={styles.desired_wage}>
           <div className='input_wrapper'>
             <label>희망 최소 시급</label>
             <div>
@@ -126,11 +126,11 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
                 max={1000000}
                 step={10}
                 disabled={isWageInputDisabled}
-                value={formData.wage}
+                value={formData.desired_wage}
                 onChange={(e) =>
                   setFormData((prevData) => ({
                     ...prevData,
-                    wage: e.target.value,
+                    desired_wage: e.target.value,
                   }))
                 }
               />

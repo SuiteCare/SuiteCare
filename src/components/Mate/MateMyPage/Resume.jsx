@@ -12,23 +12,29 @@ import UserInfo from './UserInfo';
 import { minWage } from '@/utils/calculators';
 
 const Resume = ({ data }) => {
-  const [formData, setFormData] = useState({
+  const [formMateResumeData, setFormMateResumeData] = useState({
     profilePictureFilename: '',
     contactTimeStart: '09:00',
     contactTimeEnd: '21:00',
     introduction: '',
+    desired_wage: minWage,
+  });
+
+  const [formListData, setFormListData] = useState({
     mainServiceData: [],
     checkedLoc: [],
     career: [],
     certificate: [],
-    wage: minWage,
   });
-  const [changedData, setChangedData] = useState({});
+
+  const [changedListData, setChangedListData] = useState({});
+
+  const [changedMateData, setChangedMateData] = useState({});
 
   const { openAlert, alertComponent } = useAlert();
 
   const handleMainServiceChange = (checked, value) => {
-    setFormData((prevFormData) => {
+    setFormListData((prevFormData) => {
       const updatedData = { ...prevFormData };
 
       if (checked) {
@@ -39,13 +45,13 @@ const Resume = ({ data }) => {
 
       return updatedData;
     });
-    setChangedData((prevData) => {
+    setChangedListData((prevData) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.mainServiceData = [...formData.mainServiceData, value];
+        updatedData.mainServiceData = [...formListData.mainServiceData, value];
       } else {
-        updatedData.mainServiceData = formData.mainServiceData.filter((it) => it !== value);
+        updatedData.mainServiceData = formListData.mainServiceData.filter((it) => it !== value);
       }
 
       return updatedData;
@@ -55,7 +61,7 @@ const Resume = ({ data }) => {
   const handleItemChange = (e, index, type) => {
     const { name, value } = e.target;
 
-    setFormData((prevFormData) => {
+    setFormListData((prevFormData) => {
       const updatedData = { ...prevFormData };
 
       switch (type) {
@@ -76,18 +82,18 @@ const Resume = ({ data }) => {
       }
       return updatedData;
     });
-    setChangedData((prevData) => {
+    setChangedListData((prevData) => {
       const updatedData = { ...prevData };
 
       switch (type) {
         case 'career':
-          updatedData.career = formData.career.map((careerItem, i) =>
+          updatedData.career = formListData.career.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificate = formData.certificate.map((certificateItem, i) =>
+          updatedData.certificate = formListData.certificate.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -100,12 +106,12 @@ const Resume = ({ data }) => {
   };
 
   const handleUpdateResume = async () => {
-    const { wage, checkedLoc, mainServiceData } = formData;
-
-    if (!wage) {
+    if (!formMateResumeData.desired_wage) {
       alert('희망 최소시급을 입력하세요.');
       return false;
     }
+
+    const { checkedLoc, mainServiceData } = formListData;
 
     if (!checkedLoc.length) {
       alert('최소 1개의 활동 지역을 선택하세요.');
@@ -123,13 +129,25 @@ const Resume = ({ data }) => {
       let body = {};
       if (method === 'post') {
         body = {
-          ...formData,
+          mateResume: { ...formMateResumeData },
+          ...formListData,
         };
       } else if (method === 'patch') {
         body = {
-          ...changedData,
+          mateResume: { ...changedMateData },
+          ...changedListData,
         };
       }
+      console.log(
+        {
+          mateResume: { ...formMateResumeData },
+          ...formListData,
+        },
+        {
+          mateResume: { ...changedMateData },
+          ...changedListData,
+        },
+      );
 
       const response = await axiosInstance[method]('/api/v1/mate/resume', body);
       if (response.data) {
@@ -143,16 +161,18 @@ const Resume = ({ data }) => {
   };
 
   const initializeFormData = ($data) => {
-    setFormData({
+    setFormMateResumeData({
       profilePictureFilename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
       contactTimeStart: $data.resume?.mate?.contact_time_start || '09:00',
       contactTimeEnd: $data.resume?.mate?.contact_time_end || '21:00',
       introduction: $data.resume?.mate?.introduction || '',
+      desired_wage: $data.resume?.mate?.desired_wage || minWage,
+    });
+    setFormListData({
       mainServiceData: $data.resume?.mainService?.map((it) => it.name) || [],
       checkedLoc: $data.resume?.location?.map((it) => it.name) || [],
       career: $data.resume?.career || [],
       certificate: $data.resume?.certificate || [],
-      wage: $data.resume?.mate?.desired_wage || minWage,
     });
   };
 
@@ -169,30 +189,35 @@ const Resume = ({ data }) => {
             <UserInfo
               styles={styles}
               data={data}
-              formData={formData}
-              setFormData={setFormData}
-              setChangedData={setChangedData}
+              formData={formMateResumeData}
+              setFormData={setFormMateResumeData}
+              setChangedData={setChangedMateData}
             />
           </section>
 
           <section className={styles.location}>
-            <Location styles={styles} formData={formData} setFormData={setFormData} setChangedData={setChangedData} />
+            <Location
+              styles={styles}
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
+            />
           </section>
 
           <section className={styles.career}>
             <Career
-              formData={formData}
-              setFormData={setFormData}
-              setChangedData={setChangedData}
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
               handleItemChange={handleItemChange}
             />
           </section>
 
           <section className={styles.certificate}>
             <Certificate
-              formData={formData}
-              setFormData={setFormData}
-              setChangedData={setChangedData}
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
               handleItemChange={handleItemChange}
             />
           </section>
@@ -207,7 +232,7 @@ const Resume = ({ data }) => {
                       type='checkbox'
                       name='service'
                       value={service}
-                      checked={formData?.mainServiceData?.includes(service)}
+                      checked={formListData?.mainServiceData?.includes(service)}
                       onChange={(e) => {
                         handleMainServiceChange(e.currentTarget.checked, e.currentTarget.value);
                       }}
