@@ -119,12 +119,12 @@ const ReservationForm = () => {
     };
 
     try {
-      const response = await axiosInstance.post('/api/v1/reservation', body);
+      const response = await axiosInstance.post('/api/v1/recruitment', body);
       if (response.data) {
-        alert('예약 신청이 완료되었습니다.');
+        alert('공고 등록이 완료되었습니다.');
         navigator.push('./main');
       } else {
-        alert('예약 신청에 실패하였습니다.');
+        return openAlert('공고 등록에 실패하였습니다.');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -162,7 +162,7 @@ const ReservationForm = () => {
                 />
               </div>
 
-              <div className={styles.reservation_info_wrapper}>
+              <div className={styles.recruitment_info_wrapper}>
                 <div className='input_wrapper'>
                   <label>주소</label>
                   <div className={styles.address_section}>

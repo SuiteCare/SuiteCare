@@ -8,7 +8,7 @@ const FamilyManagePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('./manage/reservation');
+    router.push('./manage/calendar');
   }, []);
 
   return (
