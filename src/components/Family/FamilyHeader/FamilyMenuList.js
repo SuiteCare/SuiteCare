@@ -15,9 +15,9 @@ const MenuList = [
     description: '간병 신청을 위해 환자 정보를 등록하세요.',
   },
   {
-    title: '간병 예약하기',
-    url: 'reservation',
-    description: '간병이 필요하신가요? 새로운 간병 예약을 신청하세요.',
+    title: '간병 공고 등록하기',
+    url: 'recruitment',
+    description: '간병 서비스를 받기 위해 새로운 간병 공고를 올릴 수 있습니다.',
   },
   {
     title: '내 활동 관리',

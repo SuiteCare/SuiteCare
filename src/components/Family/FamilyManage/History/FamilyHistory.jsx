@@ -29,8 +29,8 @@ const FamilyHistory = () => {
     <div className='FamilyHistory'>
       {isLoading && <Loading />}
       <div style={{ textAlign: 'right' }}>
-        <button type='button' onClick={() => navigator.push('/family/reservation')}>
-          간병 예약하기
+        <button type='button' onClick={() => navigator.push('/family/recruitment')}>
+          신규 간병 공고 등록하기
         </button>
       </div>
       <div className='tab_wrapper'>

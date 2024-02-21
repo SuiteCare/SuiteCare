@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
-
 import useLoginInfo from '@/hooks/useLoginInfo';
 
 import SearchForm from './JobSearchForm';
@@ -25,6 +24,7 @@ const MateJobSearch = () => {
     },
     {
       enabled: Object.keys(condition).length > 0,
+      retry: 0,
     },
   );
 
@@ -33,15 +33,15 @@ const MateJobSearch = () => {
     setCondition($condition);
   };
 
-  if (isError) {
-    alert('검색 실패');
-  }
-
   return (
     <div className='MateJobSearch content_wrapper'>
-      {isLoading ? <Loading /> : ''}
+      {isLoading && <Loading />}
       <SearchForm onSearch={handleSearch} />
-      {searchData ? <SearchResult data={searchData} /> : <div className='no_result'>검색 조건을 입력하세요.</div>}
+      {searchData ? (
+        <SearchResult data={searchData} />
+      ) : (
+        <div className='no_result'>{isError ? '검색에 실패했습니다.' : '검색 조건을 입력하세요.'}</div>
+      )}
     </div>
   );
 };

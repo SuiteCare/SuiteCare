@@ -9,8 +9,6 @@ import axiosInstance from '@/services/axiosInstance';
 import formInputInfos from './FormInputInfos';
 import styles from './SignUpForm.module.css';
 
-import { emailRegex } from '@/utils/regex';
-
 const SignUpForm = ({ type }) => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
@@ -110,7 +108,6 @@ const SignUpForm = ({ type }) => {
         formData.email,
       )
     ) {
-      console.log(formData.email, emailRegex(formData.email));
       return openAlert('이메일 주소를 올바르게 입력하십시오.');
     }
 

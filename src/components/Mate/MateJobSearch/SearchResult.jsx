@@ -104,7 +104,7 @@ const SearchResult = ({ data }) => {
       <div className={styles.search_header}>
         <h3>검색 결과 ({data.length ? data.length : 0}건)</h3>
         <select value={sortOption} onChange={handleSortChange}>
-          <option value=''>정렬 없음</option>
+          <option value=''>기본 정렬</option>
           <option value='start_date_asc'>시작일 오름차순</option>
           <option value='start_date_desc'>시작일 내림차순</option>
           <option value='wage_asc'>시급 오름차순</option>
