@@ -2,9 +2,19 @@ import { useState, useEffect } from 'react';
 import moment from 'moment';
 import 'moment/locale/ko';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { useQuery } from 'react-query';
+
+import useModal from '@/hooks/useModal';
+import useLoginInfo from '@/hooks/useLoginInfo';
+import axiosInstance from '@/services/axiosInstance';
 
 import MateCalendarModal from './MateCalendarModal';
-import { getSettingProps, customDayPropGetter } from '@/components/Common/Calendar/CalendarSettingProps';
+import {
+  getComponents,
+  getSettingProps,
+  customDayPropGetter,
+  messages,
+} from '@/components/Common/Calendar/CalendarSettingProps';
 
 import { stringToColor } from '@/utils/calculators';
 
@@ -13,26 +23,28 @@ const settingProps = getSettingProps();
 
 const MateCalendar = () => {
   const [eventList, setEventList] = useState([]);
-  const [showEventDetails, setShowEventDetails] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const { isModalVisible, openModal, closeModal } = useModal();
+
+  const { token } = useLoginInfo();
+
+  const { data, isError, isLoading } = useQuery(
+    ['reservationList', token],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/mate/reservation');
+      return response.data;
+    },
+    {
+      enabled: Boolean(token),
+    },
+  );
 
   useEffect(() => {
     const getEventList = () => {
-      // 서버와 통신해서 다음 데이터를 받아온다고 가정한다.
-      const rawData = {
-        patient_name: '김환자',
-        diagnosis: '중풍',
-        family_name: '이보호',
-        start_date: '2023-12-18',
-        end_date: '2024-2-1',
-        weekdays: ['월', '목', '토', '일'],
-        start_time: '09:00',
-        end_time: '17:00',
-      };
-
-      let currentStartDate = moment(`${rawData.start_date} ${rawData.start_time}`);
-      let currentEndDate = moment(`${rawData.start_date} ${rawData.end_time}`);
-      const endDate = moment(`${rawData.end_date} ${rawData.end_time}`);
-      const weekdays = rawData?.weekdays;
+      let currentStartDate = moment(`${data.start_date} ${data.start_time}`);
+      let currentEndDate = moment(`${data.start_date} ${data.end_time}`);
+      const endDate = moment(`${data.end_date} ${data.end_time}`);
+      const weekdays = data?.weekdays;
 
       const events = [];
 
@@ -41,11 +53,11 @@ const MateCalendar = () => {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name} 님 (${rawData.diagnosis})`,
-            family: `보호자 ${rawData.family_name} 님`,
+            title: `${data.patient_name} 님 (${data.diagnosis_name})`,
+            family: `보호자 ${data.family_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
-            color: stringToColor(rawData.patient_name + rawData.diagnosis + rawData.family_name),
+            color: stringToColor(data.patient_name + data.diagnosis_name + data.family_name),
           };
           events.push(event);
         }
@@ -56,17 +68,10 @@ const MateCalendar = () => {
       setEventList(events);
     };
 
-    getEventList();
+    if (data && data.length > 0) {
+      getEventList();
+    }
   }, []);
-
-  const showEvent = (event) => {
-    // setSelectedEvent(event);
-    setShowEventDetails(true);
-  };
-
-  const closeModal = () => {
-    setShowEventDetails(false);
-  };
 
   return (
     <>
@@ -79,10 +84,12 @@ const MateCalendar = () => {
         endAccessor='end'
         views={['month', 'week', 'agenda']}
         timeslots={2} // step={30}와 동일
+        messages={messages}
         dayPropGetter={customDayPropGetter}
-        {...settingProps}
+        {...getComponents(openModal, setModalData)}
+        {...getSettingProps()}
       />
-      {showEventDetails && <MateCalendarModal modalData='test' closeModal={closeModal} />}
+      {isModalVisible && <MateCalendarModal modalData={modalData} closeModal={closeModal} />}
     </>
   );
 };
