@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
-import useLoginInfo from '@/hooks/useLoginInfo';
 
 import SearchForm from './JobSearchForm';
 import SearchResult from './SearchResult';
