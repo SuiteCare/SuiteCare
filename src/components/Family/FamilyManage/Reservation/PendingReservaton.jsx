@@ -81,23 +81,23 @@ const PendingReservation = () => {
     <div className={styles.PendingReservation}>
       {isLoading || isResListLoading || isMateListLoading ? <Loading /> : ''}
       <div className={`${styles.select_reservation} input_wrapper`}>
-        <label>간병예약 목록</label>
+        <label>간병공고 목록</label>
         <select onChange={handleSelectChange}>
-          <option onSelect={handleReset}>간병예약 선택</option>
+          <option onSelect={handleReset}>간병공고 선택</option>
           {reservationList?.map((e, i) => (
             <option key={e.reservation_id} value={e.reservation_id}>
               {reservationList.length - i}. {selectPatient(e.patient_id)?.name} (
               {selectPatient(e.patient_id)?.diagnosis_name}) | {e.start_date} ~ {e.end_date}
             </option>
           ))}
-          <option value='add'>새로운 간병 예약하기</option>
+          <option value='add'>새로운 간병 공고 등록하기</option>
         </select>
       </div>
       <hr />
       {reservationInfo?.reservation_id ? (
         <PendingReservationCard data={reservationInfo} mateList={mateList} />
       ) : (
-        <div className='no_result'>정보를 확인할 간병 예약을 선택하세요.</div>
+        <div className='no_result'>정보를 확인할 간병 공고를 선택하세요.</div>
       )}
     </div>
   );

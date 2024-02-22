@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -62,6 +61,7 @@ const FamilyMateSearch = () => {
     },
     {
       enabled: Object.keys(condition).length > 0,
+      retry: 0,
     },
   );
 
@@ -70,16 +70,18 @@ const FamilyMateSearch = () => {
     setCondition($condition);
   };
 
-  if (isError) {
-    alert('검색 실패');
-  }
-
   return (
     <div className='FamilyMateSearch content_wrapper'>
-      {isLoading ? <Loading /> : ''}
+      {isLoading && <Loading />}
       <SearchForm onSearch={handleSearch} />
-      <SearchResult data={searchData} type='search' />
-
+      {isError ? (
+        <>
+          <h3>나에게 꼭 맞는 메이트님을 찾아보세요!</h3>
+          <div className='no_result'>검색에 실패했습니다.</div>
+        </>
+      ) : (
+        <SearchResult data={searchData} type='search' />
+      )}
       <SearchResult data={suggestionData} type='suggestion' />
     </div>
   );

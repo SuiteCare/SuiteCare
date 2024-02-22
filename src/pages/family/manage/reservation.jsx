@@ -11,7 +11,7 @@ const FamilyManageReservationPage = () => {
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>간병예약 확정하기</h1>
-            <span>나의 간병예약 건에 지원한 간병인들의 목록을 확인하고 선택할 수 있습니다.</span>
+            <span>나의 간병 공고에 지원한 간병인들의 목록 중 원하는 메이트를 선택할 수 있습니다.</span>
           </div>
           <PendingReservation />
         </div>

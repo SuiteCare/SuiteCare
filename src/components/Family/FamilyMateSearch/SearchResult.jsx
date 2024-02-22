@@ -84,7 +84,7 @@ const SearchResult = ({ data, type }) => {
       {data && data.length > 0 ? (
         data.map((e) => <SearchResultCard data={e} key={e.mate_id} showDetail={() => handleShowModal(e)} />)
       ) : (
-        <div className='no_result'>검색 결과가 없습니다.</div>
+        <div className='no_result'>검색 조건을 입력하세요.</div>
       )}
       {isModalVisible && <MateDetailModal modalData={modalData} closeModal={closeModal} />}
     </div>
