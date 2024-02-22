@@ -6,7 +6,7 @@ import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 import useAlert from '@/hooks/useAlert';
 
-import styles from './ReservationForm.module.css';
+import styles from './RecruitmentForm.module.css';
 import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
@@ -14,7 +14,7 @@ import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
 
-const ReservationForm = () => {
+const RecruitmentForm = () => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
 
@@ -33,6 +33,7 @@ const ReservationForm = () => {
     start_date: today, // 날짜 형식 YYYY-MM-DD
     end_date: today, // 날짜 형식 YYYY-MM-DD
     wage: '15000',
+    expire_at: today,
   });
 
   const [address, setAddress] = useState({
@@ -85,6 +86,20 @@ const ReservationForm = () => {
     }
   };
 
+  const wageOptions = (min, max, step) => {
+    const options = [];
+
+    for (let i = min; i <= max; i += step) {
+      options.push(
+        <option value={i} key={i}>
+          {i}
+        </option>,
+      );
+    }
+
+    return options;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress)
@@ -132,7 +147,7 @@ const ReservationForm = () => {
   };
 
   return (
-    <div className={`${styles.ReservationForm} content_wrapper`}>
+    <div className={`${styles.RecruitmentForm} content_wrapper`}>
       {alertComponent}
       <form onSubmit={handleSubmit}>
         <div className='input_wrapper'>
@@ -244,15 +259,18 @@ const ReservationForm = () => {
                 <div className='input_wrapper'>
                   <label>제시 시급</label>
                   <div>
-                    <input
-                      type='number'
-                      min={minWage}
-                      max='1000000'
-                      name='wage'
-                      placeholder='15000'
-                      onChange={handleInputChange}
-                    />
+                    <select name='wage' onChange={handleInputChange}>
+                      <option value={minWage}>{minWage}</option>
+                      {wageOptions(10000, 30000, 1000)}
+                    </select>
                     원
+                  </div>
+                </div>
+
+                <div className='input_wrapper'>
+                  <label>공고 마감일</label>
+                  <div>
+                    <input type='date' name='expire_at' onChange={handleInputChange} defaultValue={today} />
                   </div>
                 </div>
               </div>
@@ -272,4 +290,4 @@ const ReservationForm = () => {
   );
 };
 
-export default ReservationForm;
+export default RecruitmentForm;
