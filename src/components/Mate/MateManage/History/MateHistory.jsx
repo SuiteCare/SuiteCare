@@ -8,7 +8,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 import HistoryTable from './HistoryTable';
 import Loading from '@/components/Common/Modal/Loading';
 
-const FamilyHistory = () => {
+const MateHistory = () => {
   const [activeTab, setActiveTab] = useState(0);
   const { id } = useLoginInfo();
 
@@ -17,7 +17,7 @@ const FamilyHistory = () => {
   const { data, isError, isLoading } = useQuery(
     ['reservationList', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/family/reservation');
+      const response = await axiosInstance.get('/api/v1/mate/reservation');
       return response.data.reverse();
     },
     {
@@ -26,11 +26,11 @@ const FamilyHistory = () => {
   );
 
   return (
-    <div className='FamilyHistory'>
+    <div className='MateHistory'>
       {isLoading && <Loading />}
       <div style={{ textAlign: 'right' }}>
-        <button type='button' onClick={() => navigator.push('/family/recruitment')}>
-          신규 간병 공고 등록하기
+        <button type='button' onClick={() => navigator.push('/mate/recruitment')}>
+          간병 공고 지원하기
         </button>
       </div>
       <div className='tab_wrapper'>
@@ -48,4 +48,4 @@ const FamilyHistory = () => {
   );
 };
 
-export default FamilyHistory;
+export default MateHistory;

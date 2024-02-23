@@ -1,41 +1,41 @@
-.FamilyManageTable,
-.FamilyManageTable table {
+.ManageTable,
+.ManageTable table {
   width: 100%;
 }
 
-.FamilyManageTable th {
+.ManageTable th {
   font-weight: 500;
   border-bottom: 2px solid var(--deep-brown);
   font-size: 1.1rem;
   padding: 1rem;
 }
 
-.FamilyManageTable tr {
+.ManageTable tr {
   border-bottom: 1px solid var(--normal-gray);
 }
 
-.FamilyManageTable tbody > tr:hover {
+.ManageTable tbody > tr:hover {
   background-color: var(--very-light-gray);
 }
 
-.FamilyManageTable tbody > tr:hover > td:not(:first-of-type) {
+.ManageTable tbody > tr:hover > td:not(:first-of-type) {
   border-left: 1px solid white;
 }
 
-.FamilyManageTable td,
-.FamilyManageTable th {
+.ManageTable td,
+.ManageTable th {
   text-align: center;
 }
 
-.FamilyManageTable td:not(:first-of-type) {
+.ManageTable td:not(:first-of-type) {
   border-left: 1px solid var(--very-light-gray);
 }
 
-.FamilyManageTable td {
+.ManageTable td {
   padding: 5px 10px;
 }
 
-.FamilyManageTable td > button {
+.ManageTable td > button {
   padding: 0.6rem 0;
   width: 100%;
   font-weight: 400;
@@ -43,6 +43,6 @@
   color: var(--deep-brown);
 }
 
-.FamilyManageTable td > button:hover {
+.ManageTable td > button:hover {
   filter: brightness(0.95);
 }
