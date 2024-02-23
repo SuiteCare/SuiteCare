@@ -1,5 +1,5 @@
 import MateHeader from '@/components/Mate/MateHeader/MateHeader';
-import MateCalendar from '@/components/Mate/MateManage/MateCalendar';
+import MateCalendar from '@/components/Mate/MateManage/Calendar/MateCalendar';
 import MateManageSidebar from '@/components/Mate/MateManage/MateManageSidebar';
 
 const MateCalendarPage = () => {
