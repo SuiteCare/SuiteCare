@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 
-import styles from '../FamilyManageTable.module.css';
+import styles from '@/components/Common/ManageTable.module.css';
 import PatientDetailModal from '../Reservation/PatientDetailModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
@@ -39,7 +39,7 @@ const PatientList = ({ data }) => {
   };
 
   return (
-    <div className={styles.FamilyManageTable}>
+    <div className={styles.ManageTable}>
       <div style={{ textAlign: 'right' }}>
         <button type='button' onClick={() => navigator.push('/family/addpatient')}>
           환자 등록하기

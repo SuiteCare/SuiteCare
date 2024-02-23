@@ -27,11 +27,9 @@ const HistoryTable = ({ data }) => {
         <table className={styles.ManageTable}>
           <thead>
             <tr>
-              <th>예약 상태</th>
-              <th>공고 등록일</th>
+              <th>공고 지원일</th>
               <th>예약 체결일</th>
               <th>결제 완료일</th>
-              <th>간병인 성명</th>
               <th>환자 성명</th>
               <th>진단명</th>
               <th>간병 시작일</th>
@@ -45,11 +43,9 @@ const HistoryTable = ({ data }) => {
               const patient = selectPatient(e.patient_id);
               return (
                 <tr key={e.id}>
-                  <td>{e.status === 'C' ? '체결됨' : e.status === 'R' ? '취소됨' : '오류'}</td>
                   <td>{e.create_at}</td>
                   <td>{e.update_at || '예약 미체결'}</td>
                   <td>{e.payment_at || '결제 미처리'}</td>
-                  <td>{e.mate_name || '간병인 미배정'}</td>
                   <td>{patient?.name}</td>
                   <td>{patient?.diagnosis_name}</td>
                   <td>{e.start_date}</td>

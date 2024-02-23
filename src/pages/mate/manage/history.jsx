@@ -1,4 +1,5 @@
 import MateHeader from '@/components/Mate/MateHeader/MateHeader';
+import MateHistory from '@/components/Mate/MateManage/History/MateHistory';
 import MateManageSidebar from '@/components/Mate/MateManage/MateManageSidebar';
 
 const MateHistoryPage = () => {
@@ -12,6 +13,7 @@ const MateHistoryPage = () => {
             <h1>간병 수행 내역</h1>
             <span>내가 현재까지 수행한 간병 내역을 확인할 수 있습니다.</span>
           </div>
+          <MateHistory />
         </div>
       </div>
     </>
