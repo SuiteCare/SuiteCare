@@ -23,17 +23,20 @@ const RecruitmentForm = () => {
   const { patientList } = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
-  const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
+  const afterNday = (date) => {
+    const dt = new Date(Date.now() + date * 24 * 60 * 60 * 1000);
+    return `${dt.getFullYear()}-${(dt.getMonth() + 1).toString().padStart(2, '0')}-${dt
+      .getDate()
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   const [formData, setFormData] = useState({
     location: '병원', // 병원 or 자택
-    start_date: today, // 날짜 형식 YYYY-MM-DD
-    end_date: today, // 날짜 형식 YYYY-MM-DD
+    start_date: afterNday(7), // 날짜 형식 YYYY-MM-DD
+    end_date: afterNday(14), // 날짜 형식 YYYY-MM-DD
     wage: '15000',
-    expire_at: today,
+    expire_at: afterNday(7),
   });
 
   const [address, setAddress] = useState({
@@ -48,7 +51,7 @@ const RecruitmentForm = () => {
 
   const handlePatientSelectChange = (e) => {
     if (e.target.value === 'add') {
-      if (window.confirm('입력된 내용이 초기화됩니다. 환자 추가 페이지로 이동하시겠습니까?')) {
+      if (window.confirm(`${patientInfo ? '입력된 내용이 초기화됩니다.' : ''} 환자 추가 페이지로 이동하시겠습니까?`)) {
         navigator.push('/family/addpatient');
       }
     } else {
@@ -114,8 +117,13 @@ const RecruitmentForm = () => {
           return acc;
         }, []),
       ) === 0
-    )
+    ) {
       return openAlert('간병 기간 및 출퇴근요일 설정이 올바르지 않습니다.');
+    }
+
+    if (new Date(formData.expire_at) < Date.now()) {
+      return openAlert('공고 마감일 설정이 올바르지 않습니다.');
+    }
 
     const body = {
       member_id: id,
@@ -203,8 +211,8 @@ const RecruitmentForm = () => {
                 <div className='input_wrapper'>
                   <label>간병 기간</label>
                   <div>
-                    <input type='date' name='start_date' onChange={handleInputChange} defaultValue={today} /> ~
-                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={today} />
+                    <input type='date' name='start_date' onChange={handleInputChange} defaultValue={afterNday(7)} /> ~
+                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={afterNday(14)} />
                     <p>
                       (총{' '}
                       {countWeekdays(
@@ -270,7 +278,7 @@ const RecruitmentForm = () => {
                 <div className='input_wrapper'>
                   <label>공고 마감일</label>
                   <div>
-                    <input type='date' name='expire_at' onChange={handleInputChange} defaultValue={today} />
+                    <input type='date' name='expire_at' onChange={handleInputChange} defaultValue={afterNday(4)} />
                   </div>
                 </div>
               </div>
