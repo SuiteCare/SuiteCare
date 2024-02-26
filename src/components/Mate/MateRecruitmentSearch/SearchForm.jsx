@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import styles from './JobSearchForm.module.css';
+import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 import { minWage } from '@/utils/calculators';
@@ -135,7 +135,7 @@ const JobSearchForm = ({ onSearch }) => {
           <div className={styles.checkbox_list_wrapper}>
             <FormLocationList onChange={handleCheckboxChange} />
           </div>
-        </div>{' '}
+        </div>
         <hr />
         <div className='input_wrapper'>
           <label>환자 성별</label>

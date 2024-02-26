@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
 
-import SearchForm from './JobSearchForm';
+import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
 import Loading from '@/components/Common/Modal/Loading';
 
