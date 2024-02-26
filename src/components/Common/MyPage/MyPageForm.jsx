@@ -20,9 +20,11 @@ const MyPageForm = () => {
   const { id } = useLoginInfo();
 
   const [formData, setFormData] = useState({
+    gender: '',
     email: '',
     tel: '',
   });
+
   const [changedData, setChangedData] = useState();
 
   const { data, isError, isLoading } = useQuery(
@@ -41,6 +43,11 @@ const MyPageForm = () => {
       setFormData(data);
     }
   }, [data]);
+
+  const handleClickGender = (e) => {
+    setFormData((prevData) => ({ ...prevData, gender: e.target.value }));
+    setChangedData((prevData) => ({ ...prevData, gender: e.target.value }));
+  };
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -114,11 +121,11 @@ const MyPageForm = () => {
   const handleModifyClick = async (e) => {
     e.preventDefault();
 
-    if (formData.tel === data.tel && formData.email === data.email) {
+    if (formData.tel === data.tel && formData.email === data.email && formData.gender === data.gender) {
       openAlert('변경된 정보가 없습니다.');
-    } else if (!isPhoneCertificated) {
+    } else if (formData.tel !== data.tel && !isPhoneCertificated) {
       openAlert('휴대폰 인증이 필요합니다.');
-    } else if (!isEmailCertificated) {
+    } else if (formData.email !== data.email && !isEmailCertificated) {
       openAlert('이메일 인증이 필요합니다.');
     } else {
       submitModification.mutate();
@@ -156,7 +163,28 @@ const MyPageForm = () => {
 
         <div className='input_wrapper'>
           <label>성별</label>
-          <input type='text' name='gender' id='gender' readOnly value={`${genderToKo(data?.gender)}성`} />
+          <div style={{ display: 'flex', gap: '1rem', padding: '1rem 0' }}>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='M'
+                checked={formData.gender === 'M'}
+                onClick={handleClickGender}
+              />
+              <span>남성</span>
+            </div>
+            <div>
+              <input
+                type='radio'
+                name='gender'
+                value='F'
+                checked={formData.gender === 'F'}
+                onClick={handleClickGender}
+              />
+              <span>여성</span>
+            </div>
+          </div>
         </div>
 
         <div className='input_wrapper'>
