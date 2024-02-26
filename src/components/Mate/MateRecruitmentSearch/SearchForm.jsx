@@ -113,10 +113,13 @@ const JobSearchForm = ({ onSearch }) => {
 
     if (isEmptyData(formData, 'location')) {
       alert('희망 간병 지역을 1곳 이상 선택하세요.');
+      return false;
     }
-    if (isEmptyData(formData, 'weekdays')) {
+    if (formData.weekdays.every((e) => e === false)) {
       alert('희망 출근 요일을 1개 이상 선택하세요.');
+      return false;
     }
+
     onSearch(formData);
   };
 
