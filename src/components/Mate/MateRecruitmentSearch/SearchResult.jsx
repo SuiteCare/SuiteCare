@@ -9,7 +9,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
-import JobDetailModal from './JobDetailModal';
+import JobDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
