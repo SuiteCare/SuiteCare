@@ -54,7 +54,7 @@ export const stringToColor = (str, saturation = 55, lightness = 50) => {
 };
 
 export const genderToKo = (gender) => {
-  return gender === 'M' ? '남' : '여';
+  return gender === 'M' ? '남' : gender === 'F' ? '여' : '';
 };
 
 export const getMinWage = async () => {

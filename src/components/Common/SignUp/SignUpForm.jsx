@@ -122,7 +122,6 @@ const SignUpForm = ({ type }) => {
 
   const handleClickGender = (e) => {
     setFormData((prevData) => ({ ...prevData, gender: e.target.value }));
-    console.log(formData);
   };
 
   const handleInputChange = (e) => {
