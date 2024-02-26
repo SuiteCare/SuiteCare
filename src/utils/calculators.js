@@ -19,7 +19,11 @@ export const normalizeWeekDays = (weekdays) => {
       : weekdays.split(',').map((e) => weekdayDic.indexOf(e));
   }
   if (typeof weekdays === 'object') {
-    return typeof weekdays[0] === 'number' ? weekdays : weekdays.map((e) => weekdayDic.indexOf(e));
+    return typeof Number(weekdays[0]) === 'number'
+      ? typeof weekdays[0] === 'number'
+        ? weekdays
+        : weekdays.map((e) => +e)
+      : weekdays.map((e) => weekdayDic.indexOf(e));
   }
   return false;
 };
