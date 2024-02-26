@@ -18,7 +18,7 @@ const MateJobSearch = () => {
     ['searchData', condition],
     async () => {
       console.log('request params', condition);
-      const { data } = await axiosInstance.get('/api/v1/search/reservation', { params: condition });
+      const { data } = await axiosInstance.get('/api/v1/search/recruitment', { params: condition });
       return data;
     },
     {
@@ -28,8 +28,10 @@ const MateJobSearch = () => {
   );
 
   const handleSearch = async ($condition) => {
-    console.log($condition);
-    setCondition($condition);
+    setCondition({
+      ...$condition,
+      weekdays: $condition.weekdays.reduce((acc, e, i) => (e ? [...acc, i] : acc), []),
+    });
   };
 
   return (

@@ -1,72 +1,55 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
-import { minWage } from '@/utils/calculators';
+import { minWage, weekdayDic } from '@/utils/calculators';
+import TimePicker from '@/utils/TimePicker';
 
 const JobSearchForm = ({ onSearch }) => {
-  // 시급 관련
-  const [wages, setWages] = useState([15000, 100000]);
-
-  // 체크박스 및 최종 데이터 관련
-  const [checkedItems, setCheckedItems] = useState({
+  const [formData, setFormData] = useState({
     search_input: '',
     location: [],
     gender: [],
+    weekdays: Array(7).fill(true),
+    worktime: ['09:00', '18:00'],
     wage: [15000, 100000],
   });
 
-  const handleWageChange = (e, index) => {
-    const newWages = [...wages];
-    newWages[index] = +e.target.value;
-    setWages(newWages);
-  };
-
-  const updateWage = () => {
-    const newWages = [...wages];
-
-    if (newWages[0] < minWage) {
-      alert(`최소 시급은 2024년 기준 최저임금 ${minWage.toLocaleString()}원 이상이어야 합니다.`);
-      newWages[0] = minWage;
-    }
-
-    if (newWages[0] > newWages[1]) {
-      alert('최대 시급은 최소 시급보다 높아야 합니다.');
-      newWages[1] = newWages[0];
-    }
-
-    setWages(newWages);
-    setCheckedItems({
-      ...checkedItems,
-      wage: newWages,
-    });
-  };
-
-  // 상단 텍스트 검색창 관련
   const [searchInput, setSearchInput] = useState('');
 
-  const handleSearchChange = (e) => {
+  const handleInputChange = (e) => {
     setSearchInput(e.target.value);
-    setCheckedItems({
-      ...checkedItems,
-      search_input: e.target.value,
-    });
+    setFormData((prevData) => ({ ...prevData, search_input: e.target.value }));
   };
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
-    if (checked) {
-      setCheckedItems({
-        ...checkedItems,
-        [name]: [...checkedItems[name], value],
-      });
-    } else {
-      setCheckedItems({
-        ...checkedItems,
-        [name]: checkedItems[name].filter((item) => item !== value),
-      });
+    if (name === 'location') {
+      if (checked) {
+        setFormData((prevData) => ({ ...prevData, [name]: [...formData[name], value] }));
+      } else {
+        setFormData((prevData) => ({ ...prevData, [name]: formData[name].filter((item) => item !== value) }));
+      }
+    } else if (name === 'weekdays') {
+      const newWeekdays = [...formData.weekdays];
+      newWeekdays[value] = checked;
+      setFormData((prevData) => ({ ...prevData, weekdays: newWeekdays }));
     }
+  };
+
+  const selectAllWeekday = (e) => {
+    const isChecked = e.currentTarget.children[0].checked;
+    setFormData((prevData) => ({
+      ...prevData,
+      weekdays: isChecked ? Array(7).fill(true) : Array(7).fill(false),
+    }));
+  };
+
+  const handleWeekdayCheckboxWrapperClick = (index) => {
+    const newWeekdays = [...formData.weekdays];
+    newWeekdays[index] = !newWeekdays[index];
+    setFormData((prevData) => ({ ...prevData, weekdays: newWeekdays }));
   };
 
   const selectAllLocation = (e) => {
@@ -81,17 +64,43 @@ const JobSearchForm = ({ onSearch }) => {
 
     e.target.checked = !isChecked;
 
-    setCheckedItems({
-      ...checkedItems,
-      location: selectedLocations,
-    });
+    setFormData((prevData) => ({ ...prevData, location: selectedLocations }));
   };
 
   const handleAllLocationChange = (e) => {
     selectAllLocation(e);
   };
 
-  // 폼 제출
+  const handleWorktimeChange = (type, value) => {
+    const [start, end] = formData?.worktime;
+    setFormData((prevData) => ({
+      ...prevData,
+      worktime: type === 0 ? [value, end] : [start, value],
+    }));
+  };
+
+  const handleWageChange = (e, index) => {
+    const newWages = [...formData.wage];
+    newWages[index] = +e.target.value;
+    setFormData((prevData) => ({ ...prevData, wage: newWages }));
+  };
+
+  const updateWage = () => {
+    const newWages = [...formData.wage];
+
+    if (newWages[0] < minWage) {
+      alert(`최소 시급은 2024년 기준 최저임금 ${minWage.toLocaleString()}원 이상이어야 합니다.`);
+      newWages[0] = minWage;
+    }
+
+    if (newWages[0] > newWages[1]) {
+      alert('최대 시급은 최소 시급보다 높아야 합니다.');
+      newWages[1] = newWages[0];
+    }
+
+    setFormData((prevData) => ({ ...prevData, wage: newWages }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -102,11 +111,13 @@ const JobSearchForm = ({ onSearch }) => {
       return true;
     };
 
-    if (isEmptyData(checkedItems, 'location')) {
+    if (isEmptyData(formData, 'location')) {
       alert('희망 간병 지역을 1곳 이상 선택하세요.');
-    } else {
-      onSearch(checkedItems);
     }
+    if (isEmptyData(formData, 'weekdays')) {
+      alert('희망 출근 요일을 1개 이상 선택하세요.');
+    }
+    onSearch(formData);
   };
 
   return (
@@ -119,7 +130,7 @@ const JobSearchForm = ({ onSearch }) => {
             name='search_input'
             placeholder='🔎 진단명으로 검색하기'
             value={searchInput}
-            onChange={handleSearchChange}
+            onChange={handleInputChange}
             maxLength={10}
           />
         </div>
@@ -152,12 +163,65 @@ const JobSearchForm = ({ onSearch }) => {
         </div>
         <hr />
         <div className='input_wrapper'>
+          <div>
+            <label>출퇴근요일</label>
+            <div onClick={selectAllWeekday}>
+              <input type='checkbox' defaultChecked />
+              <span>전체 선택</span>
+            </div>
+          </div>
+
+          <div className={styles.checkbox_list_wrapper}>
+            {formData.weekdays.map((isChecked, index) => (
+              <div
+                key={weekdayDic[index]}
+                className={styles.checkbox_wrapper}
+                onClick={() => handleWeekdayCheckboxWrapperClick(index)}
+              >
+                <input
+                  type='checkbox'
+                  name='weekdays'
+                  value={index}
+                  checked={isChecked}
+                  onChange={handleCheckboxChange}
+                />
+                <span>{weekdayDic[index]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <hr />
+        <div className='input_wrapper'>
+          <label>출퇴근 시간</label>
+          <div>
+            <div className={styles.timepicker_wrapper}>
+              <TimePicker
+                time={formData?.worktime[0]}
+                setTime={(value) => handleWorktimeChange(0, value)}
+                start={5}
+                end={22}
+              />
+              이후 출근
+            </div>
+            <div className={styles.timepicker_wrapper}>
+              <TimePicker
+                time={formData?.worktime[1]}
+                setTime={(value) => handleWorktimeChange(1, value)}
+                start={5}
+                end={22}
+              />
+              이전 퇴근
+            </div>
+          </div>
+        </div>
+        <hr />
+        <div className='input_wrapper'>
           <label>제시 시급</label>
           <div className={styles.input_wrapper}>
             최소
             <input
               type='number'
-              value={wages[0]}
+              value={formData.wage[0]}
               onChange={(e) => handleWageChange(e, 0)}
               onBlur={updateWage}
               min={minWage}
@@ -166,7 +230,7 @@ const JobSearchForm = ({ onSearch }) => {
             원 ~ 최대
             <input
               type='number'
-              value={wages[1]}
+              value={formData.wage[1]}
               onChange={(e) => handleWageChange(e, 1)}
               onBlur={updateWage}
               min={minWage}
