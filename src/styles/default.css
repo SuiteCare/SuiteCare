@@ -337,7 +337,7 @@ input::-moz-focus-inner {
 /*  7. Forms  --------------------------------------------------------- */
 
 .Form_narrow {
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   max-width: 600px;
 }

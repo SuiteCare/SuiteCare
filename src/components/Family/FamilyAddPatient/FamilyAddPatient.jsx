@@ -116,7 +116,6 @@ const FamilyAddPatient = ({ idQuery }) => {
     e.preventDefault();
 
     const body = {
-      member_id: id,
       ...formData,
     };
     console.log(body);
@@ -151,21 +150,27 @@ const FamilyAddPatient = ({ idQuery }) => {
   const handleClickDelete = async (e) => {
     e.preventDefault();
 
-    await axiosInstance
-      .delete(`/api/v1/patient/${idQuery}`, {
-        params: { id: idQuery },
-      })
-      .then((res) => {
-        if (res.data === 1) {
-          alert(`${formData.basic.name} 님의 환자 정보가 삭제되었습니다.`);
-          navigator.push('/family/manage/patient_list');
-        } else {
-          alert('환자 정보 삭제에 실패하였습니다.');
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (
+      window.confirm(
+        `${formData.name}님의 환자 정보를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.\n또한, 환자를 삭제해도 기존에 등록한 공고 내역은 유지됩니다.`,
+      )
+    ) {
+      await axiosInstance
+        .delete(`/api/v1/patient/${idQuery}`, {
+          params: { id: idQuery },
+        })
+        .then((response) => {
+          if (response.data === 1) {
+            alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
+            navigator.push('/family/manage/patient_list');
+          } else {
+            alert('환자 정보 삭제에 실패하였습니다.');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   const handleKeyPress = (e) => random(e, formData, setFormData); // 테스트용 코드
