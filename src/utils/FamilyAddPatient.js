@@ -68,10 +68,10 @@ const random = (e, formData, setFormData) => {
     const randomName = names[Math.floor(Math.random() * names.length)];
     randomData.name = `${randomName}환자`;
 
-    const randomHeight = Math.floor(Math.random() * 101) + 100;
+    const randomHeight = Math.floor(Math.random() * 71) + 130;
     randomData.height = randomHeight.toString();
 
-    const randomWeight = Math.floor(Math.random() * 91) + 30;
+    const randomWeight = Math.floor(Math.random() * 81) + 40;
     randomData.weight = randomWeight.toString();
 
     const diagnoses = ['진단명1', '진단명2', '진단명3'];
