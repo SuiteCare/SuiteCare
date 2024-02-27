@@ -8,35 +8,35 @@ import SearchResult from './SearchResult';
 import Loading from '@/components/Common/Modal/Loading';
 
 const MateJobSearch = () => {
-  const [condition, setCondition] = useState({});
+  const [formData, setFormData] = useState({ gender: { F: false, M: false }, weekdays: Array(7).fill(false) });
 
-  const requestCondition = useMemo(() => {
+  const requestParams = useMemo(() => {
     return {
-      ...condition,
-      gender: Object.keys(condition.gender).filter((e) => condition.gender[e]),
-      weekdays: condition.weekdays.reduce((acc, e, i) => (e ? [...acc, i] : acc), []),
+      ...formData,
+      gender: Object.keys(formData.gender).filter((e) => formData.gender[e]),
+      weekdays: formData.weekdays.reduce((acc, e, i) => (e ? [...acc, i] : acc), []),
     };
-  }, [condition]);
+  }, [formData]);
 
   const {
     data: searchData,
     isError,
     isLoading,
   } = useQuery(
-    ['searchData', requestCondition],
+    ['searchData', requestParams],
     async () => {
-      console.log('request params', requestCondition);
-      const { data } = await axiosInstance.get('/api/v1/search/recruitment', { params: requestCondition });
+      console.log('request params', requestParams);
+      const { data } = await axiosInstance.get('/api/v1/search/recruitment', { params: requestParams });
       return data;
     },
     {
-      enabled: Object.keys(requestCondition).length > 0,
+      enabled: Object.keys(requestParams).length > 0,
       retry: 0,
     },
   );
 
-  const handleSearch = ($condition) => {
-    setCondition($condition);
+  const handleSearch = ($formData) => {
+    setFormData($formData);
   };
 
   return (

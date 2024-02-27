@@ -26,58 +26,51 @@ const JobSearchForm = ({ onSearch }) => {
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
     if (name === 'location') {
-      if (checked) {
-        setFormData((prevData) => ({ ...prevData, location: [...formData[name], value] }));
-      } else {
-        setFormData((prevData) => ({ ...prevData, location: formData[name].filter((item) => item !== value) }));
-      }
+      setFormData((prevData) => ({
+        ...prevData,
+        location: checked ? [...prevData.location, value] : prevData.location.filter((item) => item !== value),
+      }));
     } else if (name === 'weekdays') {
-      const newWeekdays = [...formData.weekdays];
-      newWeekdays[value] = checked;
-      setFormData((prevData) => ({ ...prevData, weekdays: newWeekdays }));
+      setFormData((prevData) => ({
+        ...prevData,
+        weekdays: prevData.weekdays.map((day, index) => (index.toString() === value ? checked : day)),
+      }));
     } else if (name === 'gender') {
       setFormData((prevData) => ({ ...prevData, gender: { ...prevData.gender, [value]: checked } }));
     }
   };
 
-  const selectAllWeekday = (e) => {
-    const isChecked = e.currentTarget.children[0].checked;
+  const handleWeekdayCheckboxWrapperClick = (index) => {
     setFormData((prevData) => ({
       ...prevData,
-      weekdays: isChecked ? Array(7).fill(true) : Array(7).fill(false),
+      weekdays: prevData.weekdays.map((day, i) => (i === index ? !day : day)),
     }));
   };
 
-  const handleWeekdayCheckboxWrapperClick = (index) => {
-    const newWeekdays = [...formData.weekdays];
-    newWeekdays[index] = !newWeekdays[index];
-    setFormData((prevData) => ({ ...prevData, weekdays: newWeekdays }));
-  };
-
   const selectAllLocation = (e) => {
+    const isChecked = e.target.checked;
     const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
-    const isChecked = allLocationCheckboxes.filter((checkbox) => checkbox.checked === false).length === 0;
-
-    const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-
     allLocationCheckboxes.forEach((checkbox) => {
-      checkbox.checked = !isChecked;
+      checkbox.checked = isChecked;
     });
-
-    e.target.checked = !isChecked;
-
-    setFormData((prevData) => ({ ...prevData, location: selectedLocations }));
+    setFormData((prevData) => ({
+      ...prevData,
+      location: isChecked ? allLocationCheckboxes.map((checkbox) => checkbox.value) : [],
+    }));
   };
 
-  const handleAllLocationChange = (e) => {
-    selectAllLocation(e);
+  const selectAllWeekday = (e) => {
+    const isChecked = e.target.checked;
+    setFormData((prevData) => ({
+      ...prevData,
+      weekdays: Array(7).fill(isChecked),
+    }));
   };
 
   const handleWorktimeChange = (type, value) => {
-    const [start, end] = formData?.worktime;
     setFormData((prevData) => ({
       ...prevData,
-      worktime: type === 0 ? [value, end] : [start, value],
+      worktime: type === 0 ? [value, prevData.worktime[1]] : [prevData.worktime[0], value],
     }));
   };
 
@@ -117,7 +110,7 @@ const JobSearchForm = ({ onSearch }) => {
       alert('희망 간병 지역을 1곳 이상 선택하세요.');
       return false;
     }
-    if (formData.weekdays.every((e) => e === false)) {
+    if (formData.weekdays.every((e) => !e)) {
       alert('희망 출근 요일을 1개 이상 선택하세요.');
       return false;
     }
@@ -144,7 +137,7 @@ const JobSearchForm = ({ onSearch }) => {
           <div>
             <label>간병 지역</label>
             <div className='checkbox_wrapper'>
-              <input type='checkbox' onChange={handleAllLocationChange} />
+              <input type='checkbox' onChange={selectAllLocation} />
               <span>전체 선택</span>
             </div>
           </div>
