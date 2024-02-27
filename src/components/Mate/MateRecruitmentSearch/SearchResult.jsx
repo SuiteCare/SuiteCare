@@ -9,7 +9,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
-import JobDetailModal from './RecruitmentDetailModal';
+import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
@@ -59,7 +59,7 @@ const SearchResult = ({ data }) => {
     setSortOption(selectedOption);
   };
 
-  const sortedData = [...data].sort(sortOptions[sortOption]);
+  const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
     const response = await axiosInstance.post('/api/v1/apply', body);
@@ -102,7 +102,7 @@ const SearchResult = ({ data }) => {
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
       <div className={styles.search_header}>
-        <h3>검색 결과 ({data.length ? data.length : 0}건)</h3>
+        <h3>검색 결과 ({data ? data.length : 0}건)</h3>
         <select value={sortOption} onChange={handleSortChange}>
           <option value=''>기본 정렬</option>
           <option value='start_date_asc'>시작일 오름차순</option>
@@ -112,8 +112,8 @@ const SearchResult = ({ data }) => {
         </select>
       </div>
       <div className={styles.card_wrapper}>
-        {sortedData.length > 0 ? (
-          sortedData.map((item) => (
+        {sortedData?.length > 0 ? (
+          sortedData?.map((item) => (
             <SearchResultCard
               data={item}
               key={item.id}
@@ -125,7 +125,9 @@ const SearchResult = ({ data }) => {
           <div className='no_result'>검색 결과가 없습니다.</div>
         )}
       </div>
-      {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />}
+      {isModalVisible && (
+        <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ const Search = () => {
     <div className='Search'>
       <Header />
       <div className='title_wrapper'>
-        <h1>간병 일감 검색하기</h1>
+        <h1>간병 공고 검색하기</h1>
         <span>원하는 조건의 간병 일감을 찾아보세요.</span>
       </div>
       <MateRecruitmentSearch />

@@ -36,7 +36,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
             onClick={() => toggleMenu('mate')}
             className={`${type === 'mate' ? styles.active : ''} mate-button`}
           >
-            <span>간병 일감 찾기</span>
+            <span>간병 공고 검색</span>
           </button>
           {mateMenuOpen && <Dropdown type='mate' isOpen />}
           <button

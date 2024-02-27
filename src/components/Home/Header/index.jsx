@@ -140,7 +140,7 @@ const Header = ({ data }) => {
               </li>
               <li>
                 <Link href='/mate/login' className='button btn suiteMate-btn'>
-                  간병일감 찾기
+                  간병 공고 검색
                 </Link>
               </li>
             </ul>
