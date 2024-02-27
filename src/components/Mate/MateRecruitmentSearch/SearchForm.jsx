@@ -10,7 +10,7 @@ const JobSearchForm = ({ onSearch }) => {
   const [formData, setFormData] = useState({
     search_input: '',
     location: [],
-    gender: [],
+    gender: { F: false, M: false },
     weekdays: Array(7).fill(true),
     worktime: ['09:00', '18:00'],
     wage: [15000, 100000],
@@ -27,14 +27,16 @@ const JobSearchForm = ({ onSearch }) => {
     const { name, value, checked } = e.target;
     if (name === 'location') {
       if (checked) {
-        setFormData((prevData) => ({ ...prevData, [name]: [...formData[name], value] }));
+        setFormData((prevData) => ({ ...prevData, location: [...formData[name], value] }));
       } else {
-        setFormData((prevData) => ({ ...prevData, [name]: formData[name].filter((item) => item !== value) }));
+        setFormData((prevData) => ({ ...prevData, location: formData[name].filter((item) => item !== value) }));
       }
     } else if (name === 'weekdays') {
       const newWeekdays = [...formData.weekdays];
       newWeekdays[value] = checked;
       setFormData((prevData) => ({ ...prevData, weekdays: newWeekdays }));
+    } else if (name === 'gender') {
+      setFormData((prevData) => ({ ...prevData, gender: { ...prevData.gender, [value]: checked } }));
     }
   };
 

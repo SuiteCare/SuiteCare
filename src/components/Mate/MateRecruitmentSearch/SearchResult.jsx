@@ -9,7 +9,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
-import JobDetailModal from './RecruitmentDetailModal';
+import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
@@ -125,7 +125,9 @@ const SearchResult = ({ data }) => {
           <div className='no_result'>검색 결과가 없습니다.</div>
         )}
       </div>
-      {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />}
+      {isModalVisible && (
+        <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />
+      )}
     </div>
   );
 };
