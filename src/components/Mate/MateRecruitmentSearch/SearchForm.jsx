@@ -244,7 +244,7 @@ const JobSearchForm = ({ onSearch }) => {
         </div>
         <hr />
         <div className={styles.button_wrapper}>
-          <button type='submit'>간병 일감 검색</button>
+          <button type='submit'>간병 공고 검색</button>
         </div>
       </form>
     </div>

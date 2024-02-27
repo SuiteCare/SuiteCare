@@ -1,8 +1,8 @@
 const MenuList = [
   {
-    title: '일감 검색하기',
+    title: '공고 검색하기',
     url: 'search',
-    description: '내가 원하는 조건에 꼭 맞는 간병 일감을 찾아보세요.',
+    description: '내가 원하는 조건에 꼭 맞는 간병 공고를 찾아보세요.',
   },
   {
     title: '내 활동 관리',
