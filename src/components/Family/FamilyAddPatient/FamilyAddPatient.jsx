@@ -150,7 +150,11 @@ const FamilyAddPatient = ({ idQuery }) => {
   const handleClickDelete = async (e) => {
     e.preventDefault();
 
-    if (window.confirm(`${formData.name}님의 환자 정보를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) {
+    if (
+      window.confirm(
+        `${formData.name}님의 환자 정보를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.\n또한, 환자를 삭제해도 기존에 등록한 공고 내역은 유지됩니다.`,
+      )
+    ) {
       await axiosInstance
         .delete(`/api/v1/patient/${idQuery}`, {
           params: { id: idQuery },
