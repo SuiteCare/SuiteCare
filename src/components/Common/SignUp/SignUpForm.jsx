@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 
@@ -192,6 +192,217 @@ const SignUpForm = ({ type }) => {
       </div>
     );
   };
+
+  // 테스트용 코드
+  const setRandomValue = (target, value) => {
+    setFormData((prevData) => ({ ...prevData, [target]: value }));
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === '`') {
+        const lastNames = [
+          '김',
+          '이',
+          '박',
+          '최',
+          '정',
+          '강',
+          '조',
+          '윤',
+          '장',
+          '임',
+          '한',
+          '오',
+          '서',
+          '신',
+          '권',
+          '황',
+          '안',
+          '송',
+          '전',
+          '홍',
+          '문',
+          '손',
+          '양',
+          '배',
+          '백',
+          '허',
+          '남',
+          '심',
+          '노',
+          '하',
+          '곽',
+          '성',
+          '차',
+          '주',
+          '우',
+          '구',
+          '나',
+          '민',
+          '유',
+          '류',
+          '진',
+          '엄',
+          '채',
+          '원',
+          '천',
+          '방',
+          '공',
+          '현',
+          '함',
+          '변',
+          '염',
+          '여',
+          '추',
+          '도',
+          '소',
+          '석',
+          '마',
+          '가',
+        ];
+
+        const firstNames = [
+          '가영',
+          '서연',
+          '지우',
+          '서현',
+          '수빈',
+          '주아',
+          '서아',
+          '지민',
+          '하은',
+          '서은',
+          '시우',
+          '예은',
+          '유진',
+          '수아',
+          '수민',
+          '유나',
+          '시아',
+          '시은',
+          '현우',
+          '은서',
+          '지원',
+          '민지',
+          '지연',
+          '예린',
+          '지현',
+          '민주',
+          '은지',
+          '다은',
+          '주연',
+          '현주',
+          '지유',
+          '소연',
+          '세은',
+          '윤서',
+          '서윤',
+          '민서',
+          '윤아',
+          '소윤',
+          '지아',
+          '지윤',
+          '다현',
+          '서진',
+          '은채',
+          '나윤',
+          '정희',
+          '영숙',
+          '순자',
+          '은영',
+          '옥순',
+          '경숙',
+          '영자',
+          '영희',
+          '순옥',
+          '미숙',
+          '경자',
+          '정숙',
+          '미영',
+          '미옥',
+          '정희',
+          '경희',
+          '성희',
+          '현숙',
+          '은숙',
+          '철수',
+          '영수',
+          '민수',
+          '기성',
+          '영호',
+          '종수',
+          '성수',
+          '재호',
+          '승우',
+          '우진',
+          '성민',
+          '현우',
+          '주성',
+          '민준',
+          '재욱',
+          '준호',
+          '동진',
+          '상우',
+          '재호',
+          '영진',
+          '성진',
+          '창민',
+          '민기',
+          '정우',
+          '준영',
+          '영주',
+          '기현',
+          '민재',
+          '진우',
+          '성훈',
+          '승민',
+          '현준',
+          '준혁',
+          '영호',
+          '영현',
+          '성준',
+          '동현',
+          '상현',
+          '진혁',
+          '민호',
+        ];
+
+        setRandomValue(
+          'name',
+          lastNames[Math.floor(Math.random() * lastNames.length)] +
+            firstNames[Math.floor(Math.random() * firstNames.length)],
+        );
+
+        setRandomValue('gender', ['F', 'M'][Math.round(Math.random())]);
+
+        setRandomValue(
+          'email',
+          `${Math.random().toString(36).substring(2, 10)}@${type}.${
+            ['com', 'co.kr', 'net'][Math.floor(Math.random() * 3)]
+          }`,
+        );
+        setRandomValue(
+          'tel',
+          `010-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`,
+        );
+
+        const randomYear = Math.floor(Math.random() * 80) + 1924;
+        const randomMonth = Math.floor(Math.random() * 12) + 1;
+        const randomDay = Math.floor(Math.random() * 31) + 1;
+        setRandomValue(
+          'birthday',
+          `${randomYear}-${String(randomMonth).padStart(2, '0')}-${String(randomDay).padStart(2, '0')}`,
+        );
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
 
   return (
     <div className='Form_narrow'>
