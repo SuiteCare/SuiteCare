@@ -28,6 +28,7 @@ const ResumePage = () => {
     },
     {
       enabled: Boolean(id),
+      retry: 0,
     },
   );
 
@@ -38,11 +39,12 @@ const ResumePage = () => {
   } = useQuery(
     ['resumeData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mate/resume');
+      const response = await axiosInstance.get(`/api/v1/mate/resume/${id}`);
       return response.data;
     },
     {
       enabled: Boolean(id),
+      retry: 0,
     },
   );
 
