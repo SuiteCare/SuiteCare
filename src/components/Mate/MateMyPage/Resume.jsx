@@ -103,32 +103,36 @@ const Resume = ({ data }) => {
     const method = data.resume.mateResume ? 'patch' : 'post';
 
     try {
+      let requestData = {};
       let body = {};
       if (method === 'post') {
-        body = {
+        requestData = {
           mateResume: { ...formMateResumeData },
           locationList: formListData.locationList.map((e) => ({ name: e })),
           mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
         };
 
-        if (formListData.careerList.length > 0) body.careerList = formListData.careerList;
-        if (formListData.certificateList.length > 0) body.certificateList = formListData.certificateList;
+        if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
+        if (formListData.certificateList.length > 0) requestData.certificateList = formListData.certificateList;
 
+        body = JSON.stringify(requestData); // 이 부분 확인 필요
         console.log('post', body);
       } else if (method === 'patch') {
-        body = {
+        requestData = {
           ...changedListData,
         };
 
-        if (Object.keys(changedMateData).length > 0) body.mateResume = { ...changedMateData };
+        if (Object.keys(changedMateData).length > 0) requestData.mateResume = { ...changedMateData };
 
         if (changedListData.locationList) {
-          body.locationList = changedListData.locationList.map((e) => ({ name: e }));
+          requestData.locationList = changedListData.locationList.map((e) => ({ name: e }));
         }
 
         if (changedListData.mainServiceList) {
-          body.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
+          requestData.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
         }
+
+        body = JSON.stringify(requestData);
         console.log('patch', body);
       }
 
