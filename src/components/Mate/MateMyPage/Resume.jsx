@@ -100,39 +100,50 @@ const Resume = ({ data }) => {
       return false;
     }
 
-    const method = data.resume.mate ? 'patch' : 'post';
+    const method = data.resume.mateResume ? 'patch' : 'post';
 
     try {
       let body = {};
       if (method === 'post') {
         body = {
           mateResume: { ...formMateResumeData },
-          ...formListData,
           locationList: formListData.locationList.map((e) => ({ name: e })),
           mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
         };
-        console.log(body);
+
+        if (formListData.careerList.length > 0) body.careerList = formListData.careerList;
+        if (formListData.certificateList.length > 0) body.certificateList = formListData.certificateList;
+
+        console.log('post', body);
       } else if (method === 'patch') {
         body = {
-          mateResume: { ...changedMateData },
           ...changedListData,
-          locationList: changedListData.locationList?.map((e) => ({ name: e })),
-          mainServiceList: changedListData.mainServiceList?.map((e) => ({ name: e })),
         };
-        console.log(body);
+
+        if (Object.keys(changedMateData).length > 0) body.mateResume = { ...changedMateData };
+
+        if (changedListData.locationList) {
+          body.locationList = changedListData.locationList.map((e) => ({ name: e }));
+        }
+
+        if (changedListData.mainServiceList) {
+          body.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
+        }
+        console.log('patch', body);
       }
 
-      const response = await axiosInstance[method]('/api/v1/mate/resume', body);
+      const response = await axiosInstance[method](`/api/v1/mate/resume`);
       if (response.data) {
-        openAlert('이력서 등록이 완료되었습니다.');
+        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
-          window.location.reload(); // 또는 location.reload();
+          navigator.reload();
         }, 1000);
       } else {
-        openAlert('이력서 등록에 실패하였습니다.');
+        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
+      openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
     }
   };
 
