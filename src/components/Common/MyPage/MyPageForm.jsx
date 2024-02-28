@@ -23,7 +23,7 @@ const MyPageForm = () => {
     email: '',
     tel: '',
   });
-  const [changedData, setChangedData] = useState();
+  const [changedData, setChangedData] = useState({});
 
   const { data, isError, isLoading } = useQuery(
     ['mypage', id],
@@ -43,14 +43,14 @@ const MyPageForm = () => {
   }, [data]);
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value,
+      [name]: value,
     }));
     setChangedData((prevData) => ({
       ...prevData,
-      [id]: id === 'tel' ? value.replaceAll('-', '') : value,
+      [name]: name === 'tel' ? value.replaceAll('-', '') : value,
     }));
   };
 
@@ -59,11 +59,11 @@ const MyPageForm = () => {
   const handlePhoneCertification = (e) => {
     e.preventDefault();
 
-    if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(formData.tel)) {
+    if (!/^01[0-9]{1}-?[0-9]{3,4}-?[0-9]{4}$/.test(formData?.tel)) {
       return openAlert('휴대폰 번호를 올바르게 입력하십시오.');
     }
 
-    if (formData.tel) {
+    if (formData?.tel) {
       if (isPhoneCertificated) {
         return openAlert('휴대폰 인증이 완료된 상태입니다.');
       }
@@ -79,13 +79,13 @@ const MyPageForm = () => {
 
     if (
       !/(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/.test(
-        formData.email,
+        formData?.email,
       )
     ) {
       return openAlert('이메일 주소를 올바르게 입력하십시오.');
     }
 
-    if (formData.email) {
+    if (formData?.email) {
       if (isEmailCertificated) {
         return openAlert('이메일 인증이 완료된 상태입니다.');
       }
@@ -146,23 +146,23 @@ const MyPageForm = () => {
 
         <div className='input_wrapper'>
           <label>성명</label>
-          <input type='text' name='name' id='name' readOnly value={data?.name} />
+          <input type='text' name='name' id='name' readOnly value={data?.name || ''} />
         </div>
 
         <div className='input_wrapper'>
           <label>생년월일</label>
-          <input type='text' name='birthday' id='birthday' readOnly value={data?.birthday} />
+          <input type='text' name='birthday' id='birthday' readOnly value={data?.birthday || ''} />
         </div>
 
         <div className='input_wrapper'>
           <label>성별</label>
-          <input type='text' name='gender' id='gender' readOnly value={`${genderToKo(data?.gender)}성`} />
+          <input type='text' name='gender' id='gender' readOnly value={`${genderToKo(data?.gender || '')}성`} />
         </div>
 
         <div className='input_wrapper'>
           <label>이메일</label>
           <div className='input_with_button'>
-            <input type='text' name='email' id='email' value={formData.email} onChange={(e) => handleInputChange(e)} />
+            <input type='text' name='email' id='email' value={formData?.email || ''} onChange={handleInputChange} />
             <button type='button' onClick={handleEmailCertification}>
               재인증
             </button>
@@ -177,9 +177,9 @@ const MyPageForm = () => {
                 type='text'
                 placeholder='010-0000-0000'
                 id='tel'
-                value={formData.tel}
+                value={formData?.tel || ''}
                 maxLength={13}
-                onChange={(e) => handleInputChange(e)}
+                onChange={handleInputChange}
               />
             </div>
             <button type='button' onClick={handlePhoneCertification}>
