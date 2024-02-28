@@ -15,8 +15,8 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
 
     e.target.checked = !isChecked;
 
-    setFormData((prevFormData) => ({ ...prevFormData, checkedLoc: selectedLocations }));
-    setChangedData((prevFormData) => ({ ...prevFormData, checkedLoc: selectedLocations }));
+    setFormData((prevFormData) => ({ ...prevFormData, locationList: selectedLocations }));
+    setChangedData((prevFormData) => ({ ...prevFormData, locationList: selectedLocations }));
   };
 
   const handleAllLocationChange = (e) => {
@@ -28,9 +28,9 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevFormData };
 
       if (checked) {
-        updatedData.checkedLoc = [...prevFormData.checkedLoc, value];
+        updatedData.locationList = [...prevFormData.locationList, value];
       } else {
-        updatedData.checkedLoc = prevFormData.checkedLoc.filter((it) => it !== value);
+        updatedData.locationList = prevFormData.locationList.filter((it) => it !== value);
       }
 
       return updatedData;
@@ -39,9 +39,9 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.checkedLoc = [...formData.checkedLoc, value];
+        updatedData.locationList = [...formData.locationList, value];
       } else {
-        updatedData.checkedLoc = formData.checkedLoc.filter((it) => it !== value);
+        updatedData.locationList = formData.locationList.filter((it) => it !== value);
       }
 
       return updatedData;
@@ -51,9 +51,9 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
   useEffect(() => {
     const checkboxes = document.getElementsByName('location');
     checkboxes.forEach((it) => {
-      it.checked = formData?.checkedLoc?.includes(it.value);
+      it.checked = formData?.locationList?.includes(it.value);
     });
-  }, [formData?.checkedLoc]);
+  }, [formData?.locationList]);
 
   return (
     <>

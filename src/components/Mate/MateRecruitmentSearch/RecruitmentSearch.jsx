@@ -30,7 +30,7 @@ const MateJobSearch = () => {
       return data;
     },
     {
-      enabled: Object.keys(requestParams).length > 0,
+      enabled: Object.keys(requestParams).length > 2,
       retry: 0,
     },
   );

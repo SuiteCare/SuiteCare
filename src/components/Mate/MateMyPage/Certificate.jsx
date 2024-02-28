@@ -3,17 +3,17 @@ import React from 'react';
 const Certificate = ({ formData, setFormData, handleItemChange }) => {
   const addCertificate = () => {
     setFormData((prevFormData) => {
-      const lastCertificate = prevFormData.certificate[prevFormData.certificate.length - 1];
+      const lastCertificate = prevFormData.certificateList[prevFormData.certificateList.length - 1];
       const newCertificate = {
         id: (lastCertificate ? lastCertificate.id : 0) + 1,
       };
-      return { ...prevFormData, certificate: [...(prevFormData.certificate || []), newCertificate] };
+      return { ...prevFormData, certificateList: [...(prevFormData.certificateList || []), newCertificate] };
     });
   };
 
   const deleteCertificate = (id) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, certificate: prevFormData.certificate.filter((it) => it.id !== id) };
+      return { ...prevFormData, certificateList: prevFormData.certificateList.filter((it) => it.id !== id) };
     });
   };
 
@@ -78,8 +78,8 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
           </tr>
         </thead>
         <tbody>
-          {formData?.certificate?.length > 0 ? (
-            formData?.certificate?.map((certificateItem, index) =>
+          {formData?.certificateList?.length > 0 ? (
+            formData?.certificateList?.map((certificateItem, index) =>
               renderCertificateItem(certificateItem, index, handleItemChange, deleteCertificate),
             )
           ) : (

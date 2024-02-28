@@ -23,7 +23,7 @@ const ResumePage = () => {
   } = useQuery(
     ['mypageData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
+      const response = await axiosInstance.get('/api/v1/mypage');
       return response.data;
     },
     {
@@ -38,7 +38,7 @@ const ResumePage = () => {
   } = useQuery(
     ['resumeData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mate/resume', { params: { id } });
+      const response = await axiosInstance.get('/api/v1/mate/resume');
       return response.data;
     },
     {
@@ -47,10 +47,10 @@ const ResumePage = () => {
   );
 
   useEffect(() => {
-    if (mypageData && resumeData) {
+    if (mypageData) {
       setData({
         mypage: mypageData,
-        resume: resumeData,
+        resume: resumeData || {},
       });
     }
   }, [mypageData, resumeData]);

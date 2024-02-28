@@ -19,7 +19,7 @@ const SearchResult = ({ data, type }) => {
       ...{
         contact_time_start: '09:00',
         contact_time_end: '22:00',
-        career: [
+        careerList: [
           {
             title: '경력 01',
             date_start: '2020-01-01',
@@ -31,7 +31,7 @@ const SearchResult = ({ data, type }) => {
             date_end: '2023-12-14',
           },
         ],
-        certificate: [
+        certificateList: [
           {
             certificate_name: '자격증 01',
             qualification_date: '2019-02-22',
