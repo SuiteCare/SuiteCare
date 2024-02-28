@@ -3,17 +3,17 @@ import React from 'react';
 const Career = ({ formData, setFormData, handleItemChange }) => {
   const addCareer = () => {
     setFormData((prevFormData) => {
-      const lastCareer = prevFormData.career[prevFormData.career.length - 1];
+      const lastCareer = prevFormData.careerList[prevFormData.careerList.length - 1];
       const newCareer = {
         id: (lastCareer ? lastCareer.id : 0) + 1,
       };
-      return { ...prevFormData, career: [...(prevFormData.career || []), newCareer] };
+      return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
     });
   };
 
   const deleteCareer = (id) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, career: prevFormData.career.filter((it) => it.id !== id) };
+      return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.id !== id) };
     });
   };
 
@@ -28,7 +28,12 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
   const renderCareerItem = (careerItem, index) => (
     <tr key={careerItem.id}>
       <td>
-        <select defaultValue={careerItem.job_name} name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
+        <select
+          defaultValue={careerItem.job_name}
+          name='job_name'
+          id='job_name'
+          onChange={(e) => handleItemChange(e, index, 'career')}
+        >
           {renderOptions([
             '경력명',
             '간호사',
@@ -92,8 +97,8 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
           </tr>
         </thead>
         <tbody>
-          {formData?.career?.length > 0 ? (
-            formData?.career?.map((careerItem, index) =>
+          {formData?.careerList?.length > 0 ? (
+            formData?.careerList?.map((careerItem, index) =>
               renderCareerItem(careerItem, index, handleItemChange, deleteCareer),
             )
           ) : (

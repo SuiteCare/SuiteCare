@@ -8,13 +8,13 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
       ...prevData,
-      contactTimeStart: type === 'start' ? value : prevData.contactTimeStart,
-      contactTimeEnd: type === 'end' ? value : prevData.contactTimeEnd,
+      contact_time_start: type === 'start' ? value : prevData.contact_time_start,
+      contact_time_end: type === 'end' ? value : prevData.contact_time_end,
     }));
     setChangedData((prevData) => ({
       ...prevData,
-      contactTimeStart: type === 'start' ? value : prevData.contactTimeStart,
-      contactTimeEnd: type === 'end' ? value : prevData.contactTimeEnd,
+      contact_time_start: type === 'start' ? value : prevData.contact_time_start,
+      contact_time_end: type === 'end' ? value : prevData.contact_time_end,
     }));
   };
 
@@ -61,11 +61,11 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
     const file = $event.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      profilePictureFilename: file.name,
+      profile_picture_filename: file.name,
     }));
     setChangedData((prevData) => ({
       ...prevData,
-      profilePictureFilename: file.name,
+      profile_picture_filename: file.name,
     }));
   };
 
@@ -75,7 +75,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       <div className='input_wrapper'>
         <div className={styles.img_wrapper}>
           <Image
-            src={`/${formData.profilePictureFilename || data.profile_picture_filename || 'default_profile.jpg'}`}
+            src={`/${formData.profile_picture_filename || data.profile_picture_filename || 'default_profile.jpg'}`}
             alt='profile_picture'
             width={200}
             height={150}
@@ -100,14 +100,14 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
             <label htmlFor='contact'>연락 가능 시간</label>
             <div className='timepicker_wrapper'>
               <TimePicker
-                time={formData?.contactTimeStart}
+                time={formData?.contact_time_start}
                 setTime={(value) => handleContactTimeChange('start', value)}
                 start={0}
                 end={24}
               />
               ~
               <TimePicker
-                time={formData?.contactTimeEnd}
+                time={formData?.contact_time_end}
                 setTime={(value) => handleContactTimeChange('end', value)}
                 start={0}
                 end={24}

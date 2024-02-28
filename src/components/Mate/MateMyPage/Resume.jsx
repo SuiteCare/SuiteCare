@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
 import useAlert from '@/hooks/useAlert';
@@ -8,55 +9,31 @@ import Career from './Career';
 import Certificate from './Certificate';
 import Location from './Location';
 import UserInfo from './UserInfo';
+import MainService from './MainService';
 
 import { minWage } from '@/utils/calculators';
 
 const Resume = ({ data }) => {
+  const navigator = useRouter();
+
   const [formMateResumeData, setFormMateResumeData] = useState({
-    profilePictureFilename: '',
-    contactTimeStart: '09:00',
-    contactTimeEnd: '21:00',
+    profile_picture_filename: '',
+    contact_time_start: '09:00',
+    contact_time_end: '21:00',
     introduction: '',
     desired_wage: minWage,
   });
 
   const [formListData, setFormListData] = useState({
-    mainServiceData: [],
-    checkedLoc: [],
-    career: [],
-    certificate: [],
+    mainServiceList: [],
+    locationList: [],
+    careerList: [],
+    certificateList: [],
   });
 
   const [changedListData, setChangedListData] = useState({});
-
   const [changedMateData, setChangedMateData] = useState({});
-
   const { openAlert, alertComponent } = useAlert();
-
-  const handleMainServiceChange = (checked, value) => {
-    setFormListData((prevFormData) => {
-      const updatedData = { ...prevFormData };
-
-      if (checked) {
-        updatedData.mainServiceData = [...prevFormData.mainServiceData, value];
-      } else {
-        updatedData.mainServiceData = prevFormData.mainServiceData.filter((it) => it !== value);
-      }
-
-      return updatedData;
-    });
-    setChangedListData((prevData) => {
-      const updatedData = { ...prevData };
-
-      if (checked) {
-        updatedData.mainServiceData = [...formListData.mainServiceData, value];
-      } else {
-        updatedData.mainServiceData = formListData.mainServiceData.filter((it) => it !== value);
-      }
-
-      return updatedData;
-    });
-  };
 
   const handleItemChange = (e, index, type) => {
     const { name, value } = e.target;
@@ -66,13 +43,13 @@ const Resume = ({ data }) => {
 
       switch (type) {
         case 'career':
-          updatedData.career = prevFormData.career.map((careerItem, i) =>
+          updatedData.careerList = prevFormData.careerList.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificate = prevFormData.certificate.map((certificateItem, i) =>
+          updatedData.certificateList = prevFormData.certificateList.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -87,13 +64,13 @@ const Resume = ({ data }) => {
 
       switch (type) {
         case 'career':
-          updatedData.career = formListData.career.map((careerItem, i) =>
+          updatedData.careerList = formListData.careerList.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificate = formListData.certificate.map((certificateItem, i) =>
+          updatedData.certificateList = formListData.certificateList.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -111,15 +88,15 @@ const Resume = ({ data }) => {
       return false;
     }
 
-    const { checkedLoc, mainServiceData } = formListData;
+    const { locationList, mainServiceList } = formListData;
 
-    if (!checkedLoc.length) {
+    if (!locationList.length) {
       alert('최소 1개의 활동 지역을 선택하세요.');
       return false;
     }
 
-    if (!mainServiceData.length) {
-      alert('최소 1개의 대표서비스를 입력하세요.');
+    if (!mainServiceList.length) {
+      alert('최소 1개의 대표서비스를 선택하세요.');
       return false;
     }
 
@@ -131,27 +108,26 @@ const Resume = ({ data }) => {
         body = {
           mateResume: { ...formMateResumeData },
           ...formListData,
+          locationList: formListData.locationList.map((e) => ({ name: e })),
+          mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
         };
+        console.log(body);
       } else if (method === 'patch') {
         body = {
           mateResume: { ...changedMateData },
           ...changedListData,
+          locationList: changedListData.locationList?.map((e) => ({ name: e })),
+          mainServiceList: changedListData.mainServiceList?.map((e) => ({ name: e })),
         };
+        console.log(body);
       }
-      console.log(
-        {
-          mateResume: { ...formMateResumeData },
-          ...formListData,
-        },
-        {
-          mateResume: { ...changedMateData },
-          ...changedListData,
-        },
-      );
 
       const response = await axiosInstance[method]('/api/v1/mate/resume', body);
       if (response.data) {
         openAlert('이력서 등록이 완료되었습니다.');
+        setTimeout(() => {
+          window.location.reload(); // 또는 location.reload();
+        }, 1000);
       } else {
         openAlert('이력서 등록에 실패하였습니다.');
       }
@@ -162,17 +138,17 @@ const Resume = ({ data }) => {
 
   const initializeFormData = ($data) => {
     setFormMateResumeData({
-      profilePictureFilename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
-      contactTimeStart: $data.resume?.mate?.contact_time_start || '09:00',
-      contactTimeEnd: $data.resume?.mate?.contact_time_end || '21:00',
+      profile_picture_filename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
+      contact_time_start: $data.resume?.mate?.contact_time_start || '09:00',
+      contact_time_end: $data.resume?.mate?.contact_time_end || '21:00',
       introduction: $data.resume?.mate?.introduction || '',
       desired_wage: $data.resume?.mate?.desired_wage || minWage,
     });
     setFormListData({
-      mainServiceData: $data.resume?.mainService?.map((it) => it.name) || [],
-      checkedLoc: $data.resume?.location?.map((it) => it.name) || [],
-      career: $data.resume?.career || [],
-      certificate: $data.resume?.certificate || [],
+      mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
+      locationList: $data.resume?.locationList?.map((e) => e.name) || [],
+      careerList: $data.resume?.careerList || [],
+      certificateList: $data.resume?.certificateList || [],
     });
   };
 
@@ -223,30 +199,12 @@ const Resume = ({ data }) => {
           </section>
 
           <section className={styles.mainService}>
-            <h3>대표서비스</h3>
-            <div>
-              {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((service) => (
-                <div key={service}>
-                  <span>
-                    <input
-                      type='checkbox'
-                      name='service'
-                      value={service}
-                      checked={formListData?.mainServiceData?.includes(service)}
-                      onChange={(e) => {
-                        handleMainServiceChange(e.currentTarget.checked, e.currentTarget.value);
-                      }}
-                    />
-                    {service}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <MainService formData={formListData} setFormData={setFormListData} setChangedData={setChangedListData} />
           </section>
 
           <div className='button_wrapper'>
             <button type='button' onClick={handleUpdateResume}>
-              {data.resume.mate ? '수정하기' : '등록하기'}
+              {data.resume.mateResume ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>
