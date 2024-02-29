@@ -62,7 +62,7 @@ const SearchResult = ({ data }) => {
   const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
-    const response = await axiosInstance.post('/api/v1/apply', body);
+    const response = await axiosInstance.get(`/api/v1/apply/${body.reservation_id}`);
     return response.data;
   };
 

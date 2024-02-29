@@ -1,0 +1,18 @@
+.suggestion .info_section {
+  height: 100%;
+}
+
+.suggestion .info_section h3 {
+  text-align: left;
+}
+
+.suggestion .info_section .inputWrapper {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.suggestion .info_section .inputWrapper span {
+  top: 0 !important;
+}

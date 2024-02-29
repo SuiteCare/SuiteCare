@@ -25,7 +25,7 @@ const SuggestionTitle = () => {
   };
 
   return (
-    <div className={`${styles.Suggestion} content_wrapper`}>
+    <div className={`${styles.suggestion} content_wrapper`}>
       <div>
         <select value={selectedPatient} onChange={handlePatientSelectChange}>
           <option value=''>환자명</option>
