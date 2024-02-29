@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 
@@ -18,6 +17,7 @@ const SearchResult = ({ data }) => {
 
   const { id } = useLoginInfo();
 
+  /* 환자 상세 정보 불러오기 url 변경 필요 await axiosInstance.get(`/api/v1/recruitment/${defaultData.id}/patient`) */
   const handleShowModal = async (defaultData) => {
     const getPatientDetail = async () => {
       if (typeof window !== 'undefined') {
@@ -62,7 +62,7 @@ const SearchResult = ({ data }) => {
   const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
-    const response = await axiosInstance.post('/api/v1/apply', body);
+    const response = await axiosInstance.get(`/api/v1/apply/${body.recruitment_id}`);
     return response.data;
   };
 
@@ -91,10 +91,10 @@ const SearchResult = ({ data }) => {
     },
   });
 
-  const handleApply = (reservationId) => {
+  const handleApply = (recruitmentId) => {
     const body = {
       mate_id: id,
-      reservation_id: reservationId,
+      recruitment_id: recruitmentId,
     };
     mutation.mutate(body);
   };
