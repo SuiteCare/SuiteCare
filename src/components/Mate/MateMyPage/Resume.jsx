@@ -143,13 +143,18 @@ const Resume = ({ data }) => {
       }
 
       const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
-      if (method === 'post' ? response.data : response.status === 200) {
+      if (response.data) {
+        // patch 시 response.data === '' 라서 false로 처리되는데, 추후 ResponseBody 객체가 넘어와 파싱해서 사용할 예정
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
           navigator.reload();
         }, 1000);
       } else {
-        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
+        openAlert(
+          `이력서 ${
+            method === 'post' ? '등록' : '수정'
+          }에 실패하였습니다. (patch라면 수정이 되었을 수 있으니 DB 확인 필요)`,
+        );
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
