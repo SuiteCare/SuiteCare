@@ -87,6 +87,12 @@ const Resume = ({ data }) => {
       return openAlert('희망 최소시급을 입력하세요.');
     }
 
+    if (formMateResumeData.desired_wage < minWage && formMateResumeData.desired_wage > 0) {
+      setFormMateResumeData((prevData) => ({ ...prevData, desired_wage: minWage }));
+      setChangedMateData((prevData) => ({ ...prevData, desired_wage: minWage }));
+      return openAlert('희망 최소시급은 정부 공시 최저시급보다 낮을 수 없습니다.');
+    }
+
     const { locationList, mainServiceList } = formListData;
 
     if (!locationList.length) {
@@ -151,11 +157,11 @@ const Resume = ({ data }) => {
 
   const initializeFormData = ($data) => {
     setFormMateResumeData({
-      profile_picture_filename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
-      contact_time_start: $data.resume?.mate?.contact_time_start || '09:00',
-      contact_time_end: $data.resume?.mate?.contact_time_end || '21:00',
-      introduction: $data.resume?.mate?.introduction || '',
-      desired_wage: $data.resume?.mate?.desired_wage || minWage,
+      profile_picture_filename: $data.resume?.mateResume?.profile_picture_filename || 'default_profile.jpg',
+      contact_time_start: $data.resume?.mateResume?.contact_time_start || '09:00',
+      contact_time_end: $data.resume?.mateResume?.contact_time_end || '21:00',
+      introduction: $data.resume?.mateResume?.introduction || '',
+      desired_wage: $data.resume?.mateResume?.desired_wage || minWage,
     });
     setFormListData({
       mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 import TimePicker from '@/utils/TimePicker';
@@ -25,7 +25,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
     }
   };
 
-  const [wordCnt, setWordCnt] = useState((data.resume?.mate?.introduction || '').length || 0);
+  const [wordCnt, setWordCnt] = useState((data.resume?.mateResume?.introduction || '').length || 0);
   const handlerTextChange = (e) => {
     const { value } = e.target;
     setFormData((prevFormData) => ({
@@ -40,28 +40,26 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
   };
 
   const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
+
+  useEffect(() => {
+    setIsWageInputDisabled(data.resume?.mateResume?.desired_wage === -1);
+  }, [data]);
+
   const handleWageCheckbox = (e) => {
-    if (e.target.checked) {
-      setIsWageInputDisabled(true);
-      setFormData((prevData) => ({
-        ...prevData,
-        desired_wage: '무관',
-      }));
-      setChangedData((prevData) => ({
-        ...prevData,
-        desired_wage: '무관',
-      }));
-    } else {
-      setIsWageInputDisabled(false);
-      setFormData((prevData) => ({
-        ...prevData,
-        desired_wage: minWage,
-      }));
-      setChangedData((prevData) => ({
-        ...prevData,
-        desired_wage: minWage,
-      }));
-    }
+    const isChecked = e.target.checked;
+    const newDesiredWage = isChecked ? -1 : minWage;
+
+    setIsWageInputDisabled(isChecked);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      desired_wage: newDesiredWage,
+    }));
+
+    setChangedData((prevData) => ({
+      ...prevData,
+      desired_wage: newDesiredWage,
+    }));
   };
 
   const handleFileChange = ($event) => {
@@ -129,11 +127,13 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
             <div>
               <input
                 type='number'
-                min={minWage}
-                max={1000000}
+                name='desired_wage'
+                min={isWageInputDisabled ? 0 : minWage}
+                max={isWageInputDisabled ? 0 : 1000000}
                 step={10}
                 disabled={isWageInputDisabled}
                 value={formData.desired_wage}
+                style={isWageInputDisabled ? { color: '#f9f8f7' } : undefined}
                 onChange={(e) => {
                   setFormData((prevData) => ({
                     ...prevData,
@@ -147,7 +147,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
               />
               원
               <div className='checkbox_wrapper'>
-                <input type='checkbox' onChange={(e) => handleWageCheckbox(e)} />
+                <input type='checkbox' onChange={(e) => handleWageCheckbox(e)} checked={isWageInputDisabled} />
                 <span>무관</span>
               </div>
             </div>
@@ -165,6 +165,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
                 maxLength='100'
                 onChange={handlerTextChange}
                 defaultValue={formData?.introduction}
+                placeholder='메이트님을 나타내는 소개글을 작성해 주세요.'
               />
               <div className={styles.wordCnt}>
                 <span>({wordCnt}/100)</span>
