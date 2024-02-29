@@ -115,8 +115,7 @@ const Resume = ({ data }) => {
         if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
         if (formListData.certificateList.length > 0) requestData.certificateList = formListData.certificateList;
 
-        body = JSON.stringify(requestData); // 이 부분 확인 필요
-        console.log('post', body);
+        body = requestData;
       } else if (method === 'patch') {
         requestData = {
           ...changedListData,
@@ -132,11 +131,11 @@ const Resume = ({ data }) => {
           requestData.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
         }
 
-        body = JSON.stringify(requestData);
+        body = requestData;
         console.log('patch', body);
       }
 
-      const response = await axiosInstance[method](`/api/v1/mate/resume`);
+      const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
       if (response.data) {
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
