@@ -138,10 +138,12 @@ const Resume = ({ data }) => {
 
         body = requestData;
         console.log('patch', body);
+
+        if (Object.values(body).length === 0) return openAlert('변경할 데이터가 없습니다.');
       }
 
       const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
-      if (response.data) {
+      if (method === 'post' ? response.data : response.status === 200) {
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
           navigator.reload();
