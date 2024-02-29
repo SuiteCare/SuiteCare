@@ -1,5 +1,4 @@
 import { React, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import { useMutation } from 'react-query';
 
@@ -19,12 +18,13 @@ const SearchResult = ({ data }) => {
   const { id } = useLoginInfo();
 
   const handleShowModal = async (defaultData) => {
+    console.log(defaultData);
     const getPatientDetail = async () => {
       if (typeof window !== 'undefined') {
         try {
           const [response1, response2] = await Promise.all([
-            axiosInstance.get(`/api/v1/patient/${defaultData.patient_id}`),
-            axiosInstance.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
+            axiosInstance.get(`/api/v1/patient/${defaultData.id}`),
+            axiosInstance.get(`/api/v1/patientDetail/${defaultData.id}`),
           ]);
 
           setModalData({

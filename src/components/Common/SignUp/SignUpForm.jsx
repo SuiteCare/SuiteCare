@@ -411,11 +411,11 @@ const SignUpForm = ({ type }) => {
         <label>회원 구분</label>
         <div className='input_radio'>
           <div className={styles.radio_user_type} onClick={handleRadioClick}>
-            <input type='radio' value='family' checked={type === 'family'} />
+            <input type='radio' value='family' defaultChecked={type === 'family'} />
             <span>패밀리 회원 (간병 서비스 이용자)</span>
           </div>
           <div className={styles.radio_user_type} onClick={handleRadioClick}>
-            <input type='radio' value='mate' checked={type === 'mate'} />
+            <input type='radio' value='mate' defaultChecked={type === 'mate'} />
             <span>메이트 회원 (간병인)</span>
           </div>
         </div>
@@ -442,7 +442,7 @@ const SignUpForm = ({ type }) => {
                 type='radio'
                 name='gender'
                 value='M'
-                checked={formData.gender === 'M'}
+                defaultChecked={formData.gender === 'M'}
                 onClick={handleClickGender}
               />
               <span>남성</span>
@@ -452,7 +452,7 @@ const SignUpForm = ({ type }) => {
                 type='radio'
                 name='gender'
                 value='F'
-                checked={formData.gender === 'F'}
+                defaultChecked={formData.gender === 'F'}
                 onClick={handleClickGender}
               />
               <span>여성</span>

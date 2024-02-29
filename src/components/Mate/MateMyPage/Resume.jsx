@@ -136,7 +136,7 @@ const Resume = ({ data }) => {
         console.log('patch', body);
       }
 
-      const response = await axiosInstance[method](`/api/v1/mate/resume`);
+      const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
       if (response.data) {
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
