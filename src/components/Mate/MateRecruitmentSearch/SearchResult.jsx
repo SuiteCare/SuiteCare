@@ -17,6 +17,7 @@ const SearchResult = ({ data }) => {
 
   const { id } = useLoginInfo();
 
+  /* 환자 상세 정보 불러오기 url 변경 필요 await axiosInstance.get(`/api/v1/recruitment/${defaultData.id}/patient`) */
   const handleShowModal = async (defaultData) => {
     const getPatientDetail = async () => {
       if (typeof window !== 'undefined') {
