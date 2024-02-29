@@ -1,6 +1,6 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
@@ -13,39 +13,42 @@ import RecruitmentDetailModal from './RecruitmentDetailModal';
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
   const [sortOption, setSortOption] = useState('');
+  const [recruitId, setRecruitId] = useState();
   const [modalData, setModalData] = useState({});
 
   const { id } = useLoginInfo();
 
-  /* 환자 상세 정보 불러오기 url 변경 필요 await axiosInstance.get(`/api/v1/recruitment/${defaultData.id}/patient`) */
-  const handleShowModal = async (defaultData) => {
-    const getPatientDetail = async () => {
-      if (typeof window !== 'undefined') {
-        try {
-          const [response1, response2] = await Promise.all([
-            axiosInstance.get(`/api/v1/patient/${defaultData.patient_id}`),
-            axiosInstance.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
-          ]);
-
-          setModalData({
-            ...defaultData,
-            ...response1.data,
-            ...response2.data,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
-    getPatientDetail();
-  };
+  const {
+    data: patientDetail,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['patientDetail', recruitId],
+    async () => {
+      const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
+      return data;
+    },
+    {
+      enabled: Boolean(recruitId),
+    },
+  );
 
   useEffect(() => {
-    if (Object.keys(modalData).length > 0) {
-      openModal();
+    if (recruitId) {
+      setModalData((prev) => ({
+        ...prev,
+        ...patientDetail,
+      }));
     }
-  }, [modalData]);
+  }, [patientDetail, recruitId]);
+
+  const handleShowModal = (eachData) => {
+    setRecruitId(eachData.id);
+    setModalData({
+      ...eachData,
+    });
+    openModal();
+  };
 
   const sortOptions = {
     wage_asc: (a, b) => a.wage - b.wage,
@@ -113,11 +116,11 @@ const SearchResult = ({ data }) => {
       </div>
       <div className={styles.card_wrapper}>
         {sortedData?.length > 0 ? (
-          sortedData?.map((item) => (
+          sortedData?.map((eachData) => (
             <SearchResultCard
-              data={item}
-              key={item.id}
-              showDetail={() => handleShowModal(item)}
+              data={eachData}
+              key={eachData.id}
+              showDetail={() => handleShowModal(eachData)}
               handleApply={handleApply}
             />
           ))
