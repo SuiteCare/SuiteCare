@@ -84,20 +84,17 @@ const Resume = ({ data }) => {
 
   const handleUpdateResume = async () => {
     if (!formMateResumeData.desired_wage) {
-      alert('희망 최소시급을 입력하세요.');
-      return false;
+      return openAlert('희망 최소시급을 입력하세요.');
     }
 
     const { locationList, mainServiceList } = formListData;
 
     if (!locationList.length) {
-      alert('최소 1개의 활동 지역을 선택하세요.');
-      return false;
+      return openAlert('최소 1개의 활동 지역을 선택하세요.');
     }
 
     if (!mainServiceList.length) {
-      alert('최소 1개의 대표서비스를 선택하세요.');
-      return false;
+      return openAlert('최소 1개의 대표서비스를 선택하세요.');
     }
 
     const method = data.resume.mateResume ? 'patch' : 'post';
@@ -116,7 +113,9 @@ const Resume = ({ data }) => {
         if (formListData.certificateList.length > 0) requestData.certificateList = formListData.certificateList;
 
         body = requestData;
-      } else if (method === 'patch') {
+        console.log('post', body);
+      }
+      if (method === 'patch') {
         requestData = {
           ...changedListData,
         };

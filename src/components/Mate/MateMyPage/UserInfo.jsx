@@ -11,11 +11,18 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       contact_time_start: type === 'start' ? value : prevData.contact_time_start,
       contact_time_end: type === 'end' ? value : prevData.contact_time_end,
     }));
-    setChangedData((prevData) => ({
-      ...prevData,
-      contact_time_start: type === 'start' ? value : prevData.contact_time_start,
-      contact_time_end: type === 'end' ? value : prevData.contact_time_end,
-    }));
+    if (type === 'start') {
+      setChangedData((prevData) => ({
+        ...prevData,
+        contact_time_start: value,
+      }));
+    }
+    if (type === 'end') {
+      setChangedData((prevData) => ({
+        ...prevData,
+        contact_time_end: value,
+      }));
+    }
   };
 
   const [wordCnt, setWordCnt] = useState((data.resume?.mate?.introduction || '').length || 0);
@@ -127,12 +134,16 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
                 step={10}
                 disabled={isWageInputDisabled}
                 value={formData.desired_wage}
-                onChange={(e) =>
+                onChange={(e) => {
                   setFormData((prevData) => ({
                     ...prevData,
                     desired_wage: e.target.value,
-                  }))
-                }
+                  }));
+                  setChangedData((prevData) => ({
+                    ...prevData,
+                    desired_wage: e.target.value,
+                  }));
+                }}
               />
               원
               <div className='checkbox_wrapper'>
