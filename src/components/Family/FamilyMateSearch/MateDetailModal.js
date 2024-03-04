@@ -60,7 +60,7 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) 
               </tr>
             </thead>
             <tbody>
-              {modalData.career.map((e) => (
+              {modalData.careerList.map((e) => (
                 <tr key={e}>
                   <td>{e.title}</td>
                   <td>
@@ -82,7 +82,7 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) 
               </tr>
             </thead>
             <tbody>
-              {modalData.certificate.map((e) => (
+              {modalData.certificateList.map((e) => (
                 <tr key={e}>
                   <td>{e.certificate_name}</td>
                   <td>{e.qualification_date}</td>
@@ -94,9 +94,13 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) 
         </div>
         <div className={styles.button_wrapper}>
           {handleConfirm ? (
-            <button onClick={() => handleConfirm(modalData.mate_id)}>간병인 선택하기</button>
+            <button type='submit' onClick={() => handleConfirm(modalData.mate_id)}>
+              간병인 선택하기
+            </button>
           ) : (
-            <button onClick={() => handleApply(modalData.mate_id)}>간병 신청하기</button>
+            <button type='submit' onClick={() => handleApply(modalData.mate_id)}>
+              간병 신청하기
+            </button>
           )}
         </div>
       </div>

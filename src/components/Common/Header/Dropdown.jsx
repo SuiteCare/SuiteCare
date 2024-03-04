@@ -44,7 +44,12 @@ const Dropdown = ({ type, isOpen }) => {
   return (
     <div className={styles.Dropdown} style={positionStyle} ref={dropdownRef}>
       <Fade top cascade when={isOpen}>
-        <ul className='dropdown_menu'>{menuItems(type)}</ul>
+        <ul className='dropdown_menu'>
+          {menuItems(type)}
+          <li key='logout' className='dropdown_menu_item'>
+            <Link href='/logout'>로그아웃</Link>
+          </li>
+        </ul>
       </Fade>
     </div>
   );

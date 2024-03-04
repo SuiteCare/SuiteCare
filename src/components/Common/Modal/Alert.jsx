@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import styles from './Alert.module.css';
 
-const Alert = ({ message, duration, closeAlert }) => {
-  const [isActive, setIsActive] = useState(false);
-
-  const animationTime = 500; // ms
+const Alert = ({ message, duration, closeAlert, isActive, setIsActive }) => {
+  const animationTime = 3000; // ms
 
   useEffect(() => {
-    setTimeout(setIsActive(true), animationTime);
-    const timeoutObj = setTimeout(() => {
-      setIsActive(false);
-      setTimeout(closeAlert, duration * 1000 - animationTime * 2);
-    }, duration * 1000);
+    if (isActive) {
+      setTimeout(() => setIsActive(false), animationTime);
+      const timeoutObj = setTimeout(() => {
+        setIsActive(false);
+        setTimeout(closeAlert, duration * 1000 - animationTime * 2);
+      }, duration * 1000);
 
-    return () => clearTimeout(timeoutObj);
-  }, [message]);
+      return () => clearTimeout(timeoutObj);
+    }
+  }, [isActive, duration]);
 
   return <div className={`${styles.Alert} ${isActive ? styles.active : ''}`}>{message}</div>;
 };

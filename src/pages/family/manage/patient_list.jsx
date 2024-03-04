@@ -19,7 +19,7 @@ const FamilyPatientListPage = () => {
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>내 환자 목록</h1>
-            <span>간병 예약을 위해 사용될 환자 정보 목록을 확인하고 관리하세요.</span>
+            <span>간병 공고 등록을 위해 사용될 환자 정보 목록을 확인하고 관리하세요.</span>
           </div>
           <PatientList data={patientList} />
         </div>

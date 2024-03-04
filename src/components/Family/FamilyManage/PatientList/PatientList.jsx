@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 
-import styles from '../FamilyManageTable.module.css';
+import styles from '@/components/Common/ManageTable.module.css';
 import PatientDetailModal from '../Reservation/PatientDetailModal';
 
 import { calAge, genderToKo } from '@/utils/calculators';
@@ -39,7 +39,7 @@ const PatientList = ({ data }) => {
   };
 
   return (
-    <div className={styles.FamilyManageTable}>
+    <div className={styles.ManageTable}>
       <div style={{ textAlign: 'right' }}>
         <button type='button' onClick={() => navigator.push('/family/addpatient')}>
           환자 등록하기
@@ -63,18 +63,13 @@ const PatientList = ({ data }) => {
           {data?.length === 0 ? (
             <tr>
               <td colSpan={8}>
-                <br />
-                <br />
-                <span>등록한 환자가 없습니다.</span>
-                <br />
-                <br />
-                <br />
+                <div className='error'>등록한 환자가 없습니다.</div>
               </td>
             </tr>
           ) : (
-            data?.map((e, index) => (
-              <tr key={e}>
-                <td>{index + 1}</td>
+            data?.map((e) => (
+              <tr key={e.id}>
+                <td>{e.id}</td>
                 <td>{e.name}</td>
                 <td>{genderToKo(e.gender)}성</td>
                 <td>

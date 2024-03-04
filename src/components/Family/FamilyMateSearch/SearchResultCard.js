@@ -11,7 +11,7 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
     <div className={styles.card}>
       {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
       <div className={styles.userName}>
-        <label>{data.mate_name}</label>({genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세)
+        <label>{data.name}</label>({genderToKo(data.gender)}성, 만 {calAge(data.birthday)}세)
         <p>
           수행한 간병 <b>{data.care_times}</b>건<span>|</span>
           <StarRating rate={data.rate} /> {data.rate?.toFixed(1)}
@@ -21,11 +21,11 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
       <div className={styles.userInfo_wrapper}>
         <div className={styles.userInfo}>
           <label>활동지역</label>
-          <span>{data.address}</span>
+          <span>{data.location}</span>
         </div>
         <div className={styles.userInfo}>
           <label>대표서비스</label>
-          <span>{data.main_service}</span>
+          <span>{data.mainservice}</span>
         </div>
         <div className={styles.userInfo}>
           <label>희망시급</label>
@@ -33,11 +33,17 @@ const SearchResultCard = ({ data, showDetail, handleApply, handleConfirm }) => {
         </div>
       </div>
       <div className={styles.search_button_wrapper}>
-        <button onClick={() => showDetail(data.mate_id)}>상세정보 보기</button>
+        <button type='button' onClick={() => showDetail(data.mate_id)}>
+          상세정보 보기
+        </button>
         {handleConfirm ? (
-          <button onClick={() => handleConfirm(data.mate_id)}>간병인 선택하기</button>
+          <button type='submit' onClick={() => handleConfirm(data.mate_id)}>
+            간병인 선택하기
+          </button>
         ) : (
-          <button onClick={() => handleApply(data.mate_id)}>간병 신청하기</button>
+          <button type='submit' onClick={() => handleApply(data.mate_id)}>
+            간병 신청하기
+          </button>
         )}
       </div>
     </div>

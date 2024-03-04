@@ -6,7 +6,7 @@ import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 import useAlert from '@/hooks/useAlert';
 
-import styles from './ReservationForm.module.css';
+import styles from './RecruitmentForm.module.css';
 import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
@@ -14,7 +14,7 @@ import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
 
-const ReservationForm = () => {
+const RecruitmentForm = () => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
 
@@ -23,16 +23,20 @@ const ReservationForm = () => {
   const { patientList } = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
-  const today = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date()
-    .getDate()
-    .toString()
-    .padStart(2, '0')}`;
+  const afterNday = (date) => {
+    const dt = new Date(Date.now() + date * 24 * 60 * 60 * 1000);
+    return `${dt.getFullYear()}-${(dt.getMonth() + 1).toString().padStart(2, '0')}-${dt
+      .getDate()
+      .toString()
+      .padStart(2, '0')}`;
+  };
 
   const [formData, setFormData] = useState({
     location: '병원', // 병원 or 자택
-    start_date: today, // 날짜 형식 YYYY-MM-DD
-    end_date: today, // 날짜 형식 YYYY-MM-DD
+    start_date: afterNday(7), // 날짜 형식 YYYY-MM-DD
+    end_date: afterNday(14), // 날짜 형식 YYYY-MM-DD
     wage: '15000',
+    expire_at: afterNday(7),
   });
 
   const [address, setAddress] = useState({
@@ -47,9 +51,12 @@ const ReservationForm = () => {
 
   const handlePatientSelectChange = (e) => {
     if (e.target.value === 'add') {
-      if (window.confirm('입력된 내용이 초기화됩니다. 환자 추가 페이지로 이동하시겠습니까?')) {
-        navigator.push('/family/addpatient');
+      if (patientInfo) {
+        if (!window.confirm('입력된 내용이 초기화됩니다. 환자 추가 페이지로 이동하시겠습니까?')) {
+          return false;
+        }
       }
+      navigator.push('/family/addpatient');
     } else {
       const selectedPatient = patientList.filter((v) => v.id === +e.target.value)[0];
       setPatientInfo(selectedPatient);
@@ -85,6 +92,20 @@ const ReservationForm = () => {
     }
   };
 
+  const wageOptions = (min, max, step) => {
+    const options = [];
+
+    for (let i = min; i <= max; i += step) {
+      options.push(
+        <option value={i} key={i}>
+          {i}
+        </option>,
+      );
+    }
+
+    return options;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress)
@@ -99,8 +120,13 @@ const ReservationForm = () => {
           return acc;
         }, []),
       ) === 0
-    )
+    ) {
       return openAlert('간병 기간 및 출퇴근요일 설정이 올바르지 않습니다.');
+    }
+
+    if (new Date(formData.expire_at) < Date.now()) {
+      return openAlert('공고 마감일 설정이 올바르지 않습니다.');
+    }
 
     const body = {
       member_id: id,
@@ -119,12 +145,12 @@ const ReservationForm = () => {
     };
 
     try {
-      console.log('확인용', body);
-      const response = await axiosInstance.post('/api/v1/reservation', body);
+      const response = await axiosInstance.post('/api/v1/recruitment', body);
       if (response.data) {
-        alert('예약 신청이 완료되었습니다.');
+        alert('공고 등록이 완료되었습니다.');
+        navigator.push('./main');
       } else {
-        alert('예약 신청에 실패하였습니다.');
+        return openAlert('공고 등록에 실패하였습니다.');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -132,7 +158,7 @@ const ReservationForm = () => {
   };
 
   return (
-    <div className={`${styles.ReservationForm} content_wrapper`}>
+    <div className={`${styles.RecruitmentForm} content_wrapper`}>
       {alertComponent}
       <form onSubmit={handleSubmit}>
         <div className='input_wrapper'>
@@ -162,7 +188,7 @@ const ReservationForm = () => {
                 />
               </div>
 
-              <div className={styles.reservation_info_wrapper}>
+              <div className={styles.recruitment_info_wrapper}>
                 <div className='input_wrapper'>
                   <label>주소</label>
                   <div className={styles.address_section}>
@@ -188,8 +214,8 @@ const ReservationForm = () => {
                 <div className='input_wrapper'>
                   <label>간병 기간</label>
                   <div>
-                    <input type='date' name='start_date' onChange={handleInputChange} defaultValue={today} /> ~
-                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={today} />
+                    <input type='date' name='start_date' onChange={handleInputChange} defaultValue={afterNday(7)} /> ~
+                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={afterNday(14)} />
                     <p>
                       (총{' '}
                       {countWeekdays(
@@ -244,15 +270,18 @@ const ReservationForm = () => {
                 <div className='input_wrapper'>
                   <label>제시 시급</label>
                   <div>
-                    <input
-                      type='number'
-                      min={minWage}
-                      max='1000000'
-                      name='wage'
-                      placeholder='15000'
-                      onChange={handleInputChange}
-                    />
+                    <select name='wage' onChange={handleInputChange}>
+                      <option value={minWage}>{minWage}</option>
+                      {wageOptions(10000, 30000, 1000)}
+                    </select>
                     원
+                  </div>
+                </div>
+
+                <div className='input_wrapper'>
+                  <label>공고 마감일</label>
+                  <div>
+                    <input type='date' name='expire_at' onChange={handleInputChange} defaultValue={afterNday(4)} />
                   </div>
                 </div>
               </div>
@@ -272,4 +301,4 @@ const ReservationForm = () => {
   );
 };
 
-export default ReservationForm;
+export default RecruitmentForm;

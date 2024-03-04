@@ -10,7 +10,7 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
-  const weekDays = modalData.day.split(',').map((e) => weekdayDic[e]);
+  const dataDayArr = modalData.day.split(',');
   const [startTime, endTime] = [modalData.start_time.slice(0, 5), modalData.end_time.slice(0, 5)];
 
   return (
@@ -37,7 +37,9 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
               <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>보호자 연락처</label>
                 <div>
-                  <p>📞{modalData.tel || '전화번호 정보가 없습니다.'}</p>
+                  <p>
+                    📞{`${modalData.tel.slice(0, 3)}-${modalData.tel.slice(4, 8)}-****` || '전화번호 정보가 없습니다.'}
+                  </p>
                 </div>
               </div>
             </div>
@@ -61,13 +63,13 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
                 <label>간병 기간</label>
                 <span>
                   {modalData.start_date} ~ {modalData.end_date}{' '}
-                  <span>(총 {countWeekdays(modalData.start_date, modalData.end_date, weekDays)}일)</span>
+                  <span>(총 {countWeekdays(modalData.start_date, modalData.end_date, dataDayArr)}일)</span>
                 </span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.single}`}>
                 <label>간병 요일</label>
-                <span>{weekDays.join(', ')}</span>
+                <span> {dataDayArr.map((e) => weekdayDic[e]).join(', ')}</span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.single}`}>
@@ -88,7 +90,7 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
                   {(
                     modalData.wage *
                     calTimeDiff(startTime, endTime) *
-                    countWeekdays(modalData.start_date, modalData.end_date, weekDays)
+                    countWeekdays(modalData.start_date, modalData.end_date, dataDayArr)
                   ).toLocaleString()}
                   원
                 </span>

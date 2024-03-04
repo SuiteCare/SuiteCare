@@ -23,11 +23,12 @@ const ResumePage = () => {
   } = useQuery(
     ['mypageData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
+      const response = await axiosInstance.get('/api/v1/mypage');
       return response.data;
     },
     {
       enabled: Boolean(id),
+      retry: 0,
     },
   );
 
@@ -36,21 +37,22 @@ const ResumePage = () => {
     isResumeError,
     isResumeLoading,
   } = useQuery(
-    ['mypageData', id],
+    ['resumeData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mate/resume', { params: { id } });
+      const response = await axiosInstance.get(`/api/v1/mate/resume/${id}`);
       return response.data;
     },
     {
       enabled: Boolean(id),
+      retry: 0,
     },
   );
 
   useEffect(() => {
-    if (mypageData && resumeData) {
+    if (mypageData) {
       setData({
         mypage: mypageData,
-        resume: resumeData,
+        resume: resumeData || {},
       });
     }
   }, [mypageData, resumeData]);

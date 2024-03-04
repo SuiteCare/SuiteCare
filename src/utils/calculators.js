@@ -12,8 +12,24 @@ export const calTimeDiff = ($start, $end) => {
 
 export const weekdayDic = ['일', '월', '화', '수', '목', '금', '토'];
 
+export const normalizeWeekDays = (weekdays) => {
+  if (typeof weekdays === 'string') {
+    return !Number.isNaN(Number(weekdays[0]))
+      ? weekdays.split(',').map((e) => Number(e))
+      : weekdays.split(',').map((e) => weekdayDic.indexOf(e));
+  }
+  if (typeof weekdays === 'object') {
+    return typeof Number(weekdays[0]) === 'number'
+      ? typeof weekdays[0] === 'number'
+        ? weekdays
+        : weekdays.map((e) => +e)
+      : weekdays.map((e) => weekdayDic.indexOf(e));
+  }
+  return false;
+};
+
 export const countWeekdays = (startDate, endDate, weekdays) => {
-  const weekdaysArr = Number.isInteger(weekdays[0]) ? weekdays : weekdays.map((e) => weekdayDic.indexOf(e));
+  const weekdaysArr = normalizeWeekDays(weekdays);
 
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -42,7 +58,7 @@ export const stringToColor = (str, saturation = 55, lightness = 50) => {
 };
 
 export const genderToKo = (gender) => {
-  return gender === 'M' ? '남' : '여';
+  return gender === 'M' ? '남' : gender === 'F' ? '여' : '';
 };
 
 export const getMinWage = async () => {

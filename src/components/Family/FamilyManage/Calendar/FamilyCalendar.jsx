@@ -3,7 +3,12 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/ko';
 
+import { useQuery } from 'react-query';
+
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
+import useLoginInfo from '@/hooks/useLoginInfo';
+import usePatientList from '@/services/apis/usePatientList';
 
 import FamilyCalendarModal from './FamilyCalendarModal';
 import {
@@ -22,37 +27,41 @@ const FamilyCalendar = () => {
   const [modalData, setModalData] = useState(null);
   const { isModalVisible, openModal, closeModal } = useModal();
 
+  const { token } = useLoginInfo();
+  const { patientList } = usePatientList();
+
+  const { data, isError, isLoading } = useQuery(
+    ['reservationList', token],
+    async () => {
+      const response = await axiosInstance.get('/api/v1/family/reservation');
+      return response.data;
+    },
+    {
+      enabled: Boolean(token),
+    },
+  );
+
   useEffect(() => {
     const getEventList = () => {
-      // 서버와 통신해서 다음 데이터를 받아온다고 가정한다.
-      const rawData = {
-        patient_name: '김환자',
-        diagnosis: '중풍',
-        mate_name: '박간병',
-        start_date: '2023-12-18',
-        end_date: '2024-2-1',
-        weekdays: ['월', '목', '토', '일'],
-        start_time: '09:00',
-        end_time: '17:00',
-      };
-
-      let currentStartDate = moment(`${rawData.start_date} ${rawData.start_time}`);
-      let currentEndDate = moment(`${rawData.start_date} ${rawData.end_time}`);
-      const endDate = moment(`${rawData.end_date} ${rawData.end_time}`);
-      const { weekdays } = rawData;
+      let currentStartDate = moment(`${data.start_date} ${data.start_time}`);
+      let currentEndDate = moment(`${data.start_date} ${data.end_time}`);
+      const endDate = moment(`${data.end_date} ${data.end_time}`);
+      const { weekdays } = data;
 
       const events = [];
+
+      const patientName = patientList.filter((e) => e.id === patient_id);
 
       // 주어진 범위 내의 출근 요일에 해당하는 날짜를 별개의 이벤트로 추가
       while (currentEndDate.isSameOrBefore(endDate, 'day')) {
         const dayOfWeek = moment(currentEndDate).format('ddd');
         if (weekdays.includes(dayOfWeek)) {
           const event = {
-            title: `${rawData.patient_name} 님 (${rawData.diagnosis})`,
-            mate: `간병인 ${rawData.mate_name} 님`,
+            title: `${patientName} 님 (${data.diagnosis_name})`,
+            mate: `간병인 ${data.mate_name} 님`,
             start: new Date(currentStartDate),
             end: new Date(currentEndDate),
-            color: stringToColor(rawData.patient_name + rawData.diagnosis + rawData.mate_name),
+            color: stringToColor(data.patient_name + data.diagnosis_name + data.mate_name),
           };
           events.push(event);
         }
@@ -63,8 +72,10 @@ const FamilyCalendar = () => {
       setEventList(events);
     };
 
-    getEventList();
-  }, []);
+    if (data && data.length > 0) {
+      getEventList();
+    }
+  }, [data]);
 
   return (
     <>

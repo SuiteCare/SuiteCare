@@ -1,9 +1,9 @@
 const formInputInfos = {
-  login_id: {
+  id: {
     label: '아이디',
     type: 'text',
-    name: 'login_id',
-    id: 'login_id',
+    name: 'id',
+    id: 'id',
     maxLength: 20,
   },
   password: {
@@ -33,6 +33,19 @@ const formInputInfos = {
     id: 'tel',
     maxLength: 13,
     placeholder: '010-0000-0000',
+  },
+  email: {
+    label: '이메일',
+    type: 'text',
+    name: 'email',
+    id: 'email',
+    placeholder: 'xxx@xxxx.xxx',
+  },
+  birthday: {
+    label: '생년월일',
+    type: 'date',
+    name: 'birthday',
+    id: 'birthday',
   },
 };
 

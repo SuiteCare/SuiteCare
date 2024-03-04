@@ -113,11 +113,7 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
             </div>
           </>
         ) : (
-          <>
-            <p>오류가 발생했습니다.</p>
-            <br />
-            <br />
-          </>
+          <div className='error'>오류가 발생했습니다.</div>
         )}
       </div>
     </div>

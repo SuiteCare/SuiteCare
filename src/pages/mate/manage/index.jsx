@@ -8,7 +8,7 @@ const MateManagePage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('./manage/targeting');
+    router.push('./manage/calendar');
   }, []);
 
   return (

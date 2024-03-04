@@ -1,12 +1,13 @@
 .Main {
   display: grid;
-  max-width: 900px;
-  gap: 1rem;
+  max-width: 1200px;
+  gap: 7rem 2rem;
   margin: 6rem auto;
 }
 
 .Main.Family {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  width: 90%;
 }
 
 .Main.Mate {
@@ -15,32 +16,14 @@
 
 .Main .MainCard {
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   font-size: 1.8rem;
   min-width: 100px;
-  height: 12rem;
+  height: 20rem;
   padding: 2rem;
   background-size: cover;
   background: #dfd7bf50;
-  border: 1px solid #dfd7bf25;
-  border-top: 4px solid var(--brown-01);
   box-shadow: 0px 0px 10px -6px #aaaa;
-}
-
-.MainCard .line {
-  border-bottom: 1px solid var(--beige-01);
-  width: 100%;
-  margin: 1rem 0;
-}
-
-.MainCard span {
-  font-size: 1rem;
-  color: var(--brown-01);
-  line-height: 1.25;
 }
 
 .Main .MainCard:hover {
@@ -50,33 +33,125 @@
 
 .Main .MainCard p {
   font-weight: 400;
+  position: absolute;
+  top: 335px;
+  right: 10px;
 }
 
-.Main .MainCard:hover p {
+.MainCard span {
+  font-size: 1rem;
+  color: var(--brown-01);
+  line-height: 1.25;
+  position: absolute;
+  top: 370px;
+  right: 10px;
+}
+
+.Main .MainCard:hover p,
+.Main .MainCard:hover span {
   font-weight: 500;
 }
 
-.MainCard .line,
-.MainCard span {
-  display: none;
+.Main.Family .MainCard:nth-child(1) {
+  background-image: url('../assets/main1.jpg');
+  background-size: cover;
+  position: relative;
 }
-
-.MainCard:hover .line,
-.MainCard:hover span {
-  display: block;
+.Main.Family .MainCard:nth-child(2) {
+  background-image: url('../assets/main2.jpg');
+  background-size: cover;
+  position: relative;
 }
-
-.Main .MainCard img {
-  display: block;
-  width: 60%;
-  max-width: 200px;
-  margin: 0 auto;
+.Main.Family .MainCard:nth-child(3) {
+  background-image: url('../assets/main3.jpg');
+  background-size: cover;
+  position: relative;
 }
-
-.Main .MainCard:first-child {
-  grid-column-end: span 2;
+.Main.Family .MainCard:nth-child(4) {
+  background-image: url('../assets/main4.jpg');
+  background-size: cover;
+  position: relative;
+}
+.Main.Family .MainCard:nth-child(5) {
+  background-image: url('../assets/main5.jpg');
+  background-size: cover;
+  position: relative;
 }
 
 .Main.Family .MainCard:last-child {
-  grid-column-end: span 3;
+  background-image: url('../assets/main6.jpg');
+  background-size: cover;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .Main {
+    display: grid;
+    gap: 2.5rem;
+    margin: 5rem auto;
+  }
+
+  .Main.Main.Family {
+    grid-template-columns: 1fr;
+  }
+
+  .Main .MainCard {
+    height: 16rem;
+  }
+
+  .Main .MainCard p {
+    position: absolute;
+    top: 190px;
+    color: white;
+  }
+
+  .Main .MainCard span {
+    position: absolute;
+    top: 225px;
+    color: white;
+  }
+
+  .Main.Family .MainCard:nth-child(1) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main1.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(2) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main2.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(3) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main3.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(4) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main4.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+  .Main.Family .MainCard:nth-child(5) {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main5.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
+
+  .Main.Family .MainCard:last-child {
+    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 1) 200%),
+      url('../assets/main6.jpg');
+    background-size: cover;
+    position: relative;
+    border-radius: 10px;
+  }
 }

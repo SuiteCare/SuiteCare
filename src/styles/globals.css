@@ -1,7 +1,0 @@
-/* styles 디렉토리 안에 있는 공통 파일을 import하는 곳입니다. */
-@import './reset.css';
-@import './default.css';
-
-html {
-  scroll-behavior: smooth;
-}

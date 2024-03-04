@@ -3,9 +3,10 @@ import styles from './SearchResultCard.module.css';
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
 const SearchResultCard = ({ data, showDetail, handleApply }) => {
-  const dueDate = Math.ceil((new Date(data.start_date) - new Date()) / (1000 * 3600 * 24));
+  const dueDate = Math.ceil((new Date(data.expire_at) - new Date()) / (1000 * 3600 * 24));
 
-  const weekDays = data.day.split(',').map((e) => weekdayDic[e]);
+  const dataDayArr = data.day.split(',');
+
   const [startTime, endTime] = [data.start_time.slice(0, 5), data.end_time.slice(0, 5)];
 
   const expiredAlert = () => {
@@ -36,24 +37,24 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
         {/* body */}
         <div className={styles.userInfo}>
           <label>진단명</label>
-          <span>{data.diagnosis_name}</span>
+          <span>{data.patient_diagnosis_name}</span>
         </div>
         <div className={styles.userInfo}>
           <label>나이/성별</label>
           <span>
-            만 {calAge(data.birthday)}세 {genderToKo(data.gender)}성
+            만 {calAge(data.patient_birthday)}세 {genderToKo(data.patient_gender)}성
           </span>
         </div>
         <div className={styles.userInfo}>
           <label>간병 기간</label>
           <span>
             {data.start_date} ~ {data.end_date}{' '}
-            <span>(총 {countWeekdays(data.start_date, data.end_date, weekDays)}일)</span>
+            <span>(총 {countWeekdays(data.start_date, data.end_date, dataDayArr)}일)</span>
           </span>
         </div>
         <div className={styles.userInfo}>
           <label>간병 요일</label>
-          {weekDays.join(', ')}
+          {dataDayArr.map((e) => weekdayDic[e]).join(', ')}
         </div>
         <div className={styles.userInfo}>
           <label>출퇴근시간</label>
@@ -75,7 +76,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
             {(
               data.wage *
               calTimeDiff(startTime, endTime) *
-              countWeekdays(data.start_date, data.end_date, weekDays)
+              countWeekdays(data.start_date, data.end_date, dataDayArr)
             ).toLocaleString()}
             원
           </span>
@@ -84,8 +85,12 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       {/* body */}
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
-        <button onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>상세정보 보기</button>
-        <button onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>간병 지원하기</button>
+        <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
+          상세정보 보기
+        </button>
+        <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
+          간병 지원하기
+        </button>
       </div>
 
       {/* bottom */}

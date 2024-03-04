@@ -15,6 +15,7 @@ const usePatientList = (id) => {
     },
     {
       enabled: Boolean(id),
+      staleTime: 1000 * 3,
     },
   );
 

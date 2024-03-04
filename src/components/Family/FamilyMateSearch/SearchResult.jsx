@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
@@ -18,7 +19,7 @@ const SearchResult = ({ data, type }) => {
       ...{
         contact_time_start: '09:00',
         contact_time_end: '22:00',
-        career: [
+        careerList: [
           {
             title: '경력 01',
             date_start: '2020-01-01',
@@ -30,7 +31,7 @@ const SearchResult = ({ data, type }) => {
             date_end: '2023-12-14',
           },
         ],
-        certificate: [
+        certificateList: [
           {
             certificate_name: '자격증 01',
             qualification_date: '2019-02-22',
@@ -50,7 +51,7 @@ const SearchResult = ({ data, type }) => {
 
   async function getModalData($mateId) {
     try {
-      const response = await axios.get('/api/v1/familymatesearch', { params: $mateId });
+      const response = await axiosInstance.get('/api/v1/familymatesearch', { params: $mateId });
       const msg = response.headers.get('msg');
       if (response.status === 200 && msg === 'success') {
         alert(response.data);
@@ -66,21 +67,24 @@ const SearchResult = ({ data, type }) => {
       return {};
     }
   }
-  console.log(data);
+
+  const renderSearchMessage = () => {
+    if (type === 'search') {
+      if (data && data.length > 0) {
+        return `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`;
+      }
+      return '나에게 꼭 맞는 메이트님을 찾아보세요!';
+    }
+    return '스위트케어가 추천하는 메이트';
+  };
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
-      <h3>
-        {type === 'search'
-          ? data?.length
-            ? `${data.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`
-            : '나에게 꼭 맞는 메이트님을 찾아보세요!'
-          : '스위트케어가 추천하는 메이트'}
-      </h3>
+      <h3>{renderSearchMessage()}</h3>
       {data && data.length > 0 ? (
         data.map((e) => <SearchResultCard data={e} key={e.mate_id} showDetail={() => handleShowModal(e)} />)
       ) : (
-        <div className='no_result'>검색 결과가 없습니다.</div>
+        <div className='no_result'>검색 조건을 입력하세요.</div>
       )}
       {isModalVisible && <MateDetailModal modalData={modalData} closeModal={closeModal} />}
     </div>

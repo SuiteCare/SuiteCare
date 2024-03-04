@@ -202,13 +202,7 @@ const KakaoMapModal = ({ setAddress, closeModal }) => {
             <div className={mapstyles.option}>
               <h4>병원 찾기</h4>
               <input type='text' value={keyword} onChange={(e) => setKeyword(e.target.value)} id='keyword' />
-              <button
-                type='submit'
-                onClick={(e) => {
-                  e.preventDefault();
-                  searchPlaces();
-                }}
-              >
+              <button type='button' onClick={searchPlaces}>
                 검색
               </button>
             </div>

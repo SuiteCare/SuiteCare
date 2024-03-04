@@ -6,7 +6,7 @@ const MateJobListPage = () => {
     <>
       <MateHeader />
       <div className='page_with_sidebar'>
-        <MateManageSidebar activeMenu='application' />
+        <MateManageSidebar activeMenu='recruitment' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>공고 지원 목록</h1>

@@ -1,141 +1,55 @@
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
+import axiosInstance from '@/services/axiosInstance';
+import useAlert from '@/hooks/useAlert';
 
 import styles from './Resume.module.css';
-import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
-import defaultProfile from '@/assets/default_profile.jpg';
+import Career from './Career';
+import Certificate from './Certificate';
+import Location from './Location';
+import UserInfo from './UserInfo';
+import MainService from './MainService';
 
-import { calAge, genderToKo, minWage } from '@/utils/calculators';
-import TimePicker from '@/utils/TimePicker';
+import { minWage } from '@/utils/calculators';
 
 const Resume = ({ data }) => {
-  const [formData, setFormData] = useState({});
+  const navigator = useRouter();
 
-  const handleContactTimeChange = (type, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      contactTimeStart: type === 'start' ? value : prevData.contactTimeStart,
-      contactTimeEnd: type === 'end' ? value : prevData.contactTimeEnd,
-    }));
-  };
+  const [formMateResumeData, setFormMateResumeData] = useState({
+    profile_picture_filename: '',
+    contact_time_start: '09:00',
+    contact_time_end: '21:00',
+    introduction: '',
+    desired_wage: minWage,
+  });
 
-  const [wordCnt, setWordCnt] = useState((data.resume?.mate?.introduction || '').length || 0);
-  const handlerTextChange = (e) => {
-    const { value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      introduction: value,
-    }));
-    setWordCnt(value.length);
-  };
+  const [formListData, setFormListData] = useState({
+    mainServiceList: [],
+    locationList: [],
+    careerList: [],
+    certificateList: [],
+  });
 
-  useEffect(() => {
-    const checkboxes = document.getElementsByName('location');
-    checkboxes.forEach((it) => {
-      it.checked = formData?.checkedLoc?.includes(it.value);
-    });
-  }, [formData?.checkedLoc]);
-
-  const selectAllLocation = (e) => {
-    const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
-    const isChecked = allLocationCheckboxes.every((checkbox) => checkbox.checked);
-
-    const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-
-    allLocationCheckboxes.forEach((checkbox) => {
-      checkbox.checked = !isChecked;
-    });
-
-    e.target.checked = !isChecked;
-
-    setFormData((prevFormData) => ({ ...prevFormData, checkedLoc: selectedLocations }));
-  };
-
-  const handleAllLocationChange = (e) => {
-    selectAllLocation(e);
-  };
-
-  const handleCheckboxChange = (checked, value) => {
-    setFormData((prevFormData) => {
-      const updatedData = { ...prevFormData };
-
-      if (checked) {
-        updatedData.checkedLoc = [...prevFormData.checkedLoc, value];
-      } else {
-        updatedData.checkedLoc = prevFormData.checkedLoc.filter((it) => it !== value);
-      }
-
-      return updatedData;
-    });
-  };
-
-  const addCareer = () => {
-    setFormData((prevFormData) => {
-      const newCareer = {
-        id: Date.now(),
-      };
-      return { ...prevFormData, career: [...(prevFormData.career || []), newCareer] };
-    });
-  };
-
-  const deleteCareer = (id) => {
-    setFormData((prevFormData) => {
-      return { ...prevFormData, career: prevFormData.career.filter((it) => it.id !== id) };
-    });
-  };
-
-  const addCertificate = () => {
-    setFormData((prevFormData) => {
-      const newCertificate = {
-        id: Date.now(),
-      };
-      return { ...prevFormData, certificate: [...(prevFormData.certificate || []), newCertificate] };
-    });
-  };
-
-  const deleteCertificate = (id) => {
-    setFormData((prevFormData) => {
-      return { ...prevFormData, certificate: prevFormData.certificate.filter((it) => it.id !== id) };
-    });
-  };
-
-  const changeHandler = (checked, id) => {
-    setFormData((prevFormData) => {
-      const updatedData = { ...prevFormData };
-
-      if (checked) {
-        updatedData.mainServiceData = [...prevFormData.mainServiceData, id];
-      } else {
-        updatedData.mainServiceData = prevFormData.mainServiceData.filter((it) => it !== id);
-      }
-
-      return updatedData;
-    });
-  };
-
-  const renderOptions = (options) => {
-    return options?.map((option) => (
-      <option key={option} value={option}>
-        {option}
-      </option>
-    ));
-  };
+  const [changedListData, setChangedListData] = useState({});
+  const [changedMateData, setChangedMateData] = useState({});
+  const { openAlert, alertComponent } = useAlert();
 
   const handleItemChange = (e, index, type) => {
     const { name, value } = e.target;
 
-    setFormData((prevFormData) => {
+    setFormListData((prevFormData) => {
       const updatedData = { ...prevFormData };
 
       switch (type) {
         case 'career':
-          updatedData.career = prevFormData.career.map((careerItem, i) =>
+          updatedData.careerList = prevFormData.careerList.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificate = prevFormData.certificate.map((certificateItem, i) =>
+          updatedData.certificateList = prevFormData.certificateList.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -143,313 +57,169 @@ const Resume = ({ data }) => {
         default:
           break;
       }
+      return updatedData;
+    });
+    setChangedListData((prevData) => {
+      const updatedData = { ...prevData };
 
+      switch (type) {
+        case 'career':
+          updatedData.careerList = formListData.careerList.map((careerItem, i) =>
+            i === index ? { ...careerItem, [name]: value } : careerItem,
+          );
+          break;
+
+        case 'certificate':
+          updatedData.certificateList = formListData.certificateList.map((certificateItem, i) =>
+            i === index ? { ...certificateItem, [name]: value } : certificateItem,
+          );
+          break;
+
+        default:
+          break;
+      }
       return updatedData;
     });
   };
 
-  const renderCareerItem = (careerItem, index) => (
-    <div key={`career-${index}`} className={styles.career_item}>
-      <select name='job_name' id='job_name' onChange={(e) => handleItemChange(e, index, 'career')}>
-        {renderOptions([
-          '경력명',
-          '간호사',
-          '호스피스 간호사',
-          '요양보호사',
-          '간병인',
-          '물리치료사',
-          '재활치료사',
-          '사회복지사',
-        ])}
-      </select>
-      <input
-        type='text'
-        id='name'
-        name='career_detail'
-        placeholder='경력 세부내용'
-        value={careerItem.name}
-        onChange={(e) => handleItemChange(e, index, 'career')}
-      />
-      <div>
-        <input
-          type='date'
-          id='date_start'
-          name='data_start'
-          value={careerItem.date_start}
-          onChange={(e) => handleItemChange(e, index, 'career')}
-        />
-        ~
-        <input
-          type='date'
-          id='date_end'
-          name='data_end'
-          value={careerItem.date_end}
-          onChange={(e) => handleItemChange(e, index, 'career')}
-        />
-      </div>
-      <button type='button' onClick={() => deleteCareer(careerItem.id)}>
-        X
-      </button>
-    </div>
-  );
-
-  const renderCertificateItem = (certificateItem, index) => (
-    <div key={`certificate-${index}`} className={styles.certificate_item}>
-      <input
-        name='certificate_name'
-        type='text'
-        placeholder='자격증명'
-        value={certificateItem.certificate_name}
-        onChange={(e) => handleItemChange(e, index, 'certificate')}
-      />
-      <input
-        name='certificate_code'
-        type='text'
-        placeholder='자격증 코드'
-        value={certificateItem.certificate_code}
-        onChange={(e) => handleItemChange(e, index, 'certificate')}
-      />
-      <div>
-        <div>
-          <label htmlFor='qualification_date'>취득일</label>
-          <input
-            type='date'
-            name='qualification_date'
-            value={certificateItem.qualification_date}
-            onChange={(e) => handleItemChange(e, index, 'certificate')}
-          />
-        </div>
-        <div>
-          <label htmlFor='expired_date'>만료일</label>
-          <input
-            type='date'
-            name='expired_date'
-            value={certificateItem.expired_date}
-            onChange={(e) => handleItemChange(e, index, 'certificate')}
-          />
-        </div>
-      </div>
-      <button type='button' onClick={() => deleteCertificate(certificateItem.id)}>
-        X
-      </button>
-    </div>
-  );
-
   const handleUpdateResume = async () => {
-    if (!formData.wage) {
+    if (!formMateResumeData.desired_wage) {
       alert('희망 최소시급을 입력하세요.');
       return false;
     }
 
-    if (!formData.checkedLoc.length) {
+    const { locationList, mainServiceList } = formListData;
+
+    if (!locationList.length) {
       alert('최소 1개의 활동 지역을 선택하세요.');
       return false;
     }
 
-    if (!formData.mainServiceData.length) {
-      alert('최소 1개의 대표서비스를 입력하세요.');
+    if (!mainServiceList.length) {
+      alert('최소 1개의 대표서비스를 선택하세요.');
       return false;
     }
 
-    const method = data.resume.location ? 'patch' : 'post';
+    const method = data.resume.mateResume ? 'patch' : 'post';
 
     try {
-      const body = {
-        ...formData,
-      };
-      console.log('업데이트 완료:', body);
+      let requestData = {};
+      let body = {};
+      if (method === 'post') {
+        requestData = {
+          mateResume: { ...formMateResumeData },
+          locationList: formListData.locationList.map((e) => ({ name: e })),
+          mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
+        };
+
+        if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
+        if (formListData.certificateList.length > 0) requestData.certificateList = formListData.certificateList;
+
+        body = JSON.stringify(requestData); // 이 부분 확인 필요
+        console.log('post', body);
+      } else if (method === 'patch') {
+        requestData = {
+          ...changedListData,
+        };
+
+        if (Object.keys(changedMateData).length > 0) requestData.mateResume = { ...changedMateData };
+
+        if (changedListData.locationList) {
+          requestData.locationList = changedListData.locationList.map((e) => ({ name: e }));
+        }
+
+        if (changedListData.mainServiceList) {
+          requestData.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
+        }
+
+        body = JSON.stringify(requestData);
+        console.log('patch', body);
+      }
+
+      const response = await axiosInstance[method](`/api/v1/mate/resume`);
+      if (response.data) {
+        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
+        setTimeout(() => {
+          navigator.reload();
+        }, 1000);
+      } else {
+        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
+      }
     } catch (error) {
       console.error('업데이트 실패:', error);
+      openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
     }
   };
-  const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
-  const handleWageCheckbox = (e) => {
-    if (e.target.checked) {
-      setIsWageInputDisabled(true);
-      setFormData((prevData) => ({
-        ...prevData,
-        wage: '무관',
-      }));
-    } else {
-      setIsWageInputDisabled(false);
-      setFormData((prevData) => ({
-        ...prevData,
-        wage: minWage,
-      }));
-    }
+
+  const initializeFormData = ($data) => {
+    setFormMateResumeData({
+      profile_picture_filename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
+      contact_time_start: $data.resume?.mate?.contact_time_start || '09:00',
+      contact_time_end: $data.resume?.mate?.contact_time_end || '21:00',
+      introduction: $data.resume?.mate?.introduction || '',
+      desired_wage: $data.resume?.mate?.desired_wage || minWage,
+    });
+    setFormListData({
+      mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
+      locationList: $data.resume?.locationList?.map((e) => e.name) || [],
+      careerList: $data.resume?.careerList || [],
+      certificateList: $data.resume?.certificateList || [],
+    });
   };
 
   useEffect(() => {
-    setFormData({
-      contactTimeStart: data.resume?.mate?.contact_time_start || '09:00',
-      contactTimeEnd: data.resume?.mate?.contact_time_end || '21:00',
-      introduction: data.resume?.mate?.introduction || '',
-      mainServiceData: data.resume?.mainService?.map((it) => it.main_service_name) || [],
-      checkedLoc: data.resume?.location?.map((it) => it.location_name) || [],
-      career: data.resume?.career || [],
-      certificate: data.resume?.certificate || [],
-      wage: minWage,
-    });
+    if (data) initializeFormData(data);
   }, [data]);
 
   return (
     <div className={styles.Resume}>
+      {alertComponent}
       <div className={styles.form_wrapper}>
         <form name='resume'>
-          <section>
-            <h3>기본정보</h3>
-            <div className={styles.introduce}>
-              <div className='input_wrapper'>
-                <div className={styles.img_wrapper}>
-                  {data.profile_picture_filename || <Image src={defaultProfile} alt='profile_picture' />}
-                  <input type='file' />
-                </div>
-                <div className={styles.basicInfo}>
-                  <div>
-                    <h2>{data.mypage.name}</h2>
-                  </div>
-                  <div>
-                    <p>
-                      {genderToKo(data.mypage.gender)}성 / {data.mypage.birthday} (만 {calAge(data.mypage.birthday)} 세)
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className={styles.contact}>
-                  <div className='input_wrapper'>
-                    <label htmlFor='contact'>연락 가능 시간</label>
-                    <div className='timepicker_wrapper'>
-                      <TimePicker
-                        time={formData?.contactTimeStart}
-                        setTime={(value) => handleContactTimeChange('start', value)}
-                        start={0}
-                        end={24}
-                      />
-                      ~
-                      <TimePicker
-                        time={formData?.contactTimeEnd}
-                        setTime={(value) => handleContactTimeChange('end', value)}
-                        start={0}
-                        end={24}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.wage}>
-                  <div className='input_wrapper'>
-                    <label>희망 최소 시급</label>
-                    <div>
-                      <input
-                        type='number'
-                        min={minWage}
-                        max={1000000}
-                        step={10}
-                        disabled={isWageInputDisabled}
-                        value={formData.wage}
-                        onChange={(e) =>
-                          setFormData((prevData) => ({
-                            ...prevData,
-                            wage: e.target.value,
-                          }))
-                        }
-                      />
-                      원
-                      <div className='checkbox_wrapper'>
-                        <input type='checkbox' onChange={(e) => handleWageCheckbox(e)} />
-                        <span>무관</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.introduction}>
-                  <div className='input_wrapper'>
-                    <label htmlFor='introduction'>한줄소개</label>
-                    <div>
-                      <textarea
-                        id='introduction'
-                        name='introduction'
-                        rows='1'
-                        maxLength='100'
-                        onChange={handlerTextChange}
-                        defaultValue={formData?.introduction}
-                      />
-                      <div className={styles.wordCnt}>
-                        <span>({wordCnt}/100)</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <section className={styles.userinfo}>
+            <UserInfo
+              styles={styles}
+              data={data}
+              formData={formMateResumeData}
+              setFormData={setFormMateResumeData}
+              setChangedData={setChangedMateData}
+            />
           </section>
+
           <section className={styles.location}>
-            <h3>활동 지역</h3>
-            <div className='checkbox_wrapper'>
-              <input type='checkbox' id='all' onChange={handleAllLocationChange} />
-              <label htmlFor='all'>전체 선택</label>
-            </div>
-            <div className={styles.checkbox_list_wrapper}>
-              <FormLocationList
-                onChange={(e) => handleCheckboxChange(e.currentTarget.checked, e.currentTarget.value)}
-              />
-            </div>
+            <Location
+              styles={styles}
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
+            />
           </section>
+
           <section className={styles.career}>
-            <h3>
-              경력
-              <button type='button' onClick={addCareer}>
-                +
-              </button>
-            </h3>
-            <div name='careerDiv'>
-              {formData?.career?.length > 0 ? (
-                formData?.career?.map((careerItem, index) => renderCareerItem(careerItem, index))
-              ) : (
-                <div />
-              )}
-            </div>
+            <Career
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
+              handleItemChange={handleItemChange}
+            />
           </section>
 
           <section className={styles.certificate}>
-            <h3>
-              자격증
-              <button type='button' onClick={addCertificate}>
-                +
-              </button>
-            </h3>
-            {formData?.certificate?.length > 0 ? (
-              formData?.certificate?.map((certificateItem, index) => renderCertificateItem(certificateItem, index))
-            ) : (
-              <div />
-            )}
+            <Certificate
+              formData={formListData}
+              setFormData={setFormListData}
+              setChangedData={setChangedListData}
+              handleItemChange={handleItemChange}
+            />
           </section>
+
           <section className={styles.mainService}>
-            <h3>대표서비스</h3>
-            <div>
-              {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((service) => (
-                <div key={service}>
-                  <span>
-                    <input
-                      type='checkbox'
-                      name='service'
-                      value={service}
-                      checked={formData?.mainServiceData?.includes(service)}
-                      onChange={(e) => {
-                        changeHandler(e.currentTarget.checked, e.currentTarget.value);
-                      }}
-                    />
-                    {service}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <MainService formData={formListData} setFormData={setFormListData} setChangedData={setChangedListData} />
           </section>
+
           <div className='button_wrapper'>
             <button type='button' onClick={handleUpdateResume}>
-              {data.resume.location ? '수정하기' : '등록하기'}
+              {data.resume.mateResume ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>

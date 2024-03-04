@@ -9,7 +9,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
-import JobDetailModal from './JobDetailModal';
+import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
@@ -23,8 +23,8 @@ const SearchResult = ({ data }) => {
       if (typeof window !== 'undefined') {
         try {
           const [response1, response2] = await Promise.all([
-            axios.get(`/api/v1/patient/${defaultData.patient_id}`),
-            axios.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
+            axiosInstance.get(`/api/v1/patient/${defaultData.patient_id}`),
+            axiosInstance.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
           ]);
 
           setModalData({
@@ -59,10 +59,10 @@ const SearchResult = ({ data }) => {
     setSortOption(selectedOption);
   };
 
-  const sortedData = [...data].sort(sortOptions[sortOption]);
+  const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
-    const response = await axiosInstance.post('/api/v1/apply', body);
+    const response = await axiosInstance.get(`/api/v1/apply/${body.reservation_id}`);
     return response.data;
   };
 
@@ -73,9 +73,15 @@ const SearchResult = ({ data }) => {
       if (applicationResult === 1) {
         alert('간병 지원이 완료되었습니다.');
       } else if (applicationResult === 0) {
-        if (confirm('간병 지원을 위해서는 메이트 프로필 작성이 필요합니다.\n프로필 작성 페이지로 이동하시겠습니까?')) {
-          router.push('/mate/mypage/profile');
+        if (
+          window.confirm(
+            '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
+          )
+        ) {
+          router.push('/mate/mypage/resume');
         }
+      } else if (applicationResult === 2) {
+        alert('이미 지원한 공고입니다.');
       } else {
         alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
       }
@@ -85,10 +91,10 @@ const SearchResult = ({ data }) => {
     },
   });
 
-  const handleApply = (reservation_id) => {
+  const handleApply = (reservationId) => {
     const body = {
       mate_id: id,
-      reservation_id,
+      reservation_id: reservationId,
     };
     mutation.mutate(body);
   };
@@ -96,9 +102,9 @@ const SearchResult = ({ data }) => {
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
       <div className={styles.search_header}>
-        <h3>검색 결과 ({data.length ? data.length : 0}건)</h3>
+        <h3>검색 결과 ({data ? data.length : 0}건)</h3>
         <select value={sortOption} onChange={handleSortChange}>
-          <option value=''>정렬 없음</option>
+          <option value=''>기본 정렬</option>
           <option value='start_date_asc'>시작일 오름차순</option>
           <option value='start_date_desc'>시작일 내림차순</option>
           <option value='wage_asc'>시급 오름차순</option>
@@ -106,8 +112,8 @@ const SearchResult = ({ data }) => {
         </select>
       </div>
       <div className={styles.card_wrapper}>
-        {sortedData.length > 0 ? (
-          sortedData.map((item) => (
+        {sortedData?.length > 0 ? (
+          sortedData?.map((item) => (
             <SearchResultCard
               data={item}
               key={item.id}
@@ -119,7 +125,9 @@ const SearchResult = ({ data }) => {
           <div className='no_result'>검색 결과가 없습니다.</div>
         )}
       </div>
-      {isModalVisible && <JobDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />}
+      {isModalVisible && (
+        <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />
+      )}
     </div>
   );
 };
