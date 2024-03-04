@@ -25,7 +25,11 @@ const MyPageForm = () => {
     tel: '',
   });
 
-  const [changedData, setChangedData] = useState();
+  const [changedData, setChangedData] = useState({
+    gender: '',
+    email: '',
+    tel: '',
+  });
 
   const { data, isError, isLoading } = useQuery(
     ['mypage', id],
@@ -57,7 +61,7 @@ const MyPageForm = () => {
     }));
     setChangedData((prevData) => ({
       ...prevData,
-      [name]: name === 'tel' ? value.replaceAll('-', '') : value,
+      [name]: name === 'tel' ? value.replace(/-/g, '') : value,
     }));
   };
 
