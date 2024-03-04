@@ -5,17 +5,20 @@ import { useMutation, useQuery } from 'react-query';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
+import useAlert from '@/hooks/useAlert';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
+  const { openAlert, alertComponent } = useAlert();
+
   const { isModalVisible, openModal, closeModal } = useModal();
   const [recruitId, setRecruitId] = useState();
   const [modalData, setModalData] = useState({});
-
   const { id } = useLoginInfo();
+  const router = useRouter();
 
   const {
     data: patientDetail,
@@ -33,62 +36,65 @@ const SearchResult = ({ data }) => {
   );
 
   useEffect(() => {
-    if (recruitId) {
-      setModalData((prev) => ({
-        ...prev,
-        ...patientDetail,
-      }));
+    if (recruitId && patientDetail) {
+      setModalData((prev) => ({ ...prev, ...patientDetail }));
     }
   }, [patientDetail, recruitId]);
 
   const handleShowModal = (eachData) => {
     setRecruitId(eachData.id);
-    setModalData({
-      ...eachData,
-    });
+    setModalData({ ...eachData });
     openModal();
   };
 
   const MateJobApplication = async (body) => {
-    const response = await axiosInstance.get(`/api/v1/apply/${body.recruitment_id}`);
-    return response.data;
+    try {
+      const response = await axiosInstance.post('/api/v1/apply', body);
+      if (!response || !response.data) {
+        openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+        throw new Error('No data received');
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error occurred while fetching data:', error);
+      throw error;
+    }
   };
-
-  const router = useRouter();
 
   const mutation = useMutation(MateJobApplication, {
     onSuccess: (applicationResult) => {
-      if (applicationResult === 1) {
-        alert('간병 지원이 완료되었습니다.');
-      } else if (applicationResult === 0) {
-        if (
-          window.confirm(
-            '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
-          )
-        ) {
-          router.push('/mate/mypage/resume');
-        }
-      } else if (applicationResult === 2) {
-        alert('이미 지원한 공고입니다.');
+      const messages = {
+        0: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
+        1: '간병 지원이 완료되었습니다.',
+        2: '이미 지원한 공고입니다.',
+        default: '오류가 발생했습니다. 간병 지원에 실패했습니다.',
+      };
+      const message = messages[applicationResult] || messages.default;
+      if (applicationResult === 0 && window.confirm(message)) {
+        router.push('/mate/mypage/resume');
       } else {
-        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+        openAlert(message);
       }
     },
     onError: (error) => {
-      console.log(error);
+      console.error('Mutation error occurred:', error);
     },
   });
 
   const handleApply = (recruitmentId) => {
     const body = {
+      request_by: 'M',
       mate_id: id,
       recruitment_id: recruitmentId,
     };
+    console.log(body);
     mutation.mutate(body);
   };
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
+      {alertComponent}
+
       <div className={styles.card_wrapper}>
         {data?.length > 0 ? (
           data?.map((eachData) => (

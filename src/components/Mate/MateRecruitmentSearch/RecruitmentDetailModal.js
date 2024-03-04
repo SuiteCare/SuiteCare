@@ -112,7 +112,7 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
 
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
-                  <label>나이/성별</label>
+                  <label>나이</label>
                   <span>만 {calAge(modalData.patient_birthday)}세</span>
                 </div>
 

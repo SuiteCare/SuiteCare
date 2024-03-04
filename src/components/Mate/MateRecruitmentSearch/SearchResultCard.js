@@ -40,7 +40,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
           <span>{data.patient_diagnosis_name}</span>
         </div>
         <div className={styles.userInfo}>
-          <label>나이/성별</label>
+          <label>환자 정보</label>
           <span>
             만 {calAge(data.patient_birthday)}세 {genderToKo(data.patient_gender)}성
           </span>
