@@ -10,7 +10,7 @@ const MateManageSidebar = ({ activeMenu }) => {
         <Link href='/mate/manage/calendar'>내 일정 정보</Link>
       </div>
       <div className={`${styles.menu} ${activeMenu === 'offer' ? styles.active : ''}`}>
-        <Link href='/mate/manage/offer'>나에게 들어온 신청</Link>
+        <Link href='/mate/manage/offer'>간병 요청 목록</Link>
       </div>
       <div className={`${styles.menu} ${activeMenu === 'apply' ? styles.active : ''}`}>
         <Link href='/mate/manage/apply'>공고 지원 목록</Link>
