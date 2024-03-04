@@ -12,7 +12,6 @@ import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
-  const [sortOption, setSortOption] = useState('');
   const [recruitId, setRecruitId] = useState();
   const [modalData, setModalData] = useState({});
 
@@ -49,20 +48,6 @@ const SearchResult = ({ data }) => {
     });
     openModal();
   };
-
-  const sortOptions = {
-    wage_asc: (a, b) => a.wage - b.wage,
-    wage_desc: (a, b) => b.wage - a.wage,
-    start_date_asc: (a, b) => new Date(a.start_date) - new Date(b.start_date),
-    start_date_desc: (a, b) => new Date(b.start_date) - new Date(a.start_date),
-  };
-
-  const handleSortChange = (e) => {
-    const selectedOption = e.target.value;
-    setSortOption(selectedOption);
-  };
-
-  const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
     const response = await axiosInstance.get(`/api/v1/apply/${body.recruitment_id}`);
@@ -104,19 +89,9 @@ const SearchResult = ({ data }) => {
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
-      <div className={styles.search_header}>
-        <h3>검색 결과 ({data ? data.length : 0}건)</h3>
-        <select value={sortOption} onChange={handleSortChange}>
-          <option value=''>기본 정렬</option>
-          <option value='start_date_asc'>시작일 오름차순</option>
-          <option value='start_date_desc'>시작일 내림차순</option>
-          <option value='wage_asc'>시급 오름차순</option>
-          <option value='wage_desc'>시급 내림차순</option>
-        </select>
-      </div>
       <div className={styles.card_wrapper}>
-        {sortedData?.length > 0 ? (
-          sortedData?.map((eachData) => (
+        {data?.length > 0 ? (
+          data?.map((eachData) => (
             <SearchResultCard
               data={eachData}
               key={eachData.id}
@@ -125,7 +100,7 @@ const SearchResult = ({ data }) => {
             />
           ))
         ) : (
-          <div className='no_result'>검색 결과가 없습니다.</div>
+          <div className='no_result'>{isError ? '검색에 실패했습니다.' : '검색 결과가 없습니다.'}</div>
         )}
       </div>
       {isModalVisible && (
