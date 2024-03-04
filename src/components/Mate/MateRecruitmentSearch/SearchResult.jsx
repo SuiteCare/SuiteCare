@@ -1,128 +1,112 @@
-import { React, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
+import useAlert from '@/hooks/useAlert';
 
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const SearchResult = ({ data }) => {
+  const { openAlert, alertComponent } = useAlert();
+
   const { isModalVisible, openModal, closeModal } = useModal();
-  const [sortOption, setSortOption] = useState('');
+  const [recruitId, setRecruitId] = useState();
   const [modalData, setModalData] = useState({});
-
   const { id } = useLoginInfo();
+  const router = useRouter();
 
-  /* 환자 상세 정보 불러오기 url 변경 필요 await axiosInstance.get(`/api/v1/recruitment/${defaultData.id}/patient`) */
-  const handleShowModal = async (defaultData) => {
-    const getPatientDetail = async () => {
-      if (typeof window !== 'undefined') {
-        try {
-          const [response1, response2] = await Promise.all([
-            axiosInstance.get(`/api/v1/patient/${defaultData.patient_id}`),
-            axiosInstance.get(`/api/v1/patientDetail/${defaultData.patient_id}`),
-          ]);
-
-          setModalData({
-            ...defaultData,
-            ...response1.data,
-            ...response2.data,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
-    getPatientDetail();
-  };
+  const {
+    data: patientDetail,
+    isError,
+    isLoading,
+  } = useQuery(
+    ['patientDetail', recruitId],
+    async () => {
+      const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
+      return data;
+    },
+    {
+      enabled: Boolean(recruitId),
+    },
+  );
 
   useEffect(() => {
-    if (Object.keys(modalData).length > 0) {
-      openModal();
+    if (recruitId && patientDetail) {
+      setModalData((prev) => ({ ...prev, ...patientDetail }));
     }
-  }, [modalData]);
+  }, [patientDetail, recruitId]);
 
-  const sortOptions = {
-    wage_asc: (a, b) => a.wage - b.wage,
-    wage_desc: (a, b) => b.wage - a.wage,
-    start_date_asc: (a, b) => new Date(a.start_date) - new Date(b.start_date),
-    start_date_desc: (a, b) => new Date(b.start_date) - new Date(a.start_date),
+  const handleShowModal = (eachData) => {
+    setRecruitId(eachData.id);
+    setModalData({ ...eachData });
+    openModal();
   };
-
-  const handleSortChange = (e) => {
-    const selectedOption = e.target.value;
-    setSortOption(selectedOption);
-  };
-
-  const sortedData = data && [...data].sort(sortOptions[sortOption]);
 
   const MateJobApplication = async (body) => {
-    const response = await axiosInstance.get(`/api/v1/apply/${body.recruitment_id}`);
-    return response.data;
+    try {
+      const response = await axiosInstance.post('/api/v1/apply', body);
+      if (!response || !response.data) {
+        openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+        throw new Error('No data received');
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Error occurred while fetching data:', error);
+      throw error;
+    }
   };
-
-  const router = useRouter();
 
   const mutation = useMutation(MateJobApplication, {
     onSuccess: (applicationResult) => {
-      if (applicationResult === 1) {
-        alert('간병 지원이 완료되었습니다.');
-      } else if (applicationResult === 0) {
-        if (
-          window.confirm(
-            '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
-          )
-        ) {
-          router.push('/mate/mypage/resume');
-        }
-      } else if (applicationResult === 2) {
-        alert('이미 지원한 공고입니다.');
+      const messages = {
+        0: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
+        1: '간병 지원이 완료되었습니다.',
+        2: '이미 지원한 공고입니다.',
+        default: '오류가 발생했습니다. 간병 지원에 실패했습니다.',
+      };
+      const message = messages[applicationResult] || messages.default;
+      if (applicationResult === 0 && window.confirm(message)) {
+        router.push('/mate/mypage/resume');
       } else {
-        alert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
+        openAlert(message);
       }
     },
     onError: (error) => {
-      console.log(error);
+      console.error('Mutation error occurred:', error);
     },
   });
 
   const handleApply = (recruitmentId) => {
     const body = {
+      request_by: 'M',
       mate_id: id,
       recruitment_id: recruitmentId,
     };
+    console.log(body);
     mutation.mutate(body);
   };
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
-      <div className={styles.search_header}>
-        <h3>검색 결과 ({data ? data.length : 0}건)</h3>
-        <select value={sortOption} onChange={handleSortChange}>
-          <option value=''>기본 정렬</option>
-          <option value='start_date_asc'>시작일 오름차순</option>
-          <option value='start_date_desc'>시작일 내림차순</option>
-          <option value='wage_asc'>시급 오름차순</option>
-          <option value='wage_desc'>시급 내림차순</option>
-        </select>
-      </div>
+      {alertComponent}
+
       <div className={styles.card_wrapper}>
-        {sortedData?.length > 0 ? (
-          sortedData?.map((item) => (
+        {data?.length > 0 ? (
+          data?.map((eachData) => (
             <SearchResultCard
-              data={item}
-              key={item.id}
-              showDetail={() => handleShowModal(item)}
+              data={eachData}
+              key={eachData.id}
+              showDetail={() => handleShowModal(eachData)}
               handleApply={handleApply}
             />
           ))
         ) : (
-          <div className='no_result'>검색 결과가 없습니다.</div>
+          <div className='no_result'>{isError ? '검색에 실패했습니다.' : '검색 결과가 없습니다.'}</div>
         )}
       </div>
       {isModalVisible && (

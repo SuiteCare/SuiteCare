@@ -1,8 +1,8 @@
-import styles from './SearchResultCard.module.css';
+import styles from './OfferedRecruitmentCard.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
-const SearchResultCard = ({ data, showDetail, handleApply }) => {
+const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
   const dueDate = Math.ceil((new Date(data.expire_at) - new Date()) / (1000 * 3600 * 24));
 
   const dataDayArr = data.day.split(',');
@@ -11,6 +11,12 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
 
   const expiredAlert = () => {
     alert('만료된 간병입니다.');
+  };
+
+  const statusDict = {
+    P: '검토 중',
+    R: '지원 탈락',
+    C: '지원 취소',
   };
 
   return (
@@ -85,14 +91,14 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
       {/* body */}
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
+        <div className={styles.status}>{statusDict[data.status]}</div>
+
         <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
           상세정보 보기
         </button>
-        {handleApply && (
-          <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
-            간병 지원하기
-          </button>
-        )}
+        <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
+          지원 취소하기
+        </button>
       </div>
 
       {/* bottom */}
@@ -100,4 +106,4 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
   );
 };
 
-export default SearchResultCard;
+export default OfferedRecruitmentCard;

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -48,7 +47,7 @@ const ReservationPatientInfo = ({ styles, fullData }) => {
           </div>
 
           <div className={`${styles.info_wrapper}`}>
-            <label>나이/성별</label>
+            <label>나이</label>
             <span>
               만 {calAge(fullData.patient.birthday)}세 {genderToKo(fullData.patient.gender)}성
             </span>

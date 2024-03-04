@@ -13,7 +13,7 @@ const JobSearchForm = ({ onSearch }) => {
     gender: { F: false, M: false },
     weekdays: Array(7).fill(true),
     worktime: ['09:00', '18:00'],
-    wage: [15000, 100000],
+    wage: [minWage, 100000],
   });
 
   const [searchInput, setSearchInput] = useState('');
