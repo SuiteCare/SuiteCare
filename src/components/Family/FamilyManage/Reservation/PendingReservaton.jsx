@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
 
@@ -18,6 +18,7 @@ const PendingReservation = ({ data }) => {
   const { id } = useLoginInfo();
 
   const { isError, isLoading, patientList } = usePatientList(id);
+  const [patientInfo, setPatientInfo] = useState();
 
   const { isModalVisible, openModal, closeModal } = useModal();
   const [modalData, setModalData] = useState({});
@@ -65,16 +66,24 @@ const PendingReservation = ({ data }) => {
   } = useQuery(
     ['mateList', selectedRecId],
     async () => {
-      const { matedata } = await axiosInstance.get('/api/v1/applicant-list', {
-        params: { reservation_id: selectedRecId },
+      const response = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/applicants`, {
+        params: { recruitment_id: selectedRecId },
       });
-      console.log('mateList', selectedRecId, data);
-      return data;
+      console.log('mateList', selectedRecId, response.data);
+      return response.data;
     },
     {
       enabled: Boolean(selectedRecId),
     },
   );
+
+  useEffect(() => {
+    console.log('mateList', mateList);
+  }, [mateList]);
+
+  useEffect(() => {
+    console.log('recruitmentList', recruitmentList);
+  }, [recruitmentList]);
 
   const selectRecruitment = ($id) => recruitmentList?.find((e) => e.id === $id);
   const selectPatient = ($id) => patientList?.filter((e) => e.id === $id)[0];
@@ -87,7 +96,7 @@ const PendingReservation = ({ data }) => {
         navigator.push('/family/addpatient');
       }
     } else {
-      const selectedRecruitment = recruitmentList?.find((v) => v.reservation_id === +newValue);
+      const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);
       const selectedPatient = selectPatient(selectedRecruitment?.patient_id);
 
       setRecruitmentSelectedInfo((prevData) => ({
@@ -96,7 +105,7 @@ const PendingReservation = ({ data }) => {
         ...selectedPatient,
       }));
 
-      setSelectedRecId(selectedRecruitment?.reservation_id);
+      setSelectedRecId(selectedRecruitment?.id);
     }
   };
 
@@ -116,48 +125,45 @@ const PendingReservation = ({ data }) => {
         <select onChange={handleSelectChange}>
           <option onSelect={handleReset}>간병공고 선택</option>
           {recruitmentList?.map((e) => (
-            <option key={e.recruitment_id} value={e.recruitment_id}>
+            <option key={e.id} value={e.id}>
               {e.patient_name} | {e.start_date} ~ {e.end_date}
             </option>
           ))}
           <option value='add'>새로운 간병 공고 등록하기</option>
         </select>
       </div>
+
       <hr />
+
+      <h3>지원한 간병인(Mate) 리스트</h3>
+
       <div className={styles.ManageTable}>
         <table>
           <thead>
             <tr>
+              <th>아이디</th>
               <th>성명</th>
-              <th>진단명</th>
-              <th>날짜</th>
-              <th>요일</th>
-              <th>시간</th>
+              <th>성별</th>
               <th>지역</th>
-              <th>제시시급</th>
-              <th>공고 상세정보</th>
+              <th>주요 서비스</th>
+              <th>간병인 상세정보</th>
             </tr>
           </thead>
           <tbody>
-            {data?.lenth === 0 ? (
+            {mateList?.length === 0 ? (
               <tr>
-                <td colSpan={8}>
-                  <div className='error'>등록한 공고가 없습니다.</div>
+                <td colSpan={6}>
+                  <div className='error'>아직 지원한 간병인이 없습니다.</div>
                 </td>
               </tr>
             ) : (
-              data?.map((e, index) => (
-                <tr key={e}>
-                  <td>{e.patient_name}</td>
-                  <td>{e.patient_diagnosis_name}</td>
-                  <td>
-                    {e.start_date} ~ {e.end_date}
-                  </td>
-                  <td>{e.weekday}</td>
-                  <td>
-                    {e.start_time} ~ {e.end_time}
-                  </td>
+              mateList?.map((e) => (
+                <tr key={e.id}>
+                  <td>{e.id}</td>
+                  <td>{e.name}</td>
+                  <td>{e.gender}</td>
                   <td>{e.location}</td>
+                  <td>{e.mainservice}</td>
                   <td>
                     <button type='button' onClick={() => handleDetailClick(e)}>
                       상세정보 보기
@@ -169,7 +175,7 @@ const PendingReservation = ({ data }) => {
           </tbody>
         </table>
       </div>
-      {recruitmentList?.reservation_id ? (
+      {recruitmentList?.recruitment_id ? (
         <PendingReservationCard data={recruitmentList} mateList={mateList} />
       ) : (
         <div className='no_result'>정보를 확인할 간병 공고를 선택하세요.</div>
