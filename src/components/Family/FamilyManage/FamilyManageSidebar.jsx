@@ -21,7 +21,7 @@ const FamilyManageSidebar = ({ activeMenu }) => {
         <Link href={`${defaultUrl}/pending_payments`}>결제 대기 목록</Link>
       </div>
       <div className={`${styles.menu} ${activeMenu === 'history' ? styles.active : ''}`}>
-        <Link href={`${defaultUrl}/history`}>간병 신청 내역</Link>
+        <Link href={`${defaultUrl}/history`}>전체 내역</Link>
       </div>
     </div>
   );
