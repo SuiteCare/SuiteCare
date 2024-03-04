@@ -158,7 +158,7 @@ const FamilyAddPatient = ({ idQuery }) => {
     }
   };
 
-  const handleKeyPress = (e) => random(e, formData, setFormData);
+  const handleKeyPress = (e) => random(e, formData, setFormData); // 테스트용 코드
 
   useEffect(() => {
     if (idQuery) getPatientData();
