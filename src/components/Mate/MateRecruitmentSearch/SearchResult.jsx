@@ -50,7 +50,7 @@ const SearchResult = ({ data }) => {
   const MateJobApplication = async (body) => {
     try {
       const response = await axiosInstance.post('/api/v1/apply', body);
-      if (!response || !response.data) {
+      if ((!response || !response.data) && response.data !== 0) {
         openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
         throw new Error('No data received');
       }
