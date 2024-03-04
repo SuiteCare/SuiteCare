@@ -3,10 +3,11 @@ import { useState } from 'react';
 import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 import FormAgeList from '@/components/Common/SearchInfo/FormAgeList';
+import PatientSelector from './PatientSelector';
 
 import { minWage } from '@/utils/calculators';
 
-const SearchForm = ({ onSearch }) => {
+const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
   // 체크박스 및 최종 데이터 관련
   const [formData, setFormData] = useState({
     search_name: '',
@@ -125,6 +126,13 @@ const SearchForm = ({ onSearch }) => {
 
   return (
     <div className={`${styles.SearchForm} Form_wide`}>
+      <div className={styles.patient_selector}>
+        <PatientSelector patientInfo={patientInfo} setPatientInfo={setPatientInfo} setFormData={setFormData} />
+        <span>✔️환자를 선택하시면 스위트케어가 추천하는 메이트를 만나보실 수 있습니다.</span>
+      </div>
+
+      <hr />
+
       <form name='search_form' onSubmit={handleSubmit}>
         <div className='input_wrapper'>
           <label>메이트 아이디 검색</label>

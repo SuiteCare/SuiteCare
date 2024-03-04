@@ -50,7 +50,7 @@ const SearchResult = ({ data }) => {
   const MateJobApplication = async (body) => {
     try {
       const response = await axiosInstance.post('/api/v1/apply', body);
-      if (!response || !response.data) {
+      if ((!response || !response.data) && response.data !== 0) {
         openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
         throw new Error('No data received');
       }
@@ -64,13 +64,16 @@ const SearchResult = ({ data }) => {
   const mutation = useMutation(MateJobApplication, {
     onSuccess: (applicationResult) => {
       const messages = {
-        0: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?',
+        0: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.',
         1: '간병 지원이 완료되었습니다.',
         2: '이미 지원한 공고입니다.',
         default: '오류가 발생했습니다. 간병 지원에 실패했습니다.',
       };
       const message = messages[applicationResult] || messages.default;
-      if (applicationResult === 0 && window.confirm(message)) {
+      if (
+        applicationResult === 0 &&
+        window.confirm(`간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?`)
+      ) {
         router.push('/mate/mypage/resume');
       } else {
         openAlert(message);

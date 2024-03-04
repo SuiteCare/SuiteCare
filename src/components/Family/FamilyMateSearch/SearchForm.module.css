@@ -4,8 +4,17 @@
   margin-bottom: 6rem;
 }
 
-.input_wrapper {
-  grid-template-columns: 100px 1fr;
+.patient_selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.patient_selector span {
+  position: relative;
+  top: -0.5rem;
+  font-size: 0.9rem;
 }
 
 .checkbox_list_wrapper {

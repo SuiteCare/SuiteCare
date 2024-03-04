@@ -348,13 +348,13 @@ input::-moz-focus-inner {
   margin: 0 auto;
 }
 
-form .input_wrapper {
+.input_wrapper {
   display: grid;
   grid-template-columns: 200px 1fr;
   align-items: center;
 }
 
-form .input_with_button {
+.input_with_button {
   display: grid;
   grid-template-columns: 1fr 8rem;
   gap: 1rem;
