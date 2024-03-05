@@ -11,20 +11,88 @@ import cardstyles from './PendingReservation.module.css';
 import styles from '@/components/Common/ManageTable.module.css';
 import PendingReservationCard from './PendingReservationCard';
 import Loading from '@/components/Common/Modal/Loading';
+import PatientDetailModal from './PatientDetailModal';
 
 const PendingReservation = ({ data }) => {
   const navigator = useRouter();
+
+  const { isModalVisible, openModal, closeModal } = useModal();
+  const [modalData, setModalData] = useState({});
 
   const { id } = useLoginInfo();
 
   const { isError, isLoading, patientList } = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
-  const { isModalVisible, openModal, closeModal } = useModal();
-  const [modalData, setModalData] = useState({});
   const [recruitmentSelectedInfo, setRecruitmentSelectedInfo] = useState({});
 
   const [selectedRecId, setSelectedRecId] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+
+  const {
+    data: recruitmentList,
+    isError: isRecListError,
+    isLoading: isRecListLoading,
+  } = useQuery(
+    ['reservationList', id],
+    async () => {
+      const { data: recruitmentData } = await axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
+      return recruitmentData.reverse();
+    },
+    {
+      enabled: Boolean(id),
+    },
+  );
+
+  useEffect(() => {
+    console.log('recruitmentList', recruitmentList);
+  }, [recruitmentList]);
+
+  const {
+    data: mateList,
+    isError: isMateListError,
+    isLoading: isMateListLoading,
+  } = useQuery(
+    ['mateList', selectedRecId],
+    async () => {
+      const { data: mateData } = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`, {
+        params: {
+          recruitment_id: selectedRecId,
+        },
+      });
+      console.log('mateList', selectedRecId, mateData);
+      return mateData;
+    },
+    {
+      enabled: Boolean(selectedRecId),
+    },
+  );
+
+  useEffect(() => {
+    console.log('mateList', mateList);
+  }, [mateList]);
+
+  const handleSelectChange = (e) => {
+    const newValue = e.target.value;
+
+    if (newValue === 'add') {
+      if (window.confirm('새로운 간병예약 신청 페이지로 이동하시겠습니까?')) {
+        navigator.push('/family/addpatient');
+      }
+    } else {
+      const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);
+      const selectPatient = selectedRecruitment.patient_name;
+
+      setRecruitmentSelectedInfo((prevData) => ({
+        ...prevData,
+        ...selectedRecruitment,
+        ...selectedPatient,
+      }));
+
+      setSelectedRecId(selectedRecruitment?.id);
+      setSelectedPatient(selectPatient);
+    }
+  };
 
   const getPatientDetail = async ($event) => {
     setModalData($event);
@@ -44,82 +112,23 @@ const PendingReservation = ({ data }) => {
     }
   };
 
-  const {
-    data: recruitmentList,
-    isError: isRecListError,
-    isLoading: isRecListLoading,
-  } = useQuery(
-    ['reservationList', id],
-    async () => {
-      const { data } = await axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
-      return data.reverse();
-    },
-    {
-      enabled: Boolean(id),
-    },
-  );
-
-  const {
-    data: mateList,
-    isError: isMateListError,
-    isLoading: isMateListLoading,
-  } = useQuery(
-    ['mateList', selectedRecId],
-    async () => {
-      const response = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/applicants`, {
-        params: { recruitment_id: selectedRecId },
-      });
-      console.log('mateList', selectedRecId, response.data);
-      return response.data;
-    },
-    {
-      enabled: Boolean(selectedRecId),
-    },
-  );
-
-  useEffect(() => {
-    console.log('mateList', mateList);
-  }, [mateList]);
-
-  useEffect(() => {
-    console.log('recruitmentList', recruitmentList);
-  }, [recruitmentList]);
-
-  const selectRecruitment = ($id) => recruitmentList?.find((e) => e.id === $id);
-  const selectPatient = ($id) => patientList?.filter((e) => e.id === $id)[0];
-
-  const handleSelectChange = (e) => {
-    const newValue = e.target.value;
-
-    if (newValue === 'add') {
-      if (window.confirm('새로운 간병예약 신청 페이지로 이동하시겠습니까?')) {
-        navigator.push('/family/addpatient');
-      }
-    } else {
-      const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);
-      const selectedPatient = selectPatient(selectedRecruitment?.patient_id);
-
-      setRecruitmentSelectedInfo((prevData) => ({
-        ...prevData,
-        ...selectedRecruitment,
-        ...selectedPatient,
-      }));
-
-      setSelectedRecId(selectedRecruitment?.id);
-    }
+  const handlePatientDetailClick = ($event) => {
+    getPatientDetail($event);
+    openModal();
   };
 
-  const handleReset = () => {
-    window.location.reload();
-  };
   const handleDetailClick = ($event) => {
     getPatientDetail($event);
     openModal();
   };
 
+  const handleReset = () => {
+    window.location.reload();
+  };
+
   return (
     <div className={cardstyles.PendingReservation}>
-      {isLoading || isRecListLoading || isMateListLoading ? <Loading /> : ''}
+      {isLoading || isRecListLoading || isMateListLoading ? <Loading /> : null}
       <div className={`${cardstyles.select_reservation} input_wrapper`}>
         <label>간병공고 목록</label>
         <select onChange={handleSelectChange}>
@@ -135,48 +144,63 @@ const PendingReservation = ({ data }) => {
 
       <hr />
 
-      <h3>지원한 간병인(Mate) 리스트</h3>
-
-      <div className={styles.ManageTable}>
-        <table>
-          <thead>
-            <tr>
-              <th>아이디</th>
-              <th>성명</th>
-              <th>성별</th>
-              <th>지역</th>
-              <th>주요 서비스</th>
-              <th>간병인 상세정보</th>
-            </tr>
-          </thead>
-          <tbody>
-            {mateList?.length === 0 ? (
-              <tr>
-                <td colSpan={6}>
-                  <div className='error'>아직 지원한 간병인이 없습니다.</div>
-                </td>
-              </tr>
-            ) : (
-              mateList?.map((e) => (
-                <tr key={e.id}>
-                  <td>{e.id}</td>
-                  <td>{e.name}</td>
-                  <td>{e.gender}</td>
-                  <td>{e.location}</td>
-                  <td>{e.mainservice}</td>
-                  <td>
-                    <button type='button' onClick={() => handleDetailClick(e)}>
-                      상세정보 보기
-                    </button>
-                  </td>
+      {selectedRecId ? (
+        <>
+          <div className={cardstyles.button_wrapper}>
+            <button type='button' onClick={() => handlePatientDetailClick(selectedPatient)}>
+              환자 정보 보기
+            </button>
+            <button type='button' className={cardstyles.second_button}>
+              공고 정보 보기
+            </button>
+          </div>
+          <br />
+          <h3>지원한 간병인 리스트</h3>
+          <div className={styles.ManageTable}>
+            <table>
+              <thead>
+                <tr>
+                  <th>아이디</th>
+                  <th>성명</th>
+                  <th>성별</th>
+                  <th>지역</th>
+                  <th>주요 서비스</th>
+                  <th>간병인 상세정보</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-      {recruitmentList?.recruitment_id ? (
-        <PendingReservationCard data={recruitmentList} mateList={mateList} />
+              </thead>
+              <tbody>
+                {mateList?.length === 0 ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className='error'>아직 지원한 간병인이 없습니다.</div>
+                    </td>
+                  </tr>
+                ) : (
+                  mateList?.map((e) => (
+                    <tr key={e.mate_resume_id}>
+                      <td>{e.mate_resume_id}</td>
+                      <td>{e.name}</td>
+                      <td>{e.gender === 'M' ? '남성' : '여성'}</td>
+                      <td>{e.location}</td>
+                      <td>{e.mainservice}</td>
+                      <td>
+                        <button type='button' onClick={() => handleDetailClick(e)}>
+                          상세정보 보기
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+              </tbody>
+            </table>
+            {isModalVisible && <PatientDetailModal modalData={modalData} closeModal={closeModal} />}
+          </div>
+        </>
       ) : (
         <div className='no_result'>정보를 확인할 간병 공고를 선택하세요.</div>
       )}

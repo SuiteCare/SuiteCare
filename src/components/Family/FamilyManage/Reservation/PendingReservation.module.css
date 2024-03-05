@@ -12,3 +12,28 @@
 .PendingReservation select {
   min-width: 25rem;
 }
+
+.button_wrapper {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: flex-end;
+  flex-direction: row;
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.button {
+  height: fit-content;
+  padding: 5px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.second_button {
+  background-color: var(--deep-brown);
+}
+
+.second_button:hover {
+  background-color: var(--brown-01);
+}
