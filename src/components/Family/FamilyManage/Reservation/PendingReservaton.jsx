@@ -12,12 +12,21 @@ import styles from '@/components/Common/ManageTable.module.css';
 import PendingReservationCard from './PendingReservationCard';
 import Loading from '@/components/Common/Modal/Loading';
 import PatientDetailModal from './PatientDetailModal';
+import RecruitmentDetailModal from './RecruitmentDetailModal';
 
 const PendingReservation = ({ data }) => {
   const navigator = useRouter();
 
-  const { isModalVisible, openModal, closeModal } = useModal();
+  const { isModalVisible, openModal } = useModal();
+  const [selectedModal, setSelectedModal] = useState(null);
+
+  const closeModal = () => {
+    // 모달을 보이지 않게 하기 위해 상태를 초기화
+    setSelectedModal(null);
+  };
+
   const [modalData, setModalData] = useState({});
+  const [reModalData, setReModalData] = useState({});
 
   const { id } = useLoginInfo();
 
@@ -91,21 +100,33 @@ const PendingReservation = ({ data }) => {
 
       setSelectedRecId(selectedRecruitment?.id);
       setSelectedPatient(selectPatient);
+
+      console.log(selectedPatient);
     }
   };
 
   const getPatientDetail = async ($event) => {
     setModalData($event);
     try {
-      const patientPromise = axiosInstance.get(`/api/v1/patient/${$event.id}`);
-      const patientDetailPromise = axiosInstance.get(`/api/v1/patientDetail/${$event.id}`);
-
-      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
+      const patientResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
 
       setModalData((prevData) => ({
         ...prevData,
         ...patientResponse.data,
-        ...patientDetailResponse.data,
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getrecruitmentDetail = async ($event) => {
+    setReModalData($event);
+    try {
+      const recruitmentResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/detail`);
+
+      setReModalData((prevData) => ({
+        ...prevData,
+        ...recruitmentResponse.data,
       }));
     } catch (error) {
       console.error(error);
@@ -113,8 +134,17 @@ const PendingReservation = ({ data }) => {
   };
 
   const handlePatientDetailClick = ($event) => {
+    console.log('p', modalData);
     getPatientDetail($event);
     openModal();
+    setSelectedModal('PatientDetail');
+  };
+
+  const handleRecruitmentDetailClick = ($event) => {
+    console.log('r', reModalData);
+    getrecruitmentDetail($event);
+    openModal();
+    setSelectedModal('RecruitmentDetail');
   };
 
   const handleDetailClick = ($event) => {
@@ -147,10 +177,14 @@ const PendingReservation = ({ data }) => {
       {selectedRecId ? (
         <>
           <div className={cardstyles.button_wrapper}>
-            <button type='button' onClick={() => handlePatientDetailClick(selectedPatient)}>
+            <button type='button' onClick={() => handlePatientDetailClick(selectedRecId)}>
               환자 정보 보기
             </button>
-            <button type='button' className={cardstyles.second_button}>
+            <button
+              type='button'
+              className={cardstyles.second_button}
+              onClick={() => handleRecruitmentDetailClick(selectedRecId)}
+            >
               공고 정보 보기
             </button>
           </div>
@@ -198,7 +232,16 @@ const PendingReservation = ({ data }) => {
                 <br />
               </tbody>
             </table>
-            {isModalVisible && <PatientDetailModal modalData={modalData} closeModal={closeModal} />}
+            {isModalVisible && (
+              <>
+                {selectedModal === 'PatientDetail' && (
+                  <PatientDetailModal modalData={modalData} closeModal={closeModal} />
+                )}
+                {selectedModal === 'RecruitmentDetail' && (
+                  <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
+                )}
+              </>
+            )}
           </div>
         </>
       ) : (
