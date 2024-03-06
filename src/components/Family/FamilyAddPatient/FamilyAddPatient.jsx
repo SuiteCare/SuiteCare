@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
-import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
@@ -11,8 +11,6 @@ import random from '@/utils/FamilyAddPatient';
 
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
-
-  const { id } = useLoginInfo();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -33,17 +31,12 @@ const FamilyAddPatient = ({ idQuery }) => {
     notice: '',
   });
 
-  // 정보 받아옴
   const getPatientData = async () => {
     try {
-      const patientPromise = axiosInstance.get(`/api/v1/patient/${idQuery}`, {
-        params: { id: idQuery },
-      });
-      const patientDetailPromise = axiosInstance.get(`/api/v1/patientDetail/${idQuery}`, {
-        params: { id: idQuery },
-      });
-
-      const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
+      const [patientResponse, patientDetailResponse] = await Promise.all([
+        axiosInstance.get(`/api/v1/patient/${idQuery}`, { params: { id: idQuery } }),
+        axiosInstance.get(`/api/v1/patientDetail/${idQuery}`, { params: { id: idQuery } }),
+      ]);
 
       setFormData({
         ...patientResponse.data,
@@ -111,34 +104,29 @@ const FamilyAddPatient = ({ idQuery }) => {
     );
   };
 
-  // 정보 백엔드로 전달
+  const mutation = useMutation((body) => {
+    return idQuery
+      ? axiosInstance.patch(`/api/v1/patient/${idQuery}`, body)
+      : axiosInstance.post('/api/v1/patient', body);
+  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const body = {
       ...formData,
     };
-    console.log(body);
 
     try {
-      const response = idQuery
-        ? await axiosInstance.patch(`/api/v1/patient/${idQuery}`, body)
-        : await axiosInstance.post('/api/v1/patient', body);
-
-      if (response.data === 1) {
-        if (idQuery) {
-          if (window.confirm(`${body.name} 님의 환자 정보가 수정되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
-            return navigator.push('/family/manage/patient_list');
-          }
-          navigator.push('/family/main');
-        } else {
-          alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
-          navigator.push('/family/main');
+      await mutation.mutateAsync(body);
+      if (idQuery) {
+        if (window.confirm(`${body.name} 님의 환자 정보가 수정되었습니다. 환자 목록으로 이동하시겠습니까?`)) {
+          return navigator.push('/family/manage/patient_list');
         }
-      } else if (idQuery) {
-        alert('환자 정보 수정에 실패하였습니다.');
+        navigator.push('/family/main');
       } else {
-        alert('환자 정보 등록에 실패하였습니다.');
+        alert(`${body.name} 님의 환자 정보가 등록되었습니다.`);
+        navigator.push('/family/main');
       }
     } catch (error) {
       console.error(error);
@@ -146,7 +134,6 @@ const FamilyAddPatient = ({ idQuery }) => {
     }
   };
 
-  // 정보 삭제
   const handleClickDelete = async (e) => {
     e.preventDefault();
 
@@ -155,21 +142,19 @@ const FamilyAddPatient = ({ idQuery }) => {
         `${formData.name}님의 환자 정보를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.\n또한, 환자를 삭제해도 기존에 등록한 공고 내역은 유지됩니다.`,
       )
     ) {
-      await axiosInstance
-        .delete(`/api/v1/patient/${idQuery}`, {
+      try {
+        const response = await axiosInstance.delete(`/api/v1/patient/${idQuery}`, {
           params: { id: idQuery },
-        })
-        .then((response) => {
-          if (response.data === 1) {
-            alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
-            navigator.push('/family/manage/patient_list');
-          } else {
-            alert('환자 정보 삭제에 실패하였습니다.');
-          }
-        })
-        .catch((error) => {
-          console.error(error);
         });
+        if (response.data === 1) {
+          alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
+          navigator.push('/family/manage/patient_list');
+        } else {
+          alert('환자 정보 삭제에 실패하였습니다.');
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -178,10 +163,10 @@ const FamilyAddPatient = ({ idQuery }) => {
   useEffect(() => {
     if (idQuery) getPatientData();
 
-    document.addEventListener('keydown', handleKeyPress); // 테스트용 코드
+    document.addEventListener('keydown', handleKeyPress);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyPress); // 테스트용 코드
+      document.removeEventListener('keydown', handleKeyPress);
     };
   }, [idQuery]);
 
