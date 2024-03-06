@@ -1,0 +1,15 @@
+.suggestion .info_section h3 {
+  text-align: left;
+}
+
+.suggestion .patient_info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: calc(100% - 2rem);
+  padding: 1rem 0;
+}
+
+.suggestion .info_section span {
+  top: 0 !important;
+}
