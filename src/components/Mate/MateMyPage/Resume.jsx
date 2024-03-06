@@ -36,6 +36,7 @@ const Resume = ({ data }) => {
   const { openAlert, alertComponent } = useAlert();
 
   const handleItemChange = (e, index, type) => {
+    console.log('여기서 orderId와 id 확인 필요', e.target);
     const { name, value } = e.target;
 
     setFormListData((prevFormData) => {

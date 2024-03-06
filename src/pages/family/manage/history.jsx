@@ -10,7 +10,7 @@ const FamilyHistoryPage = () => {
         <FamilyManageSidebar activeMenu='history' />
         <div className='content_wrapper'>
           <div className='title_wrapper'>
-            <h1>간병 신청 내역</h1>
+            <h1>전체 내역</h1>
             <span>내가 현재까지 신청한 간병 서비스 내역을 확인할 수 있습니다.</span>
           </div>
           <FamilyHistory />

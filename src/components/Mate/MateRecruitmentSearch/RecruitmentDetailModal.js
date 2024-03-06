@@ -6,7 +6,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
-const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
+const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -112,7 +112,7 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
 
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
-                  <label>나이/성별</label>
+                  <label>나이</label>
                   <span>만 {calAge(modalData.patient_birthday)}세</span>
                 </div>
 
@@ -193,13 +193,15 @@ const JobDetailModal = ({ modalData, closeModal, handleApply }) => {
         {/* 끝 */}
 
         <div className={styles.button_wrapper}>
-          <button type='submit' onClick={() => handleApply(modalData.id)}>
-            간병 지원하기
-          </button>
+          {handleApply && (
+            <button type='submit' onClick={() => handleApply(modalData.id)}>
+              간병 지원하기
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default JobDetailModal;
+export default RecruitmentDetailModal;
