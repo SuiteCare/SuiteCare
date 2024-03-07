@@ -11,7 +11,7 @@ const MateOfferPage = () => {
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>간병 요청 목록</h1>
-            <span>나에게 직접 요청한 간병 공고 목록을 확인할 수 있습니다.</span>
+            <span>패밀리가 나에게 간병을 요청한 공고 목록을 확인할 수 있습니다.</span>
           </div>
           <MateOffer />
         </div>

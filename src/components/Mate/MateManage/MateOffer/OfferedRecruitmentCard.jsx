@@ -13,18 +13,12 @@ const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
     alert('만료된 간병입니다.');
   };
 
-  const statusDict = {
-    P: '검토 중',
-    R: '지원 탈락',
-    C: '지원 취소',
-  };
-
   return (
     <div className={`${styles.card} ${dueDate <= 0 ? styles.expired : ''}`}>
       <div className={styles.top}>
         <span className={data.location === '병원' ? styles.hospital : styles.home}>{data.location}</span>
         <span className={styles.dday}>
-          지원 마감
+          공고 마감
           {dueDate > 0 ? (
             <>
               까지 <b>D-{dueDate}</b>
@@ -35,12 +29,12 @@ const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
         </span>
       </div>
       {/* title */}
+      <div className={styles.title}>
+        <label>{data.road_address}</label>
+      </div>
+      {/* title */}
+      {/* body */}
       <div className={styles.userInfo_wrapper}>
-        <div className={styles.title}>
-          <label>{data.road_address}</label>
-        </div>
-        {/* title */}
-        {/* body */}
         <div className={styles.userInfo}>
           <label>진단명</label>
           <span>{data.patient_diagnosis_name}</span>
@@ -91,13 +85,18 @@ const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
       {/* body */}
       {/* bottom */}
       <div className={styles.search_button_wrapper}>
-        <div className={styles.status}>{statusDict[data.status]}</div>
-
         <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
           상세정보 보기
         </button>
+        {data.status === 'P' ? (
+          <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
+            요청 수락하기
+          </button>
+        ) : (
+          <button>요청 취소됨</button>
+        )}
         <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
-          지원 취소하기
+          요청 거절하기
         </button>
       </div>
 
