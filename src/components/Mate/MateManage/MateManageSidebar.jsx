@@ -9,14 +9,14 @@ const MateManageSidebar = ({ activeMenu }) => {
       <div className={`${styles.menu} ${activeMenu === 'calendar' ? styles.active : ''}`}>
         <Link href='/mate/manage/calendar'>내 일정 정보</Link>
       </div>
-      <div className={`${styles.menu} ${activeMenu === 'request' ? styles.active : ''}`}>
-        <Link href='/mate/manage/request'>나에게 들어온 신청</Link>
+      <div className={`${styles.menu} ${activeMenu === 'offer' ? styles.active : ''}`}>
+        <Link href='/mate/manage/offer'>간병 요청 목록</Link>
       </div>
-      <div className={`${styles.menu} ${activeMenu === 'recruitment' ? styles.active : ''}`}>
-        <Link href='/mate/manage/recruitment'>공고 지원 목록</Link>
+      <div className={`${styles.menu} ${activeMenu === 'apply' ? styles.active : ''}`}>
+        <Link href='/mate/manage/apply'>공고 지원 목록</Link>
       </div>
       <div className={`${styles.menu} ${activeMenu === 'history' ? styles.active : ''}`}>
-        <Link href='/mate/manage/history'>간병 수행 내역</Link>
+        <Link href='/mate/manage/history'>전체 내역</Link>
       </div>
     </div>
   );

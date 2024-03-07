@@ -8,6 +8,8 @@ import SearchResult from './SearchResult';
 import Loading from '@/components/Common/Modal/Loading';
 
 const FamilyMateSearch = () => {
+  const [patientInfo, setPatientInfo] = useState();
+
   const [suggestionData, setSuggestionData] = useState({});
 
   const getSuggestionData = () => {
@@ -15,6 +17,7 @@ const FamilyMateSearch = () => {
   };
 
   useEffect(() => {
+    console.log('patientInfo', patientInfo);
     // setSuggestionData(getSuggestionData())
     setSuggestionData([
       {
@@ -44,7 +47,7 @@ const FamilyMateSearch = () => {
         care_times: 331,
       },
     ]);
-  }, []);
+  }, [patientInfo]);
 
   const [condition, setCondition] = useState({});
 
@@ -70,19 +73,32 @@ const FamilyMateSearch = () => {
     setCondition($condition);
   };
 
+  const renderSearchMessage = () => {
+    if (searchData && searchData.length > 0) {
+      return `${searchData.length}명의 메이트님을 찾았습니다. 지금 간병을 신청해 보세요!`;
+    }
+    return '나에게 꼭 맞는 메이트님을 찾아보세요!';
+  };
+
   return (
     <div className='FamilyMateSearch content_wrapper'>
       {isLoading && <Loading />}
-      <SearchForm onSearch={handleSearch} />
+
+      <SearchForm onSearch={handleSearch} patientInfo={patientInfo} setPatientInfo={setPatientInfo} />
+      <h3>{renderSearchMessage()}</h3>
       {isError ? (
-        <>
-          <h3>나에게 꼭 맞는 메이트님을 찾아보세요!</h3>
-          <div className='no_result'>검색에 실패했습니다.</div>
-        </>
+        <div className='no_result'>검색에 실패했습니다.</div>
       ) : (
         <SearchResult data={searchData} type='search' />
       )}
-      <SearchResult data={suggestionData} type='suggestion' />
+      {patientInfo ? (
+        <div style={{ marginTop: '6rem' }}>
+          <h3>스위트케어가 추천하는 메이트</h3>
+          <SearchResult data={suggestionData} type='suggestion' />
+        </div>
+      ) : (
+        ''
+      )}
     </div>
   );
 };

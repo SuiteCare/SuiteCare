@@ -112,6 +112,7 @@ table {
 
 :root {
   --beige-01: #dfd7bf;
+  --beige-02: #ded4c5;
   --transparent-beige-50: #dfd7bf50;
   --transparent-beige: #dfd7bf25;
   --brown-01: #a4907c;
@@ -348,13 +349,13 @@ input::-moz-focus-inner {
   margin: 0 auto;
 }
 
-form .input_wrapper {
+.input_wrapper {
   display: grid;
   grid-template-columns: 200px 1fr;
   align-items: center;
 }
 
-form .input_with_button {
+.input_with_button {
   display: grid;
   grid-template-columns: 1fr 8rem;
   gap: 1rem;

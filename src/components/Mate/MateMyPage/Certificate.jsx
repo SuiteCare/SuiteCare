@@ -5,22 +5,23 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
     setFormData((prevFormData) => {
       const lastCertificate = prevFormData.certificateList[prevFormData.certificateList.length - 1];
       const newCertificate = {
-        id: (lastCertificate ? lastCertificate.id : 0) + 1,
+        orderId: (lastCertificate ? lastCertificate.orderId : 0) + 1,
       };
       return { ...prevFormData, certificateList: [...(prevFormData.certificateList || []), newCertificate] };
     });
   };
 
-  const deleteCertificate = (id) => {
+  const deleteCertificate = (orderId) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, certificateList: prevFormData.certificateList.filter((it) => it.id !== id) };
+      return { ...prevFormData, certificateList: prevFormData.certificateList.filter((it) => it.orderId !== orderId) };
     });
   };
 
   const renderCertificateItem = (certificateItem, index) => (
-    <tr key={certificateItem.id}>
+    <tr key={certificateItem.orderId}>
       <td>
         <input
+          id={certificateItem.id}
           name='name'
           type='text'
           placeholder='자격증명'
@@ -54,7 +55,7 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
         />
       </td>
       <td>
-        <button type='button' onClick={() => deleteCertificate(certificateItem.id)} />
+        <button type='button' onClick={() => deleteCertificate(certificateItem.orderId)} />
       </td>
     </tr>
   );

@@ -5,15 +5,15 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
     setFormData((prevFormData) => {
       const lastCareer = prevFormData.careerList[prevFormData.careerList.length - 1];
       const newCareer = {
-        id: (lastCareer ? lastCareer.id : 0) + 1,
+        orderId: (lastCareer ? lastCareer.orderId : 0) + 1,
       };
       return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
     });
   };
 
-  const deleteCareer = (id) => {
+  const deleteCareer = (orderId) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.id !== id) };
+      return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.orderId !== orderId) };
     });
   };
 
@@ -26,7 +26,10 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
   };
 
   const renderCareerItem = (careerItem, index) => (
-    <tr key={careerItem.id}>
+    <tr key={careerItem.orderId}>
+      <td>
+        order: {careerItem.orderId} / id: {careerItem.id}
+      </td>
       <td>
         <select
           defaultValue={careerItem.job_name}
@@ -74,7 +77,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
         />
       </td>
       <td>
-        <button type='button' onClick={() => deleteCareer(careerItem.id)} />
+        <button type='button' onClick={() => deleteCareer(careerItem.orderId)} />
       </td>
     </tr>
   );

@@ -164,7 +164,9 @@ const SignUpForm = ({ type }) => {
       const response = await axiosInstance.post('/api/v1/signup', body);
       if (response.data) {
         openAlert('회원가입이 완료되었습니다.');
-        navigator.push(`/${type}/login`);
+        setTimeout(() => {
+          navigator.push(`/${type}/login`);
+        }, 1000);
       } else {
         openAlert('회원가입에 실패하였습니다.');
       }
