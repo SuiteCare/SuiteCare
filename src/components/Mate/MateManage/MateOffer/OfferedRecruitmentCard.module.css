@@ -96,10 +96,8 @@
 }
 
 .search_button_wrapper {
-  display: grid;
-  grid-template-columns: 2fr 3fr 3fr;
+  display: flex;
   gap: 10px;
-  flex-direction: column;
   justify-content: flex-end;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
@@ -111,17 +109,17 @@
   width: 100%;
 }
 
-.card button:nth-of-type(2) {
+button.confirm {
   background-color: var(--deep-brown);
 }
 
-.card button:last-of-type {
+button.reject {
   font-weight: 400;
   background-color: var(--light-gray);
   color: var(--deep-brown);
 }
 
-.card button:last-of-type:hover {
+button.reject:hover {
   filter: brightness(0.95);
 }
 

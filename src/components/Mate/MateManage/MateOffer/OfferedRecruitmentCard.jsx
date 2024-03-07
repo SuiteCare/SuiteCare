@@ -1,8 +1,15 @@
+import { useMutation } from 'react-query';
+
+import axiosInstance from '@/services/axiosInstance';
+import useLoginInfo from '@/hooks/useLoginInfo';
+
 import styles from './OfferedRecruitmentCard.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
-const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
+const OfferedRecruitmentCard = ({ data, showDetail }) => {
+  const { id } = useLoginInfo();
+
   const dueDate = Math.ceil((new Date(data.expire_at) - new Date()) / (1000 * 3600 * 24));
 
   const dataDayArr = data.day.split(',');
@@ -11,6 +18,81 @@ const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
 
   const expiredAlert = () => {
     alert('만료된 간병입니다.');
+  };
+
+  const mutationForConfirm = useMutation(async (body) => {
+    return axiosInstance.post('/api/v1/reservation', body);
+  });
+
+  const mutationForReject = useMutation(async (body) => {
+    return axiosInstance.patch('/api/v1/reject', body);
+  });
+
+  const handleConfirm = async (recruitment_id) => {
+    const body = { recruitment_id, mate_id: id, request_by: 'F' };
+    console.log('confirm', body);
+
+    try {
+      const response = await mutationForConfirm.mutateAsync(body);
+      if (response.data) {
+        alert('간병예약 컨펌 완료');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('요청을 처리하는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleReject = async (recruitment_id) => {
+    const body = { recruitment_id, mate_id: id, request_by: 'F' };
+    console.log('reject', body);
+
+    try {
+      const response = await mutationForReject.mutateAsync(body);
+      if (response.data) {
+        alert('간병 오퍼 거절 완료');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('요청을 처리하는 중 오류가 발생했습니다.');
+    }
+  };
+
+  const renderButton = ($status) => {
+    const buttons = {
+      P: (
+        <>
+          <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail()}>
+            상세정보 보기
+          </button>
+          <button
+            type='submit'
+            className={styles.confirm}
+            onClick={dueDate <= 0 ? expiredAlert : () => handleConfirm(data.recruitment_id)}
+          >
+            요청 수락하기
+          </button>
+          <button
+            type='submit'
+            className={styles.reject}
+            onClick={dueDate <= 0 ? expiredAlert : () => handleReject(data.recruitment_id)}
+          >
+            요청 거절하기
+          </button>
+        </>
+      ),
+      C: (
+        <>
+          <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail()}>
+            상세정보 보기
+          </button>
+          <button className={styles.confirm}>간병 예약 확정됨</button>
+        </>
+      ),
+      R: <button className={styles.reject}>요청 취소됨</button>,
+    };
+
+    return buttons[$status];
   };
 
   return (
@@ -84,21 +166,7 @@ const OfferedRecruitmentCard = ({ data, showDetail, handleApply }) => {
       </div>
       {/* body */}
       {/* bottom */}
-      <div className={styles.search_button_wrapper}>
-        <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
-          상세정보 보기
-        </button>
-        {data.status === 'P' ? (
-          <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
-            요청 수락하기
-          </button>
-        ) : (
-          <button>요청 취소됨</button>
-        )}
-        <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
-          요청 거절하기
-        </button>
-      </div>
+      <div className={styles.search_button_wrapper}>{renderButton(data.status)}</div>
 
       {/* bottom */}
     </div>
