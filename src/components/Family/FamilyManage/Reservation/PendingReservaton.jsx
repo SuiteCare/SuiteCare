@@ -71,6 +71,7 @@ const PendingReservation = ({ data }) => {
         },
       });
       console.log('mateList', selectedRecId, mateData);
+
       return mateData;
     },
     {
@@ -146,21 +147,23 @@ const PendingReservation = ({ data }) => {
     }
   };
 
-  const getMateDetail = async ($event) => {
-    setMaModalData($event);
+  const getMateDetail = async (mateId) => {
+    console.log(mateId);
     try {
-      const mateDetailResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`, {
-        params: {
-          recruitment_id: selectedRecId,
-        },
-      });
+      const mateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
+      const mateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
+
+      const [mateDetailResponse, mateDataResponse] = await Promise.all([mateDetailPromise, mateDataPromise]);
+
+      const matchedMate = mateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
 
       setMaModalData((prevData) => ({
         ...prevData,
         ...mateDetailResponse.data,
+        matchedMate: matchedMate ?? {},
       }));
 
-      console.log('m', maModalData);
+      console.log('ma', maModalData);
     } catch (error) {
       console.error(error);
     }
@@ -178,8 +181,8 @@ const PendingReservation = ({ data }) => {
     setSelectedModal('RecruitmentDetail');
   };
 
-  const handleMateDetailClick = ($event) => {
-    getMateDetail($event);
+  const handleMateDetailClick = (mateId) => {
+    getMateDetail(mateId);
     openModal();
     setSelectedModal('MateDetail');
   };

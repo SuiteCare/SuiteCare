@@ -2,7 +2,7 @@ import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 
-const MatetDetailModal = ({ maModalData, closeModal }) => {
+const MateDetailModal = ({ maModalData, closeModal }) => {
   const { handleContentClick } = useModal();
 
   return (
@@ -11,62 +11,61 @@ const MatetDetailModal = ({ maModalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {maModalData ? (
+        {maModalData.mateResume ? (
           <>
-            <h2>간병 지원자 {maModalData.name}님의 정보</h2>
+            <h2>간병 지원자 {maModalData.matchedMate.name}님의 정보</h2>
             <div className={styles.info_section}>
               <h5>등록된 공고 정보</h5>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
-                <span>{maModalData.profile_picture_filename}</span>
+                <span>{maModalData.matchedMate.profile_picture_filename}</span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>아이디</label>
-                <span>{maModalData.mate_resume_id}</span>
+                <span>{maModalData.matchedMate.mate_resume_id}</span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>전화번호</label>
-                <span>
-                  {maModalData.start_date} ~ {maModalData.end_date}
-                </span>
+                <span>{maModalData.matchedMate.tel}</span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>이메일</label>
-                <span>{maModalData.weekday}</span>
+                <span>{maModalData.matchedMate.email}</span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>연락 가능 시간</label>
                 <span>
-                  {maModalData.contact_time_start} ~ {maModalData.contact_time_end}
+                  {maModalData.matchedMate.contact_time_start} ~ {maModalData.matchedMate.contact_time_end}
                 </span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>성별</label>
                 <span>
-                  <span>{maModalData.gender}</span>
+                  <span>{maModalData.matchedMate.gender}</span>
                 </span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>연령</label>
                 <span>
-                  <span>{maModalData.birthday}</span>
+                  <span>{maModalData.matchedMate.birthday}</span>
                 </span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>활동 지역</label>
-                <span>{maModalData.location}</span>
+                <span>{maModalData.matchedMate.location}</span>
               </div>
-
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>주요 서비스</label>
-                <span>{maModalData.mainservice}</span>
+                <span>{maModalData.matchedMate.mainservice}</span>
+              </div>
+              <div className={`${styles.info_wrapper} ${styles.double}`}>
+                <label>보유 자격증</label>
+                <ul>
+                  {maModalData.certificateList.map((certificate) => (
+                    <li key={certificate.id}>
+                      {certificate.name} - {certificate.qualification_date}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
@@ -84,4 +83,4 @@ const MatetDetailModal = ({ maModalData, closeModal }) => {
   );
 };
 
-export default MatetDetailModal;
+export default MateDetailModal;
