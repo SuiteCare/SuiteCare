@@ -1,12 +1,16 @@
 import React from 'react';
 
-const Certificate = ({ formData, setFormData, handleItemChange }) => {
+const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }) => {
   const addCertificate = () => {
+    const lastCertificate = formData.certificateList[formData.certificateList.length - 1];
+    const newCertificate = {
+      orderId: (lastCertificate ? lastCertificate.orderId : 0) + 1,
+      id: null,
+    };
     setFormData((prevFormData) => {
-      const lastCertificate = prevFormData.certificateList[prevFormData.certificateList.length - 1];
-      const newCertificate = {
-        orderId: (lastCertificate ? lastCertificate.orderId : 0) + 1,
-      };
+      return { ...prevFormData, certificateList: [...(prevFormData.certificateList || []), newCertificate] };
+    });
+    setChangedData((prevFormData) => {
       return { ...prevFormData, certificateList: [...(prevFormData.certificateList || []), newCertificate] };
     });
   };
@@ -15,6 +19,23 @@ const Certificate = ({ formData, setFormData, handleItemChange }) => {
     setFormData((prevFormData) => {
       return { ...prevFormData, certificateList: prevFormData.certificateList.filter((it) => it.orderId !== orderId) };
     });
+
+    const deletedItem = formData.certificateList.filter((it) => it.orderId === orderId)[0];
+    if (deletedItem.id) {
+      setChangedData((prevFormData) => {
+        return {
+          ...prevFormData,
+          certificateList: [...(prevFormData.certificateList || []), { ...deletedItem, delete: true }],
+        };
+      });
+    } else {
+      setChangedData((prevFormData) => {
+        return {
+          ...prevFormData,
+          certificateList: prevFormData.certificateList.filter((it) => it.orderId !== orderId),
+        };
+      });
+    }
   };
 
   const renderCertificateItem = (certificateItem, index) => (

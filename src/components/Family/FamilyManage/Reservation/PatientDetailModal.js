@@ -7,9 +7,15 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 import { calAge, genderToKo } from '@/utils/calculators';
 
 const PatientDetailModal = ({ modalData, closeModal }) => {
-  const navigator = useRouter();
+  const router = useRouter();
 
   const { handleContentClick } = useModal();
+  const isFromRecruitment = router.asPath.includes('/reservation');
+
+  const getModalDataValue = (key) => {
+    const prefixedKey = `patient_${key}`;
+    return isFromRecruitment && modalData.hasOwnProperty(prefixedKey) ? modalData[prefixedKey] : modalData[key];
+  };
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -17,35 +23,35 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {modalData.consciousness_state ? (
+        {getModalDataValue('consciousness_state') ? (
           <>
-            <h2>{modalData.name}님의 환자 정보</h2>
+            <h2>{getModalDataValue('name')}님의 환자 정보</h2>
             <div className={styles.info_section}>
               <h5>환자 기본정보</h5>
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>진단명</label>
-                <span>{modalData.diagnosis_name}</span>
+                <span>{getModalDataValue('diagnosis_name')}</span>
               </div>
 
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>나이</label>
-                  <span>만 {calAge(modalData.birthday)}세</span>
+                  <span>만 {calAge(getModalDataValue('birthday'))}세</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>성별</label>
-                  <span>{genderToKo(modalData.gender)}성</span>
+                  <span>{genderToKo(getModalDataValue('gender'))}성</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>키</label>
-                  <span>{modalData.height} cm</span>
+                  <span>{getModalDataValue('height')} cm</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>몸무게</label>
-                  <span>{modalData.weight} kg</span>
+                  <span>{getModalDataValue('weight')} kg</span>
                 </div>
               </div>
             </div>
@@ -56,12 +62,12 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
               <div className={styles.info_grid}>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>의식 상태</label>
-                  <span>{modalData.consciousness_state}</span>
+                  <span>{getModalDataValue('consciousness_state')}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>식사 보조</label>
-                  <span>{modalData.meal_care_state}</span>
+                  <span>{getModalDataValue('meal_care_state')}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
@@ -71,37 +77,37 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>마비 상태</label>
-                  <span>{modalData.paralysis_state}</span>
+                  <span>{getModalDataValue('paralysis_state')}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>거동 상태</label>
-                  <span>{modalData.behavioral_state}</span>
+                  <span>{getModalDataValue('behavioral_state')}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>욕창</label>
-                  <span>{modalData.is_bedsore === 'Y' ? '있음' : '없음'}</span>
+                  <span>{getModalDataValue('is_bedsore') === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>석션</label>
-                  <span>{modalData.need_suction === 'Y' ? '있음' : '없음'}</span>
+                  <span>{getModalDataValue('need_suction') === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>주기적 외래 진료</label>
-                  <span>{modalData.need_outpatient === 'Y' ? '있음' : '없음'}</span>
+                  <span>{getModalDataValue('need_outpatient') === 'Y' ? '있음' : '없음'}</span>
                 </div>
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>야간 간병 필요</label>
-                  <span>{modalData.need_night_care === 'Y' ? '있음' : '없음'}</span>
+                  <span>{getModalDataValue('need_night_care') === 'Y' ? '있음' : '없음'}</span>
                 </div>
               </div>
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>비고</label>
-                <span className={styles.introduction}>{modalData.notice}</span>
+                <span className={styles.introduction}>{getModalDataValue('notice')}</span>
               </div>
               {/* 상세정보 끝 */}
             </div>

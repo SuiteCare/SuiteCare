@@ -1,12 +1,16 @@
 import React from 'react';
 
-const Career = ({ formData, setFormData, handleItemChange }) => {
+const Career = ({ formData, setFormData, setChangedData, handleItemChange }) => {
   const addCareer = () => {
+    const lastCareer = formData.careerList[formData.careerList.length - 1];
+    const newCareer = {
+      orderId: (lastCareer ? lastCareer.orderId : 0) + 1,
+      id: null,
+    };
     setFormData((prevFormData) => {
-      const lastCareer = prevFormData.careerList[prevFormData.careerList.length - 1];
-      const newCareer = {
-        orderId: (lastCareer ? lastCareer.orderId : 0) + 1,
-      };
+      return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
+    });
+    setChangedData((prevFormData) => {
       return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
     });
   };
@@ -15,6 +19,17 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
     setFormData((prevFormData) => {
       return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.orderId !== orderId) };
     });
+
+    const deletedItem = formData.careerList.filter((it) => it.orderId === orderId)[0];
+    if (deletedItem.id) {
+      setChangedData((prevFormData) => {
+        return { ...prevFormData, careerList: [...(prevFormData.careerList || []), { ...deletedItem, delete: true }] };
+      });
+    } else {
+      setChangedData((prevFormData) => {
+        return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.orderId !== orderId) };
+      });
+    }
   };
 
   const renderOptions = (options) => {
@@ -27,9 +42,6 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
 
   const renderCareerItem = (careerItem, index) => (
     <tr key={careerItem.orderId}>
-      <td>
-        order: {careerItem.orderId} / id: {careerItem.id}
-      </td>
       <td>
         <select
           defaultValue={careerItem.job_name}
