@@ -37,3 +37,7 @@
 .second_button:hover {
   background-color: var(--brown-01);
 }
+
+.table_margin {
+  margin-bottom: 200px;
+}

@@ -13,6 +13,7 @@ import PendingReservationCard from './PendingReservationCard';
 import Loading from '@/components/Common/Modal/Loading';
 import PatientDetailModal from './PatientDetailModal';
 import RecruitmentDetailModal from './RecruitmentDetailModal';
+import MateDetailModal from './MateDetailModal';
 
 const PendingReservation = ({ data }) => {
   const navigator = useRouter();
@@ -27,11 +28,11 @@ const PendingReservation = ({ data }) => {
 
   const [modalData, setModalData] = useState({});
   const [reModalData, setReModalData] = useState({});
+  const [maModalData, setMaModalData] = useState({});
 
   const { id } = useLoginInfo();
 
   const { isError, isLoading, patientList } = usePatientList(id);
-  const [patientInfo, setPatientInfo] = useState();
 
   const [recruitmentSelectedInfo, setRecruitmentSelectedInfo] = useState({});
 
@@ -108,48 +109,79 @@ const PendingReservation = ({ data }) => {
   const getPatientDetail = async ($event) => {
     setModalData($event);
     try {
-      const patientResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
+      const patientPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
+      const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
+      const [patientResponse, recruitmentDataResponse] = await Promise.all([patientPromise, recruitmentDataPromise]);
+      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
 
       setModalData((prevData) => ({
         ...prevData,
         ...patientResponse.data,
+        ...(recruitmentResponse || {}), // recruitmentResponse가 undefined이면 빈 객체를 병합
       }));
     } catch (error) {
       console.error(error);
     }
   };
 
-  const getrecruitmentDetail = async ($event) => {
+  const getRecruitmentDetail = async ($event) => {
     setReModalData($event);
     try {
-      const recruitmentResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/detail`);
+      const recruitmentdetailPromise = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/detail`);
+      const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
+      const [recruitmentdetailResponse, recruitmentDataResponse] = await Promise.all([
+        recruitmentdetailPromise,
+        recruitmentDataPromise,
+      ]);
+      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
 
       setReModalData((prevData) => ({
         ...prevData,
-        ...recruitmentResponse.data,
+        ...recruitmentdetailResponse.data,
+        ...(recruitmentResponse || {}),
       }));
+      console.log('r', reModalData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getMateDetail = async ($event) => {
+    setMaModalData($event);
+    try {
+      const mateDetailResponse = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`, {
+        params: {
+          recruitment_id: selectedRecId,
+        },
+      });
+
+      setMaModalData((prevData) => ({
+        ...prevData,
+        ...mateDetailResponse.data,
+      }));
+
+      console.log('m', maModalData);
     } catch (error) {
       console.error(error);
     }
   };
 
   const handlePatientDetailClick = ($event) => {
-    console.log('p', modalData);
     getPatientDetail($event);
     openModal();
     setSelectedModal('PatientDetail');
   };
 
   const handleRecruitmentDetailClick = ($event) => {
-    console.log('r', reModalData);
-    getrecruitmentDetail($event);
+    getRecruitmentDetail($event);
     openModal();
     setSelectedModal('RecruitmentDetail');
   };
 
-  const handleDetailClick = ($event) => {
-    getPatientDetail($event);
+  const handleMateDetailClick = ($event) => {
+    getMateDetail($event);
     openModal();
+    setSelectedModal('MateDetail');
   };
 
   const handleReset = () => {
@@ -188,10 +220,10 @@ const PendingReservation = ({ data }) => {
               공고 정보 보기
             </button>
           </div>
-          <br />
+          <span />
           <h3>지원한 간병인 리스트</h3>
           <div className={styles.ManageTable}>
-            <table>
+            <table className={cardstyles.table_margin}>
               <thead>
                 <tr>
                   <th>아이디</th>
@@ -218,18 +250,13 @@ const PendingReservation = ({ data }) => {
                       <td>{e.location}</td>
                       <td>{e.mainservice}</td>
                       <td>
-                        <button type='button' onClick={() => handleDetailClick(e)}>
+                        <button type='button' onClick={() => handleMateDetailClick(e.mate_resume_id)}>
                           상세정보 보기
                         </button>
                       </td>
                     </tr>
                   ))
                 )}
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
               </tbody>
             </table>
             {isModalVisible && (
@@ -239,6 +266,9 @@ const PendingReservation = ({ data }) => {
                 )}
                 {selectedModal === 'RecruitmentDetail' && (
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
+                )}
+                {selectedModal === 'MateDetail' && (
+                  <MateDetailModal maModalData={maModalData} closeModal={closeModal} />
                 )}
               </>
             )}
