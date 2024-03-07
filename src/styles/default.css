@@ -463,14 +463,14 @@ input[type='checkbox'] {
 /*  8. Page Design  --------------------------------------------------- */
 
 .content_wrapper {
-  padding-left: 8rem;
-  padding-right: 8rem;
-  margin-bottom: 2rem;
+  padding: 6rem;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .page_with_sidebar {
-  display: grid;
-  grid-template-columns: minmax(12rem, 16%) 1fr;
+  display: flex;
 }
 
 .title_wrapper span {
