@@ -2,16 +2,18 @@
   display: grid;
   max-width: 1200px;
   gap: 7rem 2rem;
-  margin: 6rem auto;
+  margin: 0 auto;
+  padding: 6rem 2rem;
 }
 
 .Main.Family {
   grid-template-columns: repeat(2, 1fr);
-  width: 90%;
+  width: 100%;
 }
 
 .Main.Mate {
   grid-template-columns: repeat(2, 1fr);
+  width: 100%;
 }
 
 .Main .MainCard {
@@ -88,15 +90,19 @@
   .Main {
     display: grid;
     gap: 2.5rem;
-    margin: 5rem auto;
   }
 
   .Main.Main.Family {
     grid-template-columns: 1fr;
   }
 
+  .Main.Main.Mate {
+    grid-template-columns: 1fr;
+  }
+
   .Main .MainCard {
     height: 16rem;
+    border-radius: 10px;
   }
 
   .Main .MainCard p {
