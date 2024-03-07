@@ -36,7 +36,6 @@ const Resume = ({ data }) => {
   const { openAlert, alertComponent } = useAlert();
 
   const handleItemChange = (e, index, type) => {
-    console.log('여기서 orderId와 id 확인 필요', e.target);
     const { name, value } = e.target;
 
     setFormListData((prevFormData) => {
@@ -94,7 +93,7 @@ const Resume = ({ data }) => {
       return openAlert('희망 최소시급은 정부 공시 최저시급보다 낮을 수 없습니다.');
     }
 
-    const { locationList, mainServiceList } = formListData;
+    const { locationList, mainServiceList, careerList, certificateList } = formListData;
 
     if (!locationList.length) {
       return openAlert('최소 1개의 활동 지역을 선택하세요.');
@@ -102,6 +101,30 @@ const Resume = ({ data }) => {
 
     if (!mainServiceList.length) {
       return openAlert('최소 1개의 대표서비스를 선택하세요.');
+    }
+
+    if (
+      !careerList.every((e) => {
+        if (Object.keys(e).length > 5) {
+          const { id, ...rest } = e;
+          return Object.values(rest).every((v) => !!v);
+        }
+        return false;
+      })
+    ) {
+      return openAlert('경력 사항의 빈 값을 모두 입력해 주세요.');
+    }
+
+    if (
+      !certificateList.every((e) => {
+        if (Object.keys(e).length > 5) {
+          const { id, ...rest } = e;
+          return Object.values(rest).every((v) => !!v);
+        }
+        return false;
+      })
+    ) {
+      return openAlert('자격증 목록의 빈 값을 모두 입력해 주세요.');
     }
 
     const method = data.resume.mateResume ? 'patch' : 'post';
@@ -174,8 +197,8 @@ const Resume = ({ data }) => {
     setFormListData({
       mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
       locationList: $data.resume?.locationList?.map((e) => e.name) || [],
-      careerList: $data.resume?.careerList || [],
-      certificateList: $data.resume?.certificateList || [],
+      careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id })) || [],
+      certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id })) || [],
     });
   };
 

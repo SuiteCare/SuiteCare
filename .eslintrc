@@ -120,6 +120,8 @@
         "peerDependencies": true
       }
     ],
+    "no-alert": "off", // alert 허용
+    "no-confirm": "off", // confirm 허용
     "no-param-reassign": ["error", { "props": false }],
     "no-unused-expressions": ["warn"],
     "no-unused-vars": ["warn"],

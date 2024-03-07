@@ -25,7 +25,11 @@ const MyPageForm = () => {
     tel: '',
   });
 
-  const [changedData, setChangedData] = useState();
+  const [changedData, setChangedData] = useState({
+    gender: '',
+    email: '',
+    tel: '',
+  });
 
   const { data, isError, isLoading } = useQuery(
     ['mypage', id],
@@ -50,14 +54,14 @@ const MyPageForm = () => {
   };
 
   const handleInputChange = (e) => {
-    const { id, value } = e.target;
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [id]: value,
+      [name]: value,
     }));
     setChangedData((prevData) => ({
       ...prevData,
-      [id]: id === 'tel' ? value.replaceAll('-', '') : value,
+      [name]: name === 'tel' ? value.replace(/-/g, '') : value,
     }));
   };
 
@@ -170,7 +174,7 @@ const MyPageForm = () => {
                 name='gender'
                 value='M'
                 checked={formData.gender === 'M'}
-                onClick={handleClickGender}
+                onChange={handleClickGender}
               />
               <span>남성</span>
             </div>
@@ -180,7 +184,7 @@ const MyPageForm = () => {
                 name='gender'
                 value='F'
                 checked={formData.gender === 'F'}
-                onClick={handleClickGender}
+                onChange={handleClickGender}
               />
               <span>여성</span>
             </div>
@@ -205,6 +209,7 @@ const MyPageForm = () => {
                 type='text'
                 placeholder='010-0000-0000'
                 id='tel'
+                name='tel'
                 value={formData.tel}
                 maxLength={13}
                 onChange={(e) => handleInputChange(e)}

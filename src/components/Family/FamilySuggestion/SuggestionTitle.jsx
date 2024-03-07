@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 
 import styles from './Suggestion.module.css';
 import Loading from '@/components/Common/Modal/Loading';
-
-import { calAge, genderToKo } from '@/utils/calculators';
+import { PatientInfo } from '../FamilyRecruitment/PatientInfo';
 
 const SuggestionTitle = () => {
+  const navigator = useRouter();
   const [selectedPatient, setSelectedPatient] = useState('');
 
   const { id } = useLoginInfo();
@@ -25,7 +26,7 @@ const SuggestionTitle = () => {
   };
 
   return (
-    <div className={`${styles.Suggestion} content_wrapper`}>
+    <div className={`${styles.suggestion} content_wrapper`}>
       <div>
         <select value={selectedPatient} onChange={handlePatientSelectChange}>
           <option value=''>환자명</option>
@@ -39,41 +40,13 @@ const SuggestionTitle = () => {
 
       <hr />
       {patientInfo ? (
-        <div className={styles.info_section}>
-          <h3>환자 기본정보</h3>
-
-          <div className={styles.inputWrapper}>
-            <label>성명</label>
-            <span>{patientInfo.name}</span>
-          </div>
-
-          <div className={styles.inputWrapper}>
-            <label>진단명</label>
-            <span>{patientInfo.diagnosis_name}</span>
-          </div>
-
-          <div className={styles.info_grid}>
-            <div className={styles.inputWrapper}>
-              <label>나이</label>
-              <span>만 {calAge(patientInfo.birthday)}세</span>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <label>성별</label>
-              <span>{genderToKo(patientInfo.gender)}성</span>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <label>키</label>
-              <span>{patientInfo.height} cm</span>
-            </div>
-
-            <div className={styles.inputWrapper}>
-              <label>몸무게</label>
-              <span>{patientInfo.weight} kg</span>
+        <form>
+          <div className={styles.grid_wrapper}>
+            <div className={styles.patient_info_wrapper}>
+              <PatientInfo patientBasic={patientInfo} styles={styles} navigator={navigator} id={patientInfo.id} />
             </div>
           </div>
-        </div>
+        </form>
       ) : (
         <div style={{ textAlign: 'center' }}>간병인 추천 받을 환자를 선택하세요.</div>
       )}

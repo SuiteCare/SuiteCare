@@ -6,7 +6,6 @@ import axiosInstance from '@/services/axiosInstance';
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
 import Loading from '@/components/Common/Modal/Loading';
-import PatientSelector from './PatientSelector';
 
 const FamilyMateSearch = () => {
   const [patientInfo, setPatientInfo] = useState();
@@ -18,6 +17,7 @@ const FamilyMateSearch = () => {
   };
 
   useEffect(() => {
+    console.log('patientInfo', patientInfo);
     // setSuggestionData(getSuggestionData())
     setSuggestionData([
       {
@@ -83,11 +83,8 @@ const FamilyMateSearch = () => {
   return (
     <div className='FamilyMateSearch content_wrapper'>
       {isLoading && <Loading />}
-      <PatientSelector patientInfo={patientInfo} setPatientInfo={setPatientInfo} />
-      <span>환자를 선택하시면 스위트케어가 추천하는 메이트를 만나보실 수 있습니다.</span>
-      <hr />
 
-      <SearchForm onSearch={handleSearch} />
+      <SearchForm onSearch={handleSearch} patientInfo={patientInfo} setPatientInfo={setPatientInfo} />
       <h3>{renderSearchMessage()}</h3>
       {isError ? (
         <div className='no_result'>검색에 실패했습니다.</div>
@@ -95,10 +92,10 @@ const FamilyMateSearch = () => {
         <SearchResult data={searchData} type='search' />
       )}
       {patientInfo ? (
-        <>
+        <div style={{ marginTop: '6rem' }}>
           <h3>스위트케어가 추천하는 메이트</h3>
           <SearchResult data={suggestionData} type='suggestion' />
-        </>
+        </div>
       ) : (
         ''
       )}
