@@ -22,6 +22,16 @@
   gap: 8px;
 }
 
+.title label {
+  font-size: 1.5rem;
+  width: 100%;
+  max-width: 30vh;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
 .top {
   display: grid;
   grid-template-columns: 10rem 1fr;
@@ -86,16 +96,6 @@
   font-size: 1.1rem;
 }
 
-.title label {
-  font-size: 1.5rem;
-  width: 100%;
-  max-width: 30vh;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-}
-
 .userInfo_wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -125,12 +125,14 @@
   width: 100%;
 }
 
-.card button:nth-of-type(2) {
-  background-color: var(--beige-02);
+.card button:last-of-type {
+  font-weight: 400;
+  background-color: var(--light-gray);
+  color: var(--deep-brown);
 }
 
-.card button:nth-of-type(2):hover {
-  background-color: var(--brown-01);
+.card button:last-of-type:hover {
+  filter: brightness(0.95);
 }
 
 .expired {
