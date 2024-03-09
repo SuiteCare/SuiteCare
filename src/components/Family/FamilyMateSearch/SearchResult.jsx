@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-query';
 
 import useModal from '@/hooks/useModal';
@@ -9,14 +9,15 @@ import SearchResultCard from './SearchResultCard';
 import MateDetailModal from '../../Common/Modal/Detail/MateDetailModal';
 
 const SearchResult = ({ data }) => {
-  const [modalData, setModalData] = useState({});
+  const [modalData, setModalData] = useState(null);
   const { isModalVisible, openModal, closeModal } = useModal();
 
-  const mutation = useMutation(async ($mateId) => {
+  const mutation = useMutation(async ($mateInfo) => {
     try {
-      const response = await axiosInstance.get(`/api/v1/mate/resume/${$mateId}`);
+      const response = await axiosInstance.get(`/api/v1/mate/resume/${$mateInfo.id}`);
       const msg = response.headers.get('msg');
       if (response.data) {
+        setModalData({ ...$mateInfo, ...response.data });
         return response.data;
       }
       if (msg === 'fail') {
@@ -31,10 +32,14 @@ const SearchResult = ({ data }) => {
 
   const handleShowModal = ($mateInfo) => {
     console.log($mateInfo);
-    mutation.mutate($mateInfo.id);
-    mutation.isSuccess && setModalData({ ...$mateInfo, ...mutation.data });
-    mutation.data && openModal();
+    mutation.mutate($mateInfo);
   };
+
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      openModal();
+    }
+  }, [mutation.isSuccess]);
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>

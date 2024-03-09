@@ -5,7 +5,7 @@ import MainCard from '@/components/Common/Main/MainCard';
 import styles from '@/pages/main.module.css';
 
 const Main = () => {
-  const cards = MenuList.map((e) => <MainCard key={e.title} menu={e} />);
+  const cards = MenuList.map((e) => <MainCard key={e.title} menu={e} type='mate' />);
 
   return (
     <>
