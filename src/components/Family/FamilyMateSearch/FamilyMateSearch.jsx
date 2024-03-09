@@ -69,7 +69,6 @@ const FamilyMateSearch = () => {
   );
 
   const handleSearch = async ($condition) => {
-    console.log($condition);
     setCondition($condition);
   };
 
