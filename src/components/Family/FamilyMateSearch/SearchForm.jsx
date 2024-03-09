@@ -20,7 +20,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
   });
 
   // 시급 관련
-  const [wages, setWages] = useState([15000, 1000000]);
+  const [wages, setWages] = useState([minWage, 1000000]);
 
   const handleWageChange = (e, index) => {
     const newWages = [...wages];
