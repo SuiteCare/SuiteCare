@@ -8,7 +8,7 @@ import useModal from '@/hooks/useModal';
 import styles from './PendingReservationCard.module.css';
 import ReservationPatientInfo from './ReservationPatientInfo';
 import SearchResultCard from '../../FamilyMateSearch/SearchResultCard';
-import MateDetailModal from '../../FamilyMateSearch/MateDetailModal';
+import MateDetailModal from '../../../Common/Modal/Detail/MateDetailModal';
 
 const PendingReservationCard = ({ data, mateList }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
