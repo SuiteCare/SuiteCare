@@ -7,17 +7,27 @@ import axiosInstance from '@/services/axiosInstance';
 import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import MateDetailModal from '../../Common/Modal/Detail/MateDetailModal';
+import SelectRecruitmentModal from './SelectRecruitmentModal';
 
-const SearchResult = ({ data }) => {
-  const [modalData, setModalData] = useState(null);
-  const { isModalVisible, openModal, closeModal } = useModal();
+const SearchResult = ({ data, patientInfo }) => {
+  const [mateDetailModalData, setMateDetailModalData] = useState(null);
+  const {
+    isModalVisible: isMateDetailModalVisible,
+    openModal: openMateDetailModal,
+    closeModal: closeMateDetailModal,
+  } = useModal();
+  const {
+    isModalVisible: isRecruitmentModalVisible,
+    openModal: openRecruitmentModal,
+    closeModal: closeRecruitmentModal,
+  } = useModal();
 
   const mutation = useMutation(async ($mateInfo) => {
     try {
       const response = await axiosInstance.get(`/api/v1/mate/resume/${$mateInfo.id}`);
       const msg = response.headers.get('msg');
       if (response.data) {
-        setModalData({ ...$mateInfo, ...response.data });
+        setMateDetailModalData({ ...$mateInfo, ...response.data });
         return response.data;
       }
       if (msg === 'fail') {
@@ -37,18 +47,41 @@ const SearchResult = ({ data }) => {
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      openModal();
+      openMateDetailModal();
     }
   }, [mutation.isSuccess]);
+
+  const [selectedMate, setSelectedMate] = useState(null);
+  const handleApply = ($mateInfo) => {
+    isMateDetailModalVisible && closeMateDetailModal();
+    setSelectedMate({ name: $mateInfo.name, id: $mateInfo.id });
+    openRecruitmentModal();
+  };
 
   return (
     <div className={`${styles.SearchResult} Form_wide`}>
       {data && data.length > 0 ? (
-        data.map((e) => <SearchResultCard data={e} key={e.id} showDetail={() => handleShowModal(e)} />)
+        data.map((e) => (
+          <SearchResultCard
+            data={e}
+            key={e.id}
+            showDetail={() => handleShowModal(e)}
+            handleApply={() => handleApply(e)}
+          />
+        ))
       ) : (
         <div className='no_result'>검색 조건을 입력하세요.</div>
       )}
-      {isModalVisible && <MateDetailModal modalData={modalData} closeModal={closeModal} />}
+      {isMateDetailModalVisible && (
+        <MateDetailModal modalData={mateDetailModalData} handleApply={handleApply} closeModal={closeMateDetailModal} />
+      )}
+      {isRecruitmentModalVisible && (
+        <SelectRecruitmentModal
+          selectedMate={selectedMate}
+          patientId={patientInfo?.id || null}
+          closeModal={closeRecruitmentModal}
+        />
+      )}
     </div>
   );
 };

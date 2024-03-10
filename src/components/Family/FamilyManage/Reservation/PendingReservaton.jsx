@@ -88,7 +88,7 @@ const PendingReservation = ({ data }) => {
 
     if (newValue === 'add') {
       if (window.confirm('새로운 간병예약 신청 페이지로 이동하시겠습니까?')) {
-        navigator.push('/family/addpatient');
+        navigator.push('/family/recruitment');
       }
     } else {
       const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);

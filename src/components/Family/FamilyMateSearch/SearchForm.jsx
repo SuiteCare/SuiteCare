@@ -88,7 +88,6 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
     const isChecked = allLocationCheckboxes.filter((checkbox) => checkbox.checked === false).length === 0;
 
     const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-    console.log(selectedLocations);
 
     allLocationCheckboxes.forEach((checkbox) => {
       checkbox.checked = !isChecked;

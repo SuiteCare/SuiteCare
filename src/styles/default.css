@@ -405,6 +405,13 @@ select {
 
 .button_wrapper {
   margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button_wrapper button:last-child {
+  background-color: var(--deep-brown);
 }
 
 select {
@@ -649,4 +656,16 @@ input[type='checkbox'] {
   margin: 0 auto;
   text-align: center;
   padding: 4rem;
+}
+
+/* 12. Responsive  --------------------------------------------------- */
+@media (max-width: 900px) {
+  .content_wrapper {
+    padding: 0 3rem 8rem 3rem;
+  }
+}
+@media (max-width: 600px) {
+  .content_wrapper {
+    padding: 0 2rem 8rem 2rem;
+  }
 }

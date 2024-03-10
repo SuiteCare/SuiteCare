@@ -9,8 +9,7 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) => {
-  console.log('modal data!!!', modalData);
+const MateDetailModal = ({ modalData, closeModal, handleApply }) => {
   const { handleContentClick } = useModal();
 
   return (
@@ -115,15 +114,9 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, handleConfirm }) 
           )}
         </div>
         <div className={styles.button_wrapper}>
-          {handleConfirm ? (
-            <button type='submit' onClick={() => handleConfirm(modalData.id)}>
-              간병인 선택하기
-            </button>
-          ) : (
-            <button type='submit' onClick={() => handleApply(modalData.id)}>
-              간병 신청하기
-            </button>
-          )}
+          <button type='submit' onClick={() => handleApply(modalData)}>
+            간병 제안하기
+          </button>
         </div>
       </div>
     </div>
