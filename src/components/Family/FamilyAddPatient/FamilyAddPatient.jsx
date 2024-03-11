@@ -62,6 +62,14 @@ const FamilyAddPatient = ({ idQuery }) => {
     }));
   };
 
+  // input type="number" 일때, maxLength 기능은 지원하지 않으므로 onInput에 들어갈 함수 작성
+  const handleOninputNumber = (e) => {
+    const maxLength = 3;
+    if (e.target.value.length > maxLength) {
+      e.target.value = e.target.value.slice(0, maxLength);
+    }
+  };
+
   const renderInput = (typeName) => {
     const inputInfo = formInputInfos[typeName];
     return (
@@ -98,6 +106,7 @@ const FamilyAddPatient = ({ idQuery }) => {
             value={formData[typeName]}
             onChange={handleInputChange}
             required
+            onInput={inputInfo.type === 'number' ? handleOninputNumber : null}
           />
         )}
       </div>

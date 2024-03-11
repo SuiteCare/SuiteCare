@@ -53,8 +53,6 @@ const PatientList = ({ data }) => {
             <th>성명</th>
             <th>성별</th>
             <th>생년월일</th>
-            <th>키</th>
-            <th>몸무게</th>
             <th>진단명</th>
             <th>환자 상세정보</th>
           </tr>
@@ -75,8 +73,6 @@ const PatientList = ({ data }) => {
                 <td>
                   {e.birthday} (만 {calAge(e.birthday)}세)
                 </td>
-                <td>{e.height} cm</td>
-                <td>{e.weight} kg</td>
                 <td>{e.diagnosis_name}</td>
                 <td>
                   <button type='button' onClick={() => handleDetailClick(e)}>

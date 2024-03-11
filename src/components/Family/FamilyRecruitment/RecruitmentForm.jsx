@@ -34,7 +34,7 @@ const RecruitmentForm = () => {
     location: '병원', // 병원 or 자택
     start_date: afterNday(7), // 날짜 형식 YYYY-MM-DD
     end_date: afterNday(14), // 날짜 형식 YYYY-MM-DD
-    wage: '15000',
+    wage: minWage,
     expire_at: afterNday(7),
   });
 

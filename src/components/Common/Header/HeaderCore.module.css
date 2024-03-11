@@ -1,34 +1,35 @@
 .HeaderCore {
-  background-color: var(--deep-brown);
-  display: grid;
-  height: 160px;
-  padding: 2rem 2rem 1rem 2rem;
+  display: flex;
+  height: 70px;
+  padding: 1rem 2.5rem;
   box-shadow: 0px 0px 20px #aaaa;
-  grid-template-rows: 2rem 1fr;
-  margin-bottom: 7.2rem;
-  align-items: end;
-  position: relative;
+  background: var(--deep-brown);
+  align-items: center;
   z-index: 9998;
+  justify-content: space-between;
+}
+
+.menu_wrapper {
+  display: flex;
+  gap: 2rem;
+}
+
+.button_wrapper {
+  position: relative;
 }
 
 .HeaderCore button {
-  float: right;
-  width: inherit;
   background: transparent;
-  padding: 7px 20px;
-  font-size: 1.6rem;
+  padding: 0;
+  font-size: 1.4rem;
   cursor: pointer;
   color: var(--beige-01);
   font-weight: 400;
 }
 
-.HeaderCore .active {
+.HeaderCore button.active {
   color: white;
   font-weight: 600;
-}
-
-.buttonText {
-  margin: 0 34px;
 }
 
 .HeaderCore button:hover {
@@ -37,6 +38,8 @@
 
 .HeaderCore .logo img {
   width: 120px;
+  position: relative;
+  top: 2px;
 }
 
 .HeaderCore .logo {

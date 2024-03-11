@@ -405,6 +405,13 @@ select {
 
 .button_wrapper {
   margin: 3rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.button_wrapper button:last-child {
+  background-color: var(--deep-brown);
 }
 
 select {
@@ -463,14 +470,14 @@ input[type='checkbox'] {
 /*  8. Page Design  --------------------------------------------------- */
 
 .content_wrapper {
-  padding-left: 8rem;
-  padding-right: 8rem;
-  margin-bottom: 2rem;
+  padding: 0 6rem 8rem 6rem;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .page_with_sidebar {
-  display: grid;
-  grid-template-columns: minmax(12rem, 16%) 1fr;
+  display: flex;
 }
 
 .title_wrapper span {
@@ -480,7 +487,8 @@ input[type='checkbox'] {
 }
 
 .title_wrapper {
-  margin-bottom: 1rem;
+  margin-top: 8rem;
+  margin-bottom: 2rem;
   text-align: center;
 }
 
@@ -648,4 +656,16 @@ input[type='checkbox'] {
   margin: 0 auto;
   text-align: center;
   padding: 4rem;
+}
+
+/* 12. Responsive  --------------------------------------------------- */
+@media (max-width: 900px) {
+  .content_wrapper {
+    padding: 0 3rem 8rem 3rem;
+  }
+}
+@media (max-width: 600px) {
+  .content_wrapper {
+    padding: 0 2rem 8rem 2rem;
+  }
 }

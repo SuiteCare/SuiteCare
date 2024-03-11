@@ -1,9 +1,8 @@
 .card {
   display: grid;
   width: 100%;
-  padding: 1.6rem;
+  padding: 1rem 2.4rem;
   grid-template-columns: 1fr;
-  grid-template-rows: 40px 1fr 8rem;
   min-height: 200px;
   gap: 5px;
   border: 1px solid #dedddc;
@@ -16,19 +15,32 @@
 
 .title {
   border-bottom: 1px solid #ddd;
-  padding-bottom: 6px;
-  margin-bottom: 6px;
+  padding-bottom: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title label {
+  font-size: 1.5rem;
+  width: 100%;
+  max-width: 30vh;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
 }
 
 .top {
   display: grid;
-  grid-template-columns: 7rem 1fr;
+  grid-template-columns: 10rem 1fr;
   height: 40px;
   width: 100%;
   position: relative;
-  width: calc(100% + 3.2rem + 2px);
-  left: calc(-1.6rem - 1px);
-  top: calc(-1.6rem - 1px);
+  width: calc(100% + 4.8rem + 2px);
+  left: calc(-2.4rem - 1px);
+  top: calc(-1rem - 1px);
 }
 
 .top span {
@@ -68,20 +80,10 @@
   font-size: 1.1rem;
 }
 
-.title label {
-  font-size: 1.5rem;
-  width: 100%;
-  max-width: 30vh;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
-}
-
 .userInfo_wrapper {
   display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 8px;
-  padding: 0 1rem;
 }
 
 .userInfo {
@@ -96,9 +98,9 @@
 .search_button_wrapper {
   display: flex;
   gap: 10px;
-  flex-direction: column;
   justify-content: flex-end;
-  margin-bottom: 10px;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .card button {
@@ -107,8 +109,18 @@
   width: 100%;
 }
 
-.card button:nth-of-type(2) {
+button.confirm {
   background-color: var(--deep-brown);
+}
+
+button.reject {
+  font-weight: 400;
+  background-color: var(--light-gray);
+  color: var(--deep-brown);
+}
+
+button.reject:hover {
+  filter: brightness(0.95);
 }
 
 .expired {
