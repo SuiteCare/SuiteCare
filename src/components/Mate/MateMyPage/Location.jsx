@@ -3,27 +3,8 @@ import React, { useEffect } from 'react';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 const Location = ({ styles, formData, setFormData, setChangedData }) => {
-  const selectAllLocation = (e) => {
-    const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
-    const isChecked = allLocationCheckboxes.every((checkbox) => checkbox.checked);
-
-    const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-
-    allLocationCheckboxes.forEach((checkbox) => {
-      checkbox.checked = !isChecked;
-    });
-
-    e.target.checked = !isChecked;
-
-    setFormData((prevFormData) => ({ ...prevFormData, locationList: selectedLocations }));
-    setChangedData((prevFormData) => ({ ...prevFormData, locationList: selectedLocations }));
-  };
-
-  const handleAllLocationChange = (e) => {
-    selectAllLocation(e);
-  };
-
   const handleCheckboxChange = (checked, value) => {
+    console.log(formData.locationList);
     setFormData((prevFormData) => {
       const updatedData = { ...prevFormData };
 
@@ -58,10 +39,6 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
   return (
     <>
       <h3>활동 지역</h3>
-      <div className='checkbox_wrapper'>
-        <input type='checkbox' id='all' onChange={handleAllLocationChange} />
-        <label htmlFor='all'>전체 선택</label>
-      </div>
       <div className={styles.checkbox_list_wrapper}>
         <FormLocationList onChange={(e) => handleCheckboxChange(e.currentTarget.checked, e.currentTarget.value)} />
       </div>
