@@ -21,30 +21,21 @@ const FamilyMateSearch = () => {
     // setSuggestionData(getSuggestionData())
     setSuggestionData([
       {
-        mate_id: 'kim',
-        mate_name: '추천 메이트 1',
+        id: 'suggested',
+        name: '추천 메이트',
+        tel: '01012342134',
+        email: 'asdfasdf@gmail.com',
+        profile_picture_filename: 'default_profile.jpg',
+        introduction: '추천 메이트입니다.',
+        contact_time_start: '09:00',
+        contact_time_end: '21:00',
+        desired_wage: '9860',
         gender: 'F',
-        birthday: '1964-01-12',
-        address: '서울시 서초구',
-        main_service: '목욕, 재활운동보조',
-        wage: 9900,
-        profile_picture_filename: '',
-        introduction: '안녕하세요',
-        rate: 4.9,
-        care_times: 40,
-      },
-      {
-        mate_id: 'lee',
-        mate_name: '추천 메이트 2',
-        gender: 'M',
-        birthday: '1981-07-04',
-        address: '서울시 강남구',
-        main_service: '요리',
-        wage: 189000,
-        profile_picture_filename: '',
-        introduction: '두 줄 짜리 소개글을 작성해 봅시다. 3줄 0줄 1줄이 있으니 2줄짜리도 있어야 체크가 되겠지요.',
-        rate: 3.0,
-        care_times: 331,
+        birthday: '1960-06-06',
+        location: '강남구,강동구,강북구,강서구,동작구',
+        mainservice: '목욕,요리,운전',
+        care_times: 123,
+        rate: 4.2,
       },
     ]);
   }, [patientInfo]);
@@ -69,7 +60,6 @@ const FamilyMateSearch = () => {
   );
 
   const handleSearch = async ($condition) => {
-    console.log($condition);
     setCondition($condition);
   };
 
@@ -89,7 +79,7 @@ const FamilyMateSearch = () => {
       {isError ? (
         <div className='no_result'>검색에 실패했습니다.</div>
       ) : (
-        <SearchResult data={searchData} type='search' />
+        <SearchResult data={searchData} patientInfo={patientInfo} type='search' />
       )}
       {patientInfo ? (
         <div style={{ marginTop: '6rem' }}>

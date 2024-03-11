@@ -5,25 +5,29 @@
   box-shadow: 0px 0px 20px #aaaa;
   background: var(--deep-brown);
   align-items: center;
-  position: relative;
-  top: 0;
   z-index: 9998;
   justify-content: space-between;
-  margin-bottom: 6rem;
+}
+
+.menu_wrapper {
+  display: flex;
+  gap: 2rem;
+}
+
+.button_wrapper {
+  position: relative;
 }
 
 .HeaderCore button {
-  float: right;
-  width: inherit;
   background: transparent;
-  padding: 1rem;
-  font-size: 1rem;
+  padding: 0;
+  font-size: 1.4rem;
   cursor: pointer;
   color: var(--beige-01);
   font-weight: 400;
 }
 
-.HeaderCore .active {
+.HeaderCore button.active {
   color: white;
   font-weight: 600;
 }
@@ -34,6 +38,8 @@
 
 .HeaderCore .logo img {
   width: 120px;
+  position: relative;
+  top: 2px;
 }
 
 .HeaderCore .logo {
