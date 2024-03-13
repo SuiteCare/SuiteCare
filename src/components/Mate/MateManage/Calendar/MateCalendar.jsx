@@ -124,6 +124,7 @@ const MateCalendar = () => {
               const event = {
                 title: `${recruitmentInfo.patient_name} 님 (${recruitmentInfo.diagnosis_name || '진단명 없음'})`,
                 family: `보호자 ${eventItem.family_name} 님`,
+                detail: { reservation: { ...eventItem, ...detailResponse }, patient: { ...patientResponse } },
                 start: new Date(currentStartDate).toLocaleDateString(),
                 end: new Date(currentEndDate).toLocaleDateString(),
                 color: stringToColor(

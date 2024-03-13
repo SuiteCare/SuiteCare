@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-
-import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
+import ModalReservationTab from './ModalReservationTab';
+import ModalPatientTab from './ModalPatientTab';
 
 const MateCalendarModal = ({ modalData, closeModal }) => {
   console.log(modalData);
+  const [activeTab, setActiveTab] = useState(0);
+
   const { handleContentClick } = useModal();
 
   return (
@@ -16,10 +18,20 @@ const MateCalendarModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {modalData.title}
-        {modalData.family}
-        {modalData.start}
-        {modalData.end}
+        <h3 style={{ borderColor: `${modalData.color}` }}>{modalData.title}</h3>
+
+        <div className='tab_wrapper'>
+          <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+            간병 정보
+          </div>
+          <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+            환자 정보
+          </div>
+        </div>
+        {activeTab === 0 && <ModalReservationTab modalData={modalData} />}
+        {activeTab === 1 && <ModalPatientTab modalData={modalData} />}
+
+        <div className='button_wrapper' />
       </div>
     </div>
   );
