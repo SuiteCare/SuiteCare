@@ -7,6 +7,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
 
 const MateCalendarModal = ({ modalData, closeModal }) => {
+  console.log(modalData);
   const { handleContentClick } = useModal();
 
   return (
@@ -15,19 +16,10 @@ const MateCalendarModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {/* 시작 */}
-        {/* `{
-          title: '김환자 님 (중풍)',
-          mate: '간병인 박간병 님',
-          start: '2023-12-21T00:00:00.000Z',
-          end: '2023-12-21T08:00:00.000Z',
-          color: 'hsl(342, 55%, 50%)',
-        }` */}
         {modalData.title}
-        {modalData.mate}
-        {`${modalData.start}`.split(' ')}
-        {`${modalData.end}`.split(' ')}
-        {/* 끝 */}
+        {modalData.family}
+        {modalData.start}
+        {modalData.end}
       </div>
     </div>
   );
