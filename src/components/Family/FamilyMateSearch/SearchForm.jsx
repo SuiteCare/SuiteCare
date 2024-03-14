@@ -20,7 +20,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
   });
 
   // 시급 관련
-  const [wages, setWages] = useState([15000, 1000000]);
+  const [wages, setWages] = useState([minWage, 1000000]);
 
   const handleWageChange = (e, index) => {
     const newWages = [...wages];
@@ -88,7 +88,6 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
     const isChecked = allLocationCheckboxes.filter((checkbox) => checkbox.checked === false).length === 0;
 
     const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-    console.log(selectedLocations);
 
     allLocationCheckboxes.forEach((checkbox) => {
       checkbox.checked = !isChecked;
@@ -185,7 +184,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
         </div>
         <hr />
         <div className='input_wrapper'>
-          <label>대표서비스</label>
+          <label>주요 서비스</label>
           <div className={styles.checkbox_list_wrapper}>
             {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e) => (
               <div className={styles.checkbox_wrapper} key={e}>

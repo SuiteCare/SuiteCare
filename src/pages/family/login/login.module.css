@@ -1,4 +1,5 @@
 .login {
-  background-color: #ffffff;
-  margin-top: 5rem;
+  display: grid;
+  height: calc(100vh - 70px - 12rem);
+  align-content: center;
 }

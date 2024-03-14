@@ -1,35 +1,50 @@
+@media screen and (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    height: 100%;
+  }
+}
+
 .sidebar {
-  min-width: 200px;
   background-color: var(--very-light-gray);
-  position: absolute;
-  top: 0;
   z-index: 999;
-  height: 100%;
-  left: -200px;
   transition: 0.3s ease-in-out;
 }
 
 .sidebar h3 {
   text-align: center;
-  padding: 0 0 1.5rem 0;
+  padding: 1.5rem 0;
   border-bottom: 1px solid var(--normal-gray);
   border-left: none;
 }
 
 .open {
-  left: 0px;
+  opacity: 1;
+  min-width: 15rem;
+  width: 15rem;
 }
 
 .close {
-  left: -200px;
+  opacity: 0;
+  width: 0;
+  min-width: 0;
 }
 
 .menu {
   padding-top: 20px;
 }
 
+.menuItem {
+  display: flex;
+  gap: 0.75rem;
+}
+
 .menuItem:hover {
   background-color: var(--transparent-beige);
+}
+
+.menuItem img {
+  margin-left: 0.75rem;
 }
 
 .menuItem a {
@@ -46,8 +61,8 @@
 .toggleButton {
   cursor: pointer;
   position: relative;
-  top: 0;
-  right: -200px;
+  top: 18px;
+  z-index: 9999;
   background-color: var(--very-light-gray);
   border-radius: 0 5px 5px 0;
   display: flex;
@@ -55,6 +70,7 @@
   justify-content: center;
   align-items: center;
   gap: 5px;
+  min-width: 40px;
   width: 40px;
   height: 40px;
 }
@@ -81,29 +97,6 @@
   transform: rotate(180deg);
 }
 
-/* .toggleButton input:checked ~ span {
-  opacity: 1;
+.toggleButton input:checked ~ .toggleButton {
+  left: -200px;
 }
-
-.toggleButton input:checked ~ span:nth-last-child(1) {
-  transform: rotate(-45deg);
-}
-
-.toggleButton input:checked ~ span:nth-last-child(2) {
-  opacity: 0;
-}
-.toggleButton input:checked ~ span:nth-last-child(3) {
-  transform: rotate(45deg) translate(1.5px);
-}
-
-.toggleButton span {
-  width: 30px;
-  height: 3px;
-  border-radius: 15px;
-  background-color: #000;
-  transform-origin: 4px 0px;
-  transition:
-    transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
-    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
-    opacity 0.55s ease;
-} */

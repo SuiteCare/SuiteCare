@@ -1,11 +1,20 @@
+import { useRouter } from 'next/router';
+
 import styles from '@/pages/main.module.css';
 
-const MainCard = ({ title, onClick, description }) => {
+const MainCard = ({ menu, type }) => {
+  const navigator = useRouter();
+
+  const navigateTo = (url) => {
+    navigator.push(`/${url}`);
+  };
+
   return (
-    <div className={styles.MainCard} onClick={onClick}>
-      <p>{title}</p>
-      <div className={styles.line} />
-      <span>{description}</span>
+    <div className={styles.MainCard} onClick={() => navigateTo(`${type}/${menu.url}`)}>
+      <div className={styles.title_description_wrapper}>
+        <p>{menu.title}</p>
+        <span>{menu.description}</span>
+      </div>
     </div>
   );
 };
