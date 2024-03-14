@@ -11,8 +11,10 @@ import styles from '@/components/Common/Sidebar.module.css';
 
 const MenuItem = ({ url, label, icon }) => (
   <div className={styles.menuItem}>
-    <Image src={icon} alt={icon} />
-    <Link href={url}>{label}</Link>
+    <Link href={url}>
+      <Image src={icon.image} alt={icon.alt} />
+      <span>{label}</span>
+    </Link>
   </div>
 );
 
@@ -21,10 +23,30 @@ const MateManageSidebar = () => {
   const defaultUrl = '/mate/manage';
 
   const menuItems = [
-    { key: 'calendar', label: '내 일정 정보', url: `${defaultUrl}/calendar`, icon: calender },
-    { key: 'offer', label: '간병 요청 목록', url: `${defaultUrl}/offer`, icon: offer },
-    { key: 'apply', label: '공고 지원 목록', url: `${defaultUrl}/apply`, icon: list },
-    { key: 'history', label: '전체 내역', url: `${defaultUrl}/history`, icon: general },
+    {
+      key: 'calendar',
+      label: '내 일정 정보',
+      url: `${defaultUrl}/calendar`,
+      icon: { image: calender, alt: 'calender' },
+    },
+    {
+      key: 'offer',
+      label: '간병 요청 목록',
+      url: `${defaultUrl}/offer`,
+      icon: { image: offer, alt: 'offer' },
+    },
+    {
+      key: 'apply',
+      label: '공고 지원 목록',
+      url: `${defaultUrl}/apply`,
+      icon: { image: list, alt: 'apply' },
+    },
+    {
+      key: 'history',
+      label: '전체 내역',
+      url: `${defaultUrl}/history`,
+      icon: { image: general, alt: 'history' },
+    },
   ];
 
   const toggleSidebar = () => {
@@ -43,7 +65,7 @@ const MateManageSidebar = () => {
       </div>
       <div onClick={toggleSidebar} className={styles.toggleButton}>
         <input type='checkbox' />
-        <Image src={arrow} alt='arrowImage' />
+        <Image src={arrow} alt='arrowImage' width={30} height={30} />
       </div>
     </>
   );

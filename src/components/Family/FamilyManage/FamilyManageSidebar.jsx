@@ -12,8 +12,10 @@ import styles from '@/components/Common/Sidebar.module.css';
 
 const MenuItem = ({ url, label, icon }) => (
   <div className={styles.menuItem}>
-    <Image src={icon} alt={icon} />
-    <Link href={url}>{label}</Link>
+    <Link href={url}>
+      <Image src={icon.image} alt={icon.alt} />
+      <span>{label}</span>
+    </Link>
   </div>
 );
 
@@ -22,11 +24,36 @@ const FamilyManageSidebar = () => {
   const defaultUrl = '/family/manage';
 
   const menuItems = [
-    { key: 'calendar', label: '내 일정 정보', url: `${defaultUrl}/calendar`, icon: calender },
-    { key: 'reservation', label: '간병예약 확정', url: `${defaultUrl}/reservation`, icon: calenderCheck },
-    { key: 'patient_list', label: '내 환자 목록', url: `${defaultUrl}/patient_list`, icon: list },
-    { key: 'pending_payments', label: '결제 대기 목록', url: `${defaultUrl}/pending_payments`, icon: waitList },
-    { key: 'history', label: '전체 내역', url: `${defaultUrl}/history`, icon: general },
+    {
+      key: 'calendar',
+      label: '내 일정 정보',
+      url: `${defaultUrl}/calendar`,
+      icon: { image: calender, alt: 'calender' },
+    },
+    {
+      key: 'reservation',
+      label: '간병예약 확정',
+      url: `${defaultUrl}/reservation`,
+      icon: { image: calenderCheck, alt: 'reservation' },
+    },
+    {
+      key: 'patient_list',
+      label: '내 환자 목록',
+      url: `${defaultUrl}/patient_list`,
+      icon: { image: list, alt: 'patient_list' },
+    },
+    {
+      key: 'pending_payments',
+      label: '결제 대기 목록',
+      url: `${defaultUrl}/pending_payments`,
+      icon: { image: waitList, alt: 'pending_payments' },
+    },
+    {
+      key: 'history',
+      label: '전체 내역',
+      url: `${defaultUrl}/history`,
+      icon: { image: general, alt: 'history' },
+    },
   ];
 
   const toggleSidebar = () => {
