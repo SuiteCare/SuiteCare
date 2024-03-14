@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-
-import { calAge, calTimeDiff, countWeekdays } from '@/utils/calculators.js';
+import ModalReservationTab from './ModalReservationTab';
+import ModalPatientTab from './ModalPatientTab';
 
 const MateCalendarModal = ({ modalData, closeModal }) => {
+  console.log(modalData);
+  const [activeTab, setActiveTab] = useState(0);
+
   const { handleContentClick } = useModal();
 
   return (
@@ -15,19 +18,29 @@ const MateCalendarModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {/* 시작 */}
-        {/* `{
-          title: '김환자 님 (중풍)',
-          mate: '간병인 박간병 님',
-          start: '2023-12-21T00:00:00.000Z',
-          end: '2023-12-21T08:00:00.000Z',
-          color: 'hsl(342, 55%, 50%)',
-        }` */}
-        {modalData.title}
-        {modalData.mate}
-        {`${modalData.start}`.split(' ')}
-        {`${modalData.end}`.split(' ')}
-        {/* 끝 */}
+        <h2 style={{ textAlign: 'center' }}>
+          {modalData.start.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+          })}
+        </h2>
+        <hr />
+        <h3 style={{ borderColor: `${modalData.color}` }}>{modalData.title}</h3>
+
+        <div className='tab_wrapper'>
+          <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
+            간병 정보
+          </div>
+          <div onClick={() => setActiveTab(1)} className={activeTab === 1 ? 'active' : ''}>
+            환자 정보
+          </div>
+        </div>
+        {activeTab === 0 && <ModalReservationTab modalData={modalData} />}
+        {activeTab === 1 && <ModalPatientTab modalData={modalData} />}
+
+        <div className='button_wrapper' />
       </div>
     </div>
   );
