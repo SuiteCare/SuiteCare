@@ -11,8 +11,6 @@ import useAlert from '@/hooks/useAlert';
 import ChangePwModal from './ChangePwModal';
 import styles from './MyPageForm.module.css';
 
-import { genderToKo } from '@/utils/calculators';
-
 const MyPageForm = () => {
   const navigator = useRouter();
   const { openAlert, alertComponent } = useAlert();
@@ -35,7 +33,11 @@ const MyPageForm = () => {
     ['mypage', id],
     async () => {
       const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
-      return response.data;
+      if(response.status === 200) {
+        return response.data.result[0];
+      } else if(response.status === 204) {
+        openAlert('요청한 사용자의 정보가 조회되지 않습니다.');
+      }
     },
     {
       enabled: Boolean(id),
@@ -119,6 +121,13 @@ const MyPageForm = () => {
           openAlert('내 정보 수정에 실패하였습니다.');
         }
       },
+      onError: (error) => {
+        if(error.response.status === 400) {
+          openAlert('내 정보 수정에 실패하였습니다.');
+        } else {
+          openAlert('요청을 처리하는 중 오류가 발생했습니다.');
+        }
+      }
     },
   );
 
