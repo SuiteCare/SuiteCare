@@ -5,9 +5,14 @@ import useAlert from '@/hooks/useAlert';
 const MainService = ({ formData, setFormData, setChangedData }) => {
   const { openAlert, alertComponent } = useAlert();
 
+  const cleanUpArray = (arr) => {
+    return Array.from(new Set(arr));
+  };
+
   const handleMainServiceChange = (checked, value) => {
-    if (checked && formData.mainServiceList.length >= 3) {
-      const slicedList = formData.mainServiceList.slice(0, 3);
+    const cleanUpMainServiceList = cleanUpArray(formData.mainServiceList);
+    if (checked && cleanUpMainServiceList.length >= 3) {
+      const slicedList = cleanUpMainServiceList.slice(0, 3);
       setFormData((prevData) => {
         const updatedData = { ...prevData };
         updatedData.mainServiceList = [...slicedList];
@@ -24,9 +29,9 @@ const MainService = ({ formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.mainServiceList = [...prevData.mainServiceList, value];
+        updatedData.mainServiceList = cleanUpArray([...prevData.mainServiceList, value]);
       } else {
-        updatedData.mainServiceList = prevData.mainServiceList.filter((it) => it !== value);
+        updatedData.mainServiceList = cleanUpArray(prevData.mainServiceList).filter((it) => it !== value);
       }
 
       return updatedData;
@@ -35,9 +40,9 @@ const MainService = ({ formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.mainServiceList = [...formData.mainServiceList, value];
+        updatedData.mainServiceList = cleanUpArray([...formData.mainServiceList, value]);
       } else {
-        updatedData.mainServiceList = formData.mainServiceList.filter((it) => it !== value);
+        updatedData.mainServiceList = cleanUpMainServiceList.filter((it) => it !== value);
       }
 
       return updatedData;
