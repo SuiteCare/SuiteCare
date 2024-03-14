@@ -99,8 +99,16 @@ const Resume = ({ data }) => {
       return openAlert('최소 1개의 활동 지역을 선택하세요.');
     }
 
+    if (locationList.length > 5) {
+      return openAlert('활동 지역은 최대 5개까지 선택할 수 있습니다.');
+    }
+
     if (!mainServiceList.length) {
-      return openAlert('최소 1개의 대표서비스를 선택하세요.');
+      return openAlert('최소 1개의 주요 서비스를 선택하세요.');
+    }
+
+    if (mainServiceList.length > 3) {
+      return openAlert('주요 서비스는 최대 3개까지 선택할 수 있습니다.');
     }
 
     if (

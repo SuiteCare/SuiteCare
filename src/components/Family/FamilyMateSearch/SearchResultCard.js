@@ -33,7 +33,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
           }`}</span>
         </div>
         <div className={styles.userInfo}>
-          <label>대표서비스</label>
+          <label>주요 서비스</label>
           <span>{`${data.mainservice.split(',').slice(0, 3).join(', ')}${
             data.mainservice.split(',').length > 3 ? ` 외 ${data.mainservice.split(',').length - 3}건` : ''
           }`}</span>
