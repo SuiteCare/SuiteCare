@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { calAge, genderToKo, weekdayDic } from '@/utils/calculators';
+import { calAge, genderToKo } from '@/utils/calculators';
 
 const ModalPatientTab = ({ modalData }) => {
   return (
     <>
       <div className='input_wrapper'>
         <label>환자 정보</label>
-        이름가져와야됨 ({calAge(modalData.detail.patient.patient_birthday)}세{' '}
+        {modalData.detail.patient.patient_name} ({calAge(modalData.detail.patient.patient_birthday)}세{' '}
         {genderToKo(modalData.detail.patient.patient_gender)}성)
       </div>
       <div className='input_wrapper'>

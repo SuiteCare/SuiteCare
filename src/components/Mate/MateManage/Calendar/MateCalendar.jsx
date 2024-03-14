@@ -122,11 +122,13 @@ const MateCalendar = () => {
             const dayOfCurrentEndDate = +moment(currentEndDate).format('d');
             if (weekdays.includes(dayOfCurrentEndDate)) {
               const event = {
-                title: `${recruitmentInfo.patient_name} 님 (${recruitmentInfo.diagnosis_name || '진단명 없음'})`,
-                family: `보호자 ${eventItem.family_name} 님`,
+                title: `${recruitmentInfo.patient_name} 님 (${
+                  recruitmentInfo.patient_diagnosis_name || '진단명 없음'
+                })`,
+                family: `보호자 ${eventItem.family_name} (${eventItem.family_id})`,
                 detail: { reservation: { ...eventItem, ...detailResponse }, patient: { ...patientResponse } },
-                start: new Date(currentStartDate).toLocaleDateString(),
-                end: new Date(currentEndDate).toLocaleDateString(),
+                start: new Date(currentStartDate),
+                end: new Date(currentEndDate),
                 color: stringToColor(
                   (eventItem.recruitment_id || 'id가 없을 리는 없음') +
                     (recruitmentInfo.patient_name || '환자명 없음') +
@@ -170,7 +172,7 @@ const MateCalendar = () => {
         dayPropGetter={customDayPropGetter}
         onNavigate={handleNavigate}
         {...getComponents(openModal, setModalData)}
-        {...getSettingProps()}
+        {...settingProps}
       />
       {isModalVisible && <MateCalendarModal modalData={modalData} closeModal={closeModal} />}
     </>

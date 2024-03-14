@@ -18,6 +18,15 @@ const MateCalendarModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
+        <h2 style={{ textAlign: 'center' }}>
+          {modalData.start.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            weekday: 'long',
+          })}
+        </h2>
+        <hr />
         <h3 style={{ borderColor: `${modalData.color}` }}>{modalData.title}</h3>
 
         <div className='tab_wrapper'>
