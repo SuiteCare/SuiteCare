@@ -184,7 +184,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
         </div>
         <hr />
         <div className='input_wrapper'>
-          <label>대표서비스</label>
+          <label>주요 서비스</label>
           <div className={styles.checkbox_list_wrapper}>
             {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e) => (
               <div className={styles.checkbox_wrapper} key={e}>
