@@ -84,20 +84,55 @@ const Resume = ({ data }) => {
 
   const handleUpdateResume = async () => {
     if (!formMateResumeData.desired_wage) {
-      alert('희망 최소시급을 입력하세요.');
-      return false;
+      return openAlert('희망 최소시급을 입력하세요.');
     }
 
-    const { locationList, mainServiceList } = formListData;
+    if (formMateResumeData.desired_wage < minWage && formMateResumeData.desired_wage > 0) {
+      setFormMateResumeData((prevData) => ({ ...prevData, desired_wage: minWage }));
+      setChangedMateData((prevData) => ({ ...prevData, desired_wage: minWage }));
+      return openAlert('희망 최소시급은 정부 공시 최저시급보다 낮을 수 없습니다.');
+    }
+
+    const { locationList, mainServiceList, careerList, certificateList } = formListData;
 
     if (!locationList.length) {
-      alert('최소 1개의 활동 지역을 선택하세요.');
-      return false;
+      return openAlert('최소 1개의 활동 지역을 선택하세요.');
+    }
+
+    if (locationList.length > 5) {
+      return openAlert('활동 지역은 최대 5개까지 선택할 수 있습니다.');
     }
 
     if (!mainServiceList.length) {
-      alert('최소 1개의 대표서비스를 선택하세요.');
-      return false;
+      return openAlert('최소 1개의 주요 서비스를 선택하세요.');
+    }
+
+    if (mainServiceList.length > 3) {
+      return openAlert('주요 서비스는 최대 3개까지 선택할 수 있습니다.');
+    }
+
+    if (
+      !careerList.every((e) => {
+        if (Object.keys(e).length > 5) {
+          const { id, ...rest } = e;
+          return Object.values(rest).every((v) => !!v);
+        }
+        return false;
+      })
+    ) {
+      return openAlert('경력 사항의 빈 값을 모두 입력해 주세요.');
+    }
+
+    if (
+      !certificateList.every((e) => {
+        if (Object.keys(e).length > 5) {
+          const { id, ...rest } = e;
+          return Object.values(rest).every((v) => !!v);
+        }
+        return false;
+      })
+    ) {
+      return openAlert('자격증 목록의 빈 값을 모두 입력해 주세요.');
     }
 
     const method = data.resume.mateResume ? 'patch' : 'post';
@@ -115,9 +150,10 @@ const Resume = ({ data }) => {
         if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
         if (formListData.certificateList.length > 0) requestData.certificateList = formListData.certificateList;
 
-        body = JSON.stringify(requestData); // 이 부분 확인 필요
+        body = requestData;
         console.log('post', body);
-      } else if (method === 'patch') {
+      }
+      if (method === 'patch') {
         requestData = {
           ...changedListData,
         };
@@ -132,18 +168,25 @@ const Resume = ({ data }) => {
           requestData.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
         }
 
-        body = JSON.stringify(requestData);
+        body = requestData;
         console.log('patch', body);
+
+        if (Object.values(body).length === 0) return openAlert('변경할 데이터가 없습니다.');
       }
 
-      const response = await axiosInstance[method](`/api/v1/mate/resume`);
+      const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
       if (response.data) {
+        // patch 시 response.data === '' 라서 false로 처리되는데, 추후 ResponseBody 객체가 넘어와 파싱해서 사용할 예정
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
         setTimeout(() => {
           navigator.reload();
         }, 1000);
       } else {
-        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
+        openAlert(
+          `이력서 ${
+            method === 'post' ? '등록' : '수정'
+          }에 실패하였습니다. (patch라면 수정이 되었을 수 있으니 DB 확인 필요)`,
+        );
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
@@ -153,17 +196,17 @@ const Resume = ({ data }) => {
 
   const initializeFormData = ($data) => {
     setFormMateResumeData({
-      profile_picture_filename: $data.resume?.mate?.profile_picture_filename || 'default_profile.jpg',
-      contact_time_start: $data.resume?.mate?.contact_time_start || '09:00',
-      contact_time_end: $data.resume?.mate?.contact_time_end || '21:00',
-      introduction: $data.resume?.mate?.introduction || '',
-      desired_wage: $data.resume?.mate?.desired_wage || minWage,
+      profile_picture_filename: $data.resume?.mateResume?.profile_picture_filename || 'default_profile.jpg',
+      contact_time_start: $data.resume?.mateResume?.contact_time_start || '09:00',
+      contact_time_end: $data.resume?.mateResume?.contact_time_end || '21:00',
+      introduction: $data.resume?.mateResume?.introduction || '',
+      desired_wage: $data.resume?.mateResume?.desired_wage || minWage,
     });
     setFormListData({
       mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
       locationList: $data.resume?.locationList?.map((e) => e.name) || [],
-      careerList: $data.resume?.careerList || [],
-      certificateList: $data.resume?.certificateList || [],
+      careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id })) || [],
+      certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id })) || [],
     });
   };
 

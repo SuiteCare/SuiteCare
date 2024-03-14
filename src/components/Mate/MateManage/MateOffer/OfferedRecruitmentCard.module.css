@@ -1,0 +1,146 @@
+.card {
+  display: grid;
+  width: 100%;
+  padding: 1rem 2.4rem;
+  grid-template-columns: 1fr;
+  min-height: 200px;
+  gap: 5px;
+  border: 1px solid #dedddc;
+  background-color: var(--transparent-brown);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0px 2px 12px -6px var(--normal-gray);
+  line-height: 1.5;
+}
+
+.title {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title label {
+  font-size: 1.5rem;
+  width: 100%;
+  max-width: 30vh;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: 10rem 1fr;
+  height: 40px;
+  width: 100%;
+  position: relative;
+  width: calc(100% + 4.8rem + 2px);
+  left: calc(-2.4rem - 1px);
+  top: calc(-1rem - 1px);
+}
+
+.top span {
+  padding: 0px 20px;
+  cursor: default;
+  align-items: center;
+}
+
+.top span:not(:last-of-type) {
+  font-weight: bold;
+  border-top-left-radius: 12px;
+  color: white;
+  padding: 7px 1.5rem 5px 1.5rem;
+  border: 1px solid #0003;
+}
+
+.top span.hospital {
+  background-color: cornflowerblue;
+}
+
+.top span.home {
+  background-color: teal;
+}
+
+.top .dday {
+  display: flex;
+  justify-content: flex-end;
+  border-top-right-radius: 12px;
+  color: var(--deep-brown);
+  border: 1px solid #dedddc;
+  background: var(--light-gray);
+  border-bottom: 1px solid var(--light-gray);
+  gap: 6px;
+}
+
+.top .dday b {
+  font-size: 1.1rem;
+}
+
+.userInfo_wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.userInfo {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+}
+
+.userInfo span > span {
+  display: inline-block;
+}
+
+.search_button_wrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card button {
+  height: fit-content;
+  padding: 5px;
+  width: 100%;
+}
+
+button.confirm {
+  background-color: var(--deep-brown);
+}
+
+button.reject {
+  font-weight: 400;
+  background-color: var(--light-gray);
+  color: var(--deep-brown);
+}
+
+button.reject:hover {
+  filter: brightness(0.95);
+}
+
+.expired {
+  color: var(--normal-gray);
+  filter: grayscale(0.3);
+}
+
+.expired .top span:not(:last-of-type) {
+  background-color: #ddd;
+  border: 1px solid #ccc;
+}
+
+.expired button {
+  background-color: var(--normal-gray) !important;
+  pointer-events: none;
+}
+
+.expired .dday {
+  color: red;
+}
+
+.status {
+}

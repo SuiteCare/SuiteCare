@@ -3,23 +3,24 @@ import { useState } from 'react';
 import styles from './SearchForm.module.css';
 import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 import FormAgeList from '@/components/Common/SearchInfo/FormAgeList';
+import PatientSelector from './PatientSelector';
 
 import { minWage } from '@/utils/calculators';
 
-const SearchForm = ({ onSearch }) => {
+const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
   // 체크박스 및 최종 데이터 관련
-  const [checkedItems, setCheckedItems] = useState({
+  const [formData, setFormData] = useState({
     search_name: '',
     search_diagnosis: '',
     location: [],
     gender: [],
     service: [],
     age: [],
-    wage: [15000, 1000000],
+    wage: [minWage, 1000000],
   });
 
   // 시급 관련
-  const [wages, setWages] = useState([15000, 1000000]);
+  const [wages, setWages] = useState([minWage, 1000000]);
 
   const handleWageChange = (e, index) => {
     const newWages = [...wages];
@@ -41,8 +42,8 @@ const SearchForm = ({ onSearch }) => {
     }
 
     setWages(newWages);
-    setCheckedItems({
-      ...checkedItems,
+    setFormData({
+      ...formData,
       wage: newWages,
     });
   };
@@ -52,8 +53,8 @@ const SearchForm = ({ onSearch }) => {
 
   const handleSearchNameChange = (e) => {
     setSearchName(e.target.value);
-    setCheckedItems({
-      ...checkedItems,
+    setFormData({
+      ...formData,
       search_name: e.target.value,
     });
   };
@@ -61,8 +62,8 @@ const SearchForm = ({ onSearch }) => {
 
   const handleSearchDiagnosisNameChange = (e) => {
     setSearchDiagnosis(e.target.value);
-    setCheckedItems({
-      ...checkedItems,
+    setFormData({
+      ...formData,
       search_diagnosis: e.target.value,
     });
   };
@@ -70,25 +71,23 @@ const SearchForm = ({ onSearch }) => {
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
     if (checked) {
-      setCheckedItems({
-        ...checkedItems,
-        [name]: [...checkedItems[name], value],
+      setFormData({
+        ...formData,
+        [name]: [...formData[name], value],
       });
     } else {
-      setCheckedItems({
-        ...checkedItems,
-        [name]: checkedItems[name].filter((item) => item !== value),
+      setFormData({
+        ...formData,
+        [name]: formData[name].filter((item) => item !== value),
       });
     }
   };
 
   const selectAllLocation = (e) => {
-    console.log(e);
     const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
     const isChecked = allLocationCheckboxes.filter((checkbox) => checkbox.checked === false).length === 0;
 
     const selectedLocations = isChecked ? [] : allLocationCheckboxes.map((checkbox) => checkbox.value);
-    console.log(selectedLocations);
 
     allLocationCheckboxes.forEach((checkbox) => {
       checkbox.checked = !isChecked;
@@ -96,8 +95,8 @@ const SearchForm = ({ onSearch }) => {
 
     e.target.checked = !isChecked;
 
-    setCheckedItems({
-      ...checkedItems,
+    setFormData({
+      ...formData,
       location: selectedLocations,
     });
   };
@@ -117,22 +116,29 @@ const SearchForm = ({ onSearch }) => {
       return true;
     };
 
-    if (isEmptyData(checkedItems, 'location')) {
+    if (isEmptyData(formData, 'location')) {
       alert('활동 지역을 1곳 이상 선택하세요.');
     } else {
-      onSearch(checkedItems);
+      onSearch(formData);
     }
   };
 
   return (
     <div className={`${styles.SearchForm} Form_wide`}>
+      <div className={styles.patient_selector}>
+        <PatientSelector patientInfo={patientInfo} setPatientInfo={setPatientInfo} setFormData={setFormData} />
+        <span>✔️환자를 선택하시면 스위트케어가 추천하는 메이트를 만나보실 수 있습니다.</span>
+      </div>
+
+      <hr />
+
       <form name='search_form' onSubmit={handleSubmit}>
         <div className='input_wrapper'>
-          <label>성명으로 검색</label>
+          <label>메이트 아이디 검색</label>
           <input
             type='text'
             name='search_name'
-            placeholder='🔎 간병인 성명으로 검색하기'
+            placeholder='🔎 메이트 아이디로 검색하기'
             value={searchName}
             onChange={handleSearchNameChange}
             maxLength={10}
@@ -178,7 +184,7 @@ const SearchForm = ({ onSearch }) => {
         </div>
         <hr />
         <div className='input_wrapper'>
-          <label>대표서비스</label>
+          <label>주요 서비스</label>
           <div className={styles.checkbox_list_wrapper}>
             {['외출동행', '목욕', '요리', '청소', '재활운동보조', '빨래', '운전'].map((e) => (
               <div className={styles.checkbox_wrapper} key={e}>

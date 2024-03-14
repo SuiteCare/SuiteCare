@@ -1,20 +1,35 @@
 import React from 'react';
 
-const Career = ({ formData, setFormData, handleItemChange }) => {
+const Career = ({ formData, setFormData, setChangedData, handleItemChange }) => {
   const addCareer = () => {
+    const lastCareer = formData.careerList[formData.careerList.length - 1];
+    const newCareer = {
+      orderId: (lastCareer ? lastCareer.orderId : 0) + 1,
+      id: null,
+    };
     setFormData((prevFormData) => {
-      const lastCareer = prevFormData.careerList[prevFormData.careerList.length - 1];
-      const newCareer = {
-        id: (lastCareer ? lastCareer.id : 0) + 1,
-      };
+      return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
+    });
+    setChangedData((prevFormData) => {
       return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
     });
   };
 
-  const deleteCareer = (id) => {
+  const deleteCareer = (orderId) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.id !== id) };
+      return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.orderId !== orderId) };
     });
+
+    const deletedItem = formData.careerList.filter((it) => it.orderId === orderId)[0];
+    if (deletedItem.id) {
+      setChangedData((prevFormData) => {
+        return { ...prevFormData, careerList: [...(prevFormData.careerList || []), { ...deletedItem, delete: true }] };
+      });
+    } else {
+      setChangedData((prevFormData) => {
+        return { ...prevFormData, careerList: prevFormData.careerList.filter((it) => it.orderId !== orderId) };
+      });
+    }
   };
 
   const renderOptions = (options) => {
@@ -26,7 +41,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
   };
 
   const renderCareerItem = (careerItem, index) => (
-    <tr key={careerItem.id}>
+    <tr key={careerItem.orderId}>
       <td>
         <select
           defaultValue={careerItem.job_name}
@@ -74,7 +89,7 @@ const Career = ({ formData, setFormData, handleItemChange }) => {
         />
       </td>
       <td>
-        <button type='button' onClick={() => deleteCareer(careerItem.id)} />
+        <button type='button' onClick={() => deleteCareer(careerItem.orderId)} />
       </td>
     </tr>
   );

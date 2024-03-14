@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
-import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 import useAlert from '@/hooks/useAlert';
 
@@ -10,6 +9,7 @@ import styles from './RecruitmentForm.module.css';
 import { PatientInfo } from './PatientInfo';
 import DaumPostcode from '@/components/Common/Address/DaumPostcode';
 import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
+import PatientSelector from '../FamilyMateSearch/PatientSelector';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
@@ -20,7 +20,6 @@ const RecruitmentForm = () => {
 
   const { id } = useLoginInfo();
 
-  const { patientList } = usePatientList(id);
   const [patientInfo, setPatientInfo] = useState();
 
   const afterNday = (date) => {
@@ -35,7 +34,7 @@ const RecruitmentForm = () => {
     location: '병원', // 병원 or 자택
     start_date: afterNday(7), // 날짜 형식 YYYY-MM-DD
     end_date: afterNday(14), // 날짜 형식 YYYY-MM-DD
-    wage: '15000',
+    wage: minWage,
     expire_at: afterNday(7),
   });
 
@@ -48,24 +47,6 @@ const RecruitmentForm = () => {
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('18:00');
   const [weekdayBoolean, setWeekdayBoolean] = useState([true, true, true, true, true, true, true]);
-
-  const handlePatientSelectChange = (e) => {
-    if (e.target.value === 'add') {
-      if (patientInfo) {
-        if (!window.confirm('입력된 내용이 초기화됩니다. 환자 추가 페이지로 이동하시겠습니까?')) {
-          return false;
-        }
-      }
-      navigator.push('/family/addpatient');
-    } else {
-      const selectedPatient = patientList.filter((v) => v.id === +e.target.value)[0];
-      setPatientInfo(selectedPatient);
-      setFormData((prevData) => ({
-        ...prevData,
-        patient_id: selectedPatient?.id,
-      }));
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -161,18 +142,7 @@ const RecruitmentForm = () => {
     <div className={`${styles.RecruitmentForm} content_wrapper`}>
       {alertComponent}
       <form onSubmit={handleSubmit}>
-        <div className='input_wrapper'>
-          <label>간병받을 환자</label>
-          <select onChange={handlePatientSelectChange}>
-            <option>환자 선택</option>
-            {patientList?.map((e) => (
-              <option key={e.id} value={e.id}>
-                {e.name} ({e.diagnosis_name})
-              </option>
-            ))}
-            <option value='add'>새로운 환자 추가하기</option>
-          </select>
-        </div>
+        <PatientSelector patientInfo={patientInfo} setPatientInfo={setPatientInfo} setFormData={setFormData} />
 
         <hr />
 

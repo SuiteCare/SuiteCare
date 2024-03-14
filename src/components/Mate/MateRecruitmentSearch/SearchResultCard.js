@@ -40,7 +40,7 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
           <span>{data.patient_diagnosis_name}</span>
         </div>
         <div className={styles.userInfo}>
-          <label>나이/성별</label>
+          <label>환자 정보</label>
           <span>
             만 {calAge(data.patient_birthday)}세 {genderToKo(data.patient_gender)}성
           </span>
@@ -88,9 +88,11 @@ const SearchResultCard = ({ data, showDetail, handleApply }) => {
         <button type='button' onClick={dueDate <= 0 ? expiredAlert : () => showDetail(data.mate_id)}>
           상세정보 보기
         </button>
-        <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
-          간병 지원하기
-        </button>
+        {handleApply && (
+          <button type='submit' onClick={dueDate <= 0 ? expiredAlert : () => handleApply(data.id)}>
+            간병 지원하기
+          </button>
+        )}
       </div>
 
       {/* bottom */}
