@@ -32,7 +32,7 @@ const FamilyCalendar = () => {
   const { data, isError, isLoading } = useQuery(
     ['reservationList', token],
     async () => {
-      const response = await axiosInstance.get('/api/v1/family/reservation');
+      const response = await axiosInstance.get('/api/v1/reservation/family');
       return response.data;
     },
     {
@@ -41,6 +41,8 @@ const FamilyCalendar = () => {
   );
 
   useEffect(() => {
+    console.log('Family Calendar용 데이터를 가져오는가?', data);
+
     const getEventList = () => {
       let currentStartDate = moment(`${data.start_date} ${data.start_time}`);
       let currentEndDate = moment(`${data.start_date} ${data.end_time}`);
