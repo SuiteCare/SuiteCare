@@ -12,7 +12,7 @@ export const messages = {
   time: '시간',
   event: '일정 목록',
   showMore: (total) => `+${total}개 더 보기`,
-  noEventsInRange: '해당 기간에는 간병 일정이 없습니다.',
+  noEventsInRange: <div className='no_result'>해당 기간에는 간병 일정이 없습니다.</div>,
 };
 
 const formats = {
