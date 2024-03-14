@@ -10,7 +10,6 @@ import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
 const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) => {
-  console.log('MateDetailModal임...', modalData);
   const { handleContentClick } = useModal();
 
   return (

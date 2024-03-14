@@ -36,7 +36,6 @@ const FamilyCalendar = () => {
     ['reservationList', token],
     async () => {
       const response = await axiosInstance.get('/api/v1/reservation/family');
-      console.log('reservation family 정보!!!', response.data);
       return response.data;
     },
     {
@@ -79,8 +78,6 @@ const FamilyCalendar = () => {
   });
 
   const loadEventInfo = async ($recruitmentId) => {
-    console.log('loadEventInfo from recruitment', $recruitmentId);
-
     try {
       const [detailResponse, patientResponse] = await Promise.all([
         detailMutation.mutateAsync($recruitmentId),
@@ -109,7 +106,6 @@ const FamilyCalendar = () => {
           const { detailResponse, patientResponse } = await loadEventInfo(eventItem.recruitment_id);
 
           const recruitmentInfo = { ...detailResponse, ...patientResponse };
-          console.log(eventItem, recruitmentInfo);
 
           let currentStartDate = moment(`${eventItem.start_date} ${eventItem.start_time}`);
           let currentEndDate = moment(`${eventItem.start_date} ${eventItem.end_time}`);
