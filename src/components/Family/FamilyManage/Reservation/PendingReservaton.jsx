@@ -59,20 +59,41 @@ const PendingReservation = ({ data }) => {
   }, [recruitmentList]);
 
   const {
-    data: mateList,
-    isError: isMateListError,
-    isLoading: isMateListLoading,
+    data: applyMateList,
+    isError: isApplyMateListError,
+    isLoading: isApplyMateListLoading,
   } = useQuery(
-    ['mateList', selectedRecId],
+    ['applyMateList', selectedRecId],
     async () => {
-      const { data: mateData } = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`, {
+      const { data: applyMateData } = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`, {
         params: {
           recruitment_id: selectedRecId,
         },
       });
-      console.log('mateList', selectedRecId, mateData);
+      console.log('applyMateList', selectedRecId, applyMateData);
 
-      return mateData;
+      return applyMateData;
+    },
+    {
+      enabled: Boolean(selectedRecId),
+    },
+  );
+
+  const {
+    data: offerMateList,
+    isError: isOfferMateListError,
+    isLoading: isOfferMateListLoading,
+  } = useQuery(
+    ['offerMateList', selectedRecId],
+    async () => {
+      const { data: offerMateData } = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/F`, {
+        params: {
+          recruitment_id: selectedRecId,
+        },
+      });
+      console.log('offerMateList', selectedRecId, offerMateData);
+
+      return offerMateData;
     },
     {
       enabled: Boolean(selectedRecId),
@@ -80,8 +101,12 @@ const PendingReservation = ({ data }) => {
   );
 
   useEffect(() => {
-    console.log('mateList', mateList);
-  }, [mateList]);
+    console.log('applyMateList', applyMateList);
+  }, [applyMateList]);
+
+  useEffect(() => {
+    console.log('offerMateList', offerMateList);
+  }, [applyMateList]);
 
   const handleSelectChange = (e) => {
     const newValue = e.target.value;
@@ -147,19 +172,47 @@ const PendingReservation = ({ data }) => {
     }
   };
 
-  const getMateDetail = async (mateId) => {
+  const getApplyMateDetail = async (mateId) => {
     console.log(mateId);
     try {
-      const mateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
-      const mateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
+      const applyMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
+      const applyMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
 
-      const [mateDetailResponse, mateDataResponse] = await Promise.all([mateDetailPromise, mateDataPromise]);
+      const [applyMateDetailResponse, applyMateDataResponse] = await Promise.all([
+        applyMateDetailPromise,
+        applyMateDataPromise,
+      ]);
 
-      const matchedMate = mateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
+      const matchedMate = applyMateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
 
       setMaModalData((prevData) => ({
         ...prevData,
-        ...mateDetailResponse.data,
+        ...applyMateDetailResponse.data,
+        matchedMate: matchedMate ?? {},
+      }));
+
+      console.log('ma', maModalData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getOfferMateDetail = async (mateId) => {
+    console.log(mateId);
+    try {
+      const offerMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
+      const offerMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/F`);
+
+      const [offerMateDetailResponse, offerMateDataResponse] = await Promise.all([
+        offerMateDetailPromise,
+        offerMateDataPromise,
+      ]);
+
+      const matchedMate = offerMateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
+
+      setMaModalData((prevData) => ({
+        ...prevData,
+        ...offerMateDetailResponse.data,
         matchedMate: matchedMate ?? {},
       }));
 
@@ -181,10 +234,16 @@ const PendingReservation = ({ data }) => {
     setSelectedModal('RecruitmentDetail');
   };
 
-  const handleMateDetailClick = (mateId) => {
-    getMateDetail(mateId);
+  const handleApplyMateDetailClick = (mateId) => {
+    getApplyMateDetail(mateId);
     openModal();
-    setSelectedModal('MateDetail');
+    setSelectedModal('ApplyMateDetail');
+  };
+
+  const handleOfferMateDetailClick = (mateId) => {
+    getOfferMateDetail(mateId);
+    openModal();
+    setSelectedModal('OfferMateDetail');
   };
 
   const handleReset = () => {
@@ -193,7 +252,7 @@ const PendingReservation = ({ data }) => {
 
   return (
     <div className={cardstyles.PendingReservation}>
-      {isLoading || isRecListLoading || isMateListLoading ? <Loading /> : null}
+      {isLoading || isRecListLoading || isApplyMateListLoading ? <Loading /> : null}
       <div className={`${cardstyles.select_reservation} input_wrapper`}>
         <label>간병공고 목록</label>
         <select onChange={handleSelectChange}>
@@ -224,7 +283,8 @@ const PendingReservation = ({ data }) => {
             </button>
           </div>
           <span />
-          <h3>지원한 간병인 리스트</h3>
+
+          <h3>내가 제안한 간병인 리스트</h3>
           <div className={styles.ManageTable}>
             <table className={cardstyles.table_margin}>
               <thead>
@@ -238,14 +298,14 @@ const PendingReservation = ({ data }) => {
                 </tr>
               </thead>
               <tbody>
-                {mateList?.length === 0 ? (
+                {offerMateList?.length === 0 ? (
                   <tr>
                     <td colSpan={6}>
-                      <div className='error'>아직 지원한 간병인이 없습니다.</div>
+                      <div className='error'>내가 제안한 간병인이 없습니다.</div>
                     </td>
                   </tr>
                 ) : (
-                  mateList?.map((e) => (
+                  offerMateList?.map((e) => (
                     <tr key={e.mate_resume_id}>
                       <td>{e.mate_resume_id}</td>
                       <td>{e.name}</td>
@@ -253,7 +313,7 @@ const PendingReservation = ({ data }) => {
                       <td>{e.location}</td>
                       <td>{e.mainservice}</td>
                       <td>
-                        <button type='button' onClick={() => handleMateDetailClick(e.mate_resume_id)}>
+                        <button type='button' onClick={() => handleOfferMateDetailClick(e.mate_resume_id)}>
                           상세정보 보기
                         </button>
                       </td>
@@ -270,8 +330,61 @@ const PendingReservation = ({ data }) => {
                 {selectedModal === 'RecruitmentDetail' && (
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
-                {selectedModal === 'MateDetail' && (
-                  <MateDetailModal maModalData={maModalData} closeModal={closeModal} />
+                {selectedModal === 'OfferMateDetail' && (
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
+                )}
+              </>
+            )}
+          </div>
+
+          <h3>지원한 간병인 리스트</h3>
+          <div className={styles.ManageTable}>
+            <table className={cardstyles.table_margin}>
+              <thead>
+                <tr>
+                  <th>아이디</th>
+                  <th>성명</th>
+                  <th>성별</th>
+                  <th>지역</th>
+                  <th>주요 서비스</th>
+                  <th>간병인 상세정보</th>
+                </tr>
+              </thead>
+              <tbody>
+                {applyMateList?.length === 0 ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className='error'>아직 지원한 간병인이 없습니다.</div>
+                    </td>
+                  </tr>
+                ) : (
+                  applyMateList?.map((e) => (
+                    <tr key={e.mate_resume_id}>
+                      <td>{e.mate_resume_id}</td>
+                      <td>{e.name}</td>
+                      <td>{e.gender === 'M' ? '남성' : '여성'}</td>
+                      <td>{e.location}</td>
+                      <td>{e.mainservice}</td>
+                      <td>
+                        <button type='button' onClick={() => handleApplyMateDetailClick(e.mate_resume_id)}>
+                          상세정보 보기
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+            {isModalVisible && (
+              <>
+                {selectedModal === 'PatientDetail' && (
+                  <PatientDetailModal modalData={modalData} closeModal={closeModal} />
+                )}
+                {selectedModal === 'RecruitmentDetail' && (
+                  <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
+                )}
+                {selectedModal === 'ApplyMateDetail' && (
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
                 )}
               </>
             )}
