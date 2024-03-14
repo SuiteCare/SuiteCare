@@ -122,9 +122,7 @@ const MateCalendar = () => {
             const dayOfCurrentEndDate = +moment(currentEndDate).format('d');
             if (weekdays.includes(dayOfCurrentEndDate)) {
               const event = {
-                title: `${recruitmentInfo.patient_name} 님 (${
-                  recruitmentInfo.patient_diagnosis_name || '진단명 없음'
-                })`,
+                title: `${recruitmentInfo.patient_name} (${recruitmentInfo.patient_diagnosis_name || '진단명 없음'})`,
                 family: `보호자 ${eventItem.family_name} (${eventItem.family_id})`,
                 detail: { reservation: { ...eventItem, ...detailResponse }, patient: { ...patientResponse } },
                 start: new Date(currentStartDate),

@@ -7,7 +7,6 @@ import ModalReservationTab from './ModalReservationTab';
 import ModalPatientTab from './ModalPatientTab';
 
 const MateCalendarModal = ({ modalData, closeModal }) => {
-  console.log(modalData);
   const [activeTab, setActiveTab] = useState(0);
 
   const { handleContentClick } = useModal();
