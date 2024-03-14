@@ -7,9 +7,15 @@ import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 const Location = ({ styles, formData, setFormData, setChangedData }) => {
   const { openAlert, alertComponent } = useAlert();
 
+  const cleanUpArray = (arr) => {
+    return Array.from(new Set(arr));
+  };
+
   const handleCheckboxChange = (checked, value) => {
-    if (checked && formData.locationList.length >= 5) {
-      const slicedList = formData.locationList.slice(0, 5);
+    const cleanUpLocationList = cleanUpArray(formData.locationList);
+
+    if (checked && cleanUpLocationList.length >= 5) {
+      const slicedList = cleanUpLocationList.slice(0, 5);
       setFormData((prevData) => {
         const updatedData = { ...prevData };
         updatedData.locationList = [...slicedList];
@@ -26,9 +32,9 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.locationList = [...prevData.locationList, value];
+        updatedData.locationList = cleanUpArray([...prevData.locationList, value]);
       } else {
-        updatedData.locationList = prevData.locationList.filter((it) => it !== value);
+        updatedData.locationList = cleanUpArray(prevData.locationList).filter((it) => it !== value);
       }
 
       return updatedData;
@@ -37,9 +43,9 @@ const Location = ({ styles, formData, setFormData, setChangedData }) => {
       const updatedData = { ...prevData };
 
       if (checked) {
-        updatedData.locationList = [...formData.locationList, value];
+        updatedData.locationList = cleanUpArray([...formData.locationList, value]);
       } else {
-        updatedData.locationList = formData.locationList.filter((it) => it !== value);
+        updatedData.locationList = cleanUpLocationList.filter((it) => it !== value);
       }
 
       return updatedData;
