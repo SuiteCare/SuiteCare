@@ -117,6 +117,7 @@ table {
   --transparent-beige: #dfd7bf25;
   --brown-01: #a4907c;
   --transparent-brown: #a4907c15;
+  --transparent-depp-brown: #594939b5;
   --deep-brown: #4f4242;
   --gray: #acabaa;
   --normal-gray: #cccbca;
@@ -471,7 +472,7 @@ input[type='checkbox'] {
 /*  8. Page Design  --------------------------------------------------- */
 
 .content_wrapper {
-  padding: 0 6rem 8rem 6rem;
+  padding: 0 6rem 6rem;
   max-width: 1440px;
   width: 100%;
   margin: 0 auto;
@@ -479,6 +480,7 @@ input[type='checkbox'] {
 
 .page_with_sidebar {
   display: flex;
+  position: relative;
 }
 
 .title_wrapper span {
@@ -488,8 +490,7 @@ input[type='checkbox'] {
 }
 
 .title_wrapper {
-  margin-top: 8rem;
-  margin-bottom: 2rem;
+  margin: 6rem 0 1rem 0;
   text-align: center;
 }
 
