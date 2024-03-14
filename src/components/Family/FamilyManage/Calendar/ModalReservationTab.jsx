@@ -8,34 +8,70 @@ import styles from './FamilyCalendarModal.module.css';
 import MateDetailModal from '@/components/Common/Modal/Detail/MateDetailModal';
 import Loading from '@/components/Common/Modal/Loading';
 
-import { weekdayDic } from '@/utils/calculators';
+import { minWage, weekdayDic } from '@/utils/calculators';
 
 const ModalReservationTab = ({ modalData, closeModal }) => {
   const { openModal: openDetailModal, isModalVisible: isDetailModalVisible, closeModal: closeDetailModal } = useModal();
   const [mateDetailModalData, setMateDetailModalData] = useState();
   const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
 
-  const mutation = useMutation(
-    async ($mateId) => {
+  const combinedMutation = useMutation(
+    async ($mateResumeId) => {
       try {
-        const response = await axiosInstance.get(`/api/v1/mate/resume/${$mateId}`);
-        const msg = response.headers.get('msg');
-        if (response.data) {
-          setMateDetailModalData({ ...modalData, ...response.data });
-          return response.data;
+        setIsLoading(true);
+        const [resumeResponse, searchResponse] = await Promise.all([
+          axiosInstance.get(`/api/v1/mate/resume/${$mateResumeId}`),
+          axiosInstance.get(`/api/v1/search/mate`, {
+            search_name: $mateResumeId,
+            location: [
+              '강남구',
+              '강동구',
+              '강북구',
+              '강서구',
+              '관악구',
+              '광진구',
+              '구로구',
+              '금천구',
+              '노원구',
+              '도봉구',
+              '동대문구',
+              '동작구',
+              '서대문구',
+              '서초구',
+              '성동구',
+              '성북구',
+              '송파구',
+              '양천구',
+              '영등포구',
+              '용산구',
+              '은평구',
+              '종로구',
+              '중구',
+              '중랑구',
+            ],
+            gender: [],
+            wage: [minWage, 100000],
+          }),
+        ]);
+
+        const resumeData = resumeResponse.data;
+        const searchData = searchResponse.data;
+
+        if (resumeData && searchData) {
+          setMateDetailModalData({ ...searchData[0], ...resumeData });
+          return { resumeData, searchData: searchData[0] };
         }
-        if (msg === 'fail') {
-          console.log('데이터 불러오기 실패');
-          return {};
-        }
+        console.log('데이터 불러오기 실패');
+        return {};
       } catch (error) {
         console.error('Error occurred while fetching modal data:', error);
         return {};
+      } finally {
+        setIsLoading(false);
       }
     },
     {
       onSuccess: () => {
-        setIsLoading(false);
         openDetailModal();
       },
       onError: (error) => {
@@ -46,7 +82,7 @@ const ModalReservationTab = ({ modalData, closeModal }) => {
   );
 
   const handleShowModal = () => {
-    mutation.mutate(modalData.detail.reservation.mate_resume_id);
+    combinedMutation.mutate(modalData.detail.reservation.mate_resume_id);
   };
 
   return (

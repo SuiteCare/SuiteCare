@@ -123,6 +123,7 @@ const FamilyCalendar = () => {
             const dayOfCurrentEndDate = +moment(currentEndDate).format('d');
             if (weekdays.includes(dayOfCurrentEndDate)) {
               const event = {
+                ...eventItem,
                 title: `${recruitmentInfo.patient_name} (${recruitmentInfo.patient_diagnosis_name || '진단명 없음'})`,
                 mate: `간병 메이트 ${eventItem.mate_name} (${eventItem.mate_resume_id})`,
                 detail: { reservation: { ...eventItem, ...detailResponse }, patient: { ...patientResponse } },

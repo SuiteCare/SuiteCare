@@ -29,8 +29,8 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) =
             />
           ) || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
-            <h2>{modalData.name || modalData.mate.split(' ').slice(2).join(' ')}</h2> ({genderToKo(modalData.gender)}성,
-            만 {calAge(modalData.birthday)}세)
+            <h2>{modalData.name || modalData.mate_name}</h2> ({genderToKo(modalData.gender)}성, 만{' '}
+            {calAge(modalData.birthday)}세)
             <p>
               수행한 간병 <b>{modalData.care_times || 0}</b>건<span>|</span>
               <StarRating rate={modalData.rate || 0} /> {(modalData.rate || 0).toFixed(1)}
