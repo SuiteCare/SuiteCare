@@ -1,0 +1,9 @@
+export { default as arrow } from './arrow.svg';
+export { default as calender } from './calender.svg';
+export { default as calenderCheck } from './calenderCheck.svg';
+export { default as general } from './general.svg';
+export { default as list } from './list.svg';
+export { default as offer } from './offer.svg';
+export { default as resume } from './resume.svg';
+export { default as user } from './user.svg';
+export { default as waitList } from './waitList.svg';

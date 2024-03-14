@@ -2,9 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 
-import arrow from '@/assets/arrow.svg';
-import mypage from '@/assets/sidebar/user.svg';
-import resume from '@/assets/sidebar/resume.svg';
+import { arrow, user, resume } from '@/assets/sidebar';
 import styles from '@/components/Common/Sidebar.module.css';
 
 const MenuItem = ({ url, label, icon }) => (
@@ -31,7 +29,7 @@ const MateMyPageSidebar = () => {
       key: 'mypage',
       label: '내 정보 수정',
       url: `${defaultUrl}/mypage`,
-      icon: { image: mypage, alt: 'mypage' },
+      icon: { image: user, alt: 'mypage' },
     },
   ];
 

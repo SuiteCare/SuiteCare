@@ -2,11 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import arrow from '@/assets/arrow.svg';
-import calender from '@/assets/sidebar/calender.svg';
-import offer from '@/assets/sidebar/offer.svg';
-import list from '@/assets/sidebar/list.svg';
-import general from '@/assets/sidebar/general.svg';
+import { arrow, calender, offer, list, general } from '@/assets/sidebar';
 import styles from '@/components/Common/Sidebar.module.css';
 
 const MenuItem = ({ url, label, icon }) => (
