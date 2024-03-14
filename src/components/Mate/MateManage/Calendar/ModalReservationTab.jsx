@@ -6,7 +6,7 @@ const ModalReservationTab = ({ modalData }) => {
   return (
     <>
       <div className='input_wrapper'>
-        <label>보호자</label>
+        <label>{modalData.family.slice(0, 4)}</label>
         {modalData.family.slice(4)}
       </div>
       <div className='input_wrapper'>

@@ -9,7 +9,7 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal, handleApply }) => {
+const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) => {
   const { handleContentClick } = useModal();
 
   return (
@@ -21,36 +21,58 @@ const MateDetailModal = ({ modalData, closeModal, handleApply }) => {
         <div className={styles.profile_section}>
           {(
             <Image
-              src={`/${modalData.profile_picture_filename}`}
+              src={`/${modalData.profile_picture_filename || 'default_profile.jpg'}`}
               width={300}
               height={200}
-              alt={`${modalData.profile_picture_filename}`}
+              alt={`${modalData.profile_picture_filename || 'profile picture'}`}
             />
           ) || <Image src={defaultProfile} alt='profile_picture' />}
           <div className={styles.profile_details}>
-            <h2>{modalData.name}</h2> ({genderToKo(modalData.gender)}성, 만 {calAge(modalData.birthday)}세)
+            <h2>{modalData.name || modalData.mate_name}</h2> ({genderToKo(modalData.gender)}성, 만{' '}
+            {calAge(modalData.birthday)}세)
             <p>
               수행한 간병 <b>{modalData.care_times || 0}</b>건<span>|</span>
               <StarRating rate={modalData.rate || 0} /> {(modalData.rate || 0).toFixed(1)}
             </p>
-            <p>📞{modalData.tel?.slice(0, 7) || '전화번호 정보가 없습니다.'}</p>
-            <p>📧{modalData.email || '이메일 정보가 없습니다.'}</p>
+            <p>
+              📞
+              {(pagePosition === 'FamilyCalendar' ? modalData.mateResume.tel : `${modalData.tel?.slice(0, 7)}****`) ||
+                '전화번호 정보가 없습니다.'}
+            </p>
+            <p>📧{modalData.email || modalData.mateResume.email || '이메일 정보가 없습니다.'}</p>
           </div>
         </div>
-        <div className={styles.introduction}>{modalData.introduction || '소개글이 없습니다.'}</div>
+        <div className={styles.introduction}>{modalData.mateResume.introduction || '소개글이 없습니다.'}</div>
         <div className={styles.info_grid}>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>활동 지역</label>
-            <span>{modalData.location.split(',').join(', ')}</span>
+            <span>
+              {typeof modalData.locationList === 'string'
+                ? modalData.locationList.split(',').join(', ')
+                : typeof modalData.locationList === 'object'
+                  ? Object.values(modalData.locationList)
+                      .map((e) => e.name)
+                      .join(', ')
+                  : '활동 지역 정보가 없습니다.'}
+            </span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>대표 서비스</label>
-            <span>{modalData.mainservice.split(',').join(', ')}</span>
+            <span>
+              {' '}
+              {typeof modalData.mainServiceList === 'string'
+                ? modalData.mainServiceList.split(',').join(', ')
+                : typeof modalData.mainServiceList === 'object'
+                  ? Object.values(modalData.mainServiceList)
+                      .map((e) => e.name)
+                      .join(', ')
+                  : '주요 서비스 정보가 없습니다.'}
+            </span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>연락 가능 시간</label>
             <span>
-              {modalData.contact_time_start}~{modalData.contact_time_end}
+              {modalData.mateResume.contact_time_start}~{modalData.mateResume.contact_time_end}
             </span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
@@ -104,7 +126,7 @@ const MateDetailModal = ({ modalData, closeModal, handleApply }) => {
                     <td>{e.name}</td>
                     <td>{e.code}</td>
                     <td>{e.qualification_date}</td>
-                    <td>{e.expired_date}</td>
+                    <td>{e.expired_date === '9999-12-31' ? '없음' : e.expired_date}</td>
                   </tr>
                 ))}
               </tbody>
@@ -114,9 +136,13 @@ const MateDetailModal = ({ modalData, closeModal, handleApply }) => {
           )}
         </div>
         <div className={styles.button_wrapper}>
-          <button type='submit' onClick={() => handleApply(modalData)}>
-            간병 제안하기
-          </button>
+          {pagePosition === 'FamilyCalendar' ? (
+            ''
+          ) : (
+            <button type='submit' onClick={() => handleApply(modalData)}>
+              간병 제안하기
+            </button>
+          )}
         </div>
       </div>
     </div>
