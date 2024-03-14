@@ -20,7 +20,7 @@ const MenuItem = ({ url, label, icon }) => (
 );
 
 const FamilyManageSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const defaultUrl = '/family/manage';
 
   const menuItems = [

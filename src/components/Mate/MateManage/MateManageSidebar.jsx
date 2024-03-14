@@ -19,7 +19,7 @@ const MenuItem = ({ url, label, icon }) => (
 );
 
 const MateManageSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const defaultUrl = '/mate/manage';
 
   const menuItems = [
