@@ -65,14 +65,18 @@ const SignUpForm = ({ type }) => {
         const response = await checkDuplicateIDMutation.mutateAsync(formData.id);
         const { data } = response;
 
-        if (data !== 0) {
+        if (data.code === 200) {
+          setIsAvailableID(true);
+          return openAlert('사용 가능한 아이디입니다.');
+        }
+      } catch (error) {
+        if(error.response.data.code === 409) {
           setIsAvailableID(false);
           return openAlert('이미 사용 중인 아이디입니다.');
+        } else {
+          setIsAvailableID(false);
+          return openAlert('요청을 처리하는 중 오류가 발생했습니다.');
         }
-        setIsAvailableID(true);
-        return openAlert('사용 가능한 아이디입니다.');
-      } catch (error) {
-        console.error('Error:', error);
       }
     } else {
       setIsAvailableID(false);

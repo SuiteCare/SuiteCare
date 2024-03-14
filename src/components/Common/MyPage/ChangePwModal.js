@@ -42,16 +42,22 @@ const ChangePwModal = ({ closeModal }) => {
 
       try {
         const response = await axiosInstance.post('/api/v1/changepassword', body);
-        if (response.data === 0) {
-          alert('현재 비밀번호를 다시 확인해주세요.');
-        } else {
+        if (response.data.code === 200) {
           alert('비밀번호 변경이 완료되었습니다. 변경된 비밀번호로 로그인하세요');
           closeModal();
           logout();
           navigator.push(`/${window.location.pathname.split('/')[1]}/login`);
         }
       } catch (error) {
-        console.error(error);
+        const errorCode = error.response.data.code;
+
+        if(errorCode === 401) {
+          alert('현재 비밀번호를 다시 확인해주세요.');
+        } else if(errorCode === 409) {
+          alert('현재 사용 중인 비밀번호는 사용할 수 없습니다.');
+        } else {
+          alert('요청을 처리하는 중 오류가 발생했습니다.');
+        }
       }
     } else {
       alert('입력하신 새 비밀번호가 다릅니다.');
