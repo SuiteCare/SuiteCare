@@ -1,14 +1,18 @@
+import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
+import arrow from '@/assets/arrow.svg';
 import styles from '@/components/Common/Sidebar.module.css';
 
-const MenuItem = ({ url, label, isActive }) => (
-  <div className={`${styles.menu} ${isActive ? styles.active : ''}`}>
+const MenuItem = ({ url, label }) => (
+  <div className={styles.menuItem}>
     <Link href={url}>{label}</Link>
   </div>
 );
 
-const FamilyManageSidebar = ({ activeMenu }) => {
+const FamilyManageSidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const defaultUrl = '/family/manage';
 
   const menuItems = [
@@ -19,12 +23,22 @@ const FamilyManageSidebar = ({ activeMenu }) => {
     { key: 'history', label: '전체 내역', url: `${defaultUrl}/history` },
   ];
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className={styles.Sidebar}>
-      <h3>내 활동 관리</h3>
-      {menuItems.map((item) => (
-        <MenuItem key={item.key} url={item.url} label={item.label} isActive={activeMenu === item.key} />
-      ))}
+    <div className={`${styles.sidebar} ${isOpen ? styles.open : styles.close}`}>
+      <div onClick={toggleSidebar} className={styles.toggleButton}>
+        <input type='checkbox' />
+        <Image src={arrow} alt='arrowImage' width={30} height={30} />
+      </div>
+      <h3>내 활동관리</h3>
+      <div className={styles.menu}>
+        {menuItems.map((item) => (
+          <MenuItem key={item.key} url={item.url} label={item.label} />
+        ))}
+      </div>
     </div>
   );
 };
