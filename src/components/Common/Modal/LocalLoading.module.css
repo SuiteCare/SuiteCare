@@ -1,0 +1,13 @@
+.LocalLoading {
+  width: 100%;
+  z-index: 9998;
+  overflow: hidden;
+  background-color: #0002;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: -webkit-fill-available;
+  border-radius: inherit;
+  backdrop-filter: blur(4px);
+}
