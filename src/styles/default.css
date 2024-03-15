@@ -481,6 +481,7 @@ input[type='checkbox'] {
 .page_with_sidebar {
   display: flex;
   position: relative;
+  min-height: 100vh;
 }
 
 .title_wrapper span {
