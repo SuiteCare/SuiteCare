@@ -96,7 +96,6 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) =
                   <tr key={e}>
                     <td>{e.job_name}</td>
                     <td>{e.name}</td>
-                    <td>{e.description}</td>
                     <td>
                       {e.date_start} ~ {e.date_end}
                     </td>
