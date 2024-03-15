@@ -51,7 +51,7 @@ const FamilyCalendar = () => {
 
       const events = [];
 
-      const patientName = patientList.filter((e) => e.id === patient_id);
+      const patientName = patientList.filter((e) => e.id === data.id);
 
       // 주어진 범위 내의 출근 요일에 해당하는 날짜를 별개의 이벤트로 추가
       while (currentEndDate.isSameOrBefore(endDate, 'day')) {
