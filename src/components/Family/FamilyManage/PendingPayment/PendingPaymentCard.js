@@ -41,7 +41,7 @@ const PaymentCard = ({ data, handleReservationDetailButton, handlePaymentButton 
         <span className={`${detailData?.location === '병원' ? styles.hospital : styles.home}`}>
           {detailData?.location}
         </span>
-        <span>
+        <span title={`${detailData?.road_address} ${detailData?.address_detail}`}>
           {detailData?.road_address} {detailData?.address_detail}
         </span>
       </div>
@@ -88,7 +88,6 @@ const PaymentCard = ({ data, handleReservationDetailButton, handlePaymentButton 
       </section>
       <hr />
       <section>
-        <span />
         <div>
           <label>총 결제액</label>
           <span>
