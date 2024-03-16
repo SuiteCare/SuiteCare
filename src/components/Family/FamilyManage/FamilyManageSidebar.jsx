@@ -2,12 +2,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import arrow from '@/assets/arrow.svg';
-import general from '@/assets/sidebar/general.svg';
-import list from '@/assets/sidebar/list.svg';
-import calender from '@/assets/sidebar/calender.svg';
-import calenderCheck from '@/assets/sidebar/calenderCheck.svg';
-import waitList from '@/assets/sidebar/waitList.svg';
+import { arrow, general, list, calender, calenderCheck, waitList } from '@/assets/sidebar';
 import styles from '@/components/Common/Sidebar.module.css';
 
 const MenuItem = ({ url, label, icon }) => (
@@ -20,7 +15,7 @@ const MenuItem = ({ url, label, icon }) => (
 );
 
 const FamilyManageSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const defaultUrl = '/family/manage';
 
   const menuItems = [
