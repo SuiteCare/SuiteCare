@@ -9,9 +9,9 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal, handleAccept }) => {
+const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
   const { handleContentClick } = useModal();
-  console.log('!!', modalData);
+  console.log('!!', modalType);
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -113,11 +113,16 @@ const MateDetailModal = ({ modalData, closeModal, handleAccept }) => {
                 <div className={styles.introduction}>자격증 정보가 없습니다.</div>
               )}
             </div>
-
             <div className={styles.button_wrapper}>
-              <button type='button' onClick={handleAccept}>
-                간병 수락하기
-              </button>
+              {modalType !== 'Offer' ? (
+                <button type='button' onClick={handleAccept}>
+                  간병 확정하기
+                </button>
+              ) : (
+                <button type='button' onClick={closeModal}>
+                  닫기
+                </button>
+              )}
             </div>
           </>
         ) : (
