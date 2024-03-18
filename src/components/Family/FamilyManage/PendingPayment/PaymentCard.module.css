@@ -2,15 +2,85 @@
   display: grid;
   width: 100%;
   padding: 1.6rem;
-  grid-template-columns: 200px 1fr 150px;
   min-height: 200px;
-  grid-column-gap: 1rem;
   border: 1px solid #dedddc;
   background-color: var(--transparent-brown);
   align-items: center;
   border-radius: 12px;
   margin-bottom: 1rem;
   box-shadow: 0px 2px 12px -6px var(--normal-gray);
+  position: relative;
+  padding-top: calc(1.6rem + 40px);
+}
+
+.card section {
+  display: grid;
+  grid-column-gap: 1rem;
+  grid-template-columns: 200px 1fr 150px;
+}
+
+.card section:last-of-type div {
+  font-size: 1.2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.card section:last-of-type div:first-of-type {
+  grid-column-start: span 2;
+}
+
+.card section:last-of-type label {
+  font-weight: bold;
+}
+
+.card section:last-of-type span:first-of-type {
+  font-weight: 500;
+}
+
+.card section:last-of-type button {
+  background-color: var(--deep-brown);
+}
+
+.top {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  background: var(--light-gray);
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 7rem 1fr;
+  height: 40px;
+  font-size: 1.15rem;
+  gap: 1rem;
+}
+
+.top > span {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
+.home,
+.hospital {
+  font-weight: bold;
+  border-top-left-radius: 12px;
+  color: white;
+  padding: 7px 1.5rem 5px 1.5rem;
+  border: 1px solid #0003;
+}
+
+.home {
+  background-color: teal;
+}
+
+.hospital {
+  background-color: cornflowerblue;
 }
 
 .contents {
@@ -28,22 +98,28 @@
   background-color: var(--deep-brown);
 }
 
-.userName label {
-  font-size: 1.5rem;
-  margin-right: 6px;
+.userName {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
 }
 
-.userName p:last-of-type {
-  line-height: 1.25;
-  font-size: 0.9rem;
-  color: var(--brown-01);
-  margin-top: 6px;
-  width: 90%;
+.userName span {
+  font-size: 1.1rem;
+  border-radius: 5px;
+  border: 1px solid var(--transparent-brown);
+  background-color: var(--transparent-brown);
+  padding: 0 12px;
+  font-weight: 500;
+  color: var(--deep-brown);
+}
+
+.userName label {
+  font-size: 1.5rem;
 }
 
 .userInfo_wrapper {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   grid-column-gap: 2rem;
 }
 
@@ -59,25 +135,50 @@
   justify-content: center;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 900px) {
   .card {
-    grid-template-columns: 200px 1fr;
-    grid-row-gap: 2rem;
+    grid-template-columns: 1fr;
+  }
+
+  .card section {
+    grid-template-columns: 1fr;
+  }
+
+  .card img {
+    max-width: 160px;
+  }
+
+  .userName {
+    position: absolute;
+    left: calc(160px + 2.5rem);
+    top: calc(40px + 2rem);
+    transform: translate(0, 25%);
+    flex-direction: column;
+  }
+
+  .userName label {
+    padding-left: 4px;
+  }
+
+  .userInfo_wrapper {
+    margin-top: 8px;
+  }
+
+  .card section:last-of-type div:first-of-type {
+    grid-column-start: 1;
+    justify-content: center;
+  }
+
+  .card section:last-of-type {
+    grid-template-columns: 1fr 1fr;
   }
 
   .search_button_wrapper {
-    flex-direction: row;
-    grid-column-start: 1;
-    grid-column-end: 3;
+    margin-top: 8px;
+    align-items: center;
   }
 
   .userInfo {
     grid-template-columns: 6rem 1fr;
-  }
-}
-
-@media (max-width: 900px) {
-  .card {
-    grid-template-columns: 200px 1fr;
   }
 }

@@ -660,13 +660,27 @@ input[type='checkbox'] {
 }
 
 /* 12. Responsive  --------------------------------------------------- */
+
+@media (max-width: 1300px) {
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 3rem 8rem 3rem;
+  }
+}
+
 @media (max-width: 900px) {
   .content_wrapper {
     padding: 0 3rem 8rem 3rem;
   }
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 2rem 8rem 2rem;
+  }
 }
+
 @media (max-width: 600px) {
   .content_wrapper {
     padding: 0 2rem 8rem 2rem;
+  }
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 1rem 8rem 1rem;
   }
 }

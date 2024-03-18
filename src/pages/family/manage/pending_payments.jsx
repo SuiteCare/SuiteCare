@@ -11,7 +11,7 @@ const FamilyCalendarPage = () => {
         <div className='content_wrapper'>
           <div className='title_wrapper'>
             <h1>결제 대기 목록</h1>
-            <span>결제 대금 수납을 기다리는 간병 완료 목록입니다.</span>
+            <span>결제 대금 수납을 기다리는 간병 목록입니다.</span>
           </div>
           <PendingPaymentList />
         </div>
