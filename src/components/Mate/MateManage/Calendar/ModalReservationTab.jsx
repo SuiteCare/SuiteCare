@@ -2,12 +2,22 @@ import React from 'react';
 
 import { weekdayDic } from '@/utils/calculators';
 
-const ModalReservationTab = ({ modalData }) => {
+const ModalReservationTab = ({ modalData, styles }) => {
   return (
     <>
       <div className='input_wrapper'>
         <label>{modalData.family.slice(0, 4)}</label>
         {modalData.family.slice(4)}
+      </div>
+      <hr />
+      <div className='input_wrapper'>
+        <label>간병지 주소</label>
+        <div>
+          <span className={`${modalData.detail.reservation.location === 'hospital' ? styles.hospital : styles.home}`}>
+            {modalData.detail.reservation.location}
+          </span>{' '}
+          {modalData.detail.reservation.road_address} {modalData.detail.reservation.address_detail}
+        </div>
       </div>
       <div className='input_wrapper'>
         <label>간병 기간</label>
