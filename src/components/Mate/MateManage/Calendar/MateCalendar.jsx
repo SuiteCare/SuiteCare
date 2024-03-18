@@ -97,11 +97,21 @@ const MateCalendar = () => {
     const getEventList = async () => {
       if (!data || data.length === 0) return;
 
-      const currentCalendarData = data.filter(
-        (e) =>
-          +e.end_date.slice(0, 4) === +currentCalendar.getFullYear() &&
-          +e.end_date.slice(5, 7) === +currentCalendar.getMonth() + 1,
-      );
+      const currentYear = currentCalendar.getFullYear();
+      const currentMonth = currentCalendar.getMonth() + 1;
+
+      const currentCalendarData = data.filter((e) => {
+        const startDate = new Date(e.start_date);
+        const endDate = new Date(e.end_date);
+
+        const isEventInCurrentMonth =
+          startDate.getFullYear() === currentYear &&
+          endDate.getFullYear() === currentYear &&
+          startDate.getMonth() + 1 <= currentMonth &&
+          endDate.getMonth() + 1 >= currentMonth;
+
+        return isEventInCurrentMonth;
+      });
 
       const promises = currentCalendarData.map(async (eventItem) => {
         try {
