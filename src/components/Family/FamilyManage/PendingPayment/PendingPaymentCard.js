@@ -64,7 +64,7 @@ const PaymentCard = ({ data, handleReservationDetailButton }) => {
         )}
         <div className={styles.contents}>
           <div className={styles.userName}>
-            <span>간병 메이트 </span>
+            <span>담당 메이트 </span>
             <label>
               {data.mate_name} ({data.mate_resume_id})
             </label>

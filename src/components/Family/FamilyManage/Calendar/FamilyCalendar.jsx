@@ -121,7 +121,7 @@ const FamilyCalendar = () => {
               const event = {
                 ...eventItem,
                 title: `${recruitmentInfo.patient_name} (${recruitmentInfo.patient_diagnosis_name || '진단명 없음'})`,
-                mate: `간병 메이트 ${eventItem.mate_name} (${eventItem.mate_resume_id})`,
+                mate: `담당 메이트 ${eventItem.mate_name} (${eventItem.mate_resume_id})`,
                 detail: { reservation: { ...eventItem, ...detailResponse }, patient: { ...patientResponse } },
                 start: new Date(currentStartDate),
                 end: new Date(currentEndDate),

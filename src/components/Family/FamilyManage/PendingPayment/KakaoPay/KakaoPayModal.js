@@ -24,7 +24,7 @@ const KakaoPayModal = ({ modalData, closeModal }) => {
         cid: 'TC0ONETIME',
         partner_order_id: `${recruitment_id}`,
         partner_user_id: id,
-        item_name: `스위트케어 간병 결제 (간병 메이트 ${mate_name})`,
+        item_name: `스위트케어 간병 결제 (담당 메이트 ${mate_name})`,
         quantity: 1,
         total_amount: totalAmount,
         tax_free_amount: 0,
