@@ -36,8 +36,9 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
             </p>
             <p>
               📞
-              {(page === 'calendar' ? modalData.mateResume.tel : `${modalData.tel?.slice(0, 7)}****`) ||
-                '전화번호 정보가 없습니다.'}
+              {(page === 'calendar'
+                ? `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-${modalData.tel.slice(7)}`
+                : `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-****`) || '전화번호 정보가 없습니다.'}
             </p>
             <p>📧{modalData.email || modalData.mateResume.email || '이메일 정보가 없습니다.'}</p>
           </div>

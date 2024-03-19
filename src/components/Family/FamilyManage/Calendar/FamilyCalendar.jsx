@@ -176,7 +176,7 @@ const FamilyCalendar = () => {
         {...getComponents(openModal, setModalData)}
         {...settingProps}
       />
-      {isModalVisible && <CalendarModal modalData={modalData} closeModal={closeModal} />}
+      {isModalVisible && <CalendarModal modalData={modalData} closeModal={closeModal} page='family' />}
     </>
   );
 };

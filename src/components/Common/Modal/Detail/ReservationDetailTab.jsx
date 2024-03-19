@@ -8,7 +8,7 @@ import MateDetailModal from './MateDetailModal';
 
 import { calTimeDiff, countWeekdays, minWage, weekdayDic } from '@/utils/calculators';
 
-const ReservationDetailTab = ({ styles, modalData }) => {
+const ReservationDetailTab = ({ styles, modalData, page }) => {
   const [mateDetailModalData, setMateDetailModalData] = useState();
 
   const {
@@ -87,23 +87,60 @@ const ReservationDetailTab = ({ styles, modalData }) => {
     mateDetailModalData && openMateDetailModal();
   }, [mateDetailModalData]);
 
+  const renderMateOrFamilyInfo = () => {
+    if (page === 'family') {
+      return (
+        <>
+          <h5>간병인 정보</h5>
+          <div className={`${styles.info_wrapper} ${styles.single}`}>
+            <label>담당 메이트</label>
+            <div className='input_with_button'>
+              <span>
+                {modalData.mate_resume_id ? `${modalData.mate_name} (${modalData.mate_resume_id})` : '간병인 미배정'}
+              </span>
+              <button onClick={handleMateDetailButton}>상세정보 보기</button>
+            </div>
+          </div>
+        </>
+      );
+    }
+    if (page === 'mate') {
+      return (
+        <>
+          <h5>보호자 정보</h5>
+          <div className={`${styles.info_wrapper} ${styles.single}`}>
+            <label>보호자</label>
+            <span>
+              {modalData.family_name} ({modalData.family_id})
+            </span>
+          </div>
+          <div className={`${styles.info_wrapper} ${styles.single}`}>
+            <label>연락처</label>
+            <div>
+              <p>
+                📞
+                {modalData.tel
+                  ? `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-${modalData.tel.slice(7)}`
+                  : '전화번호 정보가 없습니다.'}
+              </p>
+              <p>
+                📧
+                {modalData.email || '이메일 정보가 없습니다.'}
+              </p>
+            </div>
+          </div>
+        </>
+      );
+    }
+    return '오류가 발생했습니다.';
+  };
+
   return (
     <>
       {isMateDetailModalVisible && (
         <MateDetailModal modalData={mateDetailModalData} closeModal={closeMateDetailModal} page='calendar' />
       )}
-      <div className={styles.info_section}>
-        <h5>간병인 정보</h5>
-        <div className={`${styles.info_wrapper} ${styles.single}`}>
-          <label>담당 메이트</label>
-          <div className='input_with_button'>
-            <span>
-              {modalData.mate_resume_id ? `${modalData.mate_name} (${modalData.mate_resume_id})` : '간병인 미배정'}
-            </span>
-            <button onClick={handleMateDetailButton}>상세정보 보기</button>
-          </div>
-        </div>
-      </div>
+      <div className={styles.info_section}>{renderMateOrFamilyInfo()}</div>
 
       <hr />
 
