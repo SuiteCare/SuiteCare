@@ -8,10 +8,11 @@ import useModal from '@/hooks/useModal';
 import PendingPaymentCard from './PendingPaymentCard';
 import Loading from '@/components/Common/Modal/Loading';
 import ReservationDetailModal from '../History/ReservationDetailModal';
+import KakaoPayModal from './KakaoPay/KakaoPayModal';
 
 const FamilyPaymentList = () => {
   const { id } = useLoginInfo();
-  const { isModalVisible, openModal, closeModal } = useModal();
+  const { isModalVisible: isDetailModalVisible, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
   const [data, setData] = useState();
 
   const {
@@ -42,10 +43,7 @@ const FamilyPaymentList = () => {
 
   const handleReservationDetailButton = ($detailData) => {
     setSelectedReservation({ ...data, ...$detailData });
-    openModal();
-  };
-  const handlePaymentButton = ($detailData) => {
-    setSelectedReservation({ ...data, ...$detailData });
+    openDetailModal();
   };
 
   return (
@@ -56,19 +54,16 @@ const FamilyPaymentList = () => {
           {data &&
             Object.values(data).map((e) => {
               return (
-                <PendingPaymentCard
-                  key={e.id}
-                  data={e}
-                  handleReservationDetailButton={handleReservationDetailButton}
-                  handlePaymentButton={handlePaymentButton}
-                />
+                <PendingPaymentCard key={e.id} data={e} handleReservationDetailButton={handleReservationDetailButton} />
               );
             })}
         </div>
       ) : (
         <div className='no_result'>결제를 기다리는 간병이 없습니다.</div>
       )}
-      {isModalVisible && <ReservationDetailModal selectedReservation={selectedReservation} closeModal={closeModal} />}
+      {isDetailModalVisible && (
+        <ReservationDetailModal selectedReservation={selectedReservation} closeModal={closeDetailModal} />
+      )}
     </>
   );
 };

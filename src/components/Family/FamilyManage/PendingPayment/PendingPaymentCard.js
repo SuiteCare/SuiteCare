@@ -2,14 +2,16 @@ import Image from 'next/image';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
+import useModal from '@/hooks/useModal';
 
 import styles from './PaymentCard.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 import LocalLoading from '@/components/Common/Modal/LocalLoading';
+import KakaoPayModal from './KakaoPay/KakaoPayModal';
 
 import { calTimeDiff, countWeekdays, normalizeWeekDays, weekdayDic } from '@/utils/calculators';
 
-const PaymentCard = ({ data, handleReservationDetailButton, handlePaymentButton }) => {
+const PaymentCard = ({ data, handleReservationDetailButton }) => {
   const recruitmentId = data.recruitment_id;
 
   const {
@@ -34,8 +36,19 @@ const PaymentCard = ({ data, handleReservationDetailButton, handlePaymentButton 
     },
   );
 
+  const {
+    isModalVisible: isPaymentModalVisible,
+    openModal: openPaymentModal,
+    closeModal: closePaymentModal,
+  } = useModal();
+
+  const handlePaymentButton = () => {
+    openPaymentModal();
+  };
+
   return (
     <div className={styles.card}>
+      {isPaymentModalVisible && <KakaoPayModal modalData={{ ...data, ...detailData }} closeModal={closePaymentModal} />}
       {isDetailDataLoading && <LocalLoading />}
       <div className={styles.top}>
         <span className={`${detailData?.location === '병원' ? styles.hospital : styles.home}`}>
