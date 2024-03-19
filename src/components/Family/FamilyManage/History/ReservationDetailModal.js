@@ -10,13 +10,14 @@ import PatientData from './PatientData';
 import Loading from '@/components/Common/Modal/Loading';
 
 const ReservationDetailModal = ({ selectedReservation, closeModal }) => {
+  console.log(selectedReservation);
   const [activeTab, setActiveTab] = useState(0);
   const { handleContentClick } = useModal();
 
   const results = useQueries([
     {
       queryKey: ['patient', selectedReservation.patient_id],
-      queryFn: () => axiosInstance.get(`/api/v1/patient/${selectedReservation.patient_id}`),
+      queryFn: () => axiosInstance.get(`/api/v1/patient/${selectedReservation.patient_id}`), // 옛날식임.. 고쳐야 됨
       enabled: !!selectedReservation.patient_id,
       staleTime: 1000 * 60 * 1,
     },

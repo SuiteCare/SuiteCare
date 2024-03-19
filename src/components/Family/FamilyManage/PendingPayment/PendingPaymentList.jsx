@@ -3,15 +3,12 @@ import { useState } from 'react';
 
 import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
-import useModal from '@/hooks/useModal';
 
 import PendingPaymentCard from './PendingPaymentCard';
 import Loading from '@/components/Common/Modal/Loading';
-import ReservationDetailModal from '../History/ReservationDetailModal';
 
 const FamilyPaymentList = () => {
   const { id } = useLoginInfo();
-  const { isModalVisible, openModal, closeModal } = useModal();
   const [data, setData] = useState();
 
   const {
@@ -38,16 +35,6 @@ const FamilyPaymentList = () => {
     },
   );
 
-  const [selectedReservation, setSelectedReservation] = useState({});
-
-  const handleReservationDetailButton = ($detailData) => {
-    setSelectedReservation({ ...data, ...$detailData });
-    openModal();
-  };
-  const handlePaymentButton = ($detailData) => {
-    setSelectedReservation({ ...data, ...$detailData });
-  };
-
   return (
     <>
       {isReservationDataLoading && <Loading />}
@@ -55,20 +42,12 @@ const FamilyPaymentList = () => {
         <div className='FamilyPaymentList'>
           {data &&
             Object.values(data).map((e) => {
-              return (
-                <PendingPaymentCard
-                  key={e.id}
-                  data={e}
-                  handleReservationDetailButton={handleReservationDetailButton}
-                  handlePaymentButton={handlePaymentButton}
-                />
-              );
+              return <PendingPaymentCard key={e.id} data={e} />;
             })}
         </div>
       ) : (
         <div className='no_result'>결제를 기다리는 간병이 없습니다.</div>
       )}
-      {isModalVisible && <ReservationDetailModal selectedReservation={selectedReservation} closeModal={closeModal} />}
     </>
   );
 };

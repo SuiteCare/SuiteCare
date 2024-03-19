@@ -87,14 +87,14 @@
   display: grid;
 }
 
-.card button {
+.search_button_wrapper button {
   height: fit-content;
   padding: 5px;
   width: 100%;
   max-width: 300px;
 }
 
-.card button:nth-of-type(2) {
+.search_button_wrapper button:nth-of-type(2) {
   background-color: var(--deep-brown);
 }
 
