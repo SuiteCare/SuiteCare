@@ -3,16 +3,12 @@ import { useState } from 'react';
 
 import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
-import useModal from '@/hooks/useModal';
 
 import PendingPaymentCard from './PendingPaymentCard';
 import Loading from '@/components/Common/Modal/Loading';
-import ReservationDetailModal from '../History/ReservationDetailModal';
-import KakaoPayModal from './KakaoPay/KakaoPayModal';
 
 const FamilyPaymentList = () => {
   const { id } = useLoginInfo();
-  const { isModalVisible: isDetailModalVisible, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
   const [data, setData] = useState();
 
   const {
@@ -39,13 +35,6 @@ const FamilyPaymentList = () => {
     },
   );
 
-  const [selectedReservation, setSelectedReservation] = useState({});
-
-  const handleReservationDetailButton = ($detailData) => {
-    setSelectedReservation({ ...data, ...$detailData });
-    openDetailModal();
-  };
-
   return (
     <>
       {isReservationDataLoading && <Loading />}
@@ -53,16 +42,11 @@ const FamilyPaymentList = () => {
         <div className='FamilyPaymentList'>
           {data &&
             Object.values(data).map((e) => {
-              return (
-                <PendingPaymentCard key={e.id} data={e} handleReservationDetailButton={handleReservationDetailButton} />
-              );
+              return <PendingPaymentCard key={e.id} data={e} />;
             })}
         </div>
       ) : (
         <div className='no_result'>결제를 기다리는 간병이 없습니다.</div>
-      )}
-      {isDetailModalVisible && (
-        <ReservationDetailModal selectedReservation={selectedReservation} closeModal={closeDetailModal} />
       )}
     </>
   );

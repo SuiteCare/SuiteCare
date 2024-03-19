@@ -357,11 +357,13 @@ input::-moz-focus-inner {
 }
 
 .input_with_button {
-  display: grid;
-  grid-template-columns: 1fr 8rem;
-  gap: 1rem;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+}
+
+.input_with_button > button {
+  padding: 0.6rem 2rem;
 }
 
 form .input_with_button > .input_wrapper {

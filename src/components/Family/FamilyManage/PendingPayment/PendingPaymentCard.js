@@ -8,11 +8,24 @@ import styles from './PaymentCard.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
 import LocalLoading from '@/components/Common/Modal/LocalLoading';
 import KakaoPayModal from './KakaoPay/KakaoPayModal';
+import ReservationDetailModal from '@/components/Common/Modal/Detail/ReservationDetailModal';
+import MateDetailModal from '@/components/Common/Modal/Detail/MateDetailModal';
 
 import { calTimeDiff, countWeekdays, normalizeWeekDays, weekdayDic } from '@/utils/calculators';
 
-const PaymentCard = ({ data, handleReservationDetailButton }) => {
+const PaymentCard = ({ data }) => {
   const recruitmentId = data.recruitment_id;
+  const { isModalVisible: isDetailModalVisible, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
+  const {
+    isModalVisible: isMateDetailModalVisible,
+    openModal: openMateDetailModal,
+    closeModal: closeMateDetailModal,
+  } = useModal();
+  const {
+    isModalVisible: isPaymentModalVisible,
+    openModal: openPaymentModal,
+    closeModal: closePaymentModal,
+  } = useModal();
 
   const {
     data: detailData,
@@ -36,20 +49,33 @@ const PaymentCard = ({ data, handleReservationDetailButton }) => {
     },
   );
 
-  const {
-    isModalVisible: isPaymentModalVisible,
-    openModal: openPaymentModal,
-    closeModal: closePaymentModal,
-  } = useModal();
+  const handleReservationDetailButton = () => {
+    openDetailModal();
+  };
 
   const handlePaymentButton = () => {
     openPaymentModal();
   };
 
+  const handleMateDetailButton = () => {
+    closeDetailModal();
+    openMateDetailModal();
+  };
+
   return (
     <div className={styles.card}>
-      {isPaymentModalVisible && <KakaoPayModal modalData={{ ...data, ...detailData }} closeModal={closePaymentModal} />}
       {isDetailDataLoading && <LocalLoading />}
+      {isDetailModalVisible && (
+        <ReservationDetailModal
+          modalData={{ ...data, ...detailData }}
+          closeModal={closeDetailModal}
+          handleMateDetailButton={handleMateDetailButton}
+        />
+      )}
+      {isMateDetailModalVisible && (
+        <MateDetailModal modalData={{ ...data, ...detailData }} closeModal={closeMateDetailModal} />
+      )}
+      {isPaymentModalVisible && <KakaoPayModal modalData={{ ...data, ...detailData }} closeModal={closePaymentModal} />}
       <div className={styles.top}>
         <span className={`${detailData?.location === '병원' ? styles.hospital : styles.home}`}>
           {detailData?.location}
