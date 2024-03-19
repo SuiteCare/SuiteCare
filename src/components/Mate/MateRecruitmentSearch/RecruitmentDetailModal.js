@@ -6,7 +6,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
-const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
+const RecruitmentDetailModal = ({ modalData, closeModal, handleApply, alertComponent }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -15,6 +15,8 @@ const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
+      {alertComponent}
+
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
           <span onClick={closeModal} />

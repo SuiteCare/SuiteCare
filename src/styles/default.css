@@ -357,8 +357,9 @@ input::-moz-focus-inner {
 }
 
 .input_with_button {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 10rem;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -370,9 +371,13 @@ form .input_with_button > .input_wrapper {
   margin-bottom: 0;
 }
 
+form .input_with_button {
+  margin-bottom: 1rem;
+}
+
 form .input_with_button button {
-  padding: 0;
-  height: 80%;
+  overflow: hidden;
+  max-height: 80%;
   font-weight: 400;
   background-color: var(--beige-01);
   color: var(--deep-brown);
