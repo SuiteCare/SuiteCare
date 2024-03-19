@@ -2,7 +2,7 @@ import React from 'react';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
-const ModalPatientTab = ({ modalData }) => {
+const ModalPatientTab = ({ modalData, styles }) => {
   return (
     <>
       <div className='input_wrapper'>
@@ -59,7 +59,7 @@ const ModalPatientTab = ({ modalData }) => {
 
       <div className='input_wrapper'>
         <label>비고</label>
-        <div>{modalData.detail.patient.patient_notice}</div>
+        <div className={styles.introduction}>{modalData.detail.patient.patient_notice}</div>
       </div>
     </>
   );

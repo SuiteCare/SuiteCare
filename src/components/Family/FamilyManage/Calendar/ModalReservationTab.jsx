@@ -4,13 +4,12 @@ import { useMutation } from 'react-query';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 
-import styles from './FamilyCalendarModal.module.css';
 import MateDetailModal from '@/components/Common/Modal/Detail/MateDetailModal';
 import Loading from '@/components/Common/Modal/Loading';
 
 import { minWage, weekdayDic } from '@/utils/calculators';
 
-const ModalReservationTab = ({ modalData, closeModal }) => {
+const ModalReservationTab = ({ modalData, styles }) => {
   const { openModal: openDetailModal, isModalVisible: isDetailModalVisible, closeModal: closeDetailModal } = useModal();
   const [mateDetailModalData, setMateDetailModalData] = useState();
   const [isLoading, setIsLoading] = useState(false); // isLoading 상태 추가
@@ -99,6 +98,15 @@ const ModalReservationTab = ({ modalData, closeModal }) => {
         </div>
       </div>
       <hr />
+      <div className='input_wrapper'>
+        <label>간병지 주소</label>
+        <div>
+          <span className={`${modalData.detail.reservation.location === 'hospital' ? styles.hospital : styles.home}`}>
+            {modalData.detail.reservation.location}
+          </span>{' '}
+          {modalData.detail.reservation.road_address} {modalData.detail.reservation.address_detail}
+        </div>
+      </div>
       <div className='input_wrapper'>
         <label>간병 기간</label>
         {modalData.detail.reservation.start_date} ~ {modalData.detail.reservation.end_date}
