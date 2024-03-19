@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 
-import FamilyCalendarModal from './FamilyCalendarModal';
+import CalendarModal from '@/components/Common/Modal/Detail/CalendarModal';
 import {
   getComponents,
   getSettingProps,
@@ -105,6 +105,8 @@ const FamilyCalendar = () => {
   };
 
   const generateEvents = (eventItem, recruitmentInfo, currentStartDate, currentEndDate) => {
+    const { detail, patient } = recruitmentInfo;
+
     const events = [];
     const endDate = moment(`${eventItem.end_date} ${eventItem.end_time}`);
     const weekdays = normalizeWeekDays(eventItem.weekdays);
@@ -113,16 +115,15 @@ const FamilyCalendar = () => {
       const dayOfCurrentEndDate = +moment(currentEndDate).format('d');
       if (weekdays.includes(dayOfCurrentEndDate)) {
         const event = {
-          ...eventItem,
-          title: `${recruitmentInfo.patient_name} (${recruitmentInfo.patient_diagnosis_name || '진단명 없음'})`,
+          title: `${patient.patient_name} (${patient.patient_diagnosis_name || '진단명 없음'})`,
           mate: `담당 메이트 ${eventItem.mate_name} (${eventItem.mate_resume_id})`,
-          detail: { reservation: { ...eventItem, ...recruitmentInfo }, patient: { ...recruitmentInfo } },
+          detail: { reservation: { ...eventItem, ...detail }, patient },
           start: new Date(currentStartDate),
           end: new Date(currentEndDate),
           color: stringToColor(
             (eventItem.recruitment_id || 'id 없음') +
-              (recruitmentInfo.patient_name || '환자명 없음') +
-              (recruitmentInfo.diagnosis_name || '진단명 없음') +
+              (patient.patient_name || '환자명 없음') +
+              (patient.patient_diagnosis_name || '진단명 없음') +
               eventItem.mate_name,
           ),
         };
@@ -141,7 +142,7 @@ const FamilyCalendar = () => {
       const promises = data.map(async (eventItem) => {
         try {
           const { detailResponse, patientResponse } = await loadEventInfo(eventItem.recruitment_id);
-          const recruitmentInfo = { ...detailResponse, ...patientResponse };
+          const recruitmentInfo = { detail: detailResponse, patient: patientResponse };
           const currentStartDate = moment(`${eventItem.start_date} ${eventItem.start_time}`);
           const currentEndDate = moment(`${eventItem.start_date} ${eventItem.end_time}`);
           return generateEvents(eventItem, recruitmentInfo, currentStartDate, currentEndDate);
@@ -175,7 +176,7 @@ const FamilyCalendar = () => {
         {...getComponents(openModal, setModalData)}
         {...settingProps}
       />
-      {isModalVisible && <FamilyCalendarModal modalData={modalData} closeModal={closeModal} />}
+      {isModalVisible && <CalendarModal modalData={modalData} closeModal={closeModal} />}
     </>
   );
 };

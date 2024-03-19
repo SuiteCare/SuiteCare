@@ -3,14 +3,13 @@ import React, { useState } from 'react';
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-import ModalReservationTab from './ModalReservationTab';
-import ModalPatientTab from './ModalPatientTab';
-import calendarModalStyles from './FamilyCalendarModal.module.css';
+import ReservationDetailTab from './ReservationDetailTab';
+import PatientDetailTab from './PatientDetailTab';
 
-const FamilyCalendarModal = ({ modalData, closeModal }) => {
-  const [activeTab, setActiveTab] = useState(0);
-
+const CalendarModal = ({ modalData, closeModal }) => {
+  const { reservation, patient } = modalData.detail;
   const { handleContentClick } = useModal();
+  const [activeTab, setActiveTab] = useState(0);
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -37,13 +36,11 @@ const FamilyCalendarModal = ({ modalData, closeModal }) => {
             환자 정보
           </div>
         </div>
-        {activeTab === 0 && <ModalReservationTab modalData={modalData} styles={calendarModalStyles} />}
-        {activeTab === 1 && <ModalPatientTab modalData={modalData} styles={calendarModalStyles} />}
-
-        <div className='button_wrapper' />
+        {activeTab === 0 && <ReservationDetailTab modalData={reservation} styles={styles} />}
+        {activeTab === 1 && <PatientDetailTab modalData={patient} styles={styles} />}
       </div>
     </div>
   );
 };
 
-export default FamilyCalendarModal;
+export default CalendarModal;

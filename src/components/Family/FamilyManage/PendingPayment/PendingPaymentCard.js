@@ -57,23 +57,11 @@ const PaymentCard = ({ data }) => {
     openPaymentModal();
   };
 
-  const handleMateDetailButton = () => {
-    closeDetailModal();
-    openMateDetailModal();
-  };
-
   return (
     <div className={styles.card}>
       {isDetailDataLoading && <LocalLoading />}
       {isDetailModalVisible && (
-        <ReservationDetailModal
-          modalData={{ ...data, ...detailData }}
-          closeModal={closeDetailModal}
-          handleMateDetailButton={handleMateDetailButton}
-        />
-      )}
-      {isMateDetailModalVisible && (
-        <MateDetailModal modalData={{ ...data, ...detailData }} closeModal={closeMateDetailModal} />
+        <ReservationDetailModal modalData={{ ...data, ...detailData }} closeModal={closeDetailModal} />
       )}
       {isPaymentModalVisible && <KakaoPayModal modalData={{ ...data, ...detailData }} closeModal={closePaymentModal} />}
       <div className={styles.top}>

@@ -7,7 +7,7 @@ import { useMutation } from 'react-query';
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
 
-import MateCalendarModal from './MateCalendarModal';
+import CalendarModal from '../../../Common/Modal/Detail/CalendarModal';
 import {
   getComponents,
   getSettingProps,
@@ -105,6 +105,8 @@ const MateCalendar = () => {
   };
 
   const generateEvents = (eventItem, recruitmentInfo, currentStartDate, currentEndDate) => {
+    const { detail, patient } = recruitmentInfo;
+
     const events = [];
     const endDate = moment(`${eventItem.end_date} ${eventItem.end_time}`);
     const weekdays = normalizeWeekDays(eventItem.weekdays);
@@ -113,15 +115,15 @@ const MateCalendar = () => {
       const dayOfCurrentEndDate = +moment(currentEndDate).format('d');
       if (weekdays.includes(dayOfCurrentEndDate)) {
         const event = {
-          title: `${recruitmentInfo.patient_name} (${recruitmentInfo.patient_diagnosis_name || '진단명 없음'})`,
+          title: `${patient.patient_name} (${patient.patient_diagnosis_name || '진단명 없음'})`,
           family: `보호자 ${eventItem.family_name} (${eventItem.family_id})`,
-          detail: { reservation: { ...eventItem, ...recruitmentInfo }, patient: { ...patientResponse } },
+          detail: { reservation: { ...eventItem, ...detail }, patient },
           start: new Date(currentStartDate),
           end: new Date(currentEndDate),
           color: stringToColor(
             (eventItem.recruitment_id || 'id 없음') +
-              (recruitmentInfo.patient_name || '환자명 없음') +
-              (recruitmentInfo.diagnosis_name || '진단명 없음') +
+              (patient.patient_name || '환자명 없음') +
+              (patient.patient_diagnosis_name || '진단명 없음') +
               eventItem.family_name,
           ),
         };
@@ -140,7 +142,7 @@ const MateCalendar = () => {
       const promises = data.map(async (eventItem) => {
         try {
           const { detailResponse, patientResponse } = await loadEventInfo(eventItem.recruitment_id);
-          const recruitmentInfo = { ...detailResponse, ...patientResponse };
+          const recruitmentInfo = { detail: detailResponse, patient: patientResponse };
           const currentStartDate = moment(`${eventItem.start_date} ${eventItem.start_time}`);
           const currentEndDate = moment(`${eventItem.start_date} ${eventItem.end_time}`);
           return generateEvents(eventItem, recruitmentInfo, currentStartDate, currentEndDate);
@@ -174,7 +176,7 @@ const MateCalendar = () => {
         {...getComponents(openModal, setModalData)}
         {...settingProps}
       />
-      {isModalVisible && <MateCalendarModal modalData={modalData} closeModal={closeModal} />}
+      {isModalVisible && <CalendarModal modalData={modalData} closeModal={closeModal} />}
     </>
   );
 };
