@@ -90,7 +90,6 @@ const SearchResult = ({ data }) => {
       mate_id: id,
       recruitment_id: recruitmentId,
     };
-    console.log(body);
     mutation.mutate(body);
   };
 
@@ -113,7 +112,12 @@ const SearchResult = ({ data }) => {
         )}
       </div>
       {isModalVisible && (
-        <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />
+        <RecruitmentDetailModal
+          modalData={modalData}
+          closeModal={closeModal}
+          handleApply={handleApply}
+          alertComponent={alertComponent}
+        />
       )}
     </div>
   );

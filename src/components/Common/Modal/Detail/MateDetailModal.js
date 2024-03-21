@@ -9,7 +9,7 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) => {
+const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
   const { handleContentClick } = useModal();
 
   return (
@@ -36,8 +36,9 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) =
             </p>
             <p>
               📞
-              {(pagePosition === 'FamilyCalendar' ? modalData.mateResume.tel : `${modalData.tel?.slice(0, 7)}****`) ||
-                '전화번호 정보가 없습니다.'}
+              {(page === 'calendar'
+                ? `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-${modalData.tel.slice(7)}`
+                : `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-****`) || '전화번호 정보가 없습니다.'}
             </p>
             <p>📧{modalData.email || modalData.mateResume.email || '이메일 정보가 없습니다.'}</p>
           </div>
@@ -135,7 +136,7 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, pagePosition }) =
           )}
         </div>
         <div className={styles.button_wrapper}>
-          {pagePosition === 'FamilyCalendar' ? (
+          {page === 'calendar' ? (
             ''
           ) : (
             <button type='submit' onClick={() => handleApply(modalData)}>

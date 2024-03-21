@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-import ReservationDetail from './ReservationDetail';
-import PatientDetail from './PatientDetail';
+import ReservationDetail from './ReservationDetailTab';
+import PatientDetail from './PatientDetailTab';
 
 const ReservationDetailModal = ({ modalData, closeModal, handleMateDetailButton }) => {
   const [activeTab, setActiveTab] = useState(0);

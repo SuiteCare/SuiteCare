@@ -3,7 +3,7 @@ import React from 'react';
 
 import { calAge, genderToKo } from '@/utils/calculators';
 
-const PatientDetail = ({ styles, modalData, page }) => {
+const PatientDetailTab = ({ styles, modalData, page }) => {
   const navigator = useRouter();
 
   return (
@@ -110,4 +110,4 @@ const PatientDetail = ({ styles, modalData, page }) => {
   );
 };
 
-export default PatientDetail;
+export default PatientDetailTab;
