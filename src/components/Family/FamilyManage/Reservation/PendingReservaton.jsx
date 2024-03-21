@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
 import axiosInstance from '@/services/axiosInstance';
@@ -8,12 +8,14 @@ import usePatientList from '@/services/apis/usePatientList';
 import useLoginInfo from '@/hooks/useLoginInfo';
 
 import cardstyles from './PendingReservation.module.css';
-import styles from '@/components/Common/ManageTable.module.css';
-import PendingReservationCard from './PendingReservationCard';
+import tablestyles from '@/components/Common/ManageTable.module.css';
+
 import Loading from '@/components/Common/Modal/Loading';
 import PatientDetailModal from './PatientDetailModal';
 import RecruitmentDetailModal from '../../../Common/Modal/Detail/RecruitmentDetailModal';
 import MateDetailModal from './MateDetailModal';
+
+import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const PendingReservation = ({ data }) => {
   const navigator = useRouter();
@@ -38,6 +40,8 @@ const PendingReservation = ({ data }) => {
 
   const [selectedRecId, setSelectedRecId] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const [selectedMate, setSelectedMate] = useState(null);
+  const [modalType, setModalType] = useState(null);
 
   const {
     data: recruitmentList,
@@ -177,7 +181,6 @@ const PendingReservation = ({ data }) => {
     try {
       const applyMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
       const applyMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
-
       const [applyMateDetailResponse, applyMateDataResponse] = await Promise.all([
         applyMateDetailPromise,
         applyMateDataPromise,
@@ -191,6 +194,8 @@ const PendingReservation = ({ data }) => {
         matchedMate: matchedMate ?? {},
       }));
 
+      setSelectedMate(matchedMate.mate_resume_id);
+      console.log('간병인', selectedMate);
       console.log('ma', maModalData);
     } catch (error) {
       console.error(error);
@@ -238,12 +243,64 @@ const PendingReservation = ({ data }) => {
     getApplyMateDetail(mateId);
     openModal();
     setSelectedModal('ApplyMateDetail');
+    setModalType('Apply');
   };
 
   const handleOfferMateDetailClick = (mateId) => {
     getOfferMateDetail(mateId);
     openModal();
     setSelectedModal('OfferMateDetail');
+    setModalType('Offer');
+  };
+
+  useEffect(() => {
+    getOfferMateDetail(selectedMate);
+  }, []);
+
+  const mutation = useMutation(async (mateId) => {
+    getApplyMateDetail(mateId);
+    console.log(mateId);
+
+    try {
+      const body = {
+        recruitment_id: selectedRecId,
+        mate_id: selectedMate,
+      };
+
+      console.log('request body', body);
+      const response = await axiosInstance.post(`/api/v1/reservation`, body);
+      if (response.data === 1) {
+        const isConfirmed = window.confirm('예약을 확정하시겠습니까?');
+
+        if (isConfirmed) {
+          alert('예약이 확정되었습니다.');
+          console.log('1', response.data);
+          window.location.reload();
+        } else {
+          return false;
+        }
+      } else if (response.data > 1) {
+        alert('이미 확정되었습니다.');
+        console.log('2', response.data);
+        window.location.reload();
+      } else {
+        console.log('데이터 제출 실패');
+        return false;
+      }
+      closeModal();
+    } catch (error) {
+      console.error('Error occurred while fetching modal data:', error);
+      return {};
+    }
+  });
+
+  const handleAccept = () => {
+    console.log('selectedMate', selectedMate);
+    if (selectedMate) {
+      mutation.mutate(selectedMate);
+    } else {
+      alert('먼저 상세정보를 확인해주세요.'); // 선택된 간병인이 없을 경우 경고 메시지 출력
+    }
   };
 
   const handleReset = () => {
@@ -285,15 +342,16 @@ const PendingReservation = ({ data }) => {
           <span />
 
           <h3>내가 제안한 간병인 리스트</h3>
-          <div className={styles.ManageTable}>
+          <div className={tablestyles.ManageTable}>
             <table className={cardstyles.table_margin}>
               <thead>
                 <tr>
                   <th>아이디</th>
                   <th>성명</th>
                   <th>성별</th>
-                  <th>지역</th>
+                  <th>나이</th>
                   <th>주요 서비스</th>
+                  <th>상태</th>
                   <th>간병인 상세정보</th>
                 </tr>
               </thead>
@@ -309,9 +367,10 @@ const PendingReservation = ({ data }) => {
                     <tr key={e.mate_resume_id}>
                       <td>{e.mate_resume_id}</td>
                       <td>{e.name}</td>
-                      <td>{e.gender === 'M' ? '남성' : '여성'}</td>
-                      <td>{e.location}</td>
+                      <td>{genderToKo(e.gender)}성</td>
+                      <td> 만 {calAge(e.birthday)}세</td>
                       <td>{e.mainservice}</td>
+                      <td>{e.status === 'P' ? '검토중' : '예약 확정'}</td>
                       <td>
                         <button type='button' onClick={() => handleOfferMateDetailClick(e.mate_resume_id)}>
                           상세정보 보기
@@ -331,23 +390,24 @@ const PendingReservation = ({ data }) => {
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
                 {selectedModal === 'OfferMateDetail' && (
-                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
                 )}
               </>
             )}
           </div>
 
           <h3>지원한 간병인 리스트</h3>
-          <div className={styles.ManageTable}>
+          <div className={tablestyles.ManageTable}>
             <table className={cardstyles.table_margin}>
               <thead>
                 <tr>
                   <th>아이디</th>
                   <th>성명</th>
                   <th>성별</th>
-                  <th>지역</th>
+                  <th>나이</th>
                   <th>주요 서비스</th>
                   <th>간병인 상세정보</th>
+                  <th>간병 수락</th>
                 </tr>
               </thead>
               <tbody>
@@ -362,12 +422,17 @@ const PendingReservation = ({ data }) => {
                     <tr key={e.mate_resume_id}>
                       <td>{e.mate_resume_id}</td>
                       <td>{e.name}</td>
-                      <td>{e.gender === 'M' ? '남성' : '여성'}</td>
-                      <td>{e.location}</td>
+                      <td>{genderToKo(e.gender)}성</td>
+                      <td> 만 {calAge(e.birthday)}세</td>
                       <td>{e.mainservice}</td>
                       <td>
                         <button type='button' onClick={() => handleApplyMateDetailClick(e.mate_resume_id)}>
                           상세정보 보기
+                        </button>
+                      </td>
+                      <td>
+                        <button type='button' onClick={handleAccept}>
+                          간병 확정하기
                         </button>
                       </td>
                     </tr>
@@ -384,7 +449,7 @@ const PendingReservation = ({ data }) => {
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
                 {selectedModal === 'ApplyMateDetail' && (
-                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
                 )}
               </>
             )}

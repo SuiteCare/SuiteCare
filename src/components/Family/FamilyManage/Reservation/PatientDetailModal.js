@@ -113,7 +113,7 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
             </div>
 
             <div className={styles.button_wrapper}>
-              <button type='button' onClick={() => navigator.push(`/family/addpatient/${modalData.id}`)}>
+              <button type='button' onClick={() => router.push(`/family/addpatient/${modalData.id}`)}>
                 정보 수정하기
               </button>
             </div>

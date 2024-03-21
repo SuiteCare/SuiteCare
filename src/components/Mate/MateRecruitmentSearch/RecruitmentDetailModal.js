@@ -6,7 +6,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
 
-const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
+const RecruitmentDetailModal = ({ modalData, closeModal, handleApply, alertComponent }) => {
   const { handleContentClick } = useModal();
   const [activeTab, setActiveTab] = useState(0);
 
@@ -15,6 +15,8 @@ const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
+      {alertComponent}
+
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
           <span onClick={closeModal} />
@@ -35,11 +37,12 @@ const RecruitmentDetailModal = ({ modalData, closeModal, handleApply }) => {
             <div className={styles.info_section}>
               <h5>보호자 정보</h5>
               <div className={`${styles.info_wrapper} ${styles.single}`}>
-                <label>보호자 연락처</label>
+                <label>연락처</label>
                 <div>
                   <p>
-                    📞{`${modalData.tel.slice(0, 3)}-${modalData.tel.slice(4, 8)}-****` || '전화번호 정보가 없습니다.'}
+                    📞{`${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-****` || '전화번호 정보가 없습니다.'}
                   </p>
+                  <p>📧{modalData.email || modalData.mateResume?.email || '이메일 정보가 없습니다.'}</p>
                 </div>
               </div>
             </div>

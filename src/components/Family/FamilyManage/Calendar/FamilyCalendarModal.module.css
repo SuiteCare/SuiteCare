@@ -1,9 +1,0 @@
-.input_with_button {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.input_with_button > button {
-  padding: 0.6rem 2rem;
-}
