@@ -23,8 +23,12 @@ const ResumePage = () => {
   } = useQuery(
     ['mypageData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/mypage');
-      return response.data;
+      const response = await axiosInstance.get('/api/v1/mypage', { params: { id } });
+      if(response.status === 200) {
+        return response.data.result[0];
+      } else if(response.status === 204) {
+        openAlert('요청한 사용자의 정보가 조회되지 않습니다.');
+      }
     },
     {
       enabled: Boolean(id),
