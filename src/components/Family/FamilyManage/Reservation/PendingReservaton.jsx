@@ -9,7 +9,7 @@ import useLoginInfo from '@/hooks/useLoginInfo';
 
 import cardstyles from './PendingReservation.module.css';
 import tablestyles from '@/components/Common/ManageTable.module.css';
-import PendingReservationCard from './PendingReservationCard';
+
 import Loading from '@/components/Common/Modal/Loading';
 import PatientDetailModal from './PatientDetailModal';
 import RecruitmentDetailModal from '../../../Common/Modal/Detail/RecruitmentDetailModal';
@@ -41,6 +41,7 @@ const PendingReservation = ({ data }) => {
   const [selectedRecId, setSelectedRecId] = useState(null);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [selectedMate, setSelectedMate] = useState(null);
+  const [modalType, setModalType] = useState(null);
 
   const {
     data: recruitmentList,
@@ -242,12 +243,14 @@ const PendingReservation = ({ data }) => {
     getApplyMateDetail(mateId);
     openModal();
     setSelectedModal('ApplyMateDetail');
+    setModalType('Apply');
   };
 
   const handleOfferMateDetailClick = (mateId) => {
     getOfferMateDetail(mateId);
     openModal();
     setSelectedModal('OfferMateDetail');
+    setModalType('Offer');
   };
 
   useEffect(() => {
@@ -387,7 +390,7 @@ const PendingReservation = ({ data }) => {
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
                 {selectedModal === 'OfferMateDetail' && (
-                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
                 )}
               </>
             )}
@@ -404,7 +407,7 @@ const PendingReservation = ({ data }) => {
                   <th>나이</th>
                   <th>주요 서비스</th>
                   <th>간병인 상세정보</th>
-                  <th>간병 확정</th>
+                  <th>간병 수락</th>
                 </tr>
               </thead>
               <tbody>
@@ -446,7 +449,7 @@ const PendingReservation = ({ data }) => {
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
                 {selectedModal === 'ApplyMateDetail' && (
-                  <MateDetailModal modalData={maModalData} closeModal={closeModal} />
+                  <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
                 )}
               </>
             )}
