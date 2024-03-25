@@ -6,6 +6,7 @@ const Career = ({ formData, setFormData, setChangedData, handleItemChange }) => 
     const newCareer = {
       orderId: (lastCareer ? lastCareer.orderId : 0) + 1,
       id: null,
+      isDeleted: false,
     };
     setFormData((prevFormData) => {
       return { ...prevFormData, careerList: [...(prevFormData.careerList || []), newCareer] };
@@ -23,7 +24,10 @@ const Career = ({ formData, setFormData, setChangedData, handleItemChange }) => 
     const deletedItem = formData.careerList.filter((it) => it.orderId === orderId)[0];
     if (deletedItem.id) {
       setChangedData((prevFormData) => {
-        return { ...prevFormData, careerList: [...(prevFormData.careerList || []), { ...deletedItem, delete: true }] };
+        return {
+          ...prevFormData,
+          careerList: [...(prevFormData.careerList || []), { ...deletedItem, isDeleted: true }],
+        };
       });
     } else {
       setChangedData((prevFormData) => {
