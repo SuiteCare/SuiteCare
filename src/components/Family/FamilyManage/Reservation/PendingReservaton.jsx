@@ -227,30 +227,22 @@ const PendingReservation = ({ data }) => {
     }
   };
 
-  const handlePatientDetailClick = ($event) => {
-    getPatientDetail($event);
+  const handleDetailClick = ($target, $event) => {
+    const selectDetail = {
+      Patient: getPatientDetail,
+      Recruitment: getRecruitmentDetail,
+      ApplyMate: getApplyMateDetail,
+      OfferMate: getOfferMateDetail,
+    };
+    selectDetail[$target]($event);
+    setSelectedModal(`${$target}Detail`);
+    if ($target === 'ApplyMate') {
+      setModalType('Apply');
+    }
+    if ($target === 'OfferMate') {
+      setModalType('Offer');
+    }
     openModal();
-    setSelectedModal('PatientDetail');
-  };
-
-  const handleRecruitmentDetailClick = ($event) => {
-    getRecruitmentDetail($event);
-    openModal();
-    setSelectedModal('RecruitmentDetail');
-  };
-
-  const handleApplyMateDetailClick = (mateId) => {
-    getApplyMateDetail(mateId);
-    openModal();
-    setSelectedModal('ApplyMateDetail');
-    setModalType('Apply');
-  };
-
-  const handleOfferMateDetailClick = (mateId) => {
-    getOfferMateDetail(mateId);
-    openModal();
-    setSelectedModal('OfferMateDetail');
-    setModalType('Offer');
   };
 
   useEffect(() => {
@@ -328,13 +320,13 @@ const PendingReservation = ({ data }) => {
       {selectedRecId ? (
         <>
           <div className={cardstyles.button_wrapper}>
-            <button type='button' onClick={() => handlePatientDetailClick(selectedRecId)}>
+            <button type='button' onClick={() => handleDetailClick('Patient', selectedRecId)}>
               환자 정보 보기
             </button>
             <button
               type='button'
               className={cardstyles.second_button}
-              onClick={() => handleRecruitmentDetailClick(selectedRecId)}
+              onClick={() => handleDetailClick('Recruitment', selectedRecId)}
             >
               공고 정보 보기
             </button>
