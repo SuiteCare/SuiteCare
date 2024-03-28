@@ -70,9 +70,6 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
       }
     },
     {
-      onSuccess: () => {
-        openDetailModal();
-      },
       onError: (error) => {
         console.error('Error occurred while fetching modal data:', error);
       },
