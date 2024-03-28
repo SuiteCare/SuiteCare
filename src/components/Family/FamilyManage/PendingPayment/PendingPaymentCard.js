@@ -39,8 +39,8 @@ const PaymentCard = ({ data }) => {
         axiosInstance.get(`/api/v1/recruitment/${recruitmentId}/patient`),
       ]);
 
-      const recruitmentDetail = recruitmentDetailResponse.data;
-      const patientDetail = patientDetailResponse.data;
+      const recruitmentDetail = recruitmentDetailResponse.data.result[0];
+      const patientDetail = patientDetailResponse.data.result[0];
 
       return { ...recruitmentDetail, ...patientDetail };
     },
@@ -61,7 +61,7 @@ const PaymentCard = ({ data }) => {
     <div className={styles.card}>
       {isDetailDataLoading && <LocalLoading />}
       {isDetailModalVisible && (
-        <ReservationDetailModal modalData={{ ...data, ...detailData }} closeModal={closeDetailModal} />
+        <ReservationDetailModal modalData={{ ...data, ...detailData }} closeModal={closeDetailModal} page='family' />
       )}
       {isPaymentModalVisible && <KakaoPayModal modalData={{ ...data, ...detailData }} closeModal={closePaymentModal} />}
       <div className={styles.top}>
