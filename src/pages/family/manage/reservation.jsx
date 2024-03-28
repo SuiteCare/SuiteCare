@@ -19,16 +19,12 @@ const FamilyManageReservationPage = () => {
     ['reservationList', id],
     async () => {
       const { data: recruitmentData } = await axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
-      return recruitmentData.reverse();
+      return recruitmentData.result.reverse();
     },
     {
       enabled: Boolean(id),
     },
   );
-
-  useEffect(() => {
-    console.log('recruitmentList', recruitmentList);
-  }, [recruitmentList]);
 
   return (
     <>

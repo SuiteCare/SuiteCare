@@ -6,7 +6,7 @@ import axiosInstance from '@/services/axiosInstance';
 
 import MateDetailModal from './MateDetailModal';
 
-import { calTimeDiff, countWeekdays, minWage, weekdayDic } from '@/utils/calculators';
+import { calTimeDiff, countWeekdays, minWage, normalizeWeekDays, weekdayDic } from '@/utils/calculators';
 
 const ReservationDetailTab = ({ styles, modalData, page }) => {
   const [mateDetailModalData, setMateDetailModalData] = useState();
@@ -70,9 +70,6 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
       }
     },
     {
-      onSuccess: () => {
-        openDetailModal();
-      },
       onError: (error) => {
         console.error('Error occurred while fetching modal data:', error);
       },
@@ -162,7 +159,7 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
           <span>
             {modalData.start_date} ~ {modalData.end_date}{' '}
             <span>
-              (총 {countWeekdays(modalData.start_date, modalData.end_date, modalData.weekday)}
+              (총 {countWeekdays(modalData.start_date, modalData.end_date, normalizeWeekDays(modalData.weekday))}
               일)
             </span>
           </span>
@@ -193,7 +190,7 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
             {(
               modalData.wage *
               calTimeDiff(modalData.start_time, modalData.end_time) *
-              countWeekdays(modalData.start_date, modalData.end_date, modalData.weekday)
+              countWeekdays(modalData.start_date, modalData.end_date, normalizeWeekDays(modalData.weekday))
             ).toLocaleString()}
             원
           </span>

@@ -18,17 +18,21 @@ const FamilyPaymentList = () => {
   } = useQuery(
     ['reservationData', id],
     async () => {
-      const response = await axiosInstance.get('/api/v1/reservation/family');
-      // payment_at이 null이고 이미 간병이 시작된 (시작일이 오늘 이전인) 데이터만 필터링할 예정
-      // const filteredData = response.data.filter((e) => e.payment_at === null && new Date(e.start_date) >= new Date());
-      response.data.forEach((e) => {
-        setData((prevData) => ({
-          ...prevData,
-          [e.recruitment_id]: e,
-        }));
-      });
+      const { data } = await axiosInstance.get('/api/v1/reservation/family');
+      const { code, result } = data;
+      if (code === 200) {
+        const filteredResult = result.filter((e) => !e.pay_at && new Date(e.start_date) >= new Date());
+        filteredResult.forEach((e) => {
+          setData((prevData) => ({
+            ...prevData,
+            [e.recruitment_id]: e,
+          }));
+        });
 
-      return response.data;
+        return filteredResult;
+      }
+      console.log('데이터를 가져오는 데 오류가 발생했습니다.');
+      return [];
     },
     {
       enabled: Boolean(id),

@@ -32,8 +32,12 @@ const MateCalendar = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axiosInstance.get('/api/v1/reservation/mate');
-      return response.data;
+      const { data } = await axiosInstance.get('/api/v1/reservation/mate');
+      if (data.code === 200) {
+        return data.result;
+      }
+      console.log('데이터를 불러오는 데 오류가 발생했습니다.');
+      return [];
     } catch (error) {
       console.error('Error occurred while fetching data:', error);
       return [];
@@ -56,26 +60,25 @@ const MateCalendar = () => {
     });
   };
 
-  const handleMutationResponse = (response) => {
-    const msg = response.headers.get('msg');
-    if (response.data) {
-      return response.data;
+  const handleMutationResponse = (data) => {
+    if (data.code === 200) {
+      return data.result;
     }
-    if (msg === 'fail') {
-      console.log('데이터 불러오기 실패');
-      return {};
-    }
+    console.log('데이터 불러오기 실패');
+    return [];
   };
 
   const handleMutationError = (error) => {
+    const { code } = error.response.data;
+    const messages = {};
     console.error('Error occurred while fetching modal data:', error);
     return {};
   };
 
   const detailMutation = useMutation(async ($recruitmentId) => {
     try {
-      const response = await axiosInstance.get(`/api/v1/recruitment/${$recruitmentId}/detail`);
-      return handleMutationResponse(response);
+      const { data } = await axiosInstance.get(`/api/v1/recruitment/${$recruitmentId}/detail`);
+      return handleMutationResponse(data);
     } catch (error) {
       return handleMutationError(error);
     }
@@ -83,8 +86,8 @@ const MateCalendar = () => {
 
   const patientMutation = useMutation(async ($recruitmentId) => {
     try {
-      const response = await axiosInstance.get(`/api/v1/recruitment/${$recruitmentId}/patient`);
-      return handleMutationResponse(response);
+      const { data } = await axiosInstance.get(`/api/v1/recruitment/${$recruitmentId}/patient`);
+      return handleMutationResponse(data);
     } catch (error) {
       return handleMutationError(error);
     }
@@ -97,7 +100,7 @@ const MateCalendar = () => {
         patientMutation.mutateAsync($recruitmentId),
       ]);
 
-      return { detailResponse, patientResponse };
+      return { detail: detailResponse[0], patient: patientResponse[0] };
     } catch (error) {
       console.error('Error occurred while fetching modal data:', error);
       return false;
@@ -141,8 +144,7 @@ const MateCalendar = () => {
       const data = await loadEventData();
       const promises = data.map(async (eventItem) => {
         try {
-          const { detailResponse, patientResponse } = await loadEventInfo(eventItem.recruitment_id);
-          const recruitmentInfo = { detail: detailResponse, patient: patientResponse };
+          const recruitmentInfo = await loadEventInfo(eventItem.recruitment_id);
           const currentStartDate = moment(`${eventItem.start_date} ${eventItem.start_time}`);
           const currentEndDate = moment(`${eventItem.start_date} ${eventItem.end_time}`);
           return generateEvents(eventItem, recruitmentInfo, currentStartDate, currentEndDate);
