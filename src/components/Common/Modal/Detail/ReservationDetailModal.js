@@ -6,7 +6,7 @@ import styles from '@/components/Common/Modal/Modal.module.css';
 import ReservationDetail from './ReservationDetailTab';
 import PatientDetail from './PatientDetailTab';
 
-const ReservationDetailModal = ({ modalData, closeModal, handleMateDetailButton }) => {
+const ReservationDetailModal = ({ modalData, closeModal, handleMateDetailButton, page }) => {
   const [activeTab, setActiveTab] = useState(0);
   const { handleContentClick } = useModal();
 
@@ -27,7 +27,12 @@ const ReservationDetailModal = ({ modalData, closeModal, handleMateDetailButton 
         </div>
 
         {activeTab === 0 && (
-          <ReservationDetail styles={styles} modalData={modalData} handleMateDetailButton={handleMateDetailButton} />
+          <ReservationDetail
+            styles={styles}
+            modalData={modalData}
+            handleMateDetailButton={handleMateDetailButton}
+            page={page}
+          />
         )}
         {activeTab === 1 && <PatientDetail styles={styles} modalData={modalData} />}
       </div>
