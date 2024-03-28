@@ -17,7 +17,8 @@
   justify-content: center;
 }
 
-.loginBox input {
+.loginBox input[type='text'],
+.loginBox input[type='password'] {
   width: 100%;
   border-radius: 0;
   font-size: 1rem;
