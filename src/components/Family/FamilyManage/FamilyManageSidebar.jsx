@@ -67,7 +67,7 @@ const FamilyManageSidebar = () => {
       </div>
       <div onClick={toggleSidebar} className={styles.toggleButton}>
         <input type='checkbox' />
-        <Image src={arrow} alt='arrowImage' width={30} height={30} />
+        <Image src={arrow} alt='arrowImage' />
       </div>
     </>
   );

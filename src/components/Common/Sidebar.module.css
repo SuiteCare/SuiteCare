@@ -45,6 +45,11 @@
   color: var(--deep-brown);
 }
 
+.menuItem a img {
+  width: 20px;
+  height: auto;
+}
+
 .menuItem a span {
   font-size: 1.2rem;
 }

@@ -175,20 +175,20 @@ const Resume = ({ data }) => {
         if (Object.values(body).length === 0) return openAlert('변경할 데이터가 없습니다.');
       }
 
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append('file', document.querySelector('input[type=file]').files[0]);
-      formData.append('resumeData',
-          new Blob([JSON.stringify(body)], {
-            type: "application/json",
-          }));
-
+      formData.append(
+        'resumeData',
+        new Blob([JSON.stringify(body)], {
+          type: 'application/json',
+        }),
+      );
 
       const response = await axiosInstance[method]('/api/v1/mate/resume', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
         },
       });
-
 
       if (response.data) {
         // patch 시 response.data === '' 라서 false로 처리되는데, 추후 ResponseBody 객체가 넘어와 파싱해서 사용할 예정
