@@ -27,9 +27,11 @@ const MateRecruitmentSearch = () => {
   } = useQuery(
     ['searchData', requestParams],
     async () => {
-      console.log('request params', requestParams);
       const { data } = await axiosInstance.get('/api/v1/search/recruitment', { params: requestParams });
-      return data;
+      if (data.code === 200) {
+        return data.result;
+      }
+      alert('검색 오류가 발생했습니다.');
     },
     {
       enabled: Object.keys(requestParams).length > 2,
@@ -45,7 +47,7 @@ const MateRecruitmentSearch = () => {
     if (searchData && searchData.length > 0) {
       return `검색 결과 (${searchData ? searchData.length : 0}건)`;
     }
-    return '공고를 찾아보세요.';
+    return '원하는 조건의 공고를 찾아보세요.';
   };
 
   const sortOptions = {
