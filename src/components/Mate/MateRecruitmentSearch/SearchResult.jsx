@@ -11,7 +11,7 @@ import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import RecruitmentDetailModal from './RecruitmentDetailModal';
 
-const SearchResult = ({ data }) => {
+const SearchResult = ({ data: searchData }) => {
   const { openAlert, alertComponent } = useAlert();
 
   const { isModalVisible, openModal, closeModal } = useModal();
@@ -95,8 +95,8 @@ const SearchResult = ({ data }) => {
       {alertComponent}
 
       <div className={styles.card_wrapper}>
-        {data?.length > 0 ? (
-          data?.map((eachData) => (
+        {searchData?.length > 0 ? (
+          searchData?.map((eachData) => (
             <SearchResultCard
               data={eachData}
               key={eachData.id}
