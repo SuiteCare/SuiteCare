@@ -70,13 +70,12 @@ const SignUpForm = ({ type }) => {
           return openAlert('사용 가능한 아이디입니다.');
         }
       } catch (error) {
-        if(error.response.data.code === 409) {
+        if (error.response.data.code === 409) {
           setIsAvailableID(false);
           return openAlert('이미 사용 중인 아이디입니다.');
-        } else {
-          setIsAvailableID(false);
-          return openAlert('요청을 처리하는 중 오류가 발생했습니다.');
         }
+        setIsAvailableID(false);
+        return openAlert('요청을 처리하는 중 오류가 발생했습니다.');
       }
     } else {
       setIsAvailableID(false);
@@ -168,6 +167,7 @@ const SignUpForm = ({ type }) => {
       const response = await axiosInstance.post('/api/v1/signup', body);
       if (response.data) {
         openAlert('회원가입이 완료되었습니다.');
+        sessionStorage.setItem('newId', formData.id);
         setTimeout(() => {
           navigator.push(`/${type}/login`);
         }, 1000);
