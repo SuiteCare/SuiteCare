@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -8,6 +8,7 @@ import styles from './LoginForm.module.css';
 
 const LoginForm = ({ type }) => {
   const navigator = useRouter();
+
   const [loginFail, setLoginFail] = useState(false);
 
   const [loginForm, setLoginForm] = useState({
@@ -23,9 +24,32 @@ const LoginForm = ({ type }) => {
     });
   };
 
+  const [idRememberState, setIdRememberState] = useState();
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('login_info')) {
+        if (window.confirm('로그인 페이지로 이동하시겠습니까? 기존 계정에서 로그아웃됩니다.')) {
+          localStorage.removeItem('login_info');
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('expiration_time');
+        } else {
+          navigator.back();
+        }
+      }
+
+      const newId = sessionStorage.getItem('newId');
+      const rememberedId = localStorage.getItem(`rememberedId_${type}`);
+      setLoginForm((prevData) => ({ ...prevData, id: rememberedId || newId }));
+      setIdRememberState(!!rememberedId);
+    }
+  }, []);
+
   async function onSubmitHandler(event) {
     event.preventDefault();
     const pageRole = type === 'mate' ? 'M' : 'F';
+    idRememberState
+      ? localStorage.setItem(`rememberedId_${type}`, loginForm.id)
+      : localStorage.removeItem(`rememberedId_${type}`);
 
     if (loginForm.id && loginForm.password) {
       try {
@@ -41,6 +65,7 @@ const LoginForm = ({ type }) => {
           localStorage.setItem('login_info', JSON.stringify({ id, role }));
           localStorage.setItem('access_token', token);
           localStorage.setItem('expiration_time', new Date().getTime() + 60 * 60 * 1000); // ms 단위, 1시간 뒤에 만료
+          sessionStorage.removeItem('newId');
           navigator.push(`/${type}/main`);
         } else {
           setLoginFail(true);
@@ -68,6 +93,17 @@ const LoginForm = ({ type }) => {
               value={loginForm.password}
               onChange={onChangeHandler}
             />
+          </div>
+          <div>
+            <div className='checkbox_wrapper'>
+              <input
+                type='checkbox'
+                name='rememberId'
+                defaultChecked={idRememberState}
+                onClick={() => setIdRememberState(!idRememberState)}
+              />
+              <span>아이디 저장하기</span>
+            </div>
           </div>
           {loginFail && (
             <div className={styles.loginMsg}>

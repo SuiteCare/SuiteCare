@@ -1,5 +1,5 @@
 .login {
   display: grid;
-  height: calc(100vh - 70px - 12rem);
+  height: calc(100vh - 70px - 8rem);
   align-content: center;
 }
