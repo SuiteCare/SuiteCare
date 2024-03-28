@@ -25,8 +25,7 @@ const SelectRecruitmentModal = ({ selectedMate, patientId, closeModal }) => {
       const { data: recruitmentData } = await axiosInstance.get('/api/v1/pendingRecruitment', {
         params: { id },
       });
-      console.log(recruitmentData);
-      return recruitmentData.reverse();
+      return recruitmentData.result.reverse();
     },
     {
       enabled: Boolean(id),
@@ -58,20 +57,18 @@ const SelectRecruitmentModal = ({ selectedMate, patientId, closeModal }) => {
       };
 
       console.log('request body', body);
-      const response = await axiosInstance.post(`/api/v1/apply`, body);
-      if (response.data === 1) {
+      const { data } = await axiosInstance.post(`/api/v1/apply`, body);
+      if (data.code === 200) {
         alert('간병 제안이 완료되었습니다.');
         closeModal();
       }
-      if (response.data > 1) {
-        alert(`이미 ${selectedMate.name} 메이트님에게 해당 간병 수행을 제안한 상태입니다.`);
-        closeModal();
-      } else {
-        console.log('데이터 제출 실패');
-        return false;
-      }
+      console.log('데이터 제출 실패');
+      return false;
     } catch (error) {
-      console.error('Error occurred while fetching modal data:', error);
+      const messages = {
+        409: `이미 ${selectedMate.name} 메이트님에게 해당 간병 수행을 제안한 상태입니다.`,
+      };
+      alert(messages[error.response.data.code]);
       return {};
     }
   });
