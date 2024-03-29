@@ -12,6 +12,7 @@ import StarRating from '@/utils/StarRating';
 const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
   const { handleContentClick } = useModal();
   console.log('!!', modalType);
+  console.log(modalData.matchedMate);
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -115,7 +116,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
             </div>
             <div className={styles.button_wrapper}>
               {modalType !== 'Offer' ? (
-                <button type='button' onClick={handleAccept}>
+                <button type='button' onClick={() => handleAccept(modalData.matchedMate.mate_resume_id)}>
                   간병 확정하기
                 </button>
               ) : (

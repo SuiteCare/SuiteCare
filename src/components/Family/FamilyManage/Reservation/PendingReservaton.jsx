@@ -53,13 +53,18 @@ const PendingReservation = ({ recruitmentList }) => {
       const patientPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
       const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
       const [patientResponse, recruitmentDataResponse] = await Promise.all([patientPromise, recruitmentDataPromise]);
-      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
 
-      setModalData((prevData) => ({
-        ...prevData,
-        ...patientResponse.data,
-        ...(recruitmentResponse || {}), // recruitmentResponse가 undefined이면 빈 객체를 병합
-      }));
+      const recruitmentResponse = recruitmentDataResponse.data.result.find(
+        (recruitment) => recruitment.id === selectedRecId,
+      );
+
+      if (patientResponse.data.code === 200 && recruitmentDataResponse.data.code === 200) {
+        setModalData((prevData) => ({
+          ...prevData,
+          ...patientResponse.data.result[0],
+          ...(recruitmentResponse || {}), // recruitmentResponse가 undefined이면 빈 객체를 병합
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -75,13 +80,17 @@ const PendingReservation = ({ recruitmentList }) => {
         recruitmentdetailPromise,
         recruitmentDataPromise,
       ]);
-      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
+      const recruitmentResponse = recruitmentDataResponse.data.result.find(
+        (recruitment) => recruitment.id === selectedRecId,
+      );
 
-      setReModalData((prevData) => ({
-        ...prevData,
-        ...recruitmentdetailResponse.data,
-        ...(recruitmentResponse || {}),
-      }));
+      if (recruitmentdetailResponse.data.code === 200 && recruitmentDataResponse.data.code === 200) {
+        setReModalData((prevData) => ({
+          ...prevData,
+          ...recruitmentdetailResponse.data.result[0],
+          ...(recruitmentResponse || {}),
+        }));
+      }
       console.log('r', reModalData);
     } catch (error) {
       console.error(error);
