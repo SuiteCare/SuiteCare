@@ -20,7 +20,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
   };
 
   const [maModalData, setMaModalData] = useState({});
-  const [selectedMate, setSelectedMate] = useState(null);
   const [modalType, setModalType] = useState(null);
 
   const {
@@ -69,22 +68,12 @@ const ApplyMateForm = ({ selectedRecId }) => {
           matchedMate: matchedMate ?? {},
         }));
 
-        setSelectedMate(matchedMate.mate_resume_id);
-        console.log('간병인', selectedMate);
         console.log('ma', maModalData);
       }
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    console.log('selectedMate 변경됨:', selectedMate);
-  }, [selectedMate]);
-
-  useEffect(() => {
-    console.log('maModalData 변경됨:', maModalData);
-  }, [maModalData]);
 
   const handleApplyMateDetailClick = (mateId) => {
     getApplyMateDetail(mateId);
@@ -94,12 +83,11 @@ const ApplyMateForm = ({ selectedRecId }) => {
   };
 
   const mutation = useMutation(async (mateId) => {
-    await getApplyMateDetail(mateId);
-
+    getApplyMateDetail(mateId);
     try {
       const body = {
         recruitment_id: selectedRecId,
-        mate_id: selectedMate,
+        mate_id: mateId,
       };
 
       console.log('request body', body);
@@ -108,11 +96,9 @@ const ApplyMateForm = ({ selectedRecId }) => {
 
       if (isConfirmed) {
         const response = await axiosInstance.post(`/api/v1/reservation`, body);
-        if (response.code === 200) {
-          alert('예약이 확정되었습니다.');
-          console.log('1', response.data);
-          window.location.reload();
-        }
+        alert('예약이 확정되었습니다.');
+        console.log('1', response.data);
+        window.location.reload();
       }
       return false;
     } catch (error) {
@@ -126,10 +112,7 @@ const ApplyMateForm = ({ selectedRecId }) => {
   });
 
   const handleAccept = async (mateId) => {
-    const mateDetail = await getApplyMateDetail(mateId);
-    console.log('mateDetail', mateDetail);
-
-    mutation.mutate(mateDetail);
+    mutation.mutate(mateId);
   };
 
   return (
