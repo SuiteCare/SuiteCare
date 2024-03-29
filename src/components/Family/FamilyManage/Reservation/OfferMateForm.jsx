@@ -34,9 +34,13 @@ const OfferMateForm = ({ selectedRecId }) => {
           recruitment_id: selectedRecId,
         },
       });
-      console.log('offerMateList', selectedRecId, offerMateData);
+      const { code, result } = offerMateData;
 
-      return offerMateData;
+      if (code === 200) {
+        console.log('offerMateList', selectedRecId, offerMateData);
+
+        return result;
+      }
     },
     {
       enabled: Boolean(selectedRecId),
@@ -58,15 +62,17 @@ const OfferMateForm = ({ selectedRecId }) => {
         offerMateDataPromise,
       ]);
 
-      const matchedMate = offerMateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
+      const matchedMate = offerMateDataResponse.data.result.find((mate) => mate.mate_resume_id === mateId);
 
-      setMaModalData((prevData) => ({
-        ...prevData,
-        ...offerMateDetailResponse.data,
-        matchedMate: matchedMate ?? {},
-      }));
+      if (offerMateDetailResponse.data.code === 200 && offerMateDataResponse.data.code === 200) {
+        setMaModalData((prevData) => ({
+          ...prevData,
+          ...offerMateDetailResponse.data.result[0],
+          matchedMate: matchedMate ?? {},
+        }));
 
-      console.log('ma', maModalData);
+        console.log('ma', maModalData);
+      }
     } catch (error) {
       console.error(error);
     }

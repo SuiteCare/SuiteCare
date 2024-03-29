@@ -35,9 +35,12 @@ const ApplyMateForm = ({ selectedRecId }) => {
           recruitment_id: selectedRecId,
         },
       });
-      console.log('applyMateList', selectedRecId, applyMateData);
+      const { code, result } = applyMateData;
+      if (code === 200) {
+        console.log('applyMateList1', selectedRecId, applyMateData);
 
-      return applyMateData;
+        return result;
+      }
     },
     {
       enabled: Boolean(selectedRecId),
@@ -45,7 +48,7 @@ const ApplyMateForm = ({ selectedRecId }) => {
   );
 
   useEffect(() => {
-    console.log('applyMateList', applyMateList);
+    console.log('applyMateList2', applyMateList);
   }, [applyMateList]);
 
   const getApplyMateDetail = async (mateId) => {
@@ -57,22 +60,31 @@ const ApplyMateForm = ({ selectedRecId }) => {
         applyMateDetailPromise,
         applyMateDataPromise,
       ]);
+      const matchedMate = applyMateDataResponse.data.result.find((mate) => mate.mate_resume_id === mateId);
 
-      const matchedMate = applyMateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
+      if (applyMateDetailResponse.data.code === 200 && applyMateDataResponse.data.code === 200) {
+        setMaModalData((prevData) => ({
+          ...prevData,
+          ...applyMateDetailResponse.data.result[0],
+          matchedMate: matchedMate ?? {},
+        }));
 
-      setMaModalData((prevData) => ({
-        ...prevData,
-        ...applyMateDetailResponse.data,
-        matchedMate: matchedMate ?? {},
-      }));
-
-      setSelectedMate(matchedMate.mate_resume_id);
-      console.log('간병인', selectedMate);
-      console.log('ma', maModalData);
+        setSelectedMate(matchedMate.mate_resume_id);
+        console.log('간병인', selectedMate);
+        console.log('ma', maModalData);
+      }
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    console.log('selectedMate 변경됨:', selectedMate);
+  }, [selectedMate]);
+
+  useEffect(() => {
+    console.log('maModalData 변경됨:', maModalData);
+  }, [maModalData]);
 
   const handleApplyMateDetailClick = (mateId) => {
     getApplyMateDetail(mateId);
@@ -96,27 +108,20 @@ const ApplyMateForm = ({ selectedRecId }) => {
 
       if (isConfirmed) {
         const response = await axiosInstance.post(`/api/v1/reservation`, body);
-
-        if (response.data === 1) {
+        if (response.code === 200) {
           alert('예약이 확정되었습니다.');
           console.log('1', response.data);
           window.location.reload();
-        } else if (response.data > 1) {
-          alert('이미 확정되었습니다.');
-          console.log('2', response.data);
-          window.location.reload();
-        } else {
-          console.log('데이터 제출 실패');
-          return false;
         }
-      } else {
-        return false;
       }
+      return false;
     } catch (error) {
-      console.error('Error occurred while fetching modal data:', error);
+      const messages = {
+        409: '이미 예약이 확정되었습니다.',
+        404: '예약 확정 실패',
+      };
+      alert(messages[error.response.data.code]);
       return {};
-    } finally {
-      closeModal();
     }
   });
 
