@@ -45,7 +45,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
   );
 
   const getApplyMateDetail = async (mateId) => {
-    console.log(mateId);
     try {
       const applyMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
       const applyMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
@@ -61,8 +60,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
           ...applyMateDetailResponse.data.result[0],
           matchedMate: matchedMate ?? {},
         }));
-
-        console.log('ma', maModalData);
       }
     } catch (error) {
       console.error(error);

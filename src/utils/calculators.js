@@ -19,13 +19,14 @@ export const normalizeWeekDays = (weekdays) => {
       : weekdays.split(',').map((e) => weekdayDic.indexOf(e));
   }
   if (typeof weekdays === 'object') {
-    return typeof Number(weekdays[0]) === 'number'
-      ? typeof weekdays[0] === 'number'
-        ? weekdays
-        : weekdays.map((e) => +e)
-      : weekdays.map((e) => weekdayDic.indexOf(e));
+    if (typeof Number(weekdays[0]) === 'number') {
+      if (typeof weekdays[0] === 'number') {
+        return weekdays;
+      }
+      return weekdays.map((e) => +e);
+    }
+    return weekdays.map((e) => weekdayDic.indexOf(e));
   }
-  return false;
 };
 
 export const countWeekdays = (startDate, endDate, weekdays) => {
@@ -58,7 +59,14 @@ export const stringToColor = (str, saturation = 55, lightness = 50) => {
 };
 
 export const genderToKo = (gender) => {
-  return gender === 'M' ? '남' : gender === 'F' ? '여' : '';
+  switch (gender) {
+    case 'M':
+      return '남';
+    case 'F':
+      return '여';
+    default:
+      return null;
+  }
 };
 
 export const getMinWage = async () => {
