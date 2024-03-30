@@ -2,9 +2,12 @@ import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 
+import { weekdayDic } from '@/utils/calculators.js';
+
 const RecruitmentDetailModal = ({ reModalData, closeModal }) => {
   const { handleContentClick } = useModal();
 
+  const dataDayArr = reModalData.weekday?.split(',') ?? [];
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -31,7 +34,7 @@ const RecruitmentDetailModal = ({ reModalData, closeModal }) => {
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병 요일</label>
-                <span>{reModalData.weekday}</span>
+                <span> {dataDayArr.map((e) => weekdayDic[e]).join(', ')}</span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>

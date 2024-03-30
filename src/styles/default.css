@@ -358,19 +358,26 @@ input::-moz-focus-inner {
 
 .input_with_button {
   display: grid;
-  grid-template-columns: 1fr 8rem;
+  grid-template-columns: 1fr 10rem;
   gap: 1rem;
   align-items: center;
-  margin-bottom: 1rem;
+}
+
+.input_with_button > button {
+  padding: 0.6rem 2rem;
 }
 
 form .input_with_button > .input_wrapper {
   margin-bottom: 0;
 }
 
+form .input_with_button {
+  margin-bottom: 1rem;
+}
+
 form .input_with_button button {
-  padding: 0;
-  height: 80%;
+  overflow: hidden;
+  max-height: 80%;
   font-weight: 400;
   background-color: var(--beige-01);
   color: var(--deep-brown);
@@ -405,7 +412,7 @@ select {
 }
 
 .button_wrapper {
-  margin: 3rem 0;
+  margin-top: 3rem;
   display: flex;
   justify-content: center;
   gap: 1rem;
@@ -660,13 +667,27 @@ input[type='checkbox'] {
 }
 
 /* 12. Responsive  --------------------------------------------------- */
+
+@media (max-width: 1300px) {
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 3rem 8rem 3rem;
+  }
+}
+
 @media (max-width: 900px) {
   .content_wrapper {
     padding: 0 3rem 8rem 3rem;
   }
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 2rem 8rem 2rem;
+  }
 }
+
 @media (max-width: 600px) {
   .content_wrapper {
     padding: 0 2rem 8rem 2rem;
+  }
+  .page_with_sidebar > .content_wrapper {
+    padding: 0 1rem 8rem 1rem;
   }
 }

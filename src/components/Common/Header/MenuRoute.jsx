@@ -54,7 +54,6 @@ const MenuRoute = ({ type }) => {
             });
             if (response) {
               checkRole(JSON.parse(loginInfo));
-              console.log('ok');
             }
           } catch (error) {
             console.error(error);

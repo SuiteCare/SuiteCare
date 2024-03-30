@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
-import ModalReservationTab from './ModalReservationTab';
-import ModalPatientTab from './ModalPatientTab';
+import ReservationDetail from './ReservationDetailTab';
+import PatientDetail from './PatientDetailTab';
 
-const FamilyCalendarModal = ({ modalData, closeModal }) => {
+const ReservationDetailModal = ({ modalData, closeModal, handleMateDetailButton, page }) => {
   const [activeTab, setActiveTab] = useState(0);
-
   const { handleContentClick } = useModal();
 
   return (
@@ -17,16 +16,6 @@ const FamilyCalendarModal = ({ modalData, closeModal }) => {
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        <h2 style={{ textAlign: 'center' }}>
-          {modalData.start.toLocaleString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            weekday: 'long',
-          })}
-        </h2>
-        <hr />
-        <h3 style={{ borderColor: `${modalData.color}` }}>{modalData.title}</h3>
 
         <div className='tab_wrapper'>
           <div onClick={() => setActiveTab(0)} className={activeTab === 0 ? 'active' : ''}>
@@ -36,13 +25,19 @@ const FamilyCalendarModal = ({ modalData, closeModal }) => {
             환자 정보
           </div>
         </div>
-        {activeTab === 0 && <ModalReservationTab modalData={modalData} closeModal={closeModal} />}
-        {activeTab === 1 && <ModalPatientTab modalData={modalData} />}
 
-        <div className='button_wrapper' />
+        {activeTab === 0 && (
+          <ReservationDetail
+            styles={styles}
+            modalData={modalData}
+            handleMateDetailButton={handleMateDetailButton}
+            page={page}
+          />
+        )}
+        {activeTab === 1 && <PatientDetail styles={styles} modalData={modalData} />}
       </div>
     </div>
   );
 };
 
-export default FamilyCalendarModal;
+export default ReservationDetailModal;

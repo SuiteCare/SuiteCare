@@ -18,10 +18,10 @@ const MateOffer = () => {
     isError,
     isLoading,
   } = useQuery(
-    ['patientDetail'],
+    ['recruitmentList'],
     async () => {
       const { data } = await axiosInstance.get(`/api/v1/offer/recruitment-list`);
-      return data;
+      return data.result;
     },
     {
       enabled: true,
@@ -33,7 +33,7 @@ const MateOffer = () => {
     async () => {
       if (!recruitId) return;
       const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
-      return data;
+      return data.result;
     },
     {
       enabled: Boolean(recruitId),

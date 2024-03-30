@@ -14,6 +14,7 @@ const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }
     const newCertificate = {
       orderId: (lastCertificate ? lastCertificate.orderId : 0) + 1,
       id: null,
+      isDeleted: false,
     };
     setFormData((prevData) => {
       return { ...prevData, certificateList: [...(prevData.certificateList || []), newCertificate] };
@@ -37,7 +38,7 @@ const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }
       setChangedData((prevData) => {
         return {
           ...prevData,
-          certificateList: [...(prevData.certificateList || []), { ...deletedItem, delete: true }],
+          certificateList: [...(prevData.certificateList || []), { ...deletedItem, isDeleted: true }],
         };
       });
     } else {

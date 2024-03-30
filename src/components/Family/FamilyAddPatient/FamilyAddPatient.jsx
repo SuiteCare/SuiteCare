@@ -8,9 +8,11 @@ import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
 import random from '@/utils/FamilyAddPatient';
+import useAlert from "@/hooks/useAlert";
 
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
+  const { openAlert, alertComponent } = useAlert();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -38,12 +40,21 @@ const FamilyAddPatient = ({ idQuery }) => {
         axiosInstance.get(`/api/v1/patientDetail/${idQuery}`, { params: { id: idQuery } }),
       ]);
 
-      setFormData({
-        ...patientResponse.data,
-        ...patientDetailResponse.data,
-      });
+      if(patientResponse.data.code === 200 && patientDetailResponse.data.code === 200) {
+        setFormData({
+          ...patientResponse.data.result[0],
+          ...patientDetailResponse.data.result[0],
+        });
+      } else if(patientDetailResponse.data.code === 204){
+        return openAlert('해당 환자 상세정보가 없습니다.');
+
+      } else if(patientResponse.data.code === 204){
+        return openAlert('해당 환자 정보가 없습니다.');
+      }
+
     } catch (error) {
       console.error('Error:', error);
+      return openAlert('오류로 환자 정보를 불러올 수 없습니다.');
     }
   };
 
@@ -155,13 +166,13 @@ const FamilyAddPatient = ({ idQuery }) => {
         const response = await axiosInstance.delete(`/api/v1/patient/${idQuery}`, {
           params: { id: idQuery },
         });
-        if (response.data === 1) {
+
+        if (response.data.code === 200) {
           alert(`${formData.name} 님의 환자 정보가 삭제되었습니다.`);
           navigator.push('/family/manage/patient_list');
-        } else {
-          alert('환자 정보 삭제에 실패하였습니다.');
         }
       } catch (error) {
+        alert('환자 정보 삭제에 실패하였습니다.');
         console.error(error);
       }
     }
@@ -181,6 +192,7 @@ const FamilyAddPatient = ({ idQuery }) => {
 
   return (
     <div className={`${styles.addPatient} content_wrapper`}>
+    {alertComponent}
       <form name='addPatient' onSubmit={handleSubmit}>
         <h3>환자 기본 정보</h3>
         <div className={styles.info_grid}>
@@ -217,7 +229,6 @@ const FamilyAddPatient = ({ idQuery }) => {
         <div className='input_wrapper'>
           <label>비고</label>
           <textarea
-            type='text'
             placeholder='비고'
             name='notice'
             id='notice'

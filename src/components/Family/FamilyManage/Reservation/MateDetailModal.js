@@ -9,9 +9,8 @@ import defaultProfile from '@/assets/default_profile.jpg';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const MateDetailModal = ({ modalData, closeModal }) => {
+const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
   const { handleContentClick } = useModal();
-  console.log('!!', modalData);
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -60,19 +59,9 @@ const MateDetailModal = ({ modalData, closeModal }) => {
             </div>
 
             <div className={`${styles.info_wrapper} ${styles.double}`}>
-              <label className={styles.with_line}>보유 자격증</label>
-
-              {modalData.certificateList.map((e) => (
-                <span key={e.id}>
-                  {e.name}({e.code}) - {e.qualification_date}
-                </span>
-              ))}
-            </div>
-
-            <div className={`${styles.info_wrapper} ${styles.double}`}>
               <label>경력사항</label>
               {modalData.careerList.length > 0 ? (
-                <table>
+                <table className={styles.table}>
                   <thead>
                     <tr>
                       <th>경력 종류</th>
@@ -102,7 +91,7 @@ const MateDetailModal = ({ modalData, closeModal }) => {
                 <table>
                   <thead>
                     <tr>
-                      <th>자격명</th>
+                      <th className={styles.th}>자격명</th>
                       <th>코드</th>
                       <th>취득일</th>
                       <th>만료일</th>
@@ -123,11 +112,16 @@ const MateDetailModal = ({ modalData, closeModal }) => {
                 <div className={styles.introduction}>자격증 정보가 없습니다.</div>
               )}
             </div>
-
             <div className={styles.button_wrapper}>
-              <button type='button' onClick={() => closeModal(true)}>
-                닫기
-              </button>
+              {modalType !== 'Offer' ? (
+                <button type='button' onClick={() => handleAccept(modalData.matchedMate.mate_resume_id)}>
+                  간병 확정하기
+                </button>
+              ) : (
+                <button type='button' onClick={closeModal}>
+                  닫기
+                </button>
+              )}
             </div>
           </>
         ) : (

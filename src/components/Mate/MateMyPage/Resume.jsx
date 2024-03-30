@@ -11,7 +11,7 @@ import Location from './Location';
 import UserInfo from './UserInfo';
 import MainService from './MainService';
 
-import { minWage } from '@/utils/calculators';
+import { countWeekdays, minWage } from '@/utils/calculators';
 
 const Resume = ({ data }) => {
   const navigator = useRouter();
@@ -64,13 +64,13 @@ const Resume = ({ data }) => {
 
       switch (type) {
         case 'career':
-          updatedData.careerList = formListData.careerList.map((careerItem, i) =>
+          updatedData.careerList = changedListData.careerList.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificateList = formListData.certificateList.map((certificateItem, i) =>
+          updatedData.certificateList = changedListData.certificateList.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -113,26 +113,36 @@ const Resume = ({ data }) => {
 
     if (
       !careerList.every((e) => {
-        if (Object.keys(e).length > 5) {
-          const { id, ...rest } = e;
-          return Object.values(rest).every((v) => !!v);
+        const { job_name, name, date_start, date_end } = e;
+        if (countWeekdays(date_start, date_end, [0, 1, 2, 3, 4, 5, 6]) <= 0) {
+          openAlert('경력 기간이 올바르지 않습니다.');
+          return false;
         }
-        return false;
+        if (!(!!job_name && !!name && !!date_start && !!date_end)) {
+          openAlert('경력 사항의 빈 값을 모두 입력해 주세요.');
+          return false;
+        }
+        return true;
       })
     ) {
-      return openAlert('경력 사항의 빈 값을 모두 입력해 주세요.');
+      return false;
     }
 
     if (
       !certificateList.every((e) => {
-        if (Object.keys(e).length > 5) {
-          const { id, ...rest } = e;
-          return Object.values(rest).every((v) => !!v);
+        const { code, name, expired_date, qualification_date } = e;
+        if (countWeekdays(qualification_date, expired_date, [0, 1, 2, 3, 4, 5, 6]) <= 0) {
+          openAlert('자격증 기간 설정이 올바르지 않습니다.');
+          return false;
         }
-        return false;
+        if (!(!!code && !!name && !!qualification_date && !!expired_date)) {
+          openAlert('자격증 목록의 빈 값을 모두 입력해 주세요.');
+          return false;
+        }
+        return true;
       })
     ) {
-      return openAlert('자격증 목록의 빈 값을 모두 입력해 주세요.');
+      return false;
     }
 
     const method = data.resume.mateResume ? 'patch' : 'post';
@@ -153,6 +163,7 @@ const Resume = ({ data }) => {
         body = requestData;
         console.log('post', body);
       }
+
       if (method === 'patch') {
         requestData = {
           ...changedListData,
@@ -174,7 +185,21 @@ const Resume = ({ data }) => {
         if (Object.values(body).length === 0) return openAlert('변경할 데이터가 없습니다.');
       }
 
-      const response = await axiosInstance[method](`/api/v1/mate/resume`, body);
+      const formData = new FormData();
+      formData.append('file', document.querySelector('input[type=file]').files[0]);
+      formData.append(
+        'resumeData',
+        new Blob([JSON.stringify(body)], {
+          type: 'application/json',
+        }),
+      );
+
+      const response = await axiosInstance[method]('/api/v1/mate/resume', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
       if (response.data) {
         // patch 시 response.data === '' 라서 false로 처리되는데, 추후 ResponseBody 객체가 넘어와 파싱해서 사용할 예정
         openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
@@ -205,8 +230,8 @@ const Resume = ({ data }) => {
     setFormListData({
       mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
       locationList: $data.resume?.locationList?.map((e) => e.name) || [],
-      careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id })) || [],
-      certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id })) || [],
+      careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
+      certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
     });
   };
 

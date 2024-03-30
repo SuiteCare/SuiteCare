@@ -11,7 +11,7 @@ import styles from './SearchResult.module.css';
 import SearchResultCard from './SearchResultCard';
 import RecruitmentDetailModal from './RecruitmentDetailModal';
 
-const SearchResult = ({ data }) => {
+const SearchResult = ({ data: searchData }) => {
   const { openAlert, alertComponent } = useAlert();
 
   const { isModalVisible, openModal, closeModal } = useModal();
@@ -27,8 +27,13 @@ const SearchResult = ({ data }) => {
   } = useQuery(
     ['patientDetail', recruitId],
     async () => {
-      const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
-      return data;
+      const { data: patientDetailData } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
+      const { code, result } = patientDetailData;
+      if (code === 200) {
+        return result[0];
+      }
+      console.log('데이터를 가져오는 데 오류가 발생했습니다.');
+      return [];
     },
     {
       enabled: Boolean(recruitId),
@@ -49,40 +54,38 @@ const SearchResult = ({ data }) => {
 
   const MateJobApplication = async (body) => {
     try {
-      const response = await axiosInstance.post('/api/v1/apply', body);
-      if ((!response || !response.data) && response.data !== 0) {
+      const { data: applyData } = await axiosInstance.post('/api/v1/apply', body);
+      if (!applyData) {
         openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
         throw new Error('No data received');
       }
-      return response.data;
+      const { code } = applyData;
+      if (code === 200) {
+        return openAlert('간병 지원이 완료되었습니다.');
+      }
+      return openAlert('오류가 발생했습니다.');
     } catch (error) {
-      console.error('Error occurred while fetching data:', error);
+      const { code } = error.response.data;
+
+      const messages = {
+        404: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.',
+        409: '이미 지원한 공고입니다.',
+        default: '오류가 발생했습니다. 간병 지원에 실패했습니다.',
+      };
+
+      if (
+        code === 404 &&
+        window.confirm(`간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?`)
+      ) {
+        router.push('/mate/mypage/resume');
+      }
+      openAlert(messages[code] || messages.default);
+
       throw error;
     }
   };
 
-  const mutation = useMutation(MateJobApplication, {
-    onSuccess: (applicationResult) => {
-      const messages = {
-        0: '간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.',
-        1: '간병 지원이 완료되었습니다.',
-        2: '이미 지원한 공고입니다.',
-        default: '오류가 발생했습니다. 간병 지원에 실패했습니다.',
-      };
-      const message = messages[applicationResult] || messages.default;
-      if (
-        applicationResult === 0 &&
-        window.confirm(`간병 지원을 위해서는 메이트 이력서 작성이 필요합니다.\n이력서 작성 페이지로 이동하시겠습니까?`)
-      ) {
-        router.push('/mate/mypage/resume');
-      } else {
-        openAlert(message);
-      }
-    },
-    onError: (error) => {
-      console.error('Mutation error occurred:', error);
-    },
-  });
+  const mutation = useMutation(MateJobApplication);
 
   const handleApply = (recruitmentId) => {
     const body = {
@@ -90,7 +93,6 @@ const SearchResult = ({ data }) => {
       mate_id: id,
       recruitment_id: recruitmentId,
     };
-    console.log(body);
     mutation.mutate(body);
   };
 
@@ -99,8 +101,8 @@ const SearchResult = ({ data }) => {
       {alertComponent}
 
       <div className={styles.card_wrapper}>
-        {data?.length > 0 ? (
-          data?.map((eachData) => (
+        {searchData?.length > 0 ? (
+          searchData?.map((eachData) => (
             <SearchResultCard
               data={eachData}
               key={eachData.id}
@@ -113,7 +115,12 @@ const SearchResult = ({ data }) => {
         )}
       </div>
       {isModalVisible && (
-        <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} handleApply={handleApply} />
+        <RecruitmentDetailModal
+          modalData={modalData}
+          closeModal={closeModal}
+          handleApply={handleApply}
+          alertComponent={alertComponent}
+        />
       )}
     </div>
   );

@@ -52,16 +52,23 @@ const EventComponent = ({ event, openModal, setModalData }) => (
   </div>
 );
 
-const AgendaEventComponent = ({ event, openModal, setModalData }) => (
-  <div
-    onClick={() => {
-      setModalData(event);
-      openModal();
-    }}
-  >
-    <span style={{ color: event.color }}>●</span> <strong>{event.title}</strong> / <span>{event.mate}</span>
-  </div>
-);
+const AgendaEventComponent = ({ event, openModal, setModalData }) => {
+  console.log('asdfasdfaskdfjoi12jei412eohifowef', event);
+  return (
+    <div
+      onClick={() => {
+        setModalData(event);
+        openModal();
+      }}
+    >
+      <span style={{ color: event.color }}>●</span> <strong>{event.title}</strong> /{' '}
+      <span>{event.mate || event.family}</span> /{' '}
+      <span>
+        {event.detail.reservation.road_address} {event.detail.reservation.address_detail}
+      </span>
+    </div>
+  );
+};
 
 const MonthEventComponent = ({ event, openModal, setModalData }) => (
   <div

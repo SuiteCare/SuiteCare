@@ -17,7 +17,6 @@ const FamilyMateSearch = () => {
   };
 
   useEffect(() => {
-    console.log('patientInfo', patientInfo);
     // setSuggestionData(getSuggestionData())
     setSuggestionData([
       {
@@ -49,9 +48,13 @@ const FamilyMateSearch = () => {
   } = useQuery(
     ['searchData', condition],
     async () => {
-      console.log('request params', condition);
-      const { data } = await axiosInstance.get('/api/v1/search/mate', { params: condition });
-      return data;
+      const { data: responseData } = await axiosInstance.get('/api/v1/search/mate', { params: condition });
+      const { code, result } = responseData;
+      if (code === 200) {
+        return result;
+      }
+      console.log('데이터를 가져오는 데 실패했습니다.');
+      return [];
     },
     {
       enabled: Object.keys(condition).length > 0,

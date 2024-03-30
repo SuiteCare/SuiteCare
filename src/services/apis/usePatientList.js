@@ -15,7 +15,7 @@ const usePatientList = () => {
     ['patientList'],
     async () => {
       const response = await axiosInstance.get('/api/v1/patient');
-      return response.data;
+      return response.data.result;
     },
     {
       enabled: Boolean(id),

@@ -23,11 +23,14 @@ const PatientList = ({ data }) => {
 
       const [patientResponse, patientDetailResponse] = await Promise.all([patientPromise, patientDetailPromise]);
 
-      setModalData((prevData) => ({
-        ...prevData,
-        ...patientResponse.data,
-        ...patientDetailResponse.data,
-      }));
+      if(patientResponse.data.code === 200 && patientDetailResponse.data.code === 200) {
+        setModalData((prevData) => ({
+          ...prevData,
+          ...patientResponse.data.result[0],
+          ...patientDetailResponse.data.result[0],
+        }));
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -58,7 +61,7 @@ const PatientList = ({ data }) => {
           </tr>
         </thead>
         <tbody>
-          {data?.length === 0 ? (
+          {!data ? (
             <tr>
               <td colSpan={8}>
                 <div className='error'>등록한 환자가 없습니다.</div>

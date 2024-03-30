@@ -24,24 +24,22 @@ const SearchResult = ({ data, patientInfo }) => {
 
   const mutation = useMutation(async ($mateInfo) => {
     try {
-      const response = await axiosInstance.get(`/api/v1/mate/resume/${$mateInfo.id}`);
-      const msg = response.headers.get('msg');
-      if (response.data) {
-        setMateDetailModalData({ ...$mateInfo, ...response.data });
-        return response.data;
+      const { data: responseData } = await axiosInstance.get(`/api/v1/mate/resume/${$mateInfo.id}`);
+      const { code, result } = responseData;
+      if (code === 200) {
+        setMateDetailModalData({ ...$mateInfo, ...result[0] });
+        return result;
       }
-      if (msg === 'fail') {
-        console.log('데이터 불러오기 실패');
-        return {};
-      }
+      console.log('데이터를 가져오는 데 오류가 발생했습니다.');
+      return [];
     } catch (error) {
+      const { code } = error.response.data;
       console.error('Error occurred while fetching modal data:', error);
       return {};
     }
   });
 
   const handleShowModal = ($mateInfo) => {
-    console.log($mateInfo);
     mutation.mutate($mateInfo);
   };
 
