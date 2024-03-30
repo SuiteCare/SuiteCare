@@ -10,7 +10,7 @@ import { minWage } from '@/utils/calculators';
 const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
   // 체크박스 및 최종 데이터 관련
   const [formData, setFormData] = useState({
-    search_name: '',
+    search_id: '',
     search_diagnosis: '',
     location: [],
     gender: [],
@@ -55,7 +55,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
     setSearchName(e.target.value);
     setFormData({
       ...formData,
-      search_name: e.target.value,
+      search_id: e.target.value,
     });
   };
   const [searchDiagnosis, setSearchDiagnosis] = useState('');
@@ -137,7 +137,7 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
           <label>메이트 아이디 검색</label>
           <input
             type='text'
-            name='search_name'
+            name='search_id'
             placeholder='🔎 메이트 아이디로 검색하기'
             value={searchName}
             onChange={handleSearchNameChange}
