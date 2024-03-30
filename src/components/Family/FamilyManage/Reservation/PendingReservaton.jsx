@@ -14,7 +14,7 @@ import RecruitmentDetailModal from '../../../Common/Modal/Detail/RecruitmentDeta
 const PendingReservation = ({ recruitmentList }) => {
   const navigator = useRouter();
 
-  const { isModalVisible, openModal } = useModal();
+  const { isModalVisible, openModal, closeModal } = useModal();
   const [selectedModal, setSelectedModal] = useState(null);
 
   const { id } = useLoginInfo();
@@ -23,11 +23,6 @@ const PendingReservation = ({ recruitmentList }) => {
   const [reModalData, setReModalData] = useState({});
 
   const [selectedRecId, setSelectedRecId] = useState(null);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-
-  const closeModal = () => {
-    setSelectedModal(null);
-  };
 
   const handleSelectChange = (e) => {
     const newValue = e.target.value;
@@ -38,17 +33,15 @@ const PendingReservation = ({ recruitmentList }) => {
       }
     } else {
       const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);
-      const selectPatient = selectedRecruitment.patient_name;
 
       setSelectedRecId(selectedRecruitment?.id);
-      setSelectedPatient(selectPatient);
-
-      console.log(selectedPatient);
     }
   };
 
+  // 환자 정보 보기
   const getPatientDetail = async ($event) => {
     setModalData($event);
+
     try {
       const patientPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
       const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
@@ -68,11 +61,12 @@ const PendingReservation = ({ recruitmentList }) => {
     } catch (error) {
       console.error(error);
     }
-    console.log('m', modalData);
   };
 
+  // 공고 정보 보기
   const getRecruitmentDetail = async ($event) => {
     setReModalData($event);
+
     try {
       const recruitmentdetailPromise = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/detail`);
       const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
@@ -91,7 +85,6 @@ const PendingReservation = ({ recruitmentList }) => {
           ...(recruitmentResponse || {}),
         }));
       }
-      console.log('r', reModalData);
     } catch (error) {
       console.error(error);
     }
@@ -145,10 +138,10 @@ const PendingReservation = ({ recruitmentList }) => {
             </button>
             {isModalVisible && (
               <>
-                {selectedModal === 'PatientDetail' && (
+                {selectedModal === 'PatientDetail' && modalData && (
                   <PatientDetailModal modalData={modalData} closeModal={closeModal} />
                 )}
-                {selectedModal === 'RecruitmentDetail' && (
+                {selectedModal === 'RecruitmentDetail' && reModalData && (
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
               </>

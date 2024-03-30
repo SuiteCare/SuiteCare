@@ -11,8 +11,7 @@ import StarRating from '@/utils/StarRating';
 
 const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
   const { handleContentClick } = useModal();
-  console.log('!!', modalType);
-  console.log(modalData.matchedMate);
+
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>

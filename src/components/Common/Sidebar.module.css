@@ -45,6 +45,11 @@
   color: var(--deep-brown);
 }
 
+.menuItem a img {
+  width: 20px;
+  height: auto;
+}
+
 .menuItem a span {
   font-size: 1.2rem;
 }
@@ -86,10 +91,11 @@
 
 .toggleButton img {
   transition: 0.3s ease-in-out;
+  transform: rotate(180deg);
 }
 
 .toggleButton input:checked ~ img {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
 .toggleButton input:checked ~ .toggleButton {
