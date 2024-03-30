@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
@@ -36,8 +36,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
       });
       const { code, result } = applyMateData;
       if (code === 200) {
-        console.log('applyMateList1', selectedRecId, applyMateData);
-
         return result;
       }
     },
@@ -45,10 +43,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
       enabled: Boolean(selectedRecId),
     },
   );
-
-  useEffect(() => {
-    console.log('applyMateList2', applyMateList);
-  }, [applyMateList]);
 
   const getApplyMateDetail = async (mateId) => {
     console.log(mateId);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -47,12 +47,7 @@ const OfferMateForm = ({ selectedRecId }) => {
     },
   );
 
-  useEffect(() => {
-    console.log('offerMateList', offerMateList);
-  }, [offerMateList]);
-
   const getOfferMateDetail = async (mateId) => {
-    console.log(mateId);
     try {
       const offerMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
       const offerMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/F`);

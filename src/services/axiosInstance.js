@@ -59,9 +59,8 @@ axiosInstance.interceptors.response.use(
       return new Promise((resolve) => {
         setTimeout(() => resolve(axiosInstance(config)), retryDelay);
       });
-    } else {
-        throw error;
     }
+    throw error;
   },
 );
 

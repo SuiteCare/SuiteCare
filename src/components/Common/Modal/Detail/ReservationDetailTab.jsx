@@ -70,13 +70,7 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
         console.error('Error occurred while fetching modal data:', error);
         return {};
       }
-    },
-    {
-      onError: (error) => {
-        console.error('Error occurred while fetching modal data:', error);
-      },
-    },
-  );
+  });
 
   const handleMateDetailButton = () => {
     mutation.mutate(modalData.mate_resume_id);

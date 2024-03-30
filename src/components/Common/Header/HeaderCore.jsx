@@ -52,11 +52,11 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
   };
 
   return (
-    <div className={styles.HeaderCore} ref={wrapperRef}>
+    <div className={styles.HeaderCore}>
       <Link className={styles.logo} href={renderLogoHref()}>
         <Image src={Logo} alt='Logo' />
       </Link>
-      <div className={styles.menu_wrapper}>
+      <div className={styles.menu_wrapper} ref={wrapperRef}>
         <div className={styles.button_wrapper}>
           <button
             onClick={() => toggleMenu('family')}
