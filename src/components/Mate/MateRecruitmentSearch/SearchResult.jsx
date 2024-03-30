@@ -56,6 +56,7 @@ const SearchResult = ({ data: searchData }) => {
     try {
       const { data: applyData } = await axiosInstance.post('/api/v1/apply', body);
       if (!applyData) {
+
         openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
         throw new Error('No data received');
       }
