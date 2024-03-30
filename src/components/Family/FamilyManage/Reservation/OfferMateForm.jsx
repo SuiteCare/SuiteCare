@@ -101,7 +101,7 @@ const OfferMateForm = ({ selectedRecId }) => {
           </tr>
         </thead>
         <tbody>
-          {offerMateList?.length === 0 ? (
+          {offerMateList?.length === undefined ? (
             <tr>
               <td colSpan={6}>
                 <div className='error'>내가 제안한 간병인이 없습니다.</div>
