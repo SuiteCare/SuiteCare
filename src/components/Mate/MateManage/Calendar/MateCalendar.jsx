@@ -26,10 +26,6 @@ const MateCalendar = () => {
   const [modalData, setModalData] = useState(null);
   const [currentCalendar, setCurrentCalendar] = useState(new Date());
 
-  const handleNavigate = (newDate) => {
-    setCurrentCalendar(newDate);
-  };
-
   const fetchData = async () => {
     try {
       const { data } = await axiosInstance.get('/api/v1/reservation/mate');
@@ -70,7 +66,6 @@ const MateCalendar = () => {
 
   const handleMutationError = (error) => {
     const { code } = error.response.data;
-    const messages = {};
     console.error('Error occurred while fetching modal data:', error);
     return {};
   };
@@ -132,8 +127,8 @@ const MateCalendar = () => {
         };
         events.push(event);
       }
-      currentStartDate = currentStartDate.add(1, 'day');
-      currentEndDate = currentEndDate.add(1, 'day');
+      currentStartDate.add(1, 'day');
+      currentEndDate.add(1, 'day');
     }
 
     return events;
@@ -174,7 +169,7 @@ const MateCalendar = () => {
         timeslots={2} // step={30}와 동일
         messages={messages}
         dayPropGetter={customDayPropGetter}
-        onNavigate={handleNavigate}
+        onNavigate={(newDate) => setCurrentCalendar(newDate)}
         {...getComponents(openModal, setModalData)}
         {...settingProps}
       />

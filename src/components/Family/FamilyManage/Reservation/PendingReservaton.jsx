@@ -14,7 +14,7 @@ import RecruitmentDetailModal from '../../../Common/Modal/Detail/RecruitmentDeta
 const PendingReservation = ({ recruitmentList }) => {
   const navigator = useRouter();
 
-  const { isModalVisible, openModal } = useModal();
+  const { isModalVisible, openModal, closeModal } = useModal();
   const [selectedModal, setSelectedModal] = useState(null);
 
   const { id } = useLoginInfo();
@@ -23,11 +23,6 @@ const PendingReservation = ({ recruitmentList }) => {
   const [reModalData, setReModalData] = useState({});
 
   const [selectedRecId, setSelectedRecId] = useState(null);
-  const [selectedPatient, setSelectedPatient] = useState(null);
-
-  const closeModal = () => {
-    setSelectedModal(null);
-  };
 
   const handleSelectChange = (e) => {
     const newValue = e.target.value;
@@ -38,36 +33,40 @@ const PendingReservation = ({ recruitmentList }) => {
       }
     } else {
       const selectedRecruitment = recruitmentList?.find((v) => v.id === +newValue);
-      const selectPatient = selectedRecruitment.patient_name;
 
       setSelectedRecId(selectedRecruitment?.id);
-      setSelectedPatient(selectPatient);
-
-      console.log(selectedPatient);
     }
   };
 
+  // 환자 정보 보기
   const getPatientDetail = async ($event) => {
     setModalData($event);
+
     try {
       const patientPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/patient`);
       const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
       const [patientResponse, recruitmentDataResponse] = await Promise.all([patientPromise, recruitmentDataPromise]);
-      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
 
-      setModalData((prevData) => ({
-        ...prevData,
-        ...patientResponse.data,
-        ...(recruitmentResponse || {}), // recruitmentResponse가 undefined이면 빈 객체를 병합
-      }));
+      const recruitmentResponse = recruitmentDataResponse.data.result.find(
+        (recruitment) => recruitment.id === selectedRecId,
+      );
+
+      if (patientResponse.data.code === 200 && recruitmentDataResponse.data.code === 200) {
+        setModalData((prevData) => ({
+          ...prevData,
+          ...patientResponse.data.result[0],
+          ...(recruitmentResponse || {}), // recruitmentResponse가 undefined이면 빈 객체를 병합
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
-    console.log('m', modalData);
   };
 
+  // 공고 정보 보기
   const getRecruitmentDetail = async ($event) => {
     setReModalData($event);
+
     try {
       const recruitmentdetailPromise = await axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/detail`);
       const recruitmentDataPromise = axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
@@ -75,14 +74,17 @@ const PendingReservation = ({ recruitmentList }) => {
         recruitmentdetailPromise,
         recruitmentDataPromise,
       ]);
-      const recruitmentResponse = recruitmentDataResponse.data.find((recruitment) => recruitment.id === selectedRecId);
+      const recruitmentResponse = recruitmentDataResponse.data.result.find(
+        (recruitment) => recruitment.id === selectedRecId,
+      );
 
-      setReModalData((prevData) => ({
-        ...prevData,
-        ...recruitmentdetailResponse.data,
-        ...(recruitmentResponse || {}),
-      }));
-      console.log('r', reModalData);
+      if (recruitmentdetailResponse.data.code === 200 && recruitmentDataResponse.data.code === 200) {
+        setReModalData((prevData) => ({
+          ...prevData,
+          ...recruitmentdetailResponse.data.result[0],
+          ...(recruitmentResponse || {}),
+        }));
+      }
     } catch (error) {
       console.error(error);
     }
@@ -136,10 +138,10 @@ const PendingReservation = ({ recruitmentList }) => {
             </button>
             {isModalVisible && (
               <>
-                {selectedModal === 'PatientDetail' && (
+                {selectedModal === 'PatientDetail' && modalData && (
                   <PatientDetailModal modalData={modalData} closeModal={closeModal} />
                 )}
-                {selectedModal === 'RecruitmentDetail' && (
+                {selectedModal === 'RecruitmentDetail' && reModalData && (
                   <RecruitmentDetailModal reModalData={reModalData} closeModal={closeModal} />
                 )}
               </>

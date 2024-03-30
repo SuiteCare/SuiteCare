@@ -26,10 +26,6 @@ const FamilyCalendar = () => {
   const [modalData, setModalData] = useState(null);
   const [currentCalendar, setCurrentCalendar] = useState(new Date());
 
-  const handleNavigate = (newDate) => {
-    setCurrentCalendar(newDate);
-  };
-
   const fetchData = async () => {
     try {
       const { data } = await axiosInstance.get('/api/v1/reservation/family');
@@ -130,8 +126,8 @@ const FamilyCalendar = () => {
         };
         events.push(event);
       }
-      currentStartDate = currentStartDate.add(1, 'day');
-      currentEndDate = currentEndDate.add(1, 'day');
+      currentStartDate.add(1, 'day');
+      currentEndDate.add(1, 'day');
     }
 
     return events;
@@ -172,7 +168,7 @@ const FamilyCalendar = () => {
         timeslots={2}
         messages={messages}
         dayPropGetter={customDayPropGetter}
-        onNavigate={handleNavigate}
+        onNavigate={(newDate) => setCurrentCalendar(newDate)}
         {...getComponents(openModal, setModalData)}
         {...settingProps}
       />

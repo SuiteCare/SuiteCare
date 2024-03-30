@@ -6,6 +6,7 @@ import axiosInstance from '@/services/axiosInstance';
 import useLoginInfo from '@/hooks/useLoginInfo';
 import useModal from '@/hooks/useModal';
 import usePatientList from '@/services/apis/usePatientList';
+import useAlert from '@/hooks/useAlert';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 
@@ -14,6 +15,7 @@ const SelectRecruitmentModal = ({ selectedMate, patientId, closeModal }) => {
   const { handleContentClick } = useModal();
   const { id } = useLoginInfo();
   const { patientList } = usePatientList();
+  const { openAlert, alertComponent } = useAlert();
 
   const {
     data: recruitmentList,
@@ -56,20 +58,21 @@ const SelectRecruitmentModal = ({ selectedMate, patientId, closeModal }) => {
         request_by: 'F',
       };
 
-      console.log('request body', body);
-      const { data } = await axiosInstance.post(`/api/v1/apply`, body);
-      if (data.code === 200) {
-        alert('간병 제안이 완료되었습니다.');
+      const { data: offerData } = await axiosInstance.post(`/api/v1/apply`, body);
+      const { code } = offerData;
+      if (code === 200) {
         closeModal();
+        return openAlert('간병 제안이 완료되었습니다.');
       }
       console.log('데이터 제출 실패');
       return false;
     } catch (error) {
+      console.error(error);
+      const { code } = error.response.data;
       const messages = {
         409: `이미 ${selectedMate.name} 메이트님에게 해당 간병 수행을 제안한 상태입니다.`,
       };
-      alert(messages[error.response.data.code]);
-      return {};
+      return openAlert(messages[code]);
     }
   });
 
@@ -81,6 +84,7 @@ const SelectRecruitmentModal = ({ selectedMate, patientId, closeModal }) => {
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
+      {openAlert && alertComponent}
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
           <span onClick={closeModal} />

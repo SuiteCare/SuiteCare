@@ -2,15 +2,12 @@ import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 
-import { calAge, calTimeDiff, countWeekdays, genderToKo, weekdayDic } from '@/utils/calculators.js';
+import { weekdayDic } from '@/utils/calculators.js';
 
 const RecruitmentDetailModal = ({ reModalData, closeModal }) => {
   const { handleContentClick } = useModal();
 
-  console.log('day', reModalData.weekday);
-
   const dataDayArr = reModalData.weekday?.split(',') ?? [];
-
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>

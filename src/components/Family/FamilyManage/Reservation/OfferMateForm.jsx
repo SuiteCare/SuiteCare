@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
@@ -34,21 +34,20 @@ const OfferMateForm = ({ selectedRecId }) => {
           recruitment_id: selectedRecId,
         },
       });
-      console.log('offerMateList', selectedRecId, offerMateData);
+      const { code, result } = offerMateData;
 
-      return offerMateData;
+      if (code === 200) {
+        console.log('offerMateList', selectedRecId, offerMateData);
+
+        return result;
+      }
     },
     {
       enabled: Boolean(selectedRecId),
     },
   );
 
-  useEffect(() => {
-    console.log('offerMateList', offerMateList);
-  }, [offerMateList]);
-
   const getOfferMateDetail = async (mateId) => {
-    console.log(mateId);
     try {
       const offerMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
       const offerMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/F`);
@@ -58,15 +57,17 @@ const OfferMateForm = ({ selectedRecId }) => {
         offerMateDataPromise,
       ]);
 
-      const matchedMate = offerMateDataResponse.data.find((mate) => mate.mate_resume_id === mateId);
+      const matchedMate = offerMateDataResponse.data.result.find((mate) => mate.mate_resume_id === mateId);
 
-      setMaModalData((prevData) => ({
-        ...prevData,
-        ...offerMateDetailResponse.data,
-        matchedMate: matchedMate ?? {},
-      }));
+      if (offerMateDetailResponse.data.code === 200 && offerMateDataResponse.data.code === 200) {
+        setMaModalData((prevData) => ({
+          ...prevData,
+          ...offerMateDetailResponse.data.result[0],
+          matchedMate: matchedMate ?? {},
+        }));
 
-      console.log('ma', maModalData);
+        console.log('ma', maModalData);
+      }
     } catch (error) {
       console.error(error);
     }

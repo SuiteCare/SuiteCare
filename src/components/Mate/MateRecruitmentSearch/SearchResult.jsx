@@ -27,8 +27,13 @@ const SearchResult = ({ data: searchData }) => {
   } = useQuery(
     ['patientDetail', recruitId],
     async () => {
-      const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
-      return data;
+      const { data: patientDetailData } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
+      const { code, result } = patientDetailData;
+      if (code === 200) {
+        return result[0];
+      }
+      console.log('데이터를 가져오는 데 오류가 발생했습니다.');
+      return [];
     },
     {
       enabled: Boolean(recruitId),
@@ -49,12 +54,13 @@ const SearchResult = ({ data: searchData }) => {
 
   const MateJobApplication = async (body) => {
     try {
-      const { data } = await axiosInstance.post('/api/v1/apply', body);
-      if (!data) {
+      const { data: applyData } = await axiosInstance.post('/api/v1/apply', body);
+      if (!applyData) {
         openAlert('오류가 발생했습니다. 간병 지원에 실패했습니다.');
         throw new Error('No data received');
       }
-      if (data.code === 200) {
+      const { code } = applyData;
+      if (code === 200) {
         return openAlert('간병 지원이 완료되었습니다.');
       }
       return openAlert('오류가 발생했습니다.');
