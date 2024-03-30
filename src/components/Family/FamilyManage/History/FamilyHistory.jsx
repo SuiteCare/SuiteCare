@@ -18,6 +18,7 @@ const FamilyHistory = () => {
       0: 'pendingRecruitment',
       1: 'reservation/family',
     };
+
     try {
       const { data } = await axiosInstance.get(`/api/v1/${targetURL[$tab]}`);
       const { code, result } = data;
@@ -26,6 +27,7 @@ const FamilyHistory = () => {
         return result.reverse();
       }
       console.error('데이터를 가져오는 데 오류가 발생했습니다.');
+      setTabData([]);
       return [];
     } catch (error) {
       const { code } = error.response.data;
@@ -109,7 +111,11 @@ const FamilyHistory = () => {
           (tabData && tabData.length > 0 ? (
             <HistoryTable data={tabData} handleDetailClick={handleDetailClick} tabType='recruitment' />
           ) : (
-            <div className='no_result'>간병 공고 등록 내역이 없습니다.</div>
+            <div className='no_result'>
+              <p>간병 공고 등록 내역이 없습니다.</p>
+              <br />
+              <button onClick={() => (window.location.href = '/family/recruitment')}>신규 간병 공고 등록하기</button>
+            </div>
           ))}
         {activeTab === 1 &&
           (tabData && tabData.length > 0 ? (
