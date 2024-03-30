@@ -21,7 +21,11 @@ const Dropdown = ({ type, isOpen }) => {
   const { role } = useLoginInfo();
 
   const renderMenus = ($type) => {
-    const roleString = role === 'M' ? 'mate' : role === 'F' ? 'family' : null;
+    const roleString = {
+      M: 'mate',
+      F: 'family',
+      A: 'all',
+    };
     const menus = menuItems($type);
     const loginMenu = (
       <li key='login' className='dropdown_menu_item'>
@@ -34,7 +38,7 @@ const Dropdown = ({ type, isOpen }) => {
       </li>
     );
 
-    if ($type === roleString) {
+    if (role === 'A' || $type === roleString[role]) {
       return [...menus, logoutMenu];
     }
     return [loginMenu, ...menus];
