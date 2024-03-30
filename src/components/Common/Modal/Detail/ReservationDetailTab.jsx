@@ -55,14 +55,14 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
           }),
         ]);
 
-        const resumeData = resumeResponse.data;
-        const searchData = searchResponse.data;
+        const resumeData = resumeResponse.data.result[0];
+        const searchData = searchResponse.data.result[0];
 
         if (resumeData && searchData) {
           setMateDetailModalData({ ...searchData[0], ...resumeData });
           return { resumeData, searchData: searchData[0] };
         }
-        console.log('데이터 불러오기 실패');
+        console.error('데이터 불러오기 실패');
         return {};
       } catch (error) {
         console.error('Error occurred while fetching modal data:', error);
