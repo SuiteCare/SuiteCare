@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import useModal from '@/hooks/useModal';
+import useAlert from '@/hooks/useAlert';
 
 import KaKaoMapModal from './KakaoMapModal';
 
-const KakaoPostcode = ({ address, setAddress }) => {
+const KakaoPostcode = ({ address, setAddress, handleInputChange }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
-
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [id]: value,
-    }));
-  };
+  const { openAlert, alertComponent } = useAlert();
 
   return (
     <div className='KakaoPostcode'>
+      {openAlert && alertComponent}
       <input
         type='text'
         id='postcode'
@@ -25,6 +20,7 @@ const KakaoPostcode = ({ address, setAddress }) => {
         onChange={handleInputChange}
         maxLength={5}
         pattern='[0-9]{5}'
+        disabled
       />
       <button type='button' onClick={openModal}>
         병원주소 찾기
@@ -35,6 +31,7 @@ const KakaoPostcode = ({ address, setAddress }) => {
         placeholder='도로명주소'
         value={address.roadAddress}
         onChange={handleInputChange}
+        disabled
       />
       <input
         type='text'
@@ -42,6 +39,7 @@ const KakaoPostcode = ({ address, setAddress }) => {
         placeholder='지번주소'
         value={address.jibunAddress}
         onChange={handleInputChange}
+        disabled
       />
       <input
         type='text'

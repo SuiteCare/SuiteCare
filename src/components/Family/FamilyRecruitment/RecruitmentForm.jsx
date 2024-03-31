@@ -7,9 +7,8 @@ import useAlert from '@/hooks/useAlert';
 
 import styles from './RecruitmentForm.module.css';
 import { PatientInfo } from './PatientInfo';
-import DaumPostcode from '@/components/Common/Address/DaumPostcode';
-import KakaoPostcode from '@/components/Common/Address/KakaoPostcode';
 import PatientSelector from '../FamilyMateSearch/PatientSelector';
+import AddressPart from './AddressPart';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
@@ -35,7 +34,7 @@ const RecruitmentForm = () => {
     start_date: afterNday(7), // 날짜 형식 YYYY-MM-DD
     end_date: afterNday(14), // 날짜 형식 YYYY-MM-DD
     wage: minWage,
-    expire_at: afterNday(7),
+    expire_at: afterNday(4), // 날짜 형식 YYYY-MM-DD
   });
 
   const [address, setAddress] = useState({
@@ -89,8 +88,18 @@ const RecruitmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!address.postcode || !address.roadAddress || !address.jibunAddress || !address.detailAddress)
-      return openAlert('주소를 입력하세요.');
+    const { postcode, roadAddress, jibunAddress, detailAddress } = address;
+    if (!postcode || !roadAddress || !jibunAddress || !detailAddress) return openAlert('주소를 입력하세요.');
+
+    const regex = /서울+/;
+    if (!regex.test(roadAddress) || !regex.test(jibunAddress)) {
+      setAddress({ postcode: '', roadAddress: '', jibunAddress: '', detailAddress: '' });
+      return openAlert('현재 간병 지역이 서울에 위치한 공고만 등록할 수 있습니다.');
+    }
+
+    if (new Date(formData.start_date) <= new Date(afterNday(0))) {
+      return openAlert('간병 시작일은 미래 날짜여야 합니다.');
+    }
 
     if (
       countWeekdays(
@@ -105,8 +114,11 @@ const RecruitmentForm = () => {
       return openAlert('간병 기간 및 출퇴근요일 설정이 올바르지 않습니다.');
     }
 
-    if (new Date(formData.expire_at) < Date.now()) {
-      return openAlert('공고 마감일 설정이 올바르지 않습니다.');
+    if (
+      new Date(formData.expire_at) <= new Date(afterNday(0)) ||
+      new Date(formData.expire_at) >= new Date(formData.start_date)
+    ) {
+      return openAlert('공고 마감일은 오늘 이후부터 간병 시작일 이전이어야 합니다.');
     }
 
     const body = {
@@ -119,14 +131,14 @@ const RecruitmentForm = () => {
         if (v) acc.push(i);
         return acc;
       }, []),
-      postcode: address.postcode,
-      road_address: address.roadAddress,
-      jibun_address: address.jibunAddress,
-      address_detail: address.detailAddress,
+      postcode,
+      road_address: roadAddress,
+      jibun_address: jibunAddress,
+      address_detail: detailAddress,
     };
 
     try {
-      const response = await axiosInstance.post('/api/v1/recruitment', body);
+      const response = await axiosInstance.post('/api/v1/recruitment1', body);
       if (response.data) {
         alert('공고 등록이 완료되었습니다.');
         navigator.push('./main');
@@ -159,33 +171,25 @@ const RecruitmentForm = () => {
               </div>
 
               <div className={styles.recruitment_info_wrapper}>
-                <div className='input_wrapper'>
-                  <label>주소</label>
-                  <div className={styles.address_section}>
-                    <span>장소 종류</span>
-                    <select name='location' onChange={handleInputChange}>
-                      <option value='병원'>병원</option>
-                      <option value='자택'>자택</option>
-                    </select>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2.3rem' }}>
-                      <span>우편번호</span>
-                      <span>도로명주소</span>
-                      <span>지번주소</span>
-                      <span>상세주소</span>
-                    </div>
-                    {formData.location === '병원' ? (
-                      <KakaoPostcode address={address} setAddress={setAddress} />
-                    ) : (
-                      <DaumPostcode address={address} setAddress={setAddress} />
-                    )}
-                  </div>
-                </div>
+                <AddressPart
+                  styles={styles}
+                  formData={formData}
+                  handleInputChange={handleInputChange}
+                  address={address}
+                  setAddress={setAddress}
+                />
 
                 <div className='input_wrapper'>
                   <label>간병 기간</label>
                   <div>
-                    <input type='date' name='start_date' onChange={handleInputChange} defaultValue={afterNday(7)} /> ~
-                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={afterNday(14)} />
+                    <input
+                      type='date'
+                      name='start_date'
+                      onChange={handleInputChange}
+                      defaultValue={formData.start_date}
+                    />{' '}
+                    ~
+                    <input type='date' name='end_date' onChange={handleInputChange} defaultValue={formData.end_date} />
                     <p>
                       (총{' '}
                       {countWeekdays(
@@ -251,7 +255,12 @@ const RecruitmentForm = () => {
                 <div className='input_wrapper'>
                   <label>공고 마감일</label>
                   <div>
-                    <input type='date' name='expire_at' onChange={handleInputChange} defaultValue={afterNday(4)} />
+                    <input
+                      type='date'
+                      name='expire_at'
+                      onChange={handleInputChange}
+                      defaultValue={formData.expire_at}
+                    />
                   </div>
                 </div>
               </div>
@@ -259,8 +268,7 @@ const RecruitmentForm = () => {
 
             <hr />
             <div className='button_wrapper'>
-              <button type='submit'>간병 신청하기</button>
-              {/** handle뭐시기 나온다음에 2면 '이미 지원한 간병예약입니다' 띄우기 */}
+              <button type='submit'>간병 공고 등록하기</button>
             </div>
           </>
         ) : (
