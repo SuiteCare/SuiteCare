@@ -30,12 +30,26 @@ const Dropdown = ({ type }) => {
     return null;
   };
 
+  const handleLoginClick = (e) => {
+    if (localStorage.getItem('login_info')) {
+      if (window.confirm('로그인 페이지로 이동하시겠습니까? 기존 계정에서 로그아웃됩니다.')) {
+        localStorage.removeItem('login_info');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('expiration_time');
+      } else {
+        navigator.back();
+      }
+    }
+  };
+
   const renderMenus = ($type) => {
     const roleString = getRoleString();
     const menus = menuItems($type);
     const loginMenu = (
       <li key='login' className='dropdown_menu_item'>
-        <Link href={`/${type}/login`}>로그인</Link>
+        <Link href={`/${type}/login`} onClick={handleLoginClick}>
+          로그인
+        </Link>
       </li>
     );
     const logoutMenu = (
@@ -44,7 +58,7 @@ const Dropdown = ({ type }) => {
       </li>
     );
 
-    if ($type === roleString) {
+    if ($type === roleString || role === 'A') {
       return [...menus, logoutMenu];
     }
     return [loginMenu, ...menus];

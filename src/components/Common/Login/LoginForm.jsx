@@ -26,16 +26,6 @@ const LoginForm = ({ type }) => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      if (localStorage.getItem('login_info')) {
-        if (window.confirm('로그인 페이지로 이동하시겠습니까? 기존 계정에서 로그아웃됩니다.')) {
-          localStorage.removeItem('login_info');
-          localStorage.removeItem('access_token');
-          localStorage.removeItem('expiration_time');
-        } else {
-          navigator.back();
-        }
-      }
-
       const newId = sessionStorage.getItem('newId');
       const rememberedId = localStorage.getItem(`rememberedId_${type}`);
       setLoginForm((prevData) => ({ ...prevData, id: rememberedId || newId }));

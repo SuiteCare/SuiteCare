@@ -10,8 +10,7 @@ import Dropdown from './Dropdown';
 import MenuRoute from './MenuRoute';
 
 const HeaderCore = ({ type, isCheckLogin = true }) => {
-  const [familyMenuOpen, setFamilyMenuOpen] = useState(false);
-  const [mateMenuOpen, setMateMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState({ family: false, mate: false });
   const { id } = useLoginInfo();
   const wrapperRef = useRef(null);
 
@@ -19,8 +18,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
-        setFamilyMenuOpen(false);
-        setMateMenuOpen(false);
+        setMenuOpen({ family: false, mate: false });
       }
     };
 
@@ -30,25 +28,25 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
     };
   }, [wrapperRef]);
 
-  const toggleMenu = ($type) => {
-    if ($type === 'family') {
-      setFamilyMenuOpen(!familyMenuOpen);
-      setMateMenuOpen(false);
-    } else if ($type === 'mate') {
-      setMateMenuOpen(!mateMenuOpen);
-      setFamilyMenuOpen(false);
-    }
+  const toggleMenu = (menuType) => {
+    setMenuOpen((prevMenuOpen) => ({
+      ...Object.fromEntries(
+        Object.keys(prevMenuOpen).map((key) => [key, key === menuType ? !prevMenuOpen[key] : false]),
+      ),
+    }));
   };
 
-  const renderLogoHref = () => {
-    let location = null;
-    if (typeof window !== 'undefined') {
-      location = window.location.pathname.split('/').reverse()[0];
-    }
+  const menuButtons = [
+    { role: 'family', text: '간병인 찾기' },
+    { role: 'mate', text: '간병 일감 찾기' },
+  ];
 
-    if (location === 'login') return '/';
-    if (id) return `/${type}/main`;
-    return `/${type}/login`;
+  const renderLogoHref = () => {
+    if (typeof window !== 'undefined') {
+      const location = window.location.pathname.split('/').reverse()[0];
+      if (location === 'login') return '/';
+    }
+    return id ? `/${type}/main` : `/${type}/login`;
   };
 
   return (
@@ -57,25 +55,17 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
         <Image src={Logo} alt='Logo' />
       </Link>
       <div className={styles.menu_wrapper} ref={wrapperRef}>
-        <div className={styles.button_wrapper}>
-          <button
-            onClick={() => toggleMenu('family')}
-            className={`${type === 'family' ? styles.active : ''} family-button`}
-          >
-            <span className={styles.buttonText}>간병인 찾기</span>
-          </button>
-          {familyMenuOpen && <Dropdown type='family' />}
-        </div>
-        <div className={styles.button_wrapper}>
-          <button
-            type='button'
-            onClick={() => toggleMenu('mate')}
-            className={`${type === 'mate' ? styles.active : ''} mate-button`}
-          >
-            <span>간병 일감 찾기</span>
-          </button>
-          {mateMenuOpen && <Dropdown type='mate' />}
-        </div>
+        {menuButtons.map(({ role, text }) => (
+          <div key={role} className={styles.button_wrapper}>
+            <button
+              onClick={() => toggleMenu(role)}
+              className={`${role === 'family' ? styles.active : ''} ${role}-button`}
+            >
+              <span className={styles.buttonText}>{text}</span>
+            </button>
+            {menuOpen[role] && <Dropdown type={role} />}
+          </div>
+        ))}
       </div>
       {isCheckLogin && <MenuRoute type={type} />}
     </div>

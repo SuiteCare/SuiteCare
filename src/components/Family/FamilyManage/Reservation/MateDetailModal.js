@@ -5,12 +5,13 @@ import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
+import LocalLoading from '@/components/Common/Modal/LocalLoading';
 
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 import { phoneHyphenRegex } from '@/utils/regex';
 
-const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
+const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept, isError, isLoading }) => {
   const { handleContentClick } = useModal();
 
   const getList = (value, nullMsg) => {
@@ -24,6 +25,8 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
       return value?.map((e) => e.name).join(', ');
     }
   };
+
+  if (isLoading) return <LocalLoading />;
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -139,7 +142,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
             </div>
           </>
         ) : (
-          <div className='error'>오류가 발생했습니다.</div>
+          isError && <div className='error'>오류가 발생했습니다.</div>
         )}
       </div>
     </div>
