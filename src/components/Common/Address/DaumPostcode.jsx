@@ -1,22 +1,17 @@
 import React from 'react';
 
 import useModal from '@/hooks/useModal';
+import useAlert from '@/hooks/useAlert';
 
 import DaumSearchModal from './DaumSearchModal';
 
-const DaumPostcode = ({ address, setAddress }) => {
+const DaumPostcode = ({ address, setAddress, handleInputChange }) => {
   const { isModalVisible, openModal, closeModal } = useModal();
-
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      [id]: value,
-    }));
-  };
+  const { openAlert, alertComponent } = useAlert();
 
   return (
     <div className='DaumPostcode'>
+      {openAlert && alertComponent}
       <input
         type='text'
         id='postcode'
@@ -25,6 +20,7 @@ const DaumPostcode = ({ address, setAddress }) => {
         onChange={handleInputChange}
         maxLength={5}
         pattern='[0-9]{5}'
+        disabled
       />
       <button type='button' onClick={openModal}>
         우편번호 찾기
@@ -35,6 +31,7 @@ const DaumPostcode = ({ address, setAddress }) => {
         placeholder='도로명주소'
         value={address.roadAddress}
         onChange={handleInputChange}
+        disabled
       />
       <input
         type='text'
@@ -42,6 +39,7 @@ const DaumPostcode = ({ address, setAddress }) => {
         placeholder='지번주소'
         value={address.jibunAddress}
         onChange={handleInputChange}
+        disabled
       />
       <input
         type='text'
