@@ -138,7 +138,7 @@ const RecruitmentForm = () => {
     };
 
     try {
-      const response = await axiosInstance.post('/api/v1/recruitment1', body);
+      const response = await axiosInstance.post('/api/v1/recruitment', body);
       if (response.data) {
         alert('공고 등록이 완료되었습니다.');
         navigator.push('./main');
@@ -146,7 +146,11 @@ const RecruitmentForm = () => {
         return openAlert('공고 등록에 실패하였습니다.');
       }
     } catch (error) {
-      console.error('Error:', error);
+      const messages = {
+        409: '이미 해당 기간에 등록된 공고가 존재합니다.',
+      };
+      alert(messages[error.response.data.code]);
+      return {};
     }
   };
 
