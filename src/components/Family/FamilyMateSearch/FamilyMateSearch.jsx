@@ -84,13 +84,11 @@ const FamilyMateSearch = () => {
       ) : (
         <SearchResult data={searchData} patientInfo={patientInfo} type='search' />
       )}
-      {patientInfo ? (
+      {patientInfo && (
         <div style={{ marginTop: '6rem' }}>
           <h3>스위트케어가 추천하는 메이트</h3>
           <SearchResult data={suggestionData} type='suggestion' />
         </div>
-      ) : (
-        ''
       )}
     </div>
   );

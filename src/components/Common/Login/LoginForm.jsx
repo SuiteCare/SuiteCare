@@ -10,11 +10,11 @@ const LoginForm = ({ type }) => {
   const navigator = useRouter();
 
   const [loginFail, setLoginFail] = useState(false);
-
   const [loginForm, setLoginForm] = useState({
     id: '',
     password: '',
   });
+  const [idRememberState, setIdRememberState] = useState();
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -24,7 +24,6 @@ const LoginForm = ({ type }) => {
     });
   };
 
-  const [idRememberState, setIdRememberState] = useState();
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (localStorage.getItem('login_info')) {

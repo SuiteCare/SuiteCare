@@ -8,7 +8,7 @@ import FamilyMenuList from '@/components/Family/FamilyHeader/FamilyMenuList.js';
 import MateMenuList from '@/components/Mate/MateHeader/MateMenuList.js';
 import styles from './Dropdown.module.css';
 
-const Dropdown = ({ type, isOpen }) => {
+const Dropdown = ({ type }) => {
   const menuItems = ($type) => {
     const menuList = $type === 'family' ? FamilyMenuList : MateMenuList;
     return menuList.map((item) => (
@@ -20,8 +20,18 @@ const Dropdown = ({ type, isOpen }) => {
 
   const { role } = useLoginInfo();
 
+  const getRoleString = () => {
+    if (role === 'F') {
+      return 'family';
+    }
+    if (role === 'M') {
+      return 'mate';
+    }
+    return null;
+  };
+
   const renderMenus = ($type) => {
-    const roleString = role === 'M' ? 'mate' : role === 'F' ? 'family' : null;
+    const roleString = getRoleString();
     const menus = menuItems($type);
     const loginMenu = (
       <li key='login' className='dropdown_menu_item'>
@@ -42,7 +52,7 @@ const Dropdown = ({ type, isOpen }) => {
 
   return (
     <div className={styles.Dropdown}>
-      <Fade top cascade when={isOpen}>
+      <Fade top cascade>
         <ul className='dropdown_menu'>{renderMenus(type)}</ul>
       </Fade>
     </div>

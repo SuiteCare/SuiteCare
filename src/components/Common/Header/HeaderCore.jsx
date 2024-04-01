@@ -15,7 +15,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
   const { id } = useLoginInfo();
   const wrapperRef = useRef(null);
 
-  // useRef를 사용해서 메뉴 이외의 영역이 클릭되면 메뉴를 끄게 함
+  // 메뉴가 열린 상태에서 메뉴 이외의 영역이 클릭되면 메뉴를 끄게 함
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
@@ -64,7 +64,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
           >
             <span className={styles.buttonText}>간병인 찾기</span>
           </button>
-          {familyMenuOpen && <Dropdown type='family' isOpen />}
+          {familyMenuOpen && <Dropdown type='family' />}
         </div>
         <div className={styles.button_wrapper}>
           <button
@@ -74,7 +74,7 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
           >
             <span>간병 일감 찾기</span>
           </button>
-          {mateMenuOpen && <Dropdown type='mate' isOpen />}
+          {mateMenuOpen && <Dropdown type='mate' />}
         </div>
       </div>
       {isCheckLogin && <MenuRoute type={type} />}
