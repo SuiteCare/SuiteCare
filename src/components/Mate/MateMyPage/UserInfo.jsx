@@ -5,6 +5,7 @@ import TimePicker from '@/utils/TimePicker';
 import { calAge, genderToKo, minWage } from '@/utils/calculators';
 
 const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
+  console.log('asdfksjo1!!!!!!!!!!!!!!111', data.profile_picture_filename);
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -62,16 +63,46 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
     }));
   };
 
+  const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    if (formData.profile_picture_filename) {
+      const file = formData.profile_picture_filename;
+      if (file instanceof Blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.error('Invalid file type.');
+      }
+    } else {
+      setImagePreview(null);
+    }
+  }, [formData.profile_picture_filename]);
+
   const handleFileChange = ($event) => {
     const file = $event.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      profile_picture_filename: file.name,
-    }));
-    setChangedData((prevData) => ({
-      ...prevData,
-      profile_picture_filename: file.name,
-    }));
+    const maxSize = 1024 * 1024; // 1MB
+    if (file instanceof Blob) {
+      if (file.size <= maxSize) {
+        setFormData((prevData) => ({
+          ...prevData,
+          profile_picture_filename: file,
+        }));
+        setChangedData((prevData) => ({
+          ...prevData,
+          profile_picture_filename: file,
+        }));
+      } else {
+        alert('파일 사이즈는 1MB 미만이어야 합니다.');
+        console.error('File size exceeds the limit.');
+      }
+    } else {
+      alert('파일 형식은 이미지 형식이어야 합니다.');
+      console.error('Invalid file type.');
+    }
   };
 
   return (
@@ -79,14 +110,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       <h3>기본정보</h3>
       <div className='input_wrapper'>
         <div className={styles.img_wrapper}>
-          <Image
-            src={`/${formData.profile_picture_filename || data.profile_picture_filename || 'default_profile.jpg'}`}
-            alt='profile_picture'
-            width={200}
-            height={150}
-          />
-
-          <input type='file' onChange={handleFileChange} />
+          <Image src={imagePreview || '/default_profile.jpg'} alt='profile_picture' width={200} height={150} />
         </div>
         <div className={styles.basicInfo}>
           <div>
@@ -98,6 +122,8 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
             </p>
           </div>
         </div>
+
+        <input type='file' onChange={handleFileChange} accept='image/*' />
       </div>
       <div>
         <div className={styles.contact}>

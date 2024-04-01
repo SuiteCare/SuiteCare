@@ -1,8 +1,9 @@
-.ManageTable,
+table.ManageTable,
 .ManageTable > table {
   width: 100%;
 }
 
+table.ManageTable th,
 .ManageTable > table th {
   font-weight: 500;
   border-bottom: 2px solid var(--deep-brown);
@@ -10,31 +11,39 @@
   padding: 1rem;
 }
 
+table.ManageTable tr,
 .ManageTable > table tr {
   border-bottom: 1px solid var(--normal-gray);
 }
 
+table.ManageTable tbody > tr:hover,
 .ManageTable > table tbody > tr:hover {
   background-color: var(--very-light-gray);
 }
 
+table.ManageTable tbody > tr:hover > td:not(:first-of-type),
 .ManageTable > table tbody > tr:hover > td:not(:first-of-type) {
   border-left: 1px solid white;
 }
 
+table.ManageTable td,
 .ManageTable > table td,
+table.ManageTable th,
 .ManageTable > table th {
   text-align: center;
 }
 
+table.ManageTable td:not(:first-of-type),
 .ManageTable > table td:not(:first-of-type) {
   border-left: 1px solid var(--very-light-gray);
 }
 
+table.ManageTable td,
 .ManageTable > table td {
   padding: 5px 10px;
 }
 
+table.ManageTable td > button,
 .ManageTable > table td > button {
   padding: 0.6rem 0;
   width: 100%;
@@ -43,6 +52,7 @@
   color: var(--deep-brown);
 }
 
+table.ManageTabl td > button,
 .ManageTable > table td > button:hover {
   filter: brightness(0.95);
 }
