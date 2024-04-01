@@ -3,6 +3,8 @@ import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
 
+import Loading from '@/components/Common/Modal/Loading';
+
 import { calAge, genderToKo } from '@/utils/calculators';
 
 export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
@@ -15,8 +17,16 @@ export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
   } = useQuery(
     ['patientDetail', id],
     async () => {
-      const response = await axiosInstance.get(`/api/v1/patientDetail/${id}`);
-      return response.data;
+      try {
+        const response = await axiosInstance.get(`/api/v1/patientDetail/${id}`);
+        const { code, result } = response.data;
+        if (code === 200) {
+          return result[0];
+        }
+        return [];
+      } catch (error) {
+        console.error(error);
+      }
     },
     {
       enabled: Boolean(id),
@@ -35,6 +45,7 @@ export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
       </div>
 
       <div className={styles.patient_info}>
+        {isLoading && <Loading />}
         {activeTab === 0 && (
           <div className={styles.info_section}>
             <h3>환자 기본정보</h3>

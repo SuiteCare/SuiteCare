@@ -12,6 +12,18 @@ import StarRating from '@/utils/StarRating';
 const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
   const { handleContentClick } = useModal();
 
+  const getList = (value, nullMsg) => {
+    if (value === null) {
+      return nullMsg;
+    }
+    if (typeof value === 'string') {
+      return value.split(',').join(', ');
+    }
+    if (typeof value === 'object') {
+      return value?.map((e) => e.name).join(', ');
+    }
+  };
+
   return (
     <div className={styles.Modal} onClick={closeModal}>
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
@@ -47,28 +59,11 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
         <div className={styles.info_grid}>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>활동 지역</label>
-            <span>
-              {typeof modalData.locationList === 'string'
-                ? modalData.locationList.split(',').join(', ')
-                : typeof modalData.locationList === 'object'
-                  ? Object.values(modalData.locationList)
-                      .map((e) => e.name)
-                      .join(', ')
-                  : '활동 지역 정보가 없습니다.'}
-            </span>
+            <span>{getList(modalData?.locationList, '주요 활동 지역이 없습니다.')}</span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>대표 서비스</label>
-            <span>
-              {' '}
-              {typeof modalData.mainServiceList === 'string'
-                ? modalData.mainServiceList.split(',').join(', ')
-                : typeof modalData.mainServiceList === 'object'
-                  ? Object.values(modalData.mainServiceList)
-                      .map((e) => e.name)
-                      .join(', ')
-                  : '주요 서비스 정보가 없습니다.'}
-            </span>
+            <span>{getList(modalData?.mainServiceList, '주요 서비스가 없습니다.')}</span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>연락 가능 시간</label>
