@@ -91,7 +91,7 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
               <span>
                 {modalData.mate_resume_id ? `${modalData.mate_name} (${modalData.mate_resume_id})` : '간병인 미배정'}
               </span>
-              <button onClick={handleMateDetailButton}>상세정보 보기</button>
+              {modalData.mate_resume_id && <button onClick={handleMateDetailButton}>상세정보 보기</button>}
             </div>
           </div>
         </>
