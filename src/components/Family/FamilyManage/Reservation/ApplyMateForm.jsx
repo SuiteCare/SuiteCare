@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
@@ -36,6 +36,8 @@ const ApplyMateForm = ({ selectedRecId }) => {
       });
       const { code, result } = applyMateData;
       if (code === 200) {
+        console.log('applyMateList1', selectedRecId, applyMateData);
+        console.log('applyMateList0', applyMateList);
         return result;
       }
     },
@@ -43,6 +45,10 @@ const ApplyMateForm = ({ selectedRecId }) => {
       enabled: Boolean(selectedRecId),
     },
   );
+
+  useEffect(() => {
+    console.log('applyMateList2', applyMateList);
+  }, [applyMateList]);
 
   const getApplyMateDetail = async (mateId) => {
     try {
@@ -121,7 +127,7 @@ const ApplyMateForm = ({ selectedRecId }) => {
           </tr>
         </thead>
         <tbody>
-          {applyMateList?.length === 0 ? (
+          {applyMateList === undefined ? (
             <tr>
               <td colSpan={6}>
                 <div className='error'>아직 지원한 간병인이 없습니다.</div>
@@ -151,7 +157,12 @@ const ApplyMateForm = ({ selectedRecId }) => {
         </tbody>
       </table>
       {isModalVisible && selectedModal === 'ApplyMateDetail' && (
-        <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
+        <MateDetailModal
+          modalData={maModalData}
+          closeModal={closeModal}
+          modalType={modalType}
+          handleAccept={handleAccept}
+        />
       )}
     </div>
   );

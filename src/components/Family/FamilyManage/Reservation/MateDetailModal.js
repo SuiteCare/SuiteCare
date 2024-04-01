@@ -128,7 +128,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
             </div>
             <div className={styles.button_wrapper}>
               {modalType !== 'Offer' ? (
-                <button type='button' onClick={() => handleAccept(modalData.matchedMate.mate_resume_id)}>
+                <button type='button' onClick={handleAccept}>
                   간병 확정하기
                 </button>
               ) : (
