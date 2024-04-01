@@ -23,6 +23,7 @@
   background: #dfd7bf50;
   box-shadow: 0px 0px 10px -6px #aaaa;
   background-size: cover;
+  border-radius: 10px;
 }
 
 .MainCard:hover {
@@ -114,10 +115,6 @@
 
   .title_description_wrapper span {
     color: white;
-  }
-
-  .Family .MainCard {
-    border-radius: 10px;
   }
 
   .Family .MainCard:nth-child(1) {

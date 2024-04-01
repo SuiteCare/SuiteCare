@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 
 import useModal from '@/hooks/useModal';
@@ -11,13 +11,8 @@ import MateDetailModal from './MateDetailModal';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const ApplyMateForm = ({ selectedRecId }) => {
-  const { isModalVisible, openModal } = useModal();
+  const { isModalVisible, openModal, closeModal } = useModal();
   const [selectedModal, setSelectedModal] = useState(null);
-
-  const closeModal = () => {
-    // 모달을 보이지 않게 하기 위해 상태를 초기화
-    setSelectedModal(null);
-  };
 
   const [maModalData, setMaModalData] = useState({});
   const [modalType, setModalType] = useState(null);
@@ -36,8 +31,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
       });
       const { code, result } = applyMateData;
       if (code === 200) {
-        console.log('applyMateList1', selectedRecId, applyMateData);
-        console.log('applyMateList0', applyMateList);
         return result;
       }
     },
@@ -45,10 +38,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
       enabled: Boolean(selectedRecId),
     },
   );
-
-  useEffect(() => {
-    console.log('applyMateList2', applyMateList);
-  }, [applyMateList]);
 
   const getApplyMateDetail = async (mateId) => {
     try {
@@ -129,8 +118,8 @@ const ApplyMateForm = ({ selectedRecId }) => {
         <tbody>
           {applyMateList === undefined ? (
             <tr>
-              <td colSpan={6}>
-                <div className='error'>아직 지원한 간병인이 없습니다.</div>
+              <td colSpan={7}>
+                <div className='error'>지원한 간병인이 없습니다.</div>
               </td>
             </tr>
           ) : (
@@ -162,6 +151,8 @@ const ApplyMateForm = ({ selectedRecId }) => {
           closeModal={closeModal}
           modalType={modalType}
           handleAccept={handleAccept}
+          isError={isApplyMateListError}
+          isLoading={isApplyMateListLoading}
         />
       )}
     </div>
