@@ -28,14 +28,14 @@ const MenuRoute = ({ type }) => {
         updateRole('mate', 'A');
       } else {
         alert('패밀리 회원은 메이트 메뉴에 접근할 수 없습니다.');
-        navigator.back();
+        navigator.push('/family/main');
       }
     } else if (destination === 'family' && role === 'M') {
       if (window.confirm('패밀리-메이트 통합 회원으로 전환하시겠습니까?')) {
         updateRole('family', 'A');
       } else {
         alert('메이트 회원은 패밀리 메뉴에 접근할 수 없습니다.');
-        navigator.back();
+        navigator.push('/mate/main');
       }
     }
   };

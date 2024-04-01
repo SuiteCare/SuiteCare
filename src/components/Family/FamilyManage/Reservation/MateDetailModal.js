@@ -5,12 +5,28 @@ import useModal from '@/hooks/useModal';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 import defaultProfile from '@/assets/default_profile.jpg';
+import LocalLoading from '@/components/Common/Modal/LocalLoading';
 
 import { calAge, genderToKo } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
+import { phoneHyphenRegex } from '@/utils/regex';
 
-const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => {
+const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept, isError, isLoading }) => {
   const { handleContentClick } = useModal();
+
+  const getList = (value, nullMsg) => {
+    if (value === null) {
+      return nullMsg;
+    }
+    if (typeof value === 'string') {
+      return value.split(',').join(', ');
+    }
+    if (typeof value === 'object') {
+      return value?.map((e) => e.name).join(', ');
+    }
+  };
+
+  if (isLoading) return <LocalLoading />;
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
@@ -37,19 +53,19 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
                   수행한 간병 <b>{modalData.matchedMate.care_times || 0}</b>건<span>|</span>
                   <StarRating rate={modalData.matchedMate.rate || 0} /> {(modalData.matchedMate.rate || 0).toFixed(1)}
                 </p>
-                <p>📞{modalData.matchedMate.tel?.slice(0, 12) || '전화번호 정보가 없습니다.'}</p>
-                <p>📧{modalData.matchedMate.email || '이메일 정보가 없습니다.'}</p>
+                <p>📞 {phoneHyphenRegex(modalData.matchedMate.tel) || '전화번호 정보가 없습니다.'}</p>
+                <p>📧 {modalData.matchedMate.email || '이메일 정보가 없습니다.'}</p>
               </div>
             </div>
             <div className={styles.introduction}>{modalData.matchedMate.introduction || '소개글이 없습니다.'}</div>
 
             <div className={`${styles.info_wrapper} ${styles.double}`}>
               <label className={styles.with_line}>활동 지역</label>
-              <span>{modalData.matchedMate.location}</span>
+              <span>{getList(modalData?.matchedMate.location, '활동 지역이 없습니다.')}</span>
             </div>
             <div className={`${styles.info_wrapper} ${styles.double}`}>
               <label className={styles.with_line}>대표 서비스</label>
-              <span>{modalData.matchedMate.mainservice}</span>
+              <span>{getList(modalData?.matchedMate.mainservice, '대표 서비스가 없습니다.')}</span>
             </div>
 
             <div className={`${styles.info_wrapper} ${styles.double}`}>
@@ -115,7 +131,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
             </div>
             <div className={styles.button_wrapper}>
               {modalType !== 'Offer' ? (
-                <button type='button' onClick={() => handleAccept(modalData.matchedMate.mate_resume_id)}>
+                <button type='button' onClick={handleAccept}>
                   간병 확정하기
                 </button>
               ) : (
@@ -126,7 +142,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept }) => 
             </div>
           </>
         ) : (
-          <div className='error'>오류가 발생했습니다.</div>
+          isError && <div className='error'>오류가 발생했습니다.</div>
         )}
       </div>
     </div>

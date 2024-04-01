@@ -16,10 +16,10 @@ const FamilyPaymentList = () => {
     isError: isReservationDataError,
     isLoading: isReservationDataLoading,
   } = useQuery(
-    ['reservationData', id],
+    ['reservation', id],
     async () => {
-      const { data } = await axiosInstance.get('/api/v1/reservation/family');
-      const { code, result } = data;
+      const { data: familyReservationData } = await axiosInstance.get('/api/v1/reservation/family');
+      const { code, result } = familyReservationData;
       if (code === 200) {
         const filteredResult = result.filter((e) => !e.pay_at && new Date(e.start_date) >= new Date());
         filteredResult.forEach((e) => {

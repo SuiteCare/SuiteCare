@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { calTimeDiff, countWeekdays, normalizeWeekDays, weekdayDic } from '@/utils/calculators';
+import { calTimeDiff, countWeekdays, weekdayDic } from '@/utils/calculators';
 
 const ReservationData = ({ styles, reservationData }) => {
   return (

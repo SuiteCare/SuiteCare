@@ -11,13 +11,8 @@ import MateDetailModal from './MateDetailModal';
 import { calAge, genderToKo } from '@/utils/calculators.js';
 
 const ApplyMateForm = ({ selectedRecId }) => {
-  const { isModalVisible, openModal } = useModal();
+  const { isModalVisible, openModal, closeModal } = useModal();
   const [selectedModal, setSelectedModal] = useState(null);
-
-  const closeModal = () => {
-    // 모달을 보이지 않게 하기 위해 상태를 초기화
-    setSelectedModal(null);
-  };
 
   const [maModalData, setMaModalData] = useState({});
   const [modalType, setModalType] = useState(null);
@@ -45,7 +40,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
   );
 
   const getApplyMateDetail = async (mateId) => {
-    console.log(mateId);
     try {
       const applyMateDetailPromise = axiosInstance.get(`/api/v1/mate/resume/${mateId}`);
       const applyMateDataPromise = axiosInstance.get(`/api/v1/recruitment/${selectedRecId}/M`);
@@ -61,8 +55,6 @@ const ApplyMateForm = ({ selectedRecId }) => {
           ...applyMateDetailResponse.data.result[0],
           matchedMate: matchedMate ?? {},
         }));
-
-        console.log('ma', maModalData);
       }
     } catch (error) {
       console.error(error);
@@ -124,10 +116,10 @@ const ApplyMateForm = ({ selectedRecId }) => {
           </tr>
         </thead>
         <tbody>
-          {applyMateList?.length === 0 ? (
+          {applyMateList === undefined ? (
             <tr>
-              <td colSpan={6}>
-                <div className='error'>아직 지원한 간병인이 없습니다.</div>
+              <td colSpan={7}>
+                <div className='error'>지원한 간병인이 없습니다.</div>
               </td>
             </tr>
           ) : (
@@ -154,7 +146,14 @@ const ApplyMateForm = ({ selectedRecId }) => {
         </tbody>
       </table>
       {isModalVisible && selectedModal === 'ApplyMateDetail' && (
-        <MateDetailModal modalData={maModalData} closeModal={closeModal} modalType={modalType} />
+        <MateDetailModal
+          modalData={maModalData}
+          closeModal={closeModal}
+          modalType={modalType}
+          handleAccept={handleAccept}
+          isError={isApplyMateListError}
+          isLoading={isApplyMateListLoading}
+        />
       )}
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 import Image from 'next/image';
 import { useQuery } from 'react-query';
 
@@ -13,7 +14,7 @@ import ReservationDetailModal from '@/components/Common/Modal/Detail/Reservation
 import { calTimeDiff, countWeekdays, normalizeWeekDays, weekdayDic } from '@/utils/calculators';
 
 const PaymentCard = ({ data }) => {
-  const recruitmentId = data.recruitment_id;
+  const recruitmentId = data?.recruitment_id;
   const { isModalVisible: isDetailModalVisible, openModal: openDetailModal, closeModal: closeDetailModal } = useModal();
   const {
     isModalVisible: isPaymentModalVisible,
