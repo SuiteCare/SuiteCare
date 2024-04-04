@@ -81,13 +81,13 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
       </thead>
       <tbody>
         {data?.map((e) => (
-          <tr key={e.recruitment_id}>
+          <tr key={e.id}>
             <td>{e.id || e.recruitment_id}</td>
             {renderTableColumns(e)}
             <td>{e.start_date}</td>
             <td>{e.end_date}</td>
             <td>
-              <button type='button' onClick={() => handleDetailClick(e.recruitment_id)}>
+              <button type='button' onClick={() => handleDetailClick(e.id)}>
                 상세정보 보기
               </button>
             </td>

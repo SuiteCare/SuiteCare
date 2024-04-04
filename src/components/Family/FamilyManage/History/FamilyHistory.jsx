@@ -15,7 +15,7 @@ const FamilyHistory = () => {
 
   const mutation = useMutation(async ($tab) => {
     const targetURL = {
-      0: 'pendingRecruitment',
+      0: 'recruitment',
       1: 'reservation/family',
     };
 
@@ -49,7 +49,7 @@ const FamilyHistory = () => {
       );
       const { code, result } = recruitmentDetailResponse;
       if (code === 200) {
-        setDetailData({ ...tabData.find((e) => e.recruitment_id === $recruitmentId), ...result[0] });
+        setDetailData({ ...tabData.find((e) => e.id === $recruitmentId), ...result[0] });
         return result[0];
       }
       console.error('데이터를 가져오는 데 오류가 발생했습니다.');
