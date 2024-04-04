@@ -50,14 +50,14 @@ axiosInstance.interceptors.response.use(
   (error) => {
     const { config, response } = error;
 
-    if (response && response.status === 403) {
-      // 403 에러가 발생하면 로그인 정보를 지우고 로그인 페이지로 이동시킴
-      // 개발 완료 이후에는 무조건 로그아웃 처리가 되도록 if 문 제거
-      if (window.confirm('403 에러 발생. 로그아웃하시겠습니까?')) {
-        logout();
-        window.location.href = `/${window.location.pathname.split('/')[1]}/login`;
-      }
-    }
+    // if (response && response.status === 403) {
+    // 403 에러가 발생하면 로그인 정보를 지우고 로그인 페이지로 이동시킴
+    // 개발 완료 이후에는 무조건 로그아웃 처리가 되도록 if 문 제거
+    //  if (window.confirm('403 에러 발생. 로그아웃하시겠습니까?')) {
+    //    logout();
+    //    window.location.href = `/${window.location.pathname.split('/')[1]}/login`;
+    //   }
+    //  }
 
     if (response && response.status >= 500 && response.status < 600) {
       return new Promise((resolve) => {
