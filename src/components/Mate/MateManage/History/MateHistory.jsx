@@ -25,9 +25,9 @@ const MateHistory = () => {
       if (code === 200) {
         setTabData(result.reverse());
         return result.reverse();
+      } else {
+        setTabData([]);
       }
-      console.error('데이터를 가져오는 데 오류가 발생했습니다.');
-      return [];
     } catch (error) {
       const { code } = error.response.data;
       console.error(code);
