@@ -15,8 +15,8 @@ const MateHistory = () => {
 
   const mutation = useMutation(async ($tab) => {
     const targetURL = {
-      0: 'apply/recruitment-list',
-      1: 'offer/recruitment-list',
+      0: 'recruitment-list',
+      1: 'recruitment-list',
       2: 'reservation/mate',
     };
     try {

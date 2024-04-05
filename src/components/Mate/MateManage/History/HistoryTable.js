@@ -16,6 +16,7 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
       P: '매칭 대기',
       C: '예약 확정',
       E: '기한 만료',
+      R: '매칭 거절',
     };
 
     return statusKorean[$status];
@@ -37,22 +38,28 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
       </thead>
 
       <tbody>
-        {data?.map((e) => (
-          <tr key={e.recruitment_id}>
-            <td>{e.id || e.recruitment_id}</td>
-            {e.create_at && <td>{e.create_at.slice(0, 10)}</td>}
-            {tabType === 'reservation' && <td>{e.confirm_at}</td>}
-            {tabType === 'reservation' && <td>{e.pay_at || '결제 대기'}</td>}
-            {(tabType === 'apply' || tabType === 'offer') && <td>{renderStatus(e.status)}</td>}
-            <td>{e.start_date}</td>
-            <td>{e.end_date}</td>
-            <td>
-              <button type='button' onClick={() => handleDetailClick(e.recruitment_id)}>
-                상세정보 보기
-              </button>
-            </td>
-          </tr>
-        ))}
+        {data?.filter(
+          (e) =>
+            (tabType === 'apply' && e.request_by === 'M') ||
+            (tabType === 'offer' && e.request_by === 'F') ||
+            (tabType !== 'apply' && tabType !== 'offer'),
+          )
+          .map((e) => (
+            <tr key={e.recruitment_id}>
+              <td>{e.id || e.recruitment_id}</td>
+              {e.create_at && <td>{e.create_at.slice(0, 10)}</td>}
+              {tabType === 'reservation' && <td>{e.confirm_at}</td>}
+              {tabType === 'reservation' && <td>{e.pay_at || '결제 대기'}</td>}
+              {(tabType === 'apply' || tabType === 'offer') && <td>{renderStatus(e.status)}</td>}
+              <td>{e.start_date}</td>
+              <td>{e.end_date}</td>
+              <td>
+                <button type='button' onClick={() => handleDetailClick(e.recruitment_id)}>
+                  상세정보 보기
+                </button>
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   ) : (
