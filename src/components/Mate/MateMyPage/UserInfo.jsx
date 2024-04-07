@@ -92,11 +92,11 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       if (file.size <= maxSize) {
         setFormData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file,
+          profile_picture_filename: file.name,
         }));
         setChangedData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file,
+          profile_picture_filename: file.name,
         }));
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -105,26 +105,10 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
         reader.readAsDataURL(file);
       } else {
         console.error('File size exceeds the limit.');
-        setFormData((prevData) => ({
-          ...prevData,
-          profile_picture_filename: null,
-        }));
-        setChangedData((prevData) => ({
-          ...prevData,
-          profile_picture_filename: null,
-        }));
         openAlert('파일 사이즈는 1MB 미만이어야 합니다.');
       }
     } else {
       console.error('Invalid file type.');
-      setFormData((prevData) => ({
-        ...prevData,
-        profile_picture_filename: null,
-      }));
-      setChangedData((prevData) => ({
-        ...prevData,
-        profile_picture_filename: null,
-      }));
       openAlert('이미지 파일만 업로드할 수 있습니다.');
     }
   };
