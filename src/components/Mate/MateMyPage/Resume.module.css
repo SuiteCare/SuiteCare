@@ -10,6 +10,14 @@
   width: 3rem;
 }
 
+.img_wrapper {
+  width: 200px;
+  height: 150px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
 .checkbox_list_wrapper {
   display: grid;
   grid-template-columns: repeat(6, 1fr);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 
 import useAlert from '@/hooks/useAlert';
 
@@ -88,23 +87,45 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
   const handleFileChange = ($event) => {
     const file = $event.target.files[0];
     const maxSize = 1024 * 1024; // 1MB
+
     if (file instanceof Blob) {
       if (file.size <= maxSize) {
         setFormData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file.name,
+          profile_picture_filename: file,
         }));
         setChangedData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file.name,
+          profile_picture_filename: file,
         }));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreview(reader.result);
+        };
+        reader.readAsDataURL(file);
       } else {
         console.error('File size exceeds the limit.');
-        return openAlert('파일 사이즈는 1MB 미만이어야 합니다.');
+        setFormData((prevData) => ({
+          ...prevData,
+          profile_picture_filename: null,
+        }));
+        setChangedData((prevData) => ({
+          ...prevData,
+          profile_picture_filename: null,
+        }));
+        openAlert('파일 사이즈는 1MB 미만이어야 합니다.');
       }
     } else {
       console.error('Invalid file type.');
-      return openAlert('파일 형식은 이미지 형식이어야 합니다.');
+      setFormData((prevData) => ({
+        ...prevData,
+        profile_picture_filename: null,
+      }));
+      setChangedData((prevData) => ({
+        ...prevData,
+        profile_picture_filename: null,
+      }));
+      openAlert('이미지 파일만 업로드할 수 있습니다.');
     }
   };
 
@@ -113,9 +134,12 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       {openAlert && alertComponent}
       <h3>기본정보</h3>
       <div className='input_wrapper'>
-        <div className={styles.img_wrapper}>
-          <Image src={imagePreview || '/default_profile.jpg'} alt='profile_picture' width={200} height={150} />
-        </div>
+        <div
+          className={styles.img_wrapper}
+          style={{
+            backgroundImage: `url(${imagePreview || '/default_profile.jpg'})`,
+          }}
+        />
         <div className={styles.basicInfo}>
           <div>
             <h2>{data.mypage.name}</h2>
