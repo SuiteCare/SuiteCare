@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
+import useAlert from '@/hooks/useAlert';
+
 import TimePicker from '@/utils/TimePicker';
 import { calAge, genderToKo, minWage } from '@/utils/calculators';
 
 const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
-  console.log('asdfksjo1!!!!!!!!!!!!!!111', data.profile_picture_filename);
+  const { openAlert, alertComponent } = useAlert();
+
   const handleContactTimeChange = (type, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -96,17 +99,18 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
           profile_picture_filename: file.name,
         }));
       } else {
-        alert('파일 사이즈는 1MB 미만이어야 합니다.');
         console.error('File size exceeds the limit.');
+        return openAlert('파일 사이즈는 1MB 미만이어야 합니다.');
       }
     } else {
-      alert('파일 형식은 이미지 형식이어야 합니다.');
       console.error('Invalid file type.');
+      return openAlert('파일 형식은 이미지 형식이어야 합니다.');
     }
   };
 
   return (
     <>
+      {openAlert && alertComponent}
       <h3>기본정보</h3>
       <div className='input_wrapper'>
         <div className={styles.img_wrapper}>
