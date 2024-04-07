@@ -64,13 +64,13 @@ const Resume = ({ data }) => {
 
       switch (type) {
         case 'career':
-          updatedData.careerList = changedListData.careerList.map((careerItem, i) =>
+          updatedData.careerList = formListData.careerList.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificateList = changedListData.certificateList.map((certificateItem, i) =>
+          updatedData.certificateList = formListData.certificateList.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
