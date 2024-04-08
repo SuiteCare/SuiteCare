@@ -26,7 +26,7 @@ const useLoginInfo = () => {
         }
       }
     }
-  }, [navigator]);
+  }, []);
 
   return loginInfo;
 };

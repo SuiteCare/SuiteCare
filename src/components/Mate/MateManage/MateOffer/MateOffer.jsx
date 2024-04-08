@@ -55,20 +55,20 @@ const MateOffer = () => {
   return (
     <>
       {isModalVisible && <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} />}
-      {isLoading ? (
-        <Loading />
-      ) : isError ? (
+      {isLoading && <Loading />}
+      {isError && (
         <div className='no_result'>
           <p>데이터를 가져오는 중에 오류가 발생했습니다.</p>
         </div>
-      ) : dataList && dataList.length > 0 ? (
-        dataList.map((data) => (
-          <OfferedRecruitmentCard key={data.recruitment_id} data={data} showDetail={() => handleShowModal(data)} />
-        ))
-      ) : (
+      )}
+      {!dataList && dataList?.length < 0 ? (
         <div className='no_result'>
           <p>나에게 들어온 간병 요청이 없습니다.</p>
         </div>
+      ) : (
+        dataList?.map((data) => (
+          <OfferedRecruitmentCard key={data.recruitment_id} data={data} showDetail={() => handleShowModal(data)} />
+        ))
       )}
     </>
   );

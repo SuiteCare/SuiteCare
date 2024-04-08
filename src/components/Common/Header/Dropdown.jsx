@@ -20,16 +20,6 @@ const Dropdown = ({ type }) => {
 
   const { role } = useLoginInfo();
 
-  const getRoleString = () => {
-    if (role === 'F') {
-      return 'family';
-    }
-    if (role === 'M') {
-      return 'mate';
-    }
-    return null;
-  };
-
   const handleLoginClick = (e) => {
     if (localStorage.getItem('login_info')) {
       if (window.confirm('로그인 페이지로 이동하시겠습니까? 기존 계정에서 로그아웃됩니다.')) {
@@ -43,7 +33,11 @@ const Dropdown = ({ type }) => {
   };
 
   const renderMenus = ($type) => {
-    const roleString = getRoleString();
+    const roleString = {
+      M: 'mate',
+      F: 'family',
+      A: 'all',
+    };
     const menus = menuItems($type);
     const loginMenu = (
       <li key='login' className='dropdown_menu_item'>
@@ -58,7 +52,7 @@ const Dropdown = ({ type }) => {
       </li>
     );
 
-    if ($type === roleString || role === 'A') {
+    if (role === 'A' || $type === roleString[role]) {
       return [...menus, logoutMenu];
     }
     return [loginMenu, ...menus];
