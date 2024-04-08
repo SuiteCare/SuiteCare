@@ -52,10 +52,10 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
                 ? `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-${modalData.tel.slice(7)}`
                 : `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-****`) || '전화번호 정보가 없습니다.'}
             </p>
-            <p>📧{modalData.email || modalData.mateResume.email || '이메일 정보가 없습니다.'}</p>
+            <p>📧{modalData.email || modalData.basicResumeDTO.email || '이메일 정보가 없습니다.'}</p>
           </div>
         </div>
-        <div className={styles.introduction}>{modalData.mateResume.introduction || '소개글이 없습니다.'}</div>
+        <div className={styles.introduction}>{modalData.basicResumeDTO.introduction || '소개글이 없습니다.'}</div>
         <div className={styles.info_grid}>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>활동 지역</label>
@@ -68,12 +68,12 @@ const MateDetailModal = ({ modalData, closeModal, handleApply, page }) => {
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>연락 가능 시간</label>
             <span>
-              {modalData.mateResume.contact_time_start}~{modalData.mateResume.contact_time_end}
+              {modalData.basicResumeDTO.contact_time_start}~{modalData.basicResumeDTO.contact_time_end}
             </span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label className={styles.with_line}>희망 시급</label>
-            <span>{modalData.mateResume.desired_wage.toLocaleString()}원</span>
+            <span>{modalData.basicResumeDTO.desired_wage.toLocaleString()}원</span>
           </div>
         </div>
         <div className={`${styles.info_wrapper} ${styles.double}`}>
