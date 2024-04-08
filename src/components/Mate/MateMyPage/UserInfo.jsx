@@ -89,11 +89,11 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
       if (file.size <= maxSize) {
         setFormData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file,
+          profile_picture_filename: file.name,
         }));
         setChangedData((prevData) => ({
           ...prevData,
-          profile_picture_filename: file,
+          profile_picture_filename: file.name,
         }));
       } else {
         alert('파일 사이즈는 1MB 미만이어야 합니다.');

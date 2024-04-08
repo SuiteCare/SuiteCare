@@ -20,8 +20,10 @@ const MateApply = () => {
   } = useQuery(
     ['recruitmentList'],
     async () => {
-      const { data } = await axiosInstance.get(`/api/v1/apply/recruitment-list`);
-      return data.result;
+      const { data } = await axiosInstance.get(`/api/v1/recruitment-list`);
+      if(data.code === 200) {
+        return data.result.filter((e) => e.request_by === 'M' && e.status !== 'C' && new Date(e.expire_at).getTime() > new Date().getTime());
+      }
     },
     {
       enabled: true,

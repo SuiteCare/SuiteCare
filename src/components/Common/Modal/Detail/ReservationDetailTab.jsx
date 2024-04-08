@@ -104,7 +104,7 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
           <div className={`${styles.info_wrapper} ${styles.single}`}>
             <label>보호자</label>
             <span>
-              {modalData.family_name} ({modalData.family_id || modalData.member_id})
+              {modalData.family_name || modalData.member_name} ({modalData.family_id || modalData.member_id})
             </span>
           </div>
           <div className={`${styles.info_wrapper} ${styles.single}`}>

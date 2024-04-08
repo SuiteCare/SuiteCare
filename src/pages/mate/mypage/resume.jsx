@@ -46,8 +46,10 @@ const ResumePage = () => {
   } = useQuery(
     ['resumeData', id],
     async () => {
-      const response = await axiosInstance.get(`/api/v1/mate/resume/${id}`);
-      return response.data;
+      const { data } = await axiosInstance.get(`/api/v1/mate/resume/${id}`);
+      if(data.code === 200) {
+        return data.result[0];
+      }
     },
     {
       enabled: Boolean(id),

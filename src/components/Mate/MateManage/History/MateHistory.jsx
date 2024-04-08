@@ -15,8 +15,8 @@ const MateHistory = () => {
 
   const mutation = useMutation(async ($tab) => {
     const targetURL = {
-      0: 'apply/recruitment-list',
-      1: 'offer/recruitment-list',
+      0: 'recruitment-list',
+      1: 'recruitment-list',
       2: 'reservation/mate',
     };
     try {
@@ -25,9 +25,9 @@ const MateHistory = () => {
       if (code === 200) {
         setTabData(result.reverse());
         return result.reverse();
+      } else {
+        setTabData([]);
       }
-      console.error('데이터를 가져오는 데 오류가 발생했습니다.');
-      return [];
     } catch (error) {
       const { code } = error.response.data;
       console.error(code);

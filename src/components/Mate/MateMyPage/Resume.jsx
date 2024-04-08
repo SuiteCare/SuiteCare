@@ -145,14 +145,14 @@ const Resume = ({ data }) => {
       return false;
     }
 
-    const method = data.resume.mateResume ? 'patch' : 'post';
+    const method = data.resume.basicResumeDTO ? 'patch' : 'post';
 
     try {
       let requestData = {};
       let body = {};
       if (method === 'post') {
         requestData = {
-          mateResume: { ...formMateResumeData },
+          basicResumeDTO: { ...formMateResumeData },
           locationList: formListData.locationList.map((e) => ({ name: e })),
           mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
         };
@@ -169,7 +169,7 @@ const Resume = ({ data }) => {
           ...changedListData,
         };
 
-        if (Object.keys(changedMateData).length > 0) requestData.mateResume = { ...changedMateData };
+        if (Object.keys(changedMateData).length > 0) requestData.basicResumeDTO = { ...changedMateData };
 
         if (changedListData.locationList) {
           requestData.locationList = changedListData.locationList.map((e) => ({ name: e }));
@@ -193,7 +193,6 @@ const Resume = ({ data }) => {
           type: 'application/json',
         }),
       );
-
       const response = await axiosInstance[method]('/api/v1/mate/resume', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -221,11 +220,11 @@ const Resume = ({ data }) => {
 
   const initializeFormData = ($data) => {
     setFormMateResumeData({
-      profile_picture_filename: $data.resume?.mateResume?.profile_picture_filename || 'default_profile.jpg',
-      contact_time_start: $data.resume?.mateResume?.contact_time_start || '09:00',
-      contact_time_end: $data.resume?.mateResume?.contact_time_end || '21:00',
-      introduction: $data.resume?.mateResume?.introduction || '',
-      desired_wage: $data.resume?.mateResume?.desired_wage || minWage,
+      profile_picture_filename: $data.resume?.basicResumeDTO?.profile_picture_filename || 'default_profile.jpg',
+      contact_time_start: $data.resume?.basicResumeDTO?.contact_time_start || '09:00',
+      contact_time_end: $data.resume?.basicResumeDTO?.contact_time_end || '21:00',
+      introduction: $data.resume?.basicResumeDTO?.introduction || '',
+      desired_wage: $data.resume?.basicResumeDTO?.desired_wage || minWage,
     });
     setFormListData({
       mainServiceList: $data.resume?.mainServiceList?.map((e) => e.name) || [],
@@ -287,7 +286,7 @@ const Resume = ({ data }) => {
 
           <div className='button_wrapper'>
             <button type='button' onClick={handleUpdateResume}>
-              {data.resume.mateResume ? '수정하기' : '등록하기'}
+              {data.resume.basicResumeDTO ? '수정하기' : '등록하기'}
             </button>
           </div>
         </form>

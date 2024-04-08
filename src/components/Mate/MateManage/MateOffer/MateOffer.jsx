@@ -20,8 +20,11 @@ const MateOffer = () => {
   } = useQuery(
     ['recruitmentList'],
     async () => {
-      const { data } = await axiosInstance.get(`/api/v1/offer/recruitment-list`);
-      return data.result;
+      const { data } = await axiosInstance.get(`/api/v1/recruitment-list`);
+      if(data.code === 200) {
+        return data.result.filter((e) => e.request_by === 'F' && new Date(e.expire_at).getTime() > new Date().getTime());
+      }
+      return [];
     },
     {
       enabled: true,
@@ -33,7 +36,10 @@ const MateOffer = () => {
     async () => {
       if (!recruitId) return;
       const { data } = await axiosInstance.get(`/api/v1/recruitment/${recruitId}/patient`);
-      return data.result;
+      if(data.code === 200) {
+        return data.result[0];
+      }
+
     },
     {
       enabled: Boolean(recruitId),
@@ -47,6 +53,7 @@ const MateOffer = () => {
   }, [patientDetail, recruitId]);
 
   const handleShowModal = (eachData) => {
+    console.log('!!!', eachData);
     setRecruitId(eachData.recruitment_id);
     setModalData(eachData);
     openModal();
