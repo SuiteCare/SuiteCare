@@ -9,9 +9,8 @@ import styles from './header.module.css';
 const throttle = (func, limit) => {
   let inThrottle;
   return (...args) => {
-    const context = this;
     if (!inThrottle) {
-      func.apply(context, args);
+      func(...args);
       inThrottle = true;
       setTimeout(() => {
         inThrottle = false;

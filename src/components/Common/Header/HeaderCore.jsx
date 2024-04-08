@@ -59,7 +59,9 @@ const HeaderCore = ({ type, isCheckLogin = true }) => {
           <div key={role} className={styles.button_wrapper}>
             <button
               onClick={() => toggleMenu(role)}
-              className={`${role === 'family' ? styles.active : ''} ${role}-button`}
+              className={`${role === 'family' && type === 'family' ? styles.active : ''} ${
+                role === 'mate' && type === 'mate' ? styles.active : ''
+              } ${role}-button`}
             >
               <span className={styles.buttonText}>{text}</span>
             </button>
