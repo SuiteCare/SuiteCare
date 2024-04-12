@@ -21,13 +21,15 @@ const FamilyPaymentList = () => {
       const { data: familyReservationData } = await axiosInstance.get('/api/v1/reservation/family');
       const { code, result } = familyReservationData;
       if (code === 200) {
-        const filteredResult = result.filter((e) => !e.pay_at && new Date(e.start_date) >= new Date());
+        console.log('!!!!', result);
+        const filteredResult = result.filter((e) => !e.pay_at && new Date(e.start_date) < new Date());
         filteredResult.forEach((e) => {
           setData((prevData) => ({
             ...prevData,
             [e.recruitment_id]: e,
           }));
         });
+        console.log('!!!!', filteredResult);
 
         return filteredResult;
       }
