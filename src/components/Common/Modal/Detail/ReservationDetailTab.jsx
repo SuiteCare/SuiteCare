@@ -80,6 +80,11 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
     mateDetailModalData && openMateDetailModal();
   }, [mateDetailModalData]);
 
+  const formatPhoneNumber = (tel) => {
+    if (!tel) return '전화번호 정보가 없습니다.';
+    return tel.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  };
+
   const renderMateOrFamilyInfo = () => {
     if (page === 'family') {
       return (
@@ -112,13 +117,11 @@ const ReservationDetailTab = ({ styles, modalData, page }) => {
             <div>
               <p>
                 📞
-                {modalData.tel
-                  ? `${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-${modalData.tel.slice(7)}`
-                  : '전화번호 정보가 없습니다.'}
+                {formatPhoneNumber(modalData.family_tel || modalData.tel)}
               </p>
               <p>
                 📧
-                {modalData.email || '이메일 정보가 없습니다.'}
+                {modalData.email || modalData.family_email || '이메일 정보가 없습니다.'}
               </p>
             </div>
           </div>
