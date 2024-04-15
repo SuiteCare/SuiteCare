@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSearchParams} from "next/navigation";
 import axiosInstance from "@/services/axiosInstance";
 
@@ -13,8 +13,7 @@ const KakaopaySuccess = () => {
 
     if(body.pg_token) {
       try {
-        const response = await axiosInstance.post('/api/v1/payment/success', body);
-        return response;
+        return await axiosInstance.post('/api/v1/payment/success', body);
       } catch (error) {
         throw error;
       }
