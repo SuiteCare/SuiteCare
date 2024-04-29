@@ -42,7 +42,7 @@ const RecruitmentDetailModal = ({ modalData, closeModal, handleApply, alertCompo
                   <p>
                     📞 {`${modalData.tel.slice(0, 3)}-${modalData.tel.slice(3, 7)}-****` || '전화번호 정보가 없습니다.'}
                   </p>
-                  <p>📧 {modalData.email || modalData.mateResume?.email || '이메일 정보가 없습니다.'}</p>
+                  <p>📧 {modalData.email || modalData.basicResumeDTO?.email || '이메일 정보가 없습니다.'}</p>
                 </div>
               </div>
             </div>
