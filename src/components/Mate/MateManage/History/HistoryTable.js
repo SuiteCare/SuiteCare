@@ -42,7 +42,7 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           (e) =>
             (tabType === 'apply' && e.request_by === 'M') ||
             (tabType === 'offer' && e.request_by === 'F') ||
-            (tabType !== 'apply' && tabType !== 'offer'),
+            tabType === 'reservation',
           )
           .map((e) => (
             <tr key={e.recruitment_id}>

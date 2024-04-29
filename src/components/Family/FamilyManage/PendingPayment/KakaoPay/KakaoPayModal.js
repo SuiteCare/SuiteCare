@@ -10,6 +10,7 @@ import { calTimeDiff, countWeekdays, normalizeWeekDays } from '@/utils/calculato
 
 const KakaoPayModal = ({ modalData, closeModal }) => {
   const { wage, start_date, end_date, start_time, end_time, weekday, mate_name, recruitment_id } = modalData;
+  const reservation_id = modalData.id;
   const { id } = useLoginInfo();
   const totalAmount =
     wage * calTimeDiff(start_time, end_time) * countWeekdays(start_date, end_date, normalizeWeekDays(weekday));
@@ -23,13 +24,13 @@ const KakaoPayModal = ({ modalData, closeModal }) => {
     try {
       const body = {
         cid: 'TC0ONETIME',
-        partner_order_id: `${recruitment_id}`,
+        partner_order_id: `${reservation_id}`,
         partner_user_id: id,
         item_name: `스위트케어 간병 결제 (담당 메이트 ${mate_name})`,
         quantity: 1,
         total_amount: totalAmount,
         tax_free_amount: 0,
-        approval_url: `${window.location.origin}/family/payment/kakaopay/success`,
+        approval_url: `${window.location.origin}/family/payment/kakaopay/success?reservation_id=${reservation_id}`,
         cancel_url: `${window.location.origin}/family/payment/kakaopay/cancel`,
         fail_url: `${window.location.origin}/family/payment/kakaopay/fail`,
       };
