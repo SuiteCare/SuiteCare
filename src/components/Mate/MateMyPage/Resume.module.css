@@ -104,3 +104,19 @@
   display: block;
   padding: 1rem;
 }
+
+.certificate ul {
+  position: absolute;
+  max-height: 10rem;
+  overflow-y: scroll;
+  width: 80%;
+  z-index: 1;
+}
+
+.certificate li {
+  background-color: var(--light-gray);
+}
+
+.certificate li:hover {
+  background-color: var(--beige-02);
+}
