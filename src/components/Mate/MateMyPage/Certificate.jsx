@@ -1,13 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import {useQuery} from "react-query";
+import axiosInstance from "@/services/axiosInstance";
 
 const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }) => {
   const [expireDateDisabledList, setExpireDateDisabledList] = useState();
+  const [shownListId, setShownListId] = useState('');
+  const [search, setSearch] = useState({id: ''});
+  const [data, setData] = useState({
+    certificates: [],
+  });
+
+  const {
+    data: certificatesData,
+    isCerError,
+    isCerLoading,
+  } = useQuery(
+      ['certificates'],
+      async () => {
+        const {data} = await axiosInstance.get('/api/v1/certificateList');
+        return data.result.map(e => e.종목명);
+      }
+  );
 
   useEffect(() => {
     setExpireDateDisabledList(
       formData?.certificateList ? formData.certificateList.map((e) => e.expired_date === '9999-12-31') : [],
     );
-  }, [formData]);
+    setData({
+      certificates: certificatesData || [],
+    });
+  }, [formData, certificatesData]);
 
   const addCertificate = () => {
     const lastCertificate = formData.certificateList[formData.certificateList.length - 1];
@@ -76,6 +98,7 @@ const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }
 
       return updatedData;
     });
+
     setChangedData((prevData) => {
       const updatedData = { ...prevData };
 
@@ -86,18 +109,63 @@ const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }
       return updatedData;
     });
   };
+  const inputRefs = useRef([]);
+
+  const certificateChange = (e, index, id) => {
+    const { value } = e.currentTarget;
+    setSearch(value);
+    if(value !== '') {
+      setShownListId(id);
+    }
+
+  }
+  const onFocusOut = (e, index) => {
+    const {value} = e.currentTarget;
+
+    if(data.certificates.indexOf(value) === -1) {
+      e.currentTarget.value = '';
+    }
+    setShownListId('');
+    handleItemChange(e, index, 'certificate');
+  }
+
+  const onListClick = (e, item, index) => {
+    if (inputRefs.current[index]) {
+      inputRefs.current[index].value = item;
+    }
+
+    setShownListId('');
+  };
+  const handleMouseDown = (e) => e.preventDefault()
+
 
   const renderCertificateItem = (certificateItem, index) => (
     <tr key={certificateItem.orderId}>
-      <td>
+      <td style={{position: 'relative'}}>
         <input
           id={certificateItem.id}
           name='name'
           type='text'
           placeholder='자격증명'
           defaultValue={certificateItem.name}
-          onChange={(e) => handleItemChange(e, index, 'certificate')}
+          onChange={(e) => {handleItemChange(e, index, 'certificate'), certificateChange(e, index, certificateItem.orderId)}}
+          onBlur={(e) => onFocusOut(e, index)}
+          ref={(el) => (inputRefs.current[index] = el)}
+          style={{position: 'relative'}}
         />
+        <ul hidden={shownListId !== certificateItem.orderId}>
+          {data.certificates?.map((item, idx) => (
+              <li
+                  key={idx}
+                  style={{ cursor: 'pointer'}}
+                  hidden={!item.includes(search)}
+                  onClick={(e) => onListClick(e, item, index)}
+                  onMouseDown={handleMouseDown}
+              >
+                {item}
+              </li>
+          ))}
+        </ul>
       </td>
       <td>
         <input
@@ -140,6 +208,7 @@ const Certificate = ({ formData, setFormData, setChangedData, handleItemChange }
       </td>
     </tr>
   );
+
 
   return (
     <>

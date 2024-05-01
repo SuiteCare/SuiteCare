@@ -26,7 +26,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
     }
   };
 
-  const [wordCnt, setWordCnt] = useState((data.resume?.mateResume?.introduction || '').length || 0);
+  const [wordCnt, setWordCnt] = useState((data.resume?.basicResumeDTO?.introduction || '').length || 0);
   const handlerTextChange = (e) => {
     const { value } = e.target;
     setFormData((prevFormData) => ({
@@ -43,7 +43,7 @@ const UserInfo = ({ styles, data, formData, setFormData, setChangedData }) => {
   const [isWageInputDisabled, setIsWageInputDisabled] = useState(false);
 
   useEffect(() => {
-    setIsWageInputDisabled(data.resume?.mateResume?.desired_wage === -1);
+    setIsWageInputDisabled(data.resume?.basicResumeDTO?.desired_wage === -1);
   }, [data]);
 
   const handleWageCheckbox = (e) => {
