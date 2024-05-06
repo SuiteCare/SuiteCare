@@ -10,6 +10,7 @@ import Certificate from './Certificate';
 import Location from './Location';
 import UserInfo from './UserInfo';
 import MainService from './MainService';
+import Care from './Care';
 
 import { countWeekdays, minWage } from '@/utils/calculators';
 
@@ -29,6 +30,7 @@ const Resume = ({ data }) => {
     locationList: [],
     careerList: [],
     certificateList: [],
+    careList: [],
   });
 
   const [changedListData, setChangedListData] = useState({});
@@ -64,13 +66,13 @@ const Resume = ({ data }) => {
 
       switch (type) {
         case 'career':
-          updatedData.careerList = formListData.careerList.map((careerItem, i) =>
+          updatedData.careerList = formListData.careerList?.map((careerItem, i) =>
             i === index ? { ...careerItem, [name]: value } : careerItem,
           );
           break;
 
         case 'certificate':
-          updatedData.certificateList = formListData.certificateList.map((certificateItem, i) =>
+          updatedData.certificateList = formListData.certificateList?.map((certificateItem, i) =>
             i === index ? { ...certificateItem, [name]: value } : certificateItem,
           );
           break;
@@ -200,17 +202,15 @@ const Resume = ({ data }) => {
       });
 
       if (response.data) {
-        // patch 시 response.data === '' 라서 false로 처리되는데, 추후 ResponseBody 객체가 넘어와 파싱해서 사용할 예정
-        openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
-        setTimeout(() => {
-          navigator.reload();
-        }, 1000);
-      } else {
-        openAlert(
-          `이력서 ${
-            method === 'post' ? '등록' : '수정'
-          }에 실패하였습니다. (patch라면 수정이 되었을 수 있으니 DB 확인 필요)`,
-        );
+        const { code, httpStatus, msg, count, result } = response.data;
+
+        if (code === 200) {
+          openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}이 완료되었습니다.`);
+          setChangedListData({});
+        } else {
+          console.error(code, msg);
+          openAlert(`이력서 ${method === 'post' ? '등록' : '수정'}에 실패하였습니다.`);
+        }
       }
     } catch (error) {
       console.error('업데이트 실패:', error);
@@ -231,6 +231,17 @@ const Resume = ({ data }) => {
       locationList: $data.resume?.locationList?.map((e) => e.name) || [],
       careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
       certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
+      careList: $data.resume?.careList || [
+        { name: 'consciousness_state', value: 'y' },
+        { name: 'meal_care_state', value: 'y' },
+        { name: 'toilet_care_state', value: 'y' },
+        { name: 'paralasys_state', value: 'y' },
+        { name: 'behavioral_state', value: 'y' },
+        { name: 'bedsore', value: 'y' },
+        { name: 'suction', value: 'y' },
+        { name: 'outpatient', value: 'y' },
+        { name: 'night_care', value: 'y' },
+      ],
     });
   };
 
@@ -282,6 +293,10 @@ const Resume = ({ data }) => {
 
           <section className={styles.mainService}>
             <MainService formData={formListData} setFormData={setFormListData} setChangedData={setChangedListData} />
+          </section>
+
+          <section className={styles.care}>
+            <Care formData={formListData} setFormData={setFormListData} setChangedData={setChangedListData} />
           </section>
 
           <div className='button_wrapper'>

@@ -34,7 +34,7 @@ const MateDetailModal = ({ modalData, modalType, closeModal, handleAccept, isErr
         <div className='close_button'>
           <span onClick={closeModal} />
         </div>
-        {modalData.mateResume ? (
+        {modalData.basicResumeDTO ? (
           <>
             <div className={styles.profile_section}>
               {(

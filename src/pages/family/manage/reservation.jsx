@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 import useLoginInfo from '@/hooks/useLoginInfo';
@@ -19,6 +18,9 @@ const FamilyManageReservationPage = () => {
     ['reservationList', id],
     async () => {
       const { data: recruitmentData } = await axiosInstance.get('/api/v1/pendingRecruitment', { params: { id } });
+      if (!Array.isArray(recruitmentData.result)) {
+        return [];
+      }
       return recruitmentData.result.reverse();
     },
     {

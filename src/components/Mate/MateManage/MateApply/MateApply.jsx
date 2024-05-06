@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
+import { useRouter } from 'next/router';
 
 import axiosInstance from '@/services/axiosInstance';
 import useModal from '@/hooks/useModal';
@@ -9,6 +10,7 @@ import RecruitmentDetailModal from '../../MateRecruitmentSearch/RecruitmentDetai
 import Loading from '@/components/Common/Modal/Loading';
 
 const MateApply = () => {
+  const router = useRouter();
   const { isModalVisible, openModal, closeModal } = useModal();
   const [recruitId, setRecruitId] = useState(null);
   const [modalData, setModalData] = useState(null);
@@ -57,22 +59,22 @@ const MateApply = () => {
   return (
     <>
       {isModalVisible && <RecruitmentDetailModal modalData={modalData} closeModal={closeModal} />}
-      {isLoading ? (
-        <Loading />
-      ) : isError ? (
+      {isLoading && <Loading />}
+      {isError && (
         <div className='no_result'>
           <p>데이터를 가져오는 중에 오류가 발생했습니다.</p>
         </div>
-      ) : dataList && dataList.length > 0 ? (
-        dataList.map((data) => (
-          <AppliedRecruitmentCard key={data.recruitment_id} data={data} showDetail={() => handleShowModal(data)} />
-        ))
-      ) : (
+      )}
+      {!dataList && dataList?.length < 0 ? (
         <div className='no_result'>
           <p>지원한 간병 공고가 없습니다.</p>
           <br />
-          <button onClick={() => (location.href = '/mate/search')}>간병 공고 검색하기</button>
+          <button onClick={() => router.push('/mate/search')}>간병 공고 검색하기</button>
         </div>
+      ) : (
+        dataList?.map((data) => (
+          <AppliedRecruitmentCard key={data.recruitment_id} data={data} showDetail={() => handleShowModal(data)} />
+        ))
       )}
     </>
   );
