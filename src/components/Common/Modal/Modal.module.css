@@ -184,3 +184,8 @@ label.with_line {
   border-radius: 10px;
   color: var(--deep-brown);
 }
+
+.starRating {
+  align-content: center;
+  width: 150px; /* SVG 너비 조정 */
+}
