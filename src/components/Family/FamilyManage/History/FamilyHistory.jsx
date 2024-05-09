@@ -7,9 +7,11 @@ import axiosInstance from '@/services/axiosInstance';
 import HistoryTable from './HistoryTable';
 import Loading from '@/components/Common/Modal/Loading';
 import ReservationDetailModal from '@/components/Common/Modal/Detail/ReservationDetailModal';
+import AddReviewModal from '@/components/Common/Modal/AddReviewModal';
 
 const FamilyHistory = () => {
   const { isModalVisible, openModal, closeModal } = useModal();
+  const { isModalVisible:isReviewModalVisible, openModal:openReviewModal, closeModal:closeReviewModal } = useModal();
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState();
 
@@ -95,6 +97,35 @@ const FamilyHistory = () => {
     }
   };
 
+  const [reviewData, setReviewData] = useState();
+
+  const handleReviewClick = async (data) => {
+    try {
+      const [detailResult, patientResult] = await Promise.all([
+        recruitmentDetailMutation.mutateAsync(data.recruitment_id),
+        recruitmentPatientMutation.mutateAsync(data.recruitment_id),
+      ]);
+
+      if (detailResult) {
+        setReviewData(data);
+      } else {
+        console.error('데이터를 가져오는 데 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      console.error('데이터를 가져오는 데 오류가 발생했습니다.', error);
+    }
+  };
+
+  useEffect(() => {
+    if (reviewData) {
+      console.log(reviewData);
+      openReviewModal();
+    } else {
+      console.error('데이터를 가져오는 데 오류가 발생했습니다.');
+    }
+  }, [reviewData]);
+
+
   return (
     <>
       <div className='FamilyHistory'>
@@ -119,13 +150,21 @@ const FamilyHistory = () => {
           ))}
         {activeTab === 1 &&
           (tabData && tabData.length > 0 ? (
-            <HistoryTable data={tabData} handleDetailClick={handleDetailClick} tabType='reservation' />
+            <HistoryTable
+              data={tabData}
+              handleDetailClick={handleDetailClick}
+              handleReviewClick={handleReviewClick}
+              tabType='reservation'
+            />
           ) : (
             <div className='no_result'>간병 예약 확정 내역이 없습니다.</div>
           ))}
       </div>
       {isModalVisible && (
         <ReservationDetailModal modalData={{ ...detailData, ...patientData }} closeModal={closeModal} page='family' />
+      )}
+      {isReviewModalVisible && (
+        <AddReviewModal modalData={{reviewData, detailData, patientData}} closeModal={closeReviewModal} page='family' />
       )}
     </>
   );
