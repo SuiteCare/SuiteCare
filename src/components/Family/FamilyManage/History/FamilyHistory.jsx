@@ -99,20 +99,24 @@ const FamilyHistory = () => {
 
   const [reviewData, setReviewData] = useState();
 
-  const handleReviewClick = async (data) => {
+  const handleReviewClick = async ($data) => {
     try {
-      const [detailResult, patientResult] = await Promise.all([
-        recruitmentDetailMutation.mutateAsync(data.recruitment_id),
-        recruitmentPatientMutation.mutateAsync(data.recruitment_id),
+      const { data } = await axiosInstance.get(`/api/v1/review/${$data.review_id}`);
+      await Promise.all([
+        recruitmentDetailMutation.mutateAsync($data.recruitment_id),
+        recruitmentPatientMutation.mutateAsync($data.recruitment_id),
       ]);
-
-      if (detailResult) {
-        setReviewData(data);
-      } else {
-        console.error('데이터를 가져오는 데 오류가 발생했습니다.');
+      if (data.code === 200) {
+        setReviewData({
+          reservation: $data,
+          reviewData: data.result[0]});
+        return data.result[0];
       }
+      console.log('데이터를 불러오는 데 오류가 발생했습니다.');
+      return [];
     } catch (error) {
-      console.error('데이터를 가져오는 데 오류가 발생했습니다.', error);
+      console.error('Error occurred while fetching data:', error);
+      return [];
     }
   };
 

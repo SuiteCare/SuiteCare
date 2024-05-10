@@ -11,12 +11,8 @@ const AddReviewModal = ({ modalData, closeModal}) => {
   const { handleContentClick } = useModal();
   const { openAlert, alertComponent } = useAlert();
 
-  const dataDayArr = modalData.detailData.weekday?.split(',') ?? [];
-
   const [rating, setRating] = useState();
   const [comment, setComment] = useState('');
-
-
   const handleReview = async () => {
     const body = {
       recruitment_id: modalData.reviewData.recruitment_id,
@@ -25,8 +21,6 @@ const AddReviewModal = ({ modalData, closeModal}) => {
       rate : rating,
       comment : comment
     };
-
-    console.log('body : ', body);
 
     try {
       const {data} = await axiosInstance.post('/api/v1/review', body);
@@ -75,10 +69,10 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병인</label>
-                <span>{modalData.reviewData.mate_name}</span>
+                <span>{modalData.detailData.mate_name}</span>
               </div>
 
-                <div className={`${styles.info_wrapper} ${styles.double}`}>
+              <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>진단명</label>
                 <span>{modalData.patientData.patient_diagnosis_name}</span>
               </div>
@@ -86,13 +80,13 @@ const AddReviewModal = ({ modalData, closeModal}) => {
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병기간</label>
                 <span>
-                  {modalData.reviewData.start_date} ~ {modalData.reviewData.end_date}
+                  {modalData.detailData.start_date} ~ {modalData.detailData.end_date}
                 </span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병 요일</label>
-                <span> {dataDayArr.map((e) => weekdayDic[e]).join(', ')}</span>
+                <span> {modalData.detailData.weekday}</span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
@@ -129,13 +123,20 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>리뷰</label>
-                  <textarea
-                      placeholder='리뷰'
-                      name='comment'
-                      id='comment'
-                      maxLength='100'
-                      onChange={handleInputChange}
-                  />
+                  {modalData.reviewData.review_id ?
+                  (
+                    <textarea
+                        placeholder='리뷰'
+                        name='comment'
+                        id='comment'
+                        maxLength='100'
+                        onChange={handleInputChange}
+                    />
+                  ) :
+                  (
+                    <span className={styles.introduction}>{modalData.reviewData.comment}</span>
+                  )
+                  }
                 </div>
               </div>
               <div className={styles.button_wrapper}>
@@ -150,7 +151,6 @@ const AddReviewModal = ({ modalData, closeModal}) => {
               </div>
             </form>
           </>
-          <div className='error'>오류가 발생했습니다.</div>
       </div>
     </div>
   );
