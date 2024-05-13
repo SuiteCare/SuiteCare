@@ -32,6 +32,7 @@ const AddReviewModal = ({ modalData, closeModal }) => {
       if (data.code === 200) {
         openAlert('리뷰 등록 완료');
         setTimeout(closeModal, 2000);
+        window.location.reload();
       }
     } catch (error) {
       const messages = {
