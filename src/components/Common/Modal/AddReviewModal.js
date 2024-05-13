@@ -15,9 +15,9 @@ const AddReviewModal = ({ modalData, closeModal}) => {
   const [comment, setComment] = useState('');
   const handleReview = async () => {
     const body = {
-      recruitment_id: modalData.reviewData.recruitment_id,
-      reservation_id : modalData.reviewData.id,
-      mate_resume_id:modalData.reviewData.mate_resume_id,
+      recruitment_id: modalData.reviewData.reservation.recruitment_id,
+      reservation_id : modalData.reviewData.reservation.id,
+      mate_resume_id:modalData.reviewData.reservation.mate_resume_id,
       rate : rating,
       comment : comment
     };
@@ -26,7 +26,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
       const {data} = await axiosInstance.post('/api/v1/review', body);
       if (data.code === 200) {
         openAlert('리뷰 등록 완료');
-        setTimeout(closeModal(), 2000);
+        setTimeout(closeModal, 2000);
       }
     } catch (error) {
       const messages = {
@@ -35,7 +35,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
       };
       const {code} = error.response.data;
       openAlert(messages[code]);
-      setTimeout(closeModal(), 2000);
+      setTimeout(closeModal, 2000);
     }
   }
 

@@ -101,11 +101,11 @@ const FamilyHistory = () => {
 
   const handleReviewClick = async ($data) => {
     try {
-      const { data } = await axiosInstance.get(`/api/v1/review/${$data.id}`);
       await Promise.all([
         recruitmentDetailMutation.mutateAsync($data.recruitment_id),
         recruitmentPatientMutation.mutateAsync($data.recruitment_id),
       ]);
+      const { data } = await axiosInstance.get(`/api/v1/review/${$data.id}`);
       if (data.code === 200) {
         setReviewData({
           reservation: $data,
