@@ -101,7 +101,7 @@ const FamilyHistory = () => {
 
   const handleReviewClick = async ($data) => {
     try {
-      const { data } = await axiosInstance.get(`/api/v1/review/${$data.review_id}`);
+      const { data } = await axiosInstance.get(`/api/v1/review/${$data.id}`);
       await Promise.all([
         recruitmentDetailMutation.mutateAsync($data.recruitment_id),
         recruitmentPatientMutation.mutateAsync($data.recruitment_id),
@@ -115,6 +115,14 @@ const FamilyHistory = () => {
       console.log('데이터를 불러오는 데 오류가 발생했습니다.');
       return [];
     } catch (error) {
+
+      if(error.response.data.code === 400) {
+        console.log('등록된 리뷰가 없습니다.');
+        setReviewData({
+          reservation: $data
+        });
+        return [];
+      }
       console.error('Error occurred while fetching data:', error);
       return [];
     }
@@ -122,7 +130,6 @@ const FamilyHistory = () => {
 
   useEffect(() => {
     if (reviewData) {
-      console.log(reviewData);
       openReviewModal();
     } else {
       console.error('데이터를 가져오는 데 오류가 발생했습니다.');

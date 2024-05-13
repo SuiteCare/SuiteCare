@@ -69,7 +69,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병인</label>
-                <span>{modalData.detailData.mate_name}</span>
+                <span>{modalData.reviewData.reservation.mate_name}</span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
@@ -80,7 +80,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병기간</label>
                 <span>
-                  {modalData.detailData.start_date} ~ {modalData.detailData.end_date}
+                  {modalData.reviewData.reservation.start_date} ~ {modalData.reviewData.reservation.end_date}
                 </span>
               </div>
 
@@ -101,7 +101,6 @@ const AddReviewModal = ({ modalData, closeModal}) => {
               <div>
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>별점</label>
-                  {/*<ReviewRating clicked={clicked} onStarClick={handleStarClick} />*/}
                   {clicked.map((el, index) => {
                     return (
                         <>
@@ -109,9 +108,9 @@ const AddReviewModal = ({ modalData, closeModal}) => {
                         type="radio"
                         name="rating"
                         value={index}
+                        defaultChecked={modalData.reviewData.reviewData?.rate === index+1}
                         id={index}
                         onClick={(e) => handleStarClick(e, index)}
-                        // style={{display:'none'}}
                     />
                     <label htmlFor={index}>
                       {index}
@@ -123,7 +122,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
                 <div className={`${styles.info_wrapper} ${styles.double}`}>
                   <label>리뷰</label>
-                  {modalData.reviewData.review_id ?
+                  {!modalData.reviewData.reviewData ?
                   (
                     <textarea
                         placeholder='리뷰'
@@ -134,13 +133,13 @@ const AddReviewModal = ({ modalData, closeModal}) => {
                     />
                   ) :
                   (
-                    <span className={styles.introduction}>{modalData.reviewData.comment}</span>
+                    <span className={styles.introduction}>{modalData.reviewData.reviewData.comment}</span>
                   )
                   }
                 </div>
               </div>
               <div className={styles.button_wrapper}>
-                {modalData.reviewData.review_id ?
+                {modalData.reviewData.reservation.review_id ?
                     (<button type='button' onClick={() => closeModal(true)}>
                       닫기
                     </button>)
