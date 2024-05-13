@@ -86,7 +86,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
                 <label>간병 요일</label>
-                <span> {modalData.detailData.weekday}</span>
+                <span> {modalData.reviewData.reservation.weekdays.map((e) => weekdayDic[e]).join(', ')}</span>
               </div>
 
               <div className={`${styles.info_wrapper} ${styles.double}`}>
