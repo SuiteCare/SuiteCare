@@ -2,35 +2,33 @@ import React, { useState } from 'react';
 
 import useAlert from '@/hooks/useAlert';
 import useModal from '@/hooks/useModal';
+import axiosInstance from '@/services/axiosInstance';
 
 import styles from '@/components/Common/Modal/Modal.module.css';
 
 import { weekdayDic } from '@/utils/calculators.js';
 import StarRating from '@/utils/StarRating';
 
-const AddReviewModal = ({ modalData, closeModal}) => {
+const AddReviewModal = ({ modalData, closeModal }) => {
   const { handleContentClick } = useModal();
   const { openAlert, alertComponent } = useAlert();
-
-  const dataDayArr = modalData.detailData.weekday?.split(',') ?? [];
 
   const [rating, setRating] = useState();
   const [comment, setComment] = useState('');
 
-
   const handleReview = async () => {
     const body = {
-      recruitment_id: modalData.reviewData.recruitment_id,
-      reservation_id : modalData.reviewData.id,
-      mate_resume_id:modalData.reviewData.mate_resume_id,
-      rate : rating,
-      comment : comment
+      recruitment_id: modalData.reviewData.reservation.recruitment_id,
+      reservation_id: modalData.reviewData.reservation.id,
+      mate_resume_id: modalData.reviewData.reservation.mate_resume_id,
+      rate: rating,
+      comment,
     };
 
     console.log('body : ', body);
 
     try {
-      const {data} = await axiosInstance.post('/api/v1/review', body);
+      const { data } = await axiosInstance.post('/api/v1/review', body);
       if (data.code === 200) {
         openAlert('리뷰 등록 완료');
         setTimeout(closeModal, 2000);
@@ -40,21 +38,10 @@ const AddReviewModal = ({ modalData, closeModal}) => {
         400: '오류로 리뷰 등록에 실패했습니다.',
         409: '이미 작성된 리뷰입니다.',
       };
-      const {code} = error.response.data;
+      const { code } = error.response.data;
       openAlert(messages[code]);
       setTimeout(closeModal, 2000);
     }
-  }
-
-  const [clicked, setClicked] = useState([false, false, false, false, false]);
-
-  const handleStarClick = (e, index) => {
-    let clickStates = clicked;
-    for (let i = 0; i < 5; i++) {
-      clickStates[i] = i <= index ? true : false;
-    }
-    setClicked(clickStates);
-    setRating(index + 1);
   };
 
   const handleInputChange = (e) => {
@@ -64,7 +51,7 @@ const AddReviewModal = ({ modalData, closeModal}) => {
 
   return (
     <div className={styles.Modal} onClick={closeModal}>
-    {alertComponent}
+      {alertComponent}
       <div className={styles.modal_wrapper} onClick={handleContentClick}>
         <div className='close_button'>
           <span onClick={closeModal} />
@@ -75,27 +62,27 @@ const AddReviewModal = ({ modalData, closeModal}) => {
         <div className={styles.info_section}>
           <h5>선택한 예약 정보</h5>
 
-              <div className={`${styles.info_wrapper} ${styles.double}`}>
-                <label>간병인</label>
-                <span>{modalData.reviewData.reservation.mate_name}</span>
-              </div>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label>간병인</label>
+            <span>{modalData.reviewData.reservation.mate_name}</span>
+          </div>
 
-              <div className={`${styles.info_wrapper} ${styles.double}`}>
-                <label>진단명</label>
-                <span>{modalData.patientData.patient_diagnosis_name}</span>
-              </div>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label>진단명</label>
+            <span>{modalData.patientData.patient_diagnosis_name}</span>
+          </div>
 
-              <div className={`${styles.info_wrapper} ${styles.double}`}>
-                <label>간병기간</label>
-                <span>
-                  {modalData.reviewData.reservation.start_date} ~ {modalData.reviewData.reservation.end_date}
-                </span>
-              </div>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label>간병기간</label>
+            <span>
+              {modalData.reviewData.reservation.start_date} ~ {modalData.reviewData.reservation.end_date}
+            </span>
+          </div>
 
-              <div className={`${styles.info_wrapper} ${styles.double}`}>
-                <label>간병 요일</label>
-                <span> {modalData.reviewData.reservation.weekdays.map((e) => weekdayDic[e]).join(', ')}</span>
-              </div>
+          <div className={`${styles.info_wrapper} ${styles.double}`}>
+            <label>간병 요일</label>
+            <span> {modalData.reviewData.reservation.weekdays.map((e) => weekdayDic[e]).join(', ')}</span>
+          </div>
 
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label>간병 장소</label>
@@ -110,9 +97,9 @@ const AddReviewModal = ({ modalData, closeModal}) => {
           <h5>후기 등록하기</h5>
           <div className={`${styles.info_wrapper} ${styles.double} `}>
             <label>별점</label>
-
             <div className={styles.starRating}>
-              <StarRating rate={rating} /> {/* 선택한 별점을 StarRating 컴포넌트에 전달 */}
+              <StarRating rate={modalData.reviewData.reviewData ? modalData.reviewData.reviewData.rate : rating} />{' '}
+              {/* 선택한 별점을 StarRating 컴포넌트에 전달 */}
               <input
                 type='range'
                 min='1'
@@ -125,16 +112,20 @@ const AddReviewModal = ({ modalData, closeModal}) => {
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label>리뷰</label>
-            <textarea
-              placeholder='후기 작성'
-              name='comment'
-              id='comment'
-              maxLength='100'
-              onChange={handleInputChange}
-            />
+            {!modalData.reviewData.reviewData ? (
+              <textarea
+                placeholder='후기 작성'
+                name='comment'
+                id='comment'
+                maxLength='100'
+                onChange={handleInputChange}
+              />
+            ) : (
+              <span className={styles.introduction}>{modalData.reviewData.reviewData.comment}</span>
+            )}
           </div>
           <div className={styles.button_wrapper}>
-            {modalData.reviewData.review_id ? (
+            {modalData.reviewData.reservation.review_id ? (
               <button type='button' onClick={() => closeModal(true)}>
                 닫기
               </button>

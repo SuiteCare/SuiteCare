@@ -11,7 +11,7 @@ import AddReviewModal from '@/components/Common/Modal/AddReviewModal';
 
 const FamilyHistory = () => {
   const { isModalVisible, openModal, closeModal } = useModal();
-  const { isModalVisible:isReviewModalVisible, openModal:openReviewModal, closeModal:closeReviewModal } = useModal();
+  const { isModalVisible: isReviewModalVisible, openModal: openReviewModal, closeModal: closeReviewModal } = useModal();
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState();
 
@@ -109,17 +109,17 @@ const FamilyHistory = () => {
       if (data.code === 200) {
         setReviewData({
           reservation: $data,
-          reviewData: data.result[0]});
+          reviewData: data.result[0],
+        });
         return data.result[0];
       }
       console.log('데이터를 불러오는 데 오류가 발생했습니다.');
       return [];
     } catch (error) {
-
-      if(error.response.data.code === 400) {
+      if (error.response.data.code === 400) {
         console.log('등록된 리뷰가 없습니다.');
         setReviewData({
-          reservation: $data
+          reservation: $data,
         });
         return [];
       }
@@ -135,7 +135,6 @@ const FamilyHistory = () => {
       console.error('데이터를 가져오는 데 오류가 발생했습니다.');
     }
   }, [reviewData]);
-
 
   return (
     <>
@@ -175,7 +174,11 @@ const FamilyHistory = () => {
         <ReservationDetailModal modalData={{ ...detailData, ...patientData }} closeModal={closeModal} page='family' />
       )}
       {isReviewModalVisible && (
-        <AddReviewModal modalData={{reviewData, detailData, patientData}} closeModal={closeReviewModal} page='family' />
+        <AddReviewModal
+          modalData={{ reviewData, detailData, patientData }}
+          closeModal={closeReviewModal}
+          page='family'
+        />
       )}
     </>
   );
