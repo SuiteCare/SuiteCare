@@ -7,9 +7,11 @@ import axiosInstance from '@/services/axiosInstance';
 import HistoryTable from './HistoryTable';
 import Loading from '@/components/Common/Modal/Loading';
 import ReservationDetailModal from '@/components/Common/Modal/Detail/ReservationDetailModal';
+import AddReviewModal from '@/components/Common/Modal/AddReviewModal';
 
 const FamilyHistory = () => {
   const { isModalVisible, openModal, closeModal } = useModal();
+  const { isModalVisible: isReviewModalVisible, openModal: openReviewModal, closeModal: closeReviewModal } = useModal();
   const [activeTab, setActiveTab] = useState(0);
   const [tabData, setTabData] = useState();
 
@@ -95,6 +97,45 @@ const FamilyHistory = () => {
     }
   };
 
+  const [reviewData, setReviewData] = useState();
+
+  const handleReviewClick = async ($data) => {
+    try {
+      await Promise.all([
+        recruitmentDetailMutation.mutateAsync($data.recruitment_id),
+        recruitmentPatientMutation.mutateAsync($data.recruitment_id),
+      ]);
+      const { data } = await axiosInstance.get(`/api/v1/review/${$data.id}`);
+      if (data.code === 200) {
+        setReviewData({
+          reservation: $data,
+          reviewData: data.result[0],
+        });
+        return data.result[0];
+      }
+      console.log('데이터를 불러오는 데 오류가 발생했습니다.');
+      return [];
+    } catch (error) {
+      if (error.response.data.code === 400) {
+        console.log('등록된 리뷰가 없습니다.');
+        setReviewData({
+          reservation: $data,
+        });
+        return [];
+      }
+      console.error('Error occurred while fetching data:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    if (reviewData) {
+      openReviewModal();
+    } else {
+      console.error('데이터를 가져오는 데 오류가 발생했습니다.');
+    }
+  }, [reviewData]);
+
   return (
     <>
       <div className='FamilyHistory'>
@@ -119,13 +160,25 @@ const FamilyHistory = () => {
           ))}
         {activeTab === 1 &&
           (tabData && tabData.length > 0 ? (
-            <HistoryTable data={tabData} handleDetailClick={handleDetailClick} tabType='reservation' />
+            <HistoryTable
+              data={tabData}
+              handleDetailClick={handleDetailClick}
+              handleReviewClick={handleReviewClick}
+              tabType='reservation'
+            />
           ) : (
             <div className='no_result'>간병 예약 확정 내역이 없습니다.</div>
           ))}
       </div>
       {isModalVisible && (
         <ReservationDetailModal modalData={{ ...detailData, ...patientData }} closeModal={closeModal} page='family' />
+      )}
+      {isReviewModalVisible && (
+        <AddReviewModal
+          modalData={{ reviewData, detailData, patientData }}
+          closeModal={closeReviewModal}
+          page='family'
+        />
       )}
     </>
   );

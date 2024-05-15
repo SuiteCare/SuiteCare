@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from '@/components/Common/ManageTable.module.css';
 
-const HistoryTable = ({ data, handleDetailClick, tabType }) => {
+const HistoryTable = ({ data, handleDetailClick, handleReviewClick, tabType }) => {
   const statusKorean = {
     P: '매칭 대기',
     C: '예약 확정',
@@ -29,6 +29,9 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           <th>내역 상태</th>
           <th>환자명</th>
           <th>진단명</th>
+          <th>간병 시작일</th>
+          <th>간병 종료일</th>
+          <th>간병 상세정보</th>
         </>
       );
     }
@@ -39,6 +42,10 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           <th>결제 완료일</th>
           <th>내역 상태</th>
           <th>담당 메이트</th>
+          <th>간병 시작일</th>
+          <th>간병 종료일</th>
+          <th>간병 상세정보</th>
+          <th>리뷰</th>
         </>
       );
     }
@@ -53,6 +60,13 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           <td>{renderStatus(e.status)}</td>
           <td>{e.patient_name}</td>
           <td>{e.patient_diagnosis_name}</td>
+          <td>{e.start_date}</td>
+          <td>{e.end_date}</td>
+          <td>
+            <button type='button' onClick={() => handleDetailClick(e.id)}>
+              상세정보 보기
+            </button>
+          </td>
         </>
       );
     }
@@ -63,6 +77,18 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           <td>{e.pay_at || '결제 대기'}</td>
           <td>{renderReservationStatus(e.start_date, e.end_date)}</td>
           <td>{`${e.mate_name} (${e.mate_resume_id})`}</td>
+          <td>{e.start_date}</td>
+          <td>{e.end_date}</td>
+          <td>
+            <button type='button' onClick={() => handleDetailClick(e.id)}>
+              상세정보 보기
+            </button>
+          </td>
+          <td>
+            <button type='button' onClick={() => handleReviewClick(e)}>
+              {e.review_id ? '리뷰 보기' : '리뷰 등록'}
+            </button>
+          </td>
         </>
       );
     }
@@ -74,9 +100,6 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
         <tr>
           <th>ID</th>
           {renderTableHeader()}
-          <th>간병 시작일</th>
-          <th>간병 종료일</th>
-          <th>간병 상세정보</th>
         </tr>
       </thead>
       <tbody>
@@ -84,13 +107,6 @@ const HistoryTable = ({ data, handleDetailClick, tabType }) => {
           <tr key={e.id}>
             <td>{e.id || e.recruitment_id}</td>
             {renderTableColumns(e)}
-            <td>{e.start_date}</td>
-            <td>{e.end_date}</td>
-            <td>
-              <button type='button' onClick={() => handleDetailClick(e.id)}>
-                상세정보 보기
-              </button>
-            </td>
           </tr>
         ))}
       </tbody>
