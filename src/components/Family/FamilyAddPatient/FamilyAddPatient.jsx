@@ -3,12 +3,12 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
+import useAlert from '@/hooks/useAlert';
 
 import styles from './addPatient.module.css';
 import formInputInfos from './FormInputInfos';
 
 import random from '@/utils/FamilyAddPatient';
-import useAlert from "@/hooks/useAlert";
 
 const FamilyAddPatient = ({ idQuery }) => {
   const navigator = useRouter();
@@ -29,7 +29,6 @@ const FamilyAddPatient = ({ idQuery }) => {
     is_bedsore: '',
     need_suction: '',
     need_outpatient: '',
-    need_night_care: '',
     notice: '',
   });
 
@@ -40,18 +39,16 @@ const FamilyAddPatient = ({ idQuery }) => {
         axiosInstance.get(`/api/v1/patientDetail/${idQuery}`, { params: { id: idQuery } }),
       ]);
 
-      if(patientResponse.data.code === 200 && patientDetailResponse.data.code === 200) {
+      if (patientResponse.data.code === 200 && patientDetailResponse.data.code === 200) {
         setFormData({
           ...patientResponse.data.result[0],
           ...patientDetailResponse.data.result[0],
         });
-      } else if(patientDetailResponse.data.code === 204){
+      } else if (patientDetailResponse.data.code === 204) {
         return openAlert('해당 환자 상세정보가 없습니다.');
-
-      } else if(patientResponse.data.code === 204){
+      } else if (patientResponse.data.code === 204) {
         return openAlert('해당 환자 정보가 없습니다.');
       }
-
     } catch (error) {
       console.error('Error:', error);
       return openAlert('오류로 환자 정보를 불러올 수 없습니다.');
@@ -192,7 +189,7 @@ const FamilyAddPatient = ({ idQuery }) => {
 
   return (
     <div className={`${styles.addPatient} content_wrapper`}>
-    {alertComponent}
+      {alertComponent}
       <form name='addPatient' onSubmit={handleSubmit}>
         <h3>환자 기본 정보</h3>
         <div className={styles.info_grid}>
@@ -223,7 +220,6 @@ const FamilyAddPatient = ({ idQuery }) => {
           <div>
             {renderInput('need_suction')}
             {renderInput('need_outpatient')}
-            {renderInput('need_night_care')}
           </div>
         </div>
         <div className='input_wrapper'>

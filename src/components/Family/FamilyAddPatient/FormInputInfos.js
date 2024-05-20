@@ -118,14 +118,6 @@ const formInputInfos = {
       { value: 'N', label: '없음' },
     ],
   },
-  need_night_care: {
-    label: '야간 간병 필요',
-    type: 'radio',
-    options: [
-      { value: 'Y', label: '있음' },
-      { value: 'N', label: '없음' },
-    ],
-  },
   notice: {
     label: '비고',
     type: 'text',

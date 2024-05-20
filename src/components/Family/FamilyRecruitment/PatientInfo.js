@@ -128,11 +128,6 @@ export const PatientInfo = ({ patientBasic, styles, navigator, id }) => {
                 <label>주기적 외래 진료</label>
                 <span>{patientDetail?.need_outpatient === 'Y' ? '있음' : '없음'}</span>
               </div>
-
-              <div className='input_wrapper'>
-                <label>야간 간병 필요</label>
-                <span>{patientDetail?.need_night_care === 'Y' ? '있음' : '없음'}</span>
-              </div>
             </div>
             <div className='input_wrapper'>
               <label>비고</label>

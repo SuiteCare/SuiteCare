@@ -99,11 +99,6 @@ const PatientDetailModal = ({ modalData, closeModal }) => {
               <label>주기적 외래 진료</label>
               <span>{getModalDataValue('need_outpatient') === 'Y' ? '있음' : '없음'}</span>
             </div>
-
-            <div className={`${styles.info_wrapper} ${styles.double}`}>
-              <label>야간 간병 필요</label>
-              <span>{getModalDataValue('need_night_care') === 'Y' ? '있음' : '없음'}</span>
-            </div>
           </div>
           <div className={`${styles.info_wrapper} ${styles.double}`}>
             <label>비고</label>
