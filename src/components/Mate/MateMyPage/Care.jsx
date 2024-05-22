@@ -3,30 +3,33 @@ import React from 'react';
 const Care = ({ formData, setFormData, setChangedData }) => {
   // DB 초기값을 사용하기 편한 상태로 정리
   const defaultCareOptions = {};
-  formData.careList.forEach((e) => (defaultCareOptions[e.name] = e.value));
 
+  formData.careList.forEach((e) => (defaultCareOptions[e.name] = e.value));
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // careList 내의 특정 항목의 value를 업데이트
     setFormData((prevData) => {
+      const updatedCareList = prevData.careList.map((item) => {
+        if (item.name === name) {
+          return { ...item, value }; // 선택된 항목의 value를 업데이트
+        }
+        return item; // 나머지 항목은 그대로 반환
+      });
+
       return {
         ...prevData,
-        care: {
-          ...prevData.care,
-          [name]: value,
-        },
+        careList: updatedCareList, // 업데이트된 careList로 교체
       };
     });
 
-    setChangedData((prevData) => {
-      return {
-        ...prevData,
-        care: {
-          ...prevData.care,
-          [name]: value,
-        },
-      };
-    });
+    setChangedData((prevData) => ({
+      ...prevData,
+      care: {
+        ...prevData.care,
+        [name]: value,
+      },
+    }));
   };
 
   const careLabelList = {
@@ -52,7 +55,7 @@ const Care = ({ formData, setFormData, setChangedData }) => {
             name={name}
             id={`${name}_y`}
             value='y'
-            defaultChecked={defaultCareOptions[name] === 'y'}
+            checked={defaultCareOptions[name] === 'y'} // defaultCareOptions를 기반으로 checked 상태 결정
             onChange={handleChange}
           />
           <label htmlFor={`${name}_y`}>가능</label>{' '}
@@ -61,7 +64,7 @@ const Care = ({ formData, setFormData, setChangedData }) => {
             name={name}
             id={`${name}_n`}
             value='n'
-            defaultChecked={defaultCareOptions[name] === 'n'}
+            checked={defaultCareOptions[name] === 'n'} // formData 상태를 기반으로 checked 상태 결정
             onChange={handleChange}
           />
           <label htmlFor={`${name}_n`}>불가능</label>

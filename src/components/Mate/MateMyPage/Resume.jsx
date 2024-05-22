@@ -95,7 +95,7 @@ const Resume = ({ data }) => {
       return openAlert('희망 최소시급은 정부 공시 최저시급보다 낮을 수 없습니다.');
     }
 
-    const { locationList, mainServiceList, careerList, certificateList } = formListData;
+    const { locationList, mainServiceList, careerList, certificateList, careList } = formListData;
 
     if (!locationList.length) {
       return openAlert('최소 1개의 활동 지역을 선택하세요.');
@@ -113,6 +113,11 @@ const Resume = ({ data }) => {
       return openAlert('주요 서비스는 최대 3개까지 선택할 수 있습니다.');
     }
 
+    const allCareOptionsFilled = formListData.careList.every((item) => item.value !== '');
+
+    if (!allCareOptionsFilled) {
+      return openAlert('케어 가능 여부를 모두 체크해 주세요.');
+    }
     if (
       !careerList.every((e) => {
         const { job_name, name, date_start, date_end } = e;
@@ -157,6 +162,7 @@ const Resume = ({ data }) => {
           basicResumeDTO: { ...formMateResumeData },
           locationList: formListData.locationList.map((e) => ({ name: e })),
           mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
+          careList: formListData.careList.map((e) => ({ name: e })),
         };
 
         if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
@@ -232,15 +238,15 @@ const Resume = ({ data }) => {
       careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
       certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
       careList: $data.resume?.careList || [
-        { name: 'consciousness_state', value: 'y' },
-        { name: 'meal_care_state', value: 'y' },
-        { name: 'toilet_care_state', value: 'y' },
-        { name: 'paralasys_state', value: 'y' },
-        { name: 'behavioral_state', value: 'y' },
-        { name: 'bedsore', value: 'y' },
-        { name: 'suction', value: 'y' },
-        { name: 'outpatient', value: 'y' },
-        { name: 'night_care', value: 'y' },
+        { name: 'consciousness_state', value: '' },
+        { name: 'meal_care_state', value: '' },
+        { name: 'toilet_care_state', value: '' },
+        { name: 'paralasys_state', value: '' },
+        { name: 'behavioral_state', value: '' },
+        { name: 'bedsore', value: '' },
+        { name: 'suction', value: '' },
+        { name: 'outpatient', value: '' },
+        { name: 'night_care', value: '' },
       ],
     });
   };
