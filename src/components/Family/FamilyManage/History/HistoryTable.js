@@ -86,7 +86,7 @@ const HistoryTable = ({ data, handleDetailClick, handleReviewClick, tabType }) =
           </td>
           <td>
             <button type='button' onClick={() => handleReviewClick(e)}>
-              {e.review_id ? '리뷰 보기' : '리뷰 등록'}
+              {e.review ? '리뷰 보기' : '리뷰 등록'}
             </button>
           </td>
         </>

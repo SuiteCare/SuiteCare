@@ -126,7 +126,7 @@ const AddReviewModal = ({ modalData, closeModal }) => {
             )}
           </div>
           <div className={styles.button_wrapper}>
-            {modalData.reviewData.reservation.review_id ? (
+            {modalData.reviewData.reviewData ? (
               <button type='button' onClick={() => closeModal(true)}>
                 닫기
               </button>

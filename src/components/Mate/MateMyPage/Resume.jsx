@@ -30,7 +30,7 @@ const Resume = ({ data }) => {
     locationList: [],
     careerList: [],
     certificateList: [],
-    careList: [],
+    careAvailabilityDTO: {},
   });
 
   const [changedListData, setChangedListData] = useState({});
@@ -148,7 +148,6 @@ const Resume = ({ data }) => {
     }
 
     const method = data.resume.basicResumeDTO ? 'patch' : 'post';
-
     try {
       let requestData = {};
       let body = {};
@@ -157,6 +156,7 @@ const Resume = ({ data }) => {
           basicResumeDTO: { ...formMateResumeData },
           locationList: formListData.locationList.map((e) => ({ name: e })),
           mainServiceList: formListData.mainServiceList.map((e) => ({ name: e })),
+          careAvailabilityDTO: {...formListData.careAvailabilityDTO},
         };
 
         if (formListData.careerList.length > 0) requestData.careerList = formListData.careerList;
@@ -181,6 +181,9 @@ const Resume = ({ data }) => {
           requestData.mainServiceList = changedListData.mainServiceList.map((e) => ({ name: e }));
         }
 
+        if (changedListData.mainServiceList) {
+          requestData.careAvailabilityDTO = changedListData.careAvailabilityDTO.map((e) => (e));
+        }
         body = requestData;
         console.log('patch', body);
 
@@ -195,7 +198,7 @@ const Resume = ({ data }) => {
           type: 'application/json',
         }),
       );
-      const response = await axiosInstance[method]('/api/v1/mate/resume', formData, {
+      const response = await axiosInstance[method]('/api/v1/mate/resume', formData,{
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -231,17 +234,16 @@ const Resume = ({ data }) => {
       locationList: $data.resume?.locationList?.map((e) => e.name) || [],
       careerList: $data.resume?.careerList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
       certificateList: $data.resume?.certificateList?.map((e) => ({ ...e, orderId: e.id, isDeleted: false })) || [],
-      careList: $data.resume?.careList || [
-        { name: 'consciousness_state', value: 'y' },
-        { name: 'meal_care_state', value: 'y' },
-        { name: 'toilet_care_state', value: 'y' },
-        { name: 'paralasys_state', value: 'y' },
-        { name: 'behavioral_state', value: 'y' },
-        { name: 'bedsore', value: 'y' },
-        { name: 'suction', value: 'y' },
-        { name: 'outpatient', value: 'y' },
-        { name: 'night_care', value: 'y' },
-      ],
+      careAvailabilityDTO: $data.resume?.careAvailabilityDTO || {
+        unconsciousness_care: 'Y',
+        meal_care: 'Y',
+        toilet_care: 'Y',
+        paralysis_care: 'Y',
+        behavioral_care: 'Y',
+        bedsore_care: 'Y',
+        use_suction: 'Y',
+        outpatient_care: 'y',
+      },
     });
   };
 
