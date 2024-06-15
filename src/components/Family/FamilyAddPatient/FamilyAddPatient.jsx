@@ -30,6 +30,7 @@ const FamilyAddPatient = ({ idQuery }) => {
     need_suction: '',
     need_outpatient: '',
     notice: '',
+    rank: ['', '', ''],
   });
 
   const getPatientData = async () => {
@@ -119,6 +120,31 @@ const FamilyAddPatient = ({ idQuery }) => {
         )}
       </div>
     );
+  };
+
+  const rankOptions = (
+    <>
+      <option value='0'>상관 없음</option>
+      <option value='consciousness_state'>의식 상태</option>
+      <option value='meal_care_state'>식사 보조</option>
+      <option value='toilet_care_state'>용변 보조</option>
+      <option value='paralysis_state'>마비 상태</option>
+      <option value='behavioral_state'>거동 상태</option>
+      <option value='is_bedsore'>욕창 유무</option>
+      <option value='need_suction'>석션 필요</option>
+      <option value='need_outpatient'>주기적 외래 진료</option>
+    </>
+  );
+
+  const handleRankChange = (e, rank) => {
+    const { value } = e.target;
+    const newRank = [...formData.rank];
+    newRank.splice(rank - 1, 1, value);
+
+    setFormData((prevData) => ({
+      ...prevData,
+      rank: newRank,
+    }));
   };
 
   const mutation = useMutation((body) => {
@@ -232,6 +258,20 @@ const FamilyAddPatient = ({ idQuery }) => {
             onChange={handleInputChange}
             defaultValue={formData.notice}
           />
+        </div>
+        <div>
+          <div className='input_wrapper'>
+            <label>1순위</label>
+            <select onChange={(e) => handleRankChange(e, 1)}>{rankOptions}</select>
+          </div>
+          <div className='input_wrapper'>
+            <label>2순위</label>
+            <select onChange={(e) => handleRankChange(e, 2)}>{rankOptions}</select>
+          </div>
+          <div className='input_wrapper'>
+            <label>3순위</label>
+            <select onChange={(e) => handleRankChange(e, 3)}>{rankOptions}</select>
+          </div>
         </div>
         <div className='button_wrapper'>
           {idQuery ? (

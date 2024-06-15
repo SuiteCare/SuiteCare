@@ -85,18 +85,13 @@ const PatientDetailTab = ({ styles, modalData, page }) => {
             <label>주기적 외래 진료</label>
             <span>{modalData.patient_need_outpatient === 'Y' ? '있음' : '없음'}</span>
           </div>
-
-          <div className={`${styles.info_wrapper} ${styles.double}`}>
-            <label>야간 간병 필요</label>
-            <span>{modalData.patient_need_night_care === 'Y' ? '있음' : '없음'}</span>
-          </div>
         </div>
-        <div className={`${styles.info_wrapper} ${styles.double}`}>
-          <label>비고</label>
-          <span className={styles.introduction}>{modalData.patient_notice}</span>
-        </div>
-        {/* 상세정보 끝 */}
       </div>
+      <div className={`${styles.info_wrapper} ${styles.double}`}>
+        <label>비고</label>
+        <span className={styles.introduction}>{modalData.patient_notice}</span>
+      </div>
+      {/* 상세정보 끝 */}
       {page === 'patientList' ? (
         <div className={styles.button_wrapper}>
           <button type='button' onClick={() => navigator.push(`/family/addpatient/${modalData.patient_patient_id}`)}>
