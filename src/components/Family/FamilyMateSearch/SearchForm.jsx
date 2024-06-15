@@ -159,10 +159,6 @@ const SearchForm = ({ onSearch, patientInfo, setPatientInfo }) => {
         <div className='input_wrapper'>
           <div>
             <label>활동 지역</label>
-            <div className='checkbox_wrapper'>
-              <input type='checkbox' onChange={handleAllLocationChange} />
-              <span>전체 선택</span>
-            </div>
           </div>
           <div className={styles.checkbox_list_wrapper}>
             <FormLocationList onChange={handleCheckboxChange} />

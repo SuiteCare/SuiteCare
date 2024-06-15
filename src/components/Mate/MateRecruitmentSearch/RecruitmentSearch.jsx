@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useQuery } from 'react-query';
 
 import axiosInstance from '@/services/axiosInstance';
+import useAlert from '@/hooks/useAlert';
 
 import SearchForm from './SearchForm';
 import SearchResult from './SearchResult';
@@ -11,6 +12,7 @@ import styles from './SearchResult.module.css';
 const MateRecruitmentSearch = () => {
   const [formData, setFormData] = useState({ gender: { F: false, M: false }, weekdays: Array(7).fill(false) });
   const [sortOption, setSortOption] = useState('');
+  const { openAlert, alertComponent } = useAlert();
 
   const requestParams = useMemo(() => {
     return {
@@ -31,7 +33,7 @@ const MateRecruitmentSearch = () => {
       if (data.code === 200) {
         return data.result;
       }
-      alert('검색 오류가 발생했습니다.');
+      openAlert('검색 오류가 발생했습니다.');
     },
     {
       enabled: Object.keys(requestParams).length > 2,
@@ -40,7 +42,12 @@ const MateRecruitmentSearch = () => {
   );
 
   const handleSearch = ($formData) => {
-    setFormData($formData);
+    setFormData({
+      ...$formData,
+      pathname: window.location.pathname, // 로그데이터
+      target: 'search button',
+      search_at: new Date().getTime(),
+    });
   };
 
   const renderSearchMessage = () => {

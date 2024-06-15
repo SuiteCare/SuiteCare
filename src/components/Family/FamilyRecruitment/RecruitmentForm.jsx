@@ -12,6 +12,7 @@ import AddressPart from './AddressPart';
 
 import TimePicker from '@/utils/TimePicker';
 import { calTimeDiff, weekdayDic, countWeekdays, minWage } from '@/utils/calculators';
+import { wageOptions } from '@/utils/util';
 
 const RecruitmentForm = () => {
   const navigator = useRouter();
@@ -70,20 +71,6 @@ const RecruitmentForm = () => {
       e.currentTarget.children[0].checked = true;
       setWeekdayBoolean([true, true, true, true, true, true, true]);
     }
-  };
-
-  const wageOptions = (min, max, step) => {
-    const options = [];
-
-    for (let i = min; i <= max; i += step) {
-      options.push(
-        <option value={i} key={i}>
-          {i}
-        </option>,
-      );
-    }
-
-    return options;
   };
 
   const handleSubmit = async (e) => {

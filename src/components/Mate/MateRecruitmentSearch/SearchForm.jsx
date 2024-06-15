@@ -5,6 +5,7 @@ import FormLocationList from '@/components/Common/SearchInfo/FormLocationList';
 
 import { minWage, weekdayDic } from '@/utils/calculators';
 import TimePicker from '@/utils/TimePicker';
+import { wageOptions } from '@/utils/util';
 
 const JobSearchForm = ({ onSearch }) => {
   const [formData, setFormData] = useState({
@@ -24,8 +25,16 @@ const JobSearchForm = ({ onSearch }) => {
   };
 
   const handleCheckboxChange = (e) => {
-    const { name, value, checked } = e.target;
+    const { name, value } = e.target;
+    let { checked } = e.target;
+
     if (name === 'location') {
+      if (checked && formData.location.length > 4) {
+        alert('간병 지역은 최대 5개까지 선택할 수 있습니다.');
+        e.target.checked = false;
+        checked = false;
+      }
+
       setFormData((prevData) => ({
         ...prevData,
         location: checked ? [...prevData.location, value] : prevData.location.filter((item) => item !== value),
@@ -44,18 +53,6 @@ const JobSearchForm = ({ onSearch }) => {
     setFormData((prevData) => ({
       ...prevData,
       weekdays: prevData.weekdays.map((day, i) => (i === index ? !day : day)),
-    }));
-  };
-
-  const selectAllLocation = (e) => {
-    const isChecked = e.target.checked;
-    const allLocationCheckboxes = Array.from(document.getElementsByName('location'));
-    allLocationCheckboxes.forEach((checkbox) => {
-      checkbox.checked = isChecked;
-    });
-    setFormData((prevData) => ({
-      ...prevData,
-      location: isChecked ? allLocationCheckboxes.map((checkbox) => checkbox.value) : [],
     }));
   };
 
@@ -115,6 +112,7 @@ const JobSearchForm = ({ onSearch }) => {
       return false;
     }
 
+    // 행동 로그는 onSearch를 전달받을 때 추가
     onSearch(formData);
   };
 
@@ -136,10 +134,6 @@ const JobSearchForm = ({ onSearch }) => {
         <div className='input_wrapper'>
           <div>
             <label>간병 지역</label>
-            <div className='checkbox_wrapper'>
-              <input type='checkbox' onChange={selectAllLocation} />
-              <span>전체 선택</span>
-            </div>
           </div>
           <div className={styles.checkbox_list_wrapper}>
             <FormLocationList onChange={handleCheckboxChange} />
@@ -217,23 +211,15 @@ const JobSearchForm = ({ onSearch }) => {
           <label>제시 시급</label>
           <div className={styles.input_wrapper}>
             최소
-            <input
-              type='number'
-              value={formData.wage[0]}
-              onChange={(e) => handleWageChange(e, 0)}
-              onBlur={updateWage}
-              min={minWage}
-              max={1000000}
-            />
+            <select name='wage' onChange={(e) => handleWageChange(e, 0)}>
+              <option value={minWage}>{minWage}</option>
+              {wageOptions(10000, 30000, 1000)}
+            </select>
             원 ~ 최대
-            <input
-              type='number'
-              value={formData.wage[1]}
-              onChange={(e) => handleWageChange(e, 1)}
-              onBlur={updateWage}
-              min={minWage}
-              max={1000000}
-            />
+            <select name='wage' onChange={(e) => handleWageChange(e, 1)}>
+              <option value={minWage}>{minWage}</option>
+              {wageOptions(10000, 30000, 1000)}
+            </select>
             원
           </div>
         </div>
